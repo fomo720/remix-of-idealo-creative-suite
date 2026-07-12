@@ -2298,6 +2298,82 @@ function NotebookDesigner({
           </div>
         )}
 
+        {/* Page interior art (A5 + cover-pages only) */}
+        {showPageArt && (
+          <div className="rounded-2xl border-2 border-dashed border-border/80 bg-gradient-soft/50 p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <Label className="text-sm font-semibold">Diseño de la página interior</Label>
+              <span className="rounded-full bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                A5
+              </span>
+            </div>
+            <p className="mb-3 text-[11px] text-muted-foreground">
+              Sube un logo o marca de agua que se imprima sutilmente en cada hoja interior. Controla la opacidad para que no interfiera con la escritura.
+            </p>
+            <input
+              ref={pageFileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => onPageArtFile(e.target.files?.[0] ?? null)}
+            />
+            <button
+              onClick={() => pageFileRef.current?.click()}
+              className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-5 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+            >
+              <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
+              {pageArtUploaded ? "Cambiar diseño de página" : "Subir diseño de página"}
+            </button>
+
+            <div className="mt-3">
+              <Label className="mb-2 block text-xs text-muted-foreground">O elige un ícono prediseñado</Label>
+              <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+                {presetArts.map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => onPageArtPreset(a)}
+                    className={cn(
+                      "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
+                      pageArtPreset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                    )}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {hasPageArt && (
+              <>
+                <div className="mt-4">
+                  <div className="mb-2 flex items-center justify-between">
+                    <Label className="text-xs font-semibold">Opacidad de la marca de agua</Label>
+                    <span className="text-xs font-bold" style={{ color: "var(--brand-violet)" }}>{pageArtOpacity}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={5}
+                    max={100}
+                    step={1}
+                    value={pageArtOpacity}
+                    onChange={(e) => setPageArtOpacity(+e.target.value)}
+                    className="w-full accent-[color:var(--brand-violet)]"
+                  />
+                  <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                    <span>Sutil</span>
+                    <span>Intenso</span>
+                  </div>
+                </div>
+                <button onClick={onPageArtClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-3.5 w-3.5" /> Quitar diseño de página
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+
+
         {/* Upload cover art */}
         <div>
           <Label className="mb-2 block text-sm font-semibold">Arte para la portada</Label>
