@@ -534,7 +534,9 @@ export function Configurator() {
       const base = (laserProductData?.price ?? 200) + (laserVariantData?.priceDelta ?? 0);
       // gentle bulk curve for engraving
       const lBulk = qty >= 100 ? 0.75 : qty >= 50 ? 0.85 : qty >= 25 ? 0.92 : 1;
-      return Math.round(base * qty * lBulk);
+      // If the customer brings their own item, we only charge the engraving service (~40%).
+      const byobFactor = laserByob ? 0.4 : 1;
+      return Math.round(base * qty * lBulk * byobFactor);
     }
     if (isNotebook) {
       // notebook base price by size (cm²), plus material/style factors
