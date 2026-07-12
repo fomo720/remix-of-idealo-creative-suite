@@ -815,8 +815,25 @@ export function Configurator() {
                             <span
                               key={c.name}
                               title={c.name}
+                              role="button"
+                              tabIndex={0}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const y = window.scrollY;
+                                setLaserVariantId(v.id);
+                                setLaserColorIdx(ci);
+                                requestAnimationFrame(() => window.scrollTo({ top: y }));
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setLaserVariantId(v.id);
+                                  setLaserColorIdx(ci);
+                                }
+                              }}
                               className={cn(
-                                "h-5 w-5 rounded-full border shadow-sm transition",
+                                "h-5 w-5 cursor-pointer rounded-full border shadow-sm transition hover:scale-110",
                                 highlighted ? "ring-2 ring-offset-1 ring-offset-background scale-110" : "border-border",
                               )}
                               style={{ background: c.hex, ...(highlighted ? { boxShadow: `0 0 0 2px var(--brand-orange)` } : {}) }}
@@ -834,6 +851,8 @@ export function Configurator() {
                   );
                 })}
               </div>
+
+
 
               {/* Color chooser + small live preview + BYOB toggle */}
               {laserVariantData && (
