@@ -2843,6 +2843,12 @@ function LaserDesigner({
                 </div>
               )}
               <p className="mt-1 text-xs text-muted-foreground">{variant?.desc ?? product.desc}</p>
+              {byob && (
+                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-foreground/20 bg-background px-2 py-0.5 text-[10px] font-semibold text-foreground">
+                  <Check className="h-3 w-3" style={{ color: "var(--brand-orange)" }} />
+                  Cliente trae su propio {product.name.toLowerCase()} · solo servicio de grabado
+                </div>
+              )}
             </div>
           </div>
         </div>
