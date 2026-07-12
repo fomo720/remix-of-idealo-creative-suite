@@ -288,6 +288,12 @@ export function Configurator() {
   const [qty, setQty] = useState(100);
   const [notes, setNotes] = useState("");
 
+  // notebook state
+  const [notebookStyle, setNotebookStyle] = useState<NotebookStyle | null>(null);
+  const [notebookMaterial, setNotebookMaterial] = useState<NotebookMaterial | null>(null);
+  const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
+  const [pageType, setPageType] = useState<PageType>("blank");
+
   // image toolbox
   const [scale, setScale] = useState(100);       // 30-250%
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
