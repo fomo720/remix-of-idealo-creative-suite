@@ -1748,7 +1748,7 @@ function NotebookDesigner({
   onFile: (f: File | null) => void;
   onPreset: (p: string) => void;
   onClear: () => void;
-  fileRef: React.RefObject<HTMLInputElement>;
+  fileRef: React.RefObject<HTMLInputElement | null>;
   qty: number;
   setQty: (n: number) => void;
   notes: string;
