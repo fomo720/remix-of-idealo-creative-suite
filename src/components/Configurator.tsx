@@ -635,6 +635,18 @@ function InteractiveCanvas({
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* noop */ }
   };
 
+  const centerHorizontal = () => {
+    dragRef.current = null;
+    setSelected(true);
+    setOffsetX(0);
+  };
+
+  const centerVertical = () => {
+    dragRef.current = null;
+    setSelected(true);
+    setOffsetY(0);
+  };
+
   const filterStyle = `contrast(${contrast}%) brightness(${brightness}%)`;
   const imgTransform = `translate(-50%, -50%) translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`;
   const artBoxStyle: React.CSSProperties = {
@@ -811,11 +823,12 @@ function InteractiveCanvas({
           style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
           onMouseDown={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
         >
-          <FloatBtn label="Centrar horizontal" onClick={() => setOffsetX(0)}>
+          <FloatBtn label="Centrar horizontal" onClick={centerHorizontal}>
             <AlignHorizontalJustifyCenter className="h-4 w-4" />
           </FloatBtn>
-          <FloatBtn label="Centrar vertical" onClick={() => setOffsetY(0)}>
+          <FloatBtn label="Centrar vertical" onClick={centerVertical}>
             <AlignVerticalJustifyCenter className="h-4 w-4" />
           </FloatBtn>
           <FloatBtn label="Duplicar (patrón)" onClick={() => setDuplicated((d) => !d)}>
