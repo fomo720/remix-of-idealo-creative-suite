@@ -58,18 +58,26 @@ const materials: {
   },
 ];
 
-const shapes: { id: StickerShape; name: string; icon: React.ReactNode; aspect: number; clip?: string; radius?: string }[] = [
+type ShapeItem = {
+  id: StickerShape; name: string; icon: React.ReactNode; aspect: number;
+  clip?: string; radius?: string; path?: string; viewBox?: string;
+};
+
+const CLOUD_PATH = "M 60 90 C 20 90 10 55 40 45 C 30 15 80 5 95 30 C 120 5 175 20 170 55 C 210 55 210 100 170 100 C 155 130 100 130 90 105 C 75 125 40 120 60 90 Z";
+const HEART_PATH = "M 100 180 L 30 110 C 5 85 5 45 35 25 C 60 8 90 20 100 45 C 110 20 140 8 165 25 C 195 45 195 85 170 110 Z";
+
+const shapes: ShapeItem[] = [
   { id: "circle", name: "Círculo", icon: <Circle className="h-5 w-5" />, aspect: 1, radius: "9999px" },
   { id: "square", name: "Cuadrado", icon: <Square className="h-5 w-5" />, aspect: 1, radius: "0px" },
   { id: "rectangle", name: "Rectángulo", icon: <RectangleHorizontal className="h-5 w-5" />, aspect: 1.6, radius: "0px" },
   { id: "rounded", name: "Esq. Redondeada", icon: <Squircle className="h-5 w-5" />, aspect: 1, radius: "28px" },
   {
     id: "cloud", name: "Nube (Die-Cut)", icon: <Cloud className="h-5 w-5" />, aspect: 1.4,
-    clip: "path('M 60 90 C 20 90 10 55 40 45 C 30 15 80 5 95 30 C 120 5 175 20 170 55 C 210 55 210 100 170 100 C 155 130 100 130 90 105 C 75 125 40 120 60 90 Z')",
+    clip: `path('${CLOUD_PATH}')`, path: CLOUD_PATH, viewBox: "0 0 220 135",
   },
   {
     id: "heart", name: "Corazón", icon: <Heart className="h-5 w-5" />, aspect: 1,
-    clip: "path('M 100 180 L 30 110 C 5 85 5 45 35 25 C 60 8 90 20 100 45 C 110 20 140 8 165 25 C 195 45 195 85 170 110 Z')",
+    clip: `path('${HEART_PATH}')`, path: HEART_PATH, viewBox: "0 0 200 185",
   },
 ];
 
@@ -546,7 +554,7 @@ export function Configurator() {
 }
 
 /* ---------- Interactive Canvas ---------- */
-type ShapeDef = { id: StickerShape; name: string; icon: React.ReactNode; aspect: number; clip?: string; radius?: string };
+type ShapeDef = ShapeItem;
 
 function InteractiveCanvas({
   shapeData, materialSwatch, isDieCut, hasArt, uploaded, preset,
@@ -566,7 +574,6 @@ function InteractiveCanvas({
   const maskRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ mode: "move" | "resize"; startX: number; startY: number; startOX: number; startOY: number; startScale: number; corner?: "tl" | "tr" | "bl" | "br"; rect: DOMRect } | null>(null);
 
-  // Deselect when clicking outside
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       if (!maskRef.current) return;
@@ -614,13 +621,11 @@ function InteractiveCanvas({
     if (d.mode === "move") {
       const pctX = (dx / d.rect.width) * 100;
       const pctY = (dy / d.rect.height) * 100;
-      setOffsetX(clamp(d.startOX + pctX, -60, 60));
-      setOffsetY(clamp(d.startOY + pctY, -60, 60));
+      setOffsetX(clamp(d.startOX + pctX, -120, 120));
+      setOffsetY(clamp(d.startOY + pctY, -120, 120));
     } else {
-      // resize: use larger axis delta with corner sign
-      const sign = d.corner === "br" ? 1 : d.corner === "tl" ? 1 : d.corner === "tr" ? 1 : 1;
       const delta = ((d.corner === "tl" || d.corner === "bl") ? -dx : dx) + ((d.corner === "tl" || d.corner === "tr") ? -dy : dy);
-      const pct = (delta / d.rect.width) * 100 * sign;
+      const pct = (delta / d.rect.width) * 100;
       setScale(clamp(Math.round(d.startScale + pct), 30, 250));
     }
   };
@@ -632,31 +637,94 @@ function InteractiveCanvas({
 
   const filterStyle = `contrast(${contrast}%) brightness(${brightness}%)`;
   const imgTransform = `translate(-50%, -50%) translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`;
+  const artBoxStyle: React.CSSProperties = {
+    transform: imgTransform,
+    width: "80%",
+    height: "80%",
+  };
+
+  const renderArt = (fadedFilter = false) =>
+    uploaded ? (
+      <img
+        src={uploaded}
+        alt=""
+        draggable={false}
+        className="pointer-events-none max-h-full max-w-full object-contain"
+        style={{ filter: fadedFilter ? `${filterStyle} saturate(60%)` : filterStyle }}
+      />
+    ) : (
+      <span
+        className="pointer-events-none text-[6rem] leading-none"
+        style={{ filter: fadedFilter ? `${filterStyle} saturate(60%)` : filterStyle }}
+      >
+        {preset}
+      </span>
+    );
 
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
 
-      {/* Shape mask */}
+      {/* Workspace (NO overflow hidden - the image can bleed out visibly) */}
       <div
         ref={maskRef}
-        className="relative shadow-elegant transition-all duration-300 touch-none select-none"
+        className="relative touch-none select-none"
         style={{
           width: shapeData.aspect >= 1 ? "82%" : `${82 * shapeData.aspect}%`,
           aspectRatio: `${shapeData.aspect} / 1`,
-          background: materialSwatch,
-          borderRadius: shapeData.radius,
-          clipPath: shapeData.clip,
-          outline: isDieCut && !shapeData.clip ? "3px dashed rgba(0,0,0,0.15)" : "none",
-          outlineOffset: "6px",
-          overflow: "hidden",
         }}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       >
-        {hasArt ? (
-          duplicated ? (
+        {/* Layer 1: material background (clipped to shape) */}
+        <div
+          className="absolute inset-0 shadow-elegant"
+          style={{
+            background: materialSwatch,
+            borderRadius: shapeData.radius,
+            clipPath: shapeData.clip,
+          }}
+        />
+
+        {hasArt && !duplicated && (
+          <>
+            {/* Layer 2: faded ghost of the FULL image (shows overflow at 40%) */}
+            <div
+              className="pointer-events-none absolute left-1/2 top-1/2 flex items-center justify-center opacity-40"
+              style={artBoxStyle}
+            >
+              {renderArt(true)}
+            </div>
+
+            {/* Layer 3: crisp 100% image clipped to shape */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                borderRadius: shapeData.radius,
+                clipPath: shapeData.clip,
+                overflow: "hidden",
+              }}
+            >
+              <div
+                className="absolute left-1/2 top-1/2 flex items-center justify-center"
+                style={artBoxStyle}
+              >
+                {renderArt(false)}
+              </div>
+            </div>
+          </>
+        )}
+
+        {hasArt && duplicated && (
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              borderRadius: shapeData.radius,
+              clipPath: shapeData.clip,
+              overflow: "hidden",
+            }}
+          >
             <div className="grid h-full w-full grid-cols-2 grid-rows-2 gap-1 p-2">
               {[0, 1, 2, 3].map((i) => (
                 <div key={i} className="relative flex items-center justify-center overflow-hidden">
@@ -670,53 +738,68 @@ function InteractiveCanvas({
                 </div>
               ))}
             </div>
-          ) : (
-            <div
-              className={cn(
-                "absolute left-1/2 top-1/2 flex items-center justify-center transition-[outline] duration-150",
-                selected ? "outline outline-2 outline-offset-2 outline-[var(--brand-violet)] cursor-move" : "cursor-pointer",
-              )}
-              style={{
-                transform: imgTransform,
-                width: "80%", height: "80%",
-              }}
-              onPointerDown={onPointerDownImage}
-            >
-              {uploaded ? (
-                <img src={uploaded} alt="Tu arte" draggable={false}
-                  className="pointer-events-none max-h-full max-w-full object-contain"
-                  style={{ filter: filterStyle }} />
-              ) : (
-                <span className="pointer-events-none text-[6rem] leading-none" style={{ filter: filterStyle }}>{preset}</span>
-              )}
+          </div>
+        )}
 
-              {selected && (
-                <>
-                  {(["tl", "tr", "bl", "br"] as const).map((c) => (
-                    <span
-                      key={c}
-                      onPointerDown={onPointerDownHandle(c)}
-                      className="absolute h-3.5 w-3.5 rounded-full border-2 border-[var(--brand-violet)] bg-white shadow"
-                      style={{
-                        top: c.startsWith("t") ? "-8px" : "auto",
-                        bottom: c.startsWith("b") ? "-8px" : "auto",
-                        left: c.endsWith("l") ? "-8px" : "auto",
-                        right: c.endsWith("r") ? "-8px" : "auto",
-                        cursor: c === "tl" || c === "br" ? "nwse-resize" : "nesw-resize",
-                        touchAction: "none",
-                      }}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
-          )
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
+        {!hasArt && (
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center text-center text-muted-foreground"
+            style={{ borderRadius: shapeData.radius, clipPath: shapeData.clip }}
+          >
             <div>
               <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
               <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
             </div>
+          </div>
+        )}
+
+        {/* Layer 4: PRINT GUIDES (cut = green, bleed = yellow dashed) */}
+        <ShapeGuides shapeData={shapeData} />
+
+        {/* Die-cut soft halo */}
+        {isDieCut && !shapeData.clip && (
+          <div
+            className="pointer-events-none absolute -inset-1.5"
+            style={{ border: "2px dashed rgba(0,0,0,0.08)", borderRadius: shapeData.radius }}
+          />
+        )}
+
+        {/* Layer 5: interactive hit-box + resize handles (always on top) */}
+        {hasArt && !duplicated && (
+          <div
+            className={cn(
+              "absolute left-1/2 top-1/2 flex items-center justify-center",
+              selected ? "cursor-move" : "cursor-pointer",
+            )}
+            style={{ ...artBoxStyle, zIndex: 30 }}
+            onPointerDown={onPointerDownImage}
+          >
+            {/* transparent hit area */}
+            <div className="absolute inset-0" />
+
+            {selected && (
+              <>
+                <div
+                  className="pointer-events-none absolute -inset-1 rounded-[4px]"
+                  style={{ outline: "2px solid var(--brand-violet)", outlineOffset: "0" }}
+                />
+                {(["tl", "tr", "bl", "br"] as const).map((c) => (
+                  <span
+                    key={c}
+                    onPointerDown={onPointerDownHandle(c)}
+                    className="absolute z-40 h-3.5 w-3.5 rounded-full border-2 border-[var(--brand-violet)] bg-white shadow"
+                    style={{
+                      top: c.startsWith("t") ? "-8px" : "auto",
+                      bottom: c.startsWith("b") ? "-8px" : "auto",
+                      left: c.endsWith("l") ? "-8px" : "auto",
+                      right: c.endsWith("r") ? "-8px" : "auto",
+                      cursor: c === "tl" || c === "br" ? "nwse-resize" : "nesw-resize",
+                      touchAction: "none",
+                    }}
+                  />
+                ))}
+              </>
+            )}
           </div>
         )}
       </div>
@@ -724,7 +807,7 @@ function InteractiveCanvas({
       {/* Floating contextual menu */}
       {hasArt && selected && !duplicated && (
         <div
-          className="absolute z-20 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
+          className="absolute z-40 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
           style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
           onPointerDown={(e) => e.stopPropagation()}
         >
@@ -747,14 +830,87 @@ function InteractiveCanvas({
       {hasArt && duplicated && (
         <button
           onClick={() => setDuplicated(false)}
-          className="absolute right-2 top-2 z-20 flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-medium shadow-card-soft"
+          className="absolute right-2 top-2 z-40 flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-medium shadow-card-soft"
         >
           <Copy className="h-3 w-3" /> Salir del patrón
         </button>
       )}
+
+      {/* Legend */}
+      <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 translate-y-full items-center gap-3 rounded-full border border-border bg-card/90 px-3 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
+        <span className="inline-flex items-center gap-1">
+          <span className="inline-block h-2 w-4 rounded-sm" style={{ background: "#22c55e" }} />
+          Corte
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span
+            className="inline-block h-2 w-4 rounded-sm"
+            style={{ backgroundImage: "repeating-linear-gradient(90deg, #f59e0b 0 3px, transparent 3px 6px)" }}
+          />
+          Zona segura
+        </span>
+      </div>
     </div>
   );
 }
+
+function ShapeGuides({ shapeData }: { shapeData: ShapeDef }) {
+  // Path-based shapes (cloud, heart): render two SVG paths, one inset for bleed
+  if (shapeData.clip && shapeData.path && shapeData.viewBox) {
+    return (
+      <svg
+        className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible"
+        viewBox={shapeData.viewBox}
+        preserveAspectRatio="none"
+      >
+        {/* Cut line */}
+        <path
+          d={shapeData.path}
+          fill="none"
+          stroke="#22c55e"
+          strokeWidth={2}
+          vectorEffect="non-scaling-stroke"
+        />
+        {/* Bleed / safe area — inset via transform-origin center */}
+        <g style={{ transformOrigin: "center", transformBox: "fill-box" }} transform="scale(0.92)">
+          <path
+            d={shapeData.path}
+            fill="none"
+            stroke="#f59e0b"
+            strokeWidth={1.5}
+            strokeDasharray="4 3"
+            vectorEffect="non-scaling-stroke"
+          />
+        </g>
+      </svg>
+    );
+  }
+
+  // Radius-based shapes: use bordered divs
+  const outerRadius = shapeData.radius ?? "0px";
+  const innerRadius =
+    outerRadius === "9999px"
+      ? "9999px"
+      : outerRadius === "0px"
+        ? "0px"
+        : `calc(${outerRadius} - 4px)`;
+  return (
+    <>
+      <div
+        className="pointer-events-none absolute inset-0 z-20"
+        style={{ border: "2px solid #22c55e", borderRadius: outerRadius }}
+      />
+      <div
+        className="pointer-events-none absolute inset-[6px] z-20"
+        style={{
+          border: "1.5px dashed #f59e0b",
+          borderRadius: innerRadius,
+        }}
+      />
+    </>
+  );
+}
+
 
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
