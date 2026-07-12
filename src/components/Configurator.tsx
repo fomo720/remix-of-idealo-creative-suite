@@ -18,10 +18,30 @@ type Material = "vinyl-white" | "vinyl-clear" | "semi-gloss" | "matte";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
-  { id: "die-cut", name: "Die-Cut", desc: "Corte individual exacto al contorno", accent: "var(--brand-red)" },
-  { id: "kiss-cut", name: "Kiss-Cut", desc: "Corte sobre el papel base", accent: "var(--brand-orange)" },
-  { id: "sheets", name: "Hojas de Stickers", desc: "Varios diseños por hoja", accent: "var(--brand-green)" },
-  { id: "rolls", name: "Rollos", desc: "Ideal para producción a escala", accent: "var(--brand-blue)" },
+  {
+    id: "die-cut",
+    name: "Die-Cut",
+    desc: "Stickers individuales cortados con precisión al contorno exacto de tu diseño.",
+    accent: "var(--brand-red)",
+  },
+  {
+    id: "kiss-cut",
+    name: "Kiss-Cut",
+    desc: "Cortados alrededor de tu forma dejando el papel base intacto para despegarlos fácilmente.",
+    accent: "var(--brand-orange)",
+  },
+  {
+    id: "sheets",
+    name: "Hoja (Diseño Único)",
+    desc: "Stickers personalizados cortados con precisión en hojas, sin cantidad mínima.",
+    accent: "var(--brand-green)",
+  },
+  {
+    id: "rolls",
+    name: "Rollos",
+    desc: "Stickers impresos y cortados en rollo para dispensado fácil y mayor rentabilidad.",
+    accent: "var(--brand-blue)",
+  },
 ];
 
 const materials: {
@@ -223,8 +243,9 @@ export function Configurator() {
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {cuts.map((c) => (
-                  <SelectCard
+                  <CutCard
                     key={c.id}
+                    id={c.id}
                     title={c.name}
                     desc={c.desc}
                     accent={c.accent}
@@ -1112,6 +1133,113 @@ function SelectCard({
         <div>
           <h4 className="font-semibold leading-tight">{title}</h4>
           <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
+        </div>
+        {active && (
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-white" style={{ background: accent }}>
+            <Check className="h-3.5 w-3.5" />
+          </span>
+        )}
+      </div>
+    </button>
+  );
+}
+
+function CutIllustration({ id }: { id: CutShape }) {
+  // Cloud/blob shape used as the "sticker" in every illustration
+  const blob = "M40 55 C15 55 10 30 32 25 C28 8 55 3 65 18 C82 3 115 15 112 35 C135 35 135 65 108 65 C100 82 65 82 60 68 C50 80 25 75 40 55 Z";
+  const fill = "#5BB8D9";
+  const stroke = "#ffffff";
+
+  if (id === "die-cut") {
+    return (
+      <svg viewBox="0 0 160 100" className="h-full w-full">
+        {/* soft shadow */}
+        <ellipse cx="80" cy="88" rx="55" ry="5" fill="#000" opacity="0.08" />
+        <g transform="translate(15,10)">
+          <path d={blob} fill={stroke} stroke="#e5e7eb" strokeWidth="1.5" transform="translate(4,4)" opacity="0.9" />
+          <path d={blob} fill={fill} stroke={stroke} strokeWidth="4" strokeLinejoin="round" />
+        </g>
+      </svg>
+    );
+  }
+  if (id === "kiss-cut") {
+    return (
+      <svg viewBox="0 0 160 100" className="h-full w-full">
+        <ellipse cx="80" cy="90" rx="60" ry="4" fill="#000" opacity="0.08" />
+        <g transform="translate(10,15) rotate(-4 70 40)">
+          <rect x="0" y="0" width="140" height="70" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        </g>
+        <g transform="translate(20,20)">
+          <rect x="0" y="0" width="130" height="65" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+          <g transform="translate(35,5) scale(0.55)">
+            <path d={blob} fill={fill} stroke={stroke} strokeWidth="4" strokeLinejoin="round" />
+            <path d={blob} fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="2 2" transform="translate(-2,-2) scale(1.05)" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (id === "sheets") {
+    return (
+      <svg viewBox="0 0 160 100" className="h-full w-full">
+        <ellipse cx="80" cy="92" rx="55" ry="4" fill="#000" opacity="0.08" />
+        <g transform="translate(45,8) rotate(8 40 45)">
+          <rect x="0" y="0" width="80" height="85" rx="3" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        </g>
+        <g transform="translate(15,12)">
+          <rect x="0" y="0" width="80" height="85" rx="3" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+          {[0,1,2].map((row) =>
+            [0,1].map((col) => (
+              <g key={`${row}-${col}`} transform={`translate(${8 + col*36},${6 + row*26}) scale(0.22)`}>
+                <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
+              </g>
+            ))
+          )}
+        </g>
+      </svg>
+    );
+  }
+  // rolls
+  return (
+    <svg viewBox="0 0 160 100" className="h-full w-full">
+      <ellipse cx="80" cy="92" rx="60" ry="4" fill="#000" opacity="0.08" />
+      {/* strip */}
+      <g transform="translate(10,45)">
+        <rect x="0" y="0" width="95" height="35" rx="2" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        <g transform="translate(8,4) scale(0.22)">
+          <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
+        </g>
+        <g transform="translate(48,4) scale(0.22)">
+          <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
+        </g>
+      </g>
+      {/* roll */}
+      <g transform="translate(105,25)">
+        <circle cx="25" cy="30" r="28" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        <circle cx="25" cy="30" r="10" fill="#1f2937" />
+      </g>
+    </svg>
+  );
+}
+
+function CutCard({
+  id, title, desc, active, onClick, accent,
+}: { id: CutShape; title: string; desc: string; active: boolean; onClick: () => void; accent: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all rainbow-splash",
+        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+      )}
+    >
+      <div className="flex h-36 w-full items-center justify-center bg-muted/60 p-4">
+        <CutIllustration id={id} />
+      </div>
+      <div className="flex flex-1 items-start justify-between gap-2 p-5">
+        <div>
+          <h4 className="font-semibold leading-tight">{title}</h4>
+          <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{desc}</p>
         </div>
         {active && (
           <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-white" style={{ background: accent }}>
