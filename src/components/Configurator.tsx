@@ -202,7 +202,7 @@ export function Configurator() {
                 accent="var(--brand-pink)"
                 icon={<Layers className="h-8 w-8" />}
                 active={category === "stickers"}
-                onClick={() => { setCategory("stickers"); setTimeout(() => goTo(2), 250); }}
+                onClick={() => setCategory("stickers")}
               />
               <CategoryCard
                 title="Iron-ons (Textiles)"
@@ -210,7 +210,7 @@ export function Configurator() {
                 accent="var(--brand-blue)"
                 icon={<Package className="h-8 w-8" />}
                 active={category === "iron-ons"}
-                onClick={() => { setCategory("iron-ons"); setTimeout(() => goTo(2), 250); }}
+                onClick={() => setCategory("iron-ons")}
               />
             </div>
           )}
@@ -226,7 +226,7 @@ export function Configurator() {
                     desc={c.desc}
                     accent={c.accent}
                     active={cut === c.id}
-                    onClick={() => { setCut(c.id); setTimeout(() => goTo(3), 250); }}
+                    onClick={() => setCut(c.id)}
                   />
                 ))}
               </div>
@@ -245,7 +245,7 @@ export function Configurator() {
                     desc={m.desc}
                     accent="var(--brand-violet)"
                     active={material === m.id}
-                    onClick={() => { setMaterial(m.id); setTimeout(() => goTo(4), 250); }}
+                    onClick={() => setMaterial(m.id)}
                     swatch={m.swatch}
                   />
                 ))}
@@ -1026,7 +1026,7 @@ function Stepper({ step, onGo }: { step: number; onGo: (n: number) => void }) {
         return (
           <div key={l} className="flex flex-1 items-center gap-2">
             <button
-              onClick={() => n <= step && onGo(n)}
+              onClick={() => onGo(n)}
               className={cn(
                 "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition",
                 active && "rainbow-border-active",
