@@ -48,13 +48,13 @@ type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "h
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   {
     id: "die-cut",
-    name: "Die-Cut",
+    name: "Troquelado",
     desc: "Stickers individuales cortados con precisión al contorno exacto de tu diseño.",
     accent: "var(--brand-red)",
   },
   {
     id: "kiss-cut",
-    name: "Kiss-Cut",
+    name: "Corte de Beso",
     desc: "Cortados alrededor de tu forma dejando el papel base intacto para despegarlos fácilmente.",
     accent: "var(--brand-orange)",
   },
