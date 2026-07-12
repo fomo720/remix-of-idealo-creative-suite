@@ -1212,31 +1212,18 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls — vertical toilet-paper-style roll with apple stickers hanging down
+  // rolls — use uploaded roll icon with apple stickers on the paper
   return (
     <svg viewBox="0 0 160 100" className="h-full w-full">
-      <ellipse cx="80" cy="95" rx="40" ry="3" fill="#000" opacity="0.08" />
-      {/* roll cylinder at top */}
-      <g transform="translate(52,6)">
-        {/* body */}
-        <rect x="0" y="8" width="56" height="18" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        {/* top rim */}
-        <ellipse cx="28" cy="8" rx="28" ry="7" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        {/* inner hole */}
-        <ellipse cx="28" cy="8" rx="9" ry="2.5" fill="#1f2937" />
-        {/* bottom edge line */}
-        <ellipse cx="28" cy="26" rx="28" ry="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-      </g>
-      {/* paper strip hanging vertically */}
-      <g transform="translate(62,30)">
-        <rect x="0" y="0" width="36" height="62" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        {/* two apple stickers stacked */}
-        {appleImg(28, 4, 3)}
-        {appleImg(28, 4, 32)}
-      </g>
+      <ellipse cx="80" cy="94" rx="55" ry="4" fill="#000" opacity="0.08" />
+      <image href={rollIcon.url} x="10" y="10" width="140" height="80" preserveAspectRatio="xMidYMid meet" />
+      {/* apple stickers on the flat paper section */}
+      {appleImg(22, 76, 40)}
+      {appleImg(22, 104, 40)}
     </svg>
   );
 }
+
 
 
 
