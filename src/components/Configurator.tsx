@@ -384,6 +384,12 @@ export function Configurator() {
   }, [qty]);
 
   const price = useMemo(() => {
+    if (isLaser) {
+      const base = laserProductData?.price ?? 200;
+      // gentle bulk curve for engraving
+      const lBulk = qty >= 100 ? 0.75 : qty >= 50 ? 0.85 : qty >= 25 ? 0.92 : 1;
+      return Math.round(base * qty * lBulk);
+    }
     if (isNotebook) {
       // notebook base price by size (cm²), plus material/style factors
       const areaCm = notebookSizeData.w * notebookSizeData.h;
@@ -400,7 +406,7 @@ export function Configurator() {
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     return Math.round(base * area * factor * bulkFactor * qty);
-  }, [isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
+  }, [isLaser, laserProductData, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
