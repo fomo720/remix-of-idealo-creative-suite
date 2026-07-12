@@ -40,7 +40,7 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 type Category = "stickers" | "iron-ons" | "libretas" | "laser";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
-  | "llavero-madera" | "vaso" | "coco";
+  | "llavero-madera" | "vaso" | "coco" | "cadena";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
 type Material =
   | "white-vinyl-removable"
