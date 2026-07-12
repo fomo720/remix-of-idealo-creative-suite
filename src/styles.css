@@ -150,9 +150,10 @@
   border: 2px solid transparent;
 }
 @utility rainbow-border-active {
-  border-image: var(--gradient-rainbow) 1;
-  border-style: solid;
-  border-width: 2px;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--color-card), var(--color-card)) padding-box,
+    var(--gradient-rainbow) border-box;
   box-shadow: var(--shadow-elegant);
 }
 
