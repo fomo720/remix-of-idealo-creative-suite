@@ -272,7 +272,7 @@ function pageBackground(type: PageType): React.CSSProperties {
 }
 
 /* ---------- Grabado Láser ---------- */
-type LaserColor = { name: string; hex: string };
+type LaserColor = { name: string; hex: string; image?: string };
 type LaserVariant = {
   id: string;
   name: string;
