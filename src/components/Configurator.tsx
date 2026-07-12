@@ -314,17 +314,14 @@ export function Configurator() {
           {step === 3 && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {materials.map((m) => (
-                  <SelectCard
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {materials.map((m, idx) => (
+                  <MaterialCard
                     key={m.id}
-                    title={m.name}
-                    desc={m.desc}
-                    accent="var(--brand-violet)"
+                    material={m}
                     active={material === m.id}
+                    isBestSeller={idx === 0}
                     onClick={() => setMaterial(m.id)}
-                    swatch={m.swatch}
-                    sampleImage={m.sampleImage}
                   />
                 ))}
               </div>
