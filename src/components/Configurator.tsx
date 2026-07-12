@@ -18,7 +18,16 @@ import rollIcon from "@/assets/roll-icon.png.asset.json";
 
 type Category = "stickers" | "iron-ons";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
-type Material = "vinyl-white" | "vinyl-clear" | "semi-gloss" | "matte";
+type Material =
+  | "vinyl-white"
+  | "vinyl-clear"
+  | "semi-gloss"
+  | "matte"
+  | "white-vinyl-removable"
+  | "clear-vinyl-removable"
+  | "eco-pet-matte"
+  | "white-vinyl-permanent"
+  | "hang-tag-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
