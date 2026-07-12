@@ -243,8 +243,9 @@ export function Configurator() {
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {cuts.map((c) => (
-                  <SelectCard
+                  <CutCard
                     key={c.id}
+                    id={c.id}
                     title={c.name}
                     desc={c.desc}
                     accent={c.accent}
