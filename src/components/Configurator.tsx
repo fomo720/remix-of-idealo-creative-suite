@@ -304,7 +304,10 @@ export function Configurator() {
   const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const isNotebook = category === "libretas";
   const materialData = materials.find((m) => m.id === material);
+  const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
+  const notebookSizeData = notebookSizes[notebookSizeIdx];
   const shapeData = shapes.find((s) => s.id === shape)!;
 
   const bulkFactor = useMemo(() => {
@@ -317,13 +320,23 @@ export function Configurator() {
   }, [qty]);
 
   const price = useMemo(() => {
+    if (isNotebook) {
+      // notebook base price by size (cm²), plus material/style factors
+      const areaCm = notebookSizeData.w * notebookSizeData.h;
+      const base = 45 + areaCm * 0.35;
+      const matFactor = notebookMaterialData?.priceFactor ?? 1;
+      const styleFactor = notebookStyle === "cover-pages" ? 1.25 : 1;
+      // gentler bulk curve for notebooks
+      const nbBulk = qty >= 100 ? 0.7 : qty >= 50 ? 0.8 : qty >= 25 ? 0.9 : 1;
+      return Math.round(base * matFactor * styleFactor * nbBulk * qty);
+    }
     const base = 8;
     const w = parseFloat(width || "1");
     const h = parseFloat(height || "1");
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     return Math.round(base * area * factor * bulkFactor * qty);
-  }, [width, height, qty, materialData, bulkFactor]);
+  }, [isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
