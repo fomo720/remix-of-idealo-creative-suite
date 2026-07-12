@@ -2469,7 +2469,11 @@ function NotebookDesigner({
             pageType={pageType}
             uploaded={uploaded}
             preset={preset}
+            pageArtUploaded={pageArtUploaded}
+            pageArtPreset={pageArtPreset}
+            pageArtOpacity={pageArtOpacity}
           />
+
 
           <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
             <Stat label="Tamaño" value={`${size.label} · ${size.cm}`} />
