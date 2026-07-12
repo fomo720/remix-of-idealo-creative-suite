@@ -1212,14 +1212,15 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls — clean roll icon with a single apple sticker on the paper
+  // rolls — clean roll icon with a single apple sticker centered on the paper
   return (
-    <svg viewBox="0 0 160 100" className="h-full w-full">
-      <image href={rollIcon.url} x="0" y="0" width="160" height="100" preserveAspectRatio="xMidYMid meet" />
-      {appleImg(30, 82, 42)}
+    <svg viewBox="0 0 160 100" className="h-full w-full" style={{ overflow: "hidden" }}>
+      <image href={rollIcon.url} x="-5" y="-35" width="170" height="170" preserveAspectRatio="xMidYMid meet" />
+      {appleImg(32, 82, 38)}
     </svg>
   );
 }
+
 
 
 
