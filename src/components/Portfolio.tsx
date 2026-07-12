@@ -1,3 +1,4 @@
+import menus from "@/assets/portfolio-menus.jpg.asset.json";
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
 import carpetas from "@/assets/portfolio-carpetas.jpg.asset.json";
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
@@ -19,8 +20,9 @@ const projects: Project[] = [
   {
     title: "Menús para restaurantes",
     tag: "Restaurantes",
-    subtitle: "Impresión premium · acabado mate",
-    gradient: "linear-gradient(135deg,#fb923c,#ec4899)",
+    subtitle: "Impresión doble lado · espiral de metal · laminado",
+    image: menus.url,
+    bg: "#d9d9d9",
   },
   {
     title: "Stickers de marca",
@@ -104,7 +106,7 @@ export function Portfolio() {
                     src={p.image}
                     alt={p.title}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-contain p-0 scale-[2] transition-transform duration-500 group-hover:scale-[2.1]"
                   />
                 ) : null}
                 <div className="absolute inset-x-0 bottom-0 flex items-end p-4">
