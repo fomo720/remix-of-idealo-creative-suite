@@ -2189,6 +2189,8 @@ function NotebookMaterialCard({
 function NotebookDesigner({
   styleId, material, sizeIdx, setSizeIdx, pageType, setPageType,
   uploaded, preset, onFile, onPreset, onClear, fileRef,
+  pageArtUploaded, pageArtPreset, pageArtOpacity, setPageArtOpacity,
+  onPageArtFile, onPageArtPreset, onPageArtClear, pageFileRef,
   qty, setQty, notes, setNotes, price, onBack,
 }: {
   styleId: NotebookStyle;
@@ -2203,6 +2205,14 @@ function NotebookDesigner({
   onPreset: (p: string) => void;
   onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
+  pageArtUploaded: string | null;
+  pageArtPreset: string | null;
+  pageArtOpacity: number;
+  setPageArtOpacity: (n: number) => void;
+  onPageArtFile: (f: File | null) => void;
+  onPageArtPreset: (p: string) => void;
+  onPageArtClear: () => void;
+  pageFileRef: React.RefObject<HTMLInputElement | null>;
   qty: number;
   setQty: (n: number) => void;
   notes: string;
@@ -2213,6 +2223,10 @@ function NotebookDesigner({
   const size = notebookSizes[sizeIdx];
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
+  const showPageArt = showPages && size.id === "a5";
+  const hasPageArt = !!(pageArtUploaded || pageArtPreset);
+
+
 
   return (
     <div className="animate-step-in grid gap-8 lg:grid-cols-2">
