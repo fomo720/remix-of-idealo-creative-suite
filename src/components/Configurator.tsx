@@ -2682,7 +2682,18 @@ function LaserDesigner({
             <div>
               <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Producto seleccionado</div>
               <div className="font-bold leading-tight">{product.name}</div>
-              <p className="mt-1 text-xs text-muted-foreground">{product.desc}</p>
+              {variant && (
+                <div className="mt-1 text-xs">
+                  <span className="font-semibold text-foreground">{variant.name}</span>
+                  {color && (
+                    <span className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] text-muted-foreground">
+                      <span className="h-3 w-3 rounded-full border border-black/10" style={{ background: color.hex }} />
+                      {color.name}
+                    </span>
+                  )}
+                </div>
+              )}
+              <p className="mt-1 text-xs text-muted-foreground">{variant?.desc ?? product.desc}</p>
             </div>
           </div>
         </div>
