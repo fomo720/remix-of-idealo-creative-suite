@@ -1212,17 +1212,16 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls — use uploaded roll icon with apple stickers on the paper
+  // rolls — clean roll icon with a single apple sticker on the paper
   return (
     <svg viewBox="0 0 160 100" className="h-full w-full">
-      <ellipse cx="80" cy="94" rx="55" ry="4" fill="#000" opacity="0.08" />
-      <image href={rollIcon.url} x="10" y="10" width="140" height="80" preserveAspectRatio="xMidYMid meet" />
-      {/* apple stickers on the flat paper section */}
-      {appleImg(22, 76, 40)}
-      {appleImg(22, 104, 40)}
+      <ellipse cx="80" cy="94" rx="50" ry="3.5" fill="#000" opacity="0.08" />
+      <image href={rollIcon.url} x="15" y="4" width="130" height="92" preserveAspectRatio="xMidYMid meet" />
+      {appleImg(28, 78, 40)}
     </svg>
   );
 }
+
 
 
 
