@@ -515,6 +515,7 @@ export function Configurator() {
   const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const pageFileRef = useRef<HTMLInputElement>(null);
   const isNotebook = category === "libretas";
   const isLaser = category === "laser";
   const materialData = materials.find((m) => m.id === material);
