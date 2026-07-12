@@ -491,6 +491,11 @@ export function Configurator() {
   const [notebookMaterial, setNotebookMaterial] = useState<NotebookMaterial | null>(null);
   const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
   const [pageType, setPageType] = useState<PageType>("blank");
+  // notebook page (interior) art
+  const [pageArtUploaded, setPageArtUploaded] = useState<string | null>(null);
+  const [pageArtPreset, setPageArtPreset] = useState<string | null>(null);
+  const [pageArtOpacity, setPageArtOpacity] = useState(35); // 0-100
+
 
   // laser state
   const [laserProduct, setLaserProduct] = useState<LaserProductId | null>(null);
@@ -510,6 +515,7 @@ export function Configurator() {
   const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const pageFileRef = useRef<HTMLInputElement>(null);
   const isNotebook = category === "libretas";
   const isLaser = category === "laser";
   const materialData = materials.find((m) => m.id === material);
@@ -577,6 +583,20 @@ export function Configurator() {
     setUploaded(null); setPreset(null); resetImageTools();
     if (fileRef.current) fileRef.current.value = "";
   };
+
+  const handlePageArtFile = (f: File | null) => {
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    setPageArtUploaded(url);
+    setPageArtPreset(null);
+  };
+  const clearPageArt = () => {
+    setPageArtUploaded(null);
+    setPageArtPreset(null);
+    if (pageFileRef.current) pageFileRef.current.value = "";
+  };
+
+
 
   const applyPreset = (i: number) => {
     setActivePreset(i);
@@ -939,6 +959,14 @@ export function Configurator() {
               onPreset={(p) => { setPreset(p); setUploaded(null); }}
               onClear={clearImage}
               fileRef={fileRef}
+              pageArtUploaded={pageArtUploaded}
+              pageArtPreset={pageArtPreset}
+              pageArtOpacity={pageArtOpacity}
+              setPageArtOpacity={setPageArtOpacity}
+              onPageArtFile={handlePageArtFile}
+              onPageArtPreset={(p) => { setPageArtPreset(p); setPageArtUploaded(null); }}
+              onPageArtClear={clearPageArt}
+              pageFileRef={pageFileRef}
               qty={qty}
               setQty={setQty}
               notes={notes}
@@ -2161,6 +2189,8 @@ function NotebookMaterialCard({
 function NotebookDesigner({
   styleId, material, sizeIdx, setSizeIdx, pageType, setPageType,
   uploaded, preset, onFile, onPreset, onClear, fileRef,
+  pageArtUploaded, pageArtPreset, pageArtOpacity, setPageArtOpacity,
+  onPageArtFile, onPageArtPreset, onPageArtClear, pageFileRef,
   qty, setQty, notes, setNotes, price, onBack,
 }: {
   styleId: NotebookStyle;
@@ -2175,6 +2205,14 @@ function NotebookDesigner({
   onPreset: (p: string) => void;
   onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
+  pageArtUploaded: string | null;
+  pageArtPreset: string | null;
+  pageArtOpacity: number;
+  setPageArtOpacity: (n: number) => void;
+  onPageArtFile: (f: File | null) => void;
+  onPageArtPreset: (p: string) => void;
+  onPageArtClear: () => void;
+  pageFileRef: React.RefObject<HTMLInputElement | null>;
   qty: number;
   setQty: (n: number) => void;
   notes: string;
@@ -2185,6 +2223,10 @@ function NotebookDesigner({
   const size = notebookSizes[sizeIdx];
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
+  const showPageArt = showPages && size.id === "a5";
+  const hasPageArt = !!(pageArtUploaded || pageArtPreset);
+
+
 
   return (
     <div className="animate-step-in grid gap-8 lg:grid-cols-2">
@@ -2255,6 +2297,82 @@ function NotebookDesigner({
             </div>
           </div>
         )}
+
+        {/* Page interior art (A5 + cover-pages only) */}
+        {showPageArt && (
+          <div className="rounded-2xl border-2 border-dashed border-border/80 bg-gradient-soft/50 p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <Label className="text-sm font-semibold">Diseño de la página interior</Label>
+              <span className="rounded-full bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                A5
+              </span>
+            </div>
+            <p className="mb-3 text-[11px] text-muted-foreground">
+              Sube un logo o marca de agua que se imprima sutilmente en cada hoja interior. Controla la opacidad para que no interfiera con la escritura.
+            </p>
+            <input
+              ref={pageFileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => onPageArtFile(e.target.files?.[0] ?? null)}
+            />
+            <button
+              onClick={() => pageFileRef.current?.click()}
+              className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-5 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+            >
+              <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
+              {pageArtUploaded ? "Cambiar diseño de página" : "Subir diseño de página"}
+            </button>
+
+            <div className="mt-3">
+              <Label className="mb-2 block text-xs text-muted-foreground">O elige un ícono prediseñado</Label>
+              <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+                {presetArts.map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => onPageArtPreset(a)}
+                    className={cn(
+                      "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
+                      pageArtPreset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                    )}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {hasPageArt && (
+              <>
+                <div className="mt-4">
+                  <div className="mb-2 flex items-center justify-between">
+                    <Label className="text-xs font-semibold">Opacidad de la marca de agua</Label>
+                    <span className="text-xs font-bold" style={{ color: "var(--brand-violet)" }}>{pageArtOpacity}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={5}
+                    max={100}
+                    step={1}
+                    value={pageArtOpacity}
+                    onChange={(e) => setPageArtOpacity(+e.target.value)}
+                    className="w-full accent-[color:var(--brand-violet)]"
+                  />
+                  <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                    <span>Sutil</span>
+                    <span>Intenso</span>
+                  </div>
+                </div>
+                <button onClick={onPageArtClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-3.5 w-3.5" /> Quitar diseño de página
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+
 
         {/* Upload cover art */}
         <div>
@@ -2351,7 +2469,11 @@ function NotebookDesigner({
             pageType={pageType}
             uploaded={uploaded}
             preset={preset}
+            pageArtUploaded={pageArtUploaded}
+            pageArtPreset={pageArtPreset}
+            pageArtOpacity={pageArtOpacity}
           />
+
 
           <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
             <Stat label="Tamaño" value={`${size.label} · ${size.cm}`} />
@@ -2377,6 +2499,7 @@ function NotebookDesigner({
 /* ---------- Notebook live preview ---------- */
 function NotebookPreview({
   size, material, showPages, pageType, uploaded, preset,
+  pageArtUploaded, pageArtPreset, pageArtOpacity,
 }: {
   size: (typeof notebookSizes)[number];
   material: (typeof notebookMaterials)[number];
@@ -2384,12 +2507,17 @@ function NotebookPreview({
   pageType: PageType;
   uploaded: string | null;
   preset: string | null;
+  pageArtUploaded?: string | null;
+  pageArtPreset?: string | null;
+  pageArtOpacity?: number;
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
     material.id === "cover-glossy"
       ? "linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#334155 100%)"
       : "linear-gradient(135deg,#3f3f46 0%,#52525b 100%)";
+  const pageArtOpacityPct = (pageArtOpacity ?? 35) / 100;
+  const hasPageArt = !!(pageArtUploaded || pageArtPreset);
 
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
@@ -2407,20 +2535,35 @@ function NotebookPreview({
         {showPages && (
           <>
             <div
-              className="absolute rounded-r-md border border-border bg-white"
+              className="absolute overflow-hidden rounded-r-md border border-border bg-white"
               style={{
                 inset: "3% -6% 3% 4%",
                 boxShadow: "2px 4px 12px rgba(0,0,0,0.1)",
                 ...pageBackground(pageType),
                 backgroundColor: "#ffffff",
               }}
-            />
+            >
+              {hasPageArt && (
+                <div
+                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                  style={{ opacity: pageArtOpacityPct }}
+                >
+                  {pageArtUploaded ? (
+                    <img src={pageArtUploaded} alt="" className="max-h-[60%] max-w-[60%] object-contain" />
+                  ) : (
+                    <span className="text-[3rem] leading-none">{pageArtPreset}</span>
+                  )}
+                </div>
+              )}
+            </div>
             <div
               className="absolute rounded-r-sm border border-border bg-white/95"
               style={{ inset: "1.5% -3% 1.5% 6%" }}
             />
           </>
         )}
+
+
 
         {/* Cover */}
         <div
