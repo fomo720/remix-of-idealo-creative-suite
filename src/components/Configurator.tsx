@@ -1072,7 +1072,7 @@ function CategoryCard({
     <button
       onClick={onClick}
       className={cn(
-        "group relative overflow-hidden rounded-3xl border-2 p-8 text-left transition-all",
+        "group relative overflow-hidden rounded-3xl border-2 p-8 text-left transition-all rainbow-splash",
         active ? "rainbow-border-active" : "border-border hover:-translate-y-1 hover:shadow-elegant",
       )}
     >
