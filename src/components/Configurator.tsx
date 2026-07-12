@@ -940,11 +940,14 @@ function FloatBtn({
 }: { children: React.ReactNode; onClick: () => void; label: string; danger?: boolean }) {
   return (
     <button
-      onClick={onClick}
+      type="button"
+      onPointerDown={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={(e) => { e.stopPropagation(); e.preventDefault(); onClick(); }}
       title={label}
       aria-label={label}
       className={cn(
-        "grid h-9 w-9 place-items-center rounded-full transition active:scale-95",
+        "grid h-9 w-9 place-items-center rounded-full transition active:scale-95 cursor-pointer",
         danger
           ? "text-destructive hover:bg-destructive/10"
           : "text-foreground hover:bg-muted",
