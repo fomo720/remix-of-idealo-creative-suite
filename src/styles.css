@@ -227,8 +227,8 @@
   background-position: 0% 50%;
   background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
   transition: transform 180ms ease, filter 200ms ease;
 }
 .rainbow-text-hover::after {
