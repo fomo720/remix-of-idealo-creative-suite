@@ -738,7 +738,14 @@ export function Configurator() {
                   return (
                     <button
                       key={v.id}
-                      onClick={() => { setLaserVariantId(v.id); setLaserColorIdx(0); }}
+                      type="button"
+                      onClick={() => {
+                        const y = window.scrollY;
+                        setLaserVariantId(v.id);
+                        setLaserColorIdx(0);
+                        // Prevent layout jump when the color panel appears below
+                        requestAnimationFrame(() => window.scrollTo({ top: y }));
+                      }}
                       className={cn(
                         "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
                         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
