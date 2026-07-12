@@ -268,6 +268,14 @@ function pageBackground(type: PageType): React.CSSProperties {
 }
 
 /* ---------- Grabado Láser ---------- */
+type LaserColor = { name: string; hex: string };
+type LaserVariant = {
+  id: string;
+  name: string;
+  desc: string;
+  priceDelta?: number; // added to base
+  colors: LaserColor[];
+};
 type LaserProduct = {
   id: LaserProductId;
   name: string;
@@ -278,6 +286,8 @@ type LaserProduct = {
   price: number;        // unit price base in Lempiras
   icon: React.ReactNode;
   shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut";
+  variantLabel?: string; // e.g. "Modelo", "Estilo"
+  variants?: LaserVariant[];
 };
 
 const laserProducts: LaserProduct[] = [
@@ -285,36 +295,132 @@ const laserProducts: LaserProduct[] = [
     id: "tabla", name: "Tabla de Cortar", desc: "Madera de bambú prensada", hint: "Regalos de cocina y bodas",
     surface: "linear-gradient(135deg,#d9a869,#b8823f)", engrave: "#3a2110", price: 380,
     icon: <Square className="h-8 w-8" />, shape: "board",
+    variantLabel: "Estilo de tabla",
+    variants: [
+      { id: "rect-grande", name: "Rectangular Grande", desc: "38 × 25 cm · bambú prensado", colors: [
+        { name: "Bambú natural", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "rect-manija", name: "Con Manija (Paleta)", desc: "40 × 20 cm · agarre lateral", colors: [
+        { name: "Bambú natural", hex: "#c99560" }, { name: "Cerezo", hex: "#8a4a2a" },
+      ]},
+      { id: "redonda", name: "Redonda de Quesos", desc: "Ø 28 cm · borde biselado", colors: [
+        { name: "Bambú natural", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "picnic", name: "Set Picnic (larga)", desc: "45 × 18 cm · para tablas de embutidos", priceDelta: 60, colors: [
+        { name: "Bambú natural", hex: "#c99560" },
+      ]},
+    ],
   },
   {
     id: "botella", name: "Botella Metálica", desc: "Estilo Yeti · Owala · Stanley", hint: "Corporativo y deportivo",
     surface: "linear-gradient(135deg,#3a3a3a,#1c1c1c)", engrave: "#e8ecef", price: 450,
     icon: <Coffee className="h-8 w-8" />, shape: "bottle",
+    variantLabel: "Modelo",
+    variants: [
+      { id: "yeti-stack-16", name: "Yeti Rambler® Apilable 16 oz", desc: "473 ml · para café y cerveza", colors: [
+        { name: "Negro", hex: "#111111" }, { name: "Rojo", hex: "#c8352b" },
+        { name: "Amarillo", hex: "#f0c419" }, { name: "Azul", hex: "#2b4d8e" }, { name: "Blanco", hex: "#f2f2f2" },
+      ]},
+      { id: "yeti-jr-10", name: "Yeti Rambler® Jr. 10 oz", desc: "Para niños · irrompible", priceDelta: -60, colors: [
+        { name: "Verde", hex: "#3e6b3a" }, { name: "Amarillo", hex: "#f0c419" },
+        { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "yeti-straw-42", name: "Yeti Rambler® 42 oz c/sorbete", desc: "1.2 L · caja/deportivo", priceDelta: 180, colors: [
+        { name: "Amarillo", hex: "#f0c419" }, { name: "Naranja", hex: "#e07a29" }, { name: "Verde", hex: "#3e6b3a" },
+      ]},
+      { id: "yeti-30", name: "Yeti Rambler® 30 oz", desc: "887 ml · viajes y oficina", priceDelta: 120, colors: [
+        { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" }, { name: "Verde", hex: "#3e6b3a" },
+      ]},
+      { id: "owala-slider", name: "Owala SmoothSip® Slider", desc: "Anti-derrame · frío o caliente", priceDelta: 90, colors: [
+        { name: "Rosado", hex: "#e6a3b8" }, { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "owala-freesip", name: "Owala FreeSip®", desc: "Award winning · 24 h frío", priceDelta: 110, colors: [
+        { name: "Rosado", hex: "#e6a3b8" }, { name: "Azul", hex: "#2b4d8e" }, { name: "Negro", hex: "#111111" },
+      ]},
+    ],
   },
   {
     id: "cartera", name: "Cartera de Cuero (Varón)", desc: "Piel legítima curtida", hint: "Iniciales y logos",
     surface: "linear-gradient(135deg,#4a2c1a,#2d180c)", engrave: "#0f0803", price: 520,
     icon: <Wallet className="h-8 w-8" />, shape: "wallet",
+    variantLabel: "Tipo de cartera",
+    variants: [
+      { id: "bifold", name: "Bifold Clásica", desc: "Doble pliegue · 8 tarjetas", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" }, { name: "Miel", hex: "#8a5a2a" },
+      ]},
+      { id: "trifold", name: "Trifold", desc: "Triple pliegue · más espacio", priceDelta: 40, colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "cardholder", name: "Tarjetero Slim", desc: "Ultra delgado · 6 tarjetas", priceDelta: -80, colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" }, { name: "Cognac", hex: "#7a4a26" },
+      ]},
+    ],
   },
   {
     id: "llavero-cuero", name: "Llavero de Cuero", desc: "Piel natural", hint: "Merch y detalles",
     surface: "linear-gradient(135deg,#7a4a26,#4d2c14)", engrave: "#1a0d05", price: 120,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+    variantLabel: "Forma",
+    variants: [
+      { id: "rect", name: "Rectangular", desc: "Clásico · 7 × 3 cm", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" }, { name: "Miel", hex: "#8a5a2a" },
+      ]},
+      { id: "redondo", name: "Redondo", desc: "Ø 4 cm · logos centrados", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "hueso", name: "Hueso (Mascotas)", desc: "Para placas de perros/gatos", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Rojo", hex: "#8b2a24" },
+      ]},
+      { id: "corazon", name: "Corazón", desc: "Regalos y parejas", colors: [
+        { name: "Rojo", hex: "#8b2a24" }, { name: "Rosado", hex: "#c68796" },
+      ]},
+    ],
   },
   {
     id: "llavero-madera", name: "Llavero de Madera", desc: "Madera clara pulida", hint: "Souvenirs y eventos",
     surface: "linear-gradient(135deg,#c99560,#a1703b)", engrave: "#3a2110", price: 90,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+    variantLabel: "Forma",
+    variants: [
+      { id: "circulo", name: "Círculo", desc: "Ø 4 cm · logos", colors: [
+        { name: "Bambú", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "rect", name: "Rectangular", desc: "7 × 3 cm · nombres", colors: [
+        { name: "Bambú", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "casa", name: "Casita", desc: "Bienvenida y bienes raíces", colors: [
+        { name: "Bambú", hex: "#c99560" },
+      ]},
+      { id: "estrella", name: "Estrella", desc: "Eventos y premios", colors: [
+        { name: "Bambú", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+    ],
   },
   {
     id: "vaso", name: "Vaso de Vidrio", desc: "Vidrio templado transparente", hint: "Restaurantes y bares",
     surface: "linear-gradient(135deg,#e8f2f7,#c4d8e2)", engrave: "#4d6a75", price: 180,
     icon: <Wine className="h-8 w-8" />, shape: "glass",
+    variantLabel: "Tipo de vaso",
+    variants: [
+      { id: "highball", name: "Highball 12 oz", desc: "Tragos largos · agua/refrescos", colors: [
+        { name: "Cristal", hex: "#e8f2f7" },
+      ]},
+      { id: "whiskey", name: "Whiskey / Old Fashioned", desc: "10 oz · base gruesa", priceDelta: 30, colors: [
+        { name: "Cristal", hex: "#e8f2f7" }, { name: "Ámbar", hex: "#d6a95a" },
+      ]},
+      { id: "pinta", name: "Pinta de Cerveza 16 oz", desc: "Clásico bar", priceDelta: 20, colors: [
+        { name: "Cristal", hex: "#e8f2f7" },
+      ]},
+      { id: "vino", name: "Copa de Vino", desc: "Tallada · 12 oz", priceDelta: 60, colors: [
+        { name: "Cristal", hex: "#e8f2f7" },
+      ]},
+    ],
   },
   {
     id: "coco", name: "Coco (Fruta Natural)", desc: "Grabamos la cáscara del coco", hint: "Eventos tropicales · bodas playa",
     surface: "linear-gradient(135deg,#5a3720,#2f1c0e)", engrave: "#120a04", price: 65,
     icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
+    // coco es coco — sin variantes
   },
 ];
 
