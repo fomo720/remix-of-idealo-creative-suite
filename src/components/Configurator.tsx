@@ -2431,16 +2431,22 @@ function LaserProductCard({
       )}
     >
       <div className="relative h-40 w-full overflow-hidden" style={{ background: product.surface }}>
-        <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
-          backgroundImage:
-            "repeating-linear-gradient(115deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 6px)",
-        }} />
-        <div className="relative grid h-full w-full place-items-center text-white/90">
-          <div className="flex flex-col items-center gap-1.5">
-            {product.icon}
-            <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">Vista de material</span>
+        {product.heroImage ? (
+          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
+            backgroundImage:
+              "repeating-linear-gradient(115deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 6px)",
+          }} />
+        )}
+        {!product.heroImage && (
+          <div className="relative grid h-full w-full place-items-center text-white/90">
+            <div className="flex flex-col items-center gap-1.5">
+              {product.icon}
+              <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">Vista de material</span>
+            </div>
           </div>
-        </div>
+        )}
         {active && (
           <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full text-white shadow-md" style={{ background: "var(--brand-orange)" }}>
             <Check className="h-4 w-4" />
