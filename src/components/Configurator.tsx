@@ -2184,3 +2184,523 @@ function NotebookPreview({
   );
 }
 
+
+/* ============================================================
+   ============  GRABADO LÁSER — Componentes  =================
+   ============================================================ */
+
+function LaserProductCard({
+  product, active, onClick,
+}: { product: LaserProduct; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all rainbow-splash",
+        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+      )}
+    >
+      <div className="relative h-40 w-full overflow-hidden" style={{ background: product.surface }}>
+        <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
+          backgroundImage:
+            "repeating-linear-gradient(115deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 6px)",
+        }} />
+        <div className="relative grid h-full w-full place-items-center text-white/90">
+          <div className="flex flex-col items-center gap-1.5">
+            {product.icon}
+            <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">Vista de material</span>
+          </div>
+        </div>
+        {active && (
+          <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full text-white shadow-md" style={{ background: "var(--brand-orange)" }}>
+            <Check className="h-4 w-4" />
+          </span>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col gap-1.5 p-4">
+        <h4 className="text-sm font-bold leading-tight">{product.name}</h4>
+        <p className="text-xs text-muted-foreground">{product.desc}</p>
+        <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
+          <span className="text-[11px] text-muted-foreground">{product.hint}</span>
+          <span className="text-[11px] font-semibold" style={{ color: "var(--brand-orange)" }}>
+            desde {currency(product.price)}
+          </span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+/* Product mockup — SVG silhouette per shape, receives engraved art as an <image> mask overlay */
+function ProductMockup({
+  product, children,
+}: { product: LaserProduct; children: React.ReactNode }) {
+  const s = product.shape;
+  // Each shape renders its silhouette + a clipped inner "engrave zone" that hosts children.
+  if (s === "board") {
+    return (
+      <svg viewBox="0 0 300 220" className="h-full w-full">
+        <defs>
+          <linearGradient id="lg-board" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#d9a869" /><stop offset="100%" stopColor="#a06e30" />
+          </linearGradient>
+          <clipPath id="cp-board"><rect x="30" y="35" width="240" height="150" rx="18" /></clipPath>
+        </defs>
+        <ellipse cx="150" cy="200" rx="120" ry="6" fill="#000" opacity="0.15" />
+        <rect x="30" y="35" width="240" height="150" rx="18" fill="url(#lg-board)" />
+        {/* wood grain */}
+        {[0,1,2,3,4].map((i) => (
+          <path key={i} d={`M40 ${55 + i*28} Q150 ${50 + i*28} 260 ${58 + i*28}`} stroke="#7a4d1e" strokeOpacity="0.18" fill="none" strokeWidth="1.2" />
+        ))}
+        <circle cx="252" cy="55" r="4" fill="#000" opacity="0.35" />
+        <g clipPath="url(#cp-board)">
+          <foreignObject x="30" y="35" width="240" height="150">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+        <rect x="30" y="35" width="240" height="150" rx="18" fill="none" stroke="#000" strokeOpacity="0.15" strokeWidth="1.5" />
+      </svg>
+    );
+  }
+  if (s === "bottle") {
+    return (
+      <svg viewBox="0 0 300 340" className="h-full w-full">
+        <defs>
+          <linearGradient id="lg-bottle" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#151515" /><stop offset="45%" stopColor="#4a4a4a" /><stop offset="100%" stopColor="#151515" />
+          </linearGradient>
+          <clipPath id="cp-bottle"><rect x="95" y="90" width="110" height="180" rx="6" /></clipPath>
+        </defs>
+        <ellipse cx="150" cy="320" rx="65" ry="6" fill="#000" opacity="0.2" />
+        <rect x="120" y="20" width="60" height="30" rx="4" fill="#222" />
+        <rect x="115" y="45" width="70" height="16" rx="3" fill="#0f0f0f" />
+        <path d="M100 70 L200 70 L205 90 L205 285 Q205 305 185 305 L115 305 Q95 305 95 285 L95 90 Z" fill="url(#lg-bottle)" />
+        {/* metallic highlight */}
+        <rect x="102" y="95" width="10" height="190" rx="4" fill="#fff" opacity="0.15" />
+        <g clipPath="url(#cp-bottle)">
+          <foreignObject x="95" y="90" width="110" height="180">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+      </svg>
+    );
+  }
+  if (s === "wallet") {
+    return (
+      <svg viewBox="0 0 320 220" className="h-full w-full">
+        <defs>
+          <linearGradient id="lg-wallet" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#5b3620" /><stop offset="100%" stopColor="#2f1a0d" />
+          </linearGradient>
+          <clipPath id="cp-wallet"><rect x="40" y="30" width="240" height="160" rx="10" /></clipPath>
+        </defs>
+        <ellipse cx="160" cy="205" rx="120" ry="6" fill="#000" opacity="0.22" />
+        <rect x="40" y="30" width="240" height="160" rx="10" fill="url(#lg-wallet)" />
+        {/* stitching */}
+        <rect x="46" y="36" width="228" height="148" rx="8" fill="none" stroke="#d9b98a" strokeOpacity="0.35" strokeWidth="1" strokeDasharray="3 4" />
+        <line x1="160" y1="30" x2="160" y2="190" stroke="#000" strokeOpacity="0.35" strokeWidth="1" />
+        <g clipPath="url(#cp-wallet)">
+          <foreignObject x="40" y="30" width="240" height="160">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+      </svg>
+    );
+  }
+  if (s === "tag") {
+    const wood = product.id === "llavero-madera";
+    const grad = wood
+      ? "linear-gradient(135deg,#c99560,#8a5f2d)"
+      : "linear-gradient(135deg,#7a4a26,#3e2110)";
+    return (
+      <svg viewBox="0 0 220 320" className="h-full w-full">
+        <defs>
+          <clipPath id="cp-tag"><rect x="55" y="80" width="110" height="200" rx="14" /></clipPath>
+        </defs>
+        {/* ring */}
+        <circle cx="110" cy="40" r="22" fill="none" stroke="#c0c0c0" strokeWidth="6" />
+        <circle cx="110" cy="40" r="22" fill="none" stroke="#8a8a8a" strokeWidth="1" />
+        <line x1="110" y1="62" x2="110" y2="85" stroke="#8a8a8a" strokeWidth="2" />
+        <ellipse cx="110" cy="300" rx="65" ry="5" fill="#000" opacity="0.2" />
+        <foreignObject x="55" y="80" width="110" height="200">
+          <div style={{ width: "100%", height: "100%", borderRadius: 14, background: grad }} />
+        </foreignObject>
+        <g clipPath="url(#cp-tag)">
+          <foreignObject x="55" y="80" width="110" height="200">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+        <rect x="55" y="80" width="110" height="200" rx="14" fill="none" stroke="#000" strokeOpacity="0.35" strokeWidth="1.5" />
+      </svg>
+    );
+  }
+  if (s === "glass") {
+    return (
+      <svg viewBox="0 0 220 320" className="h-full w-full">
+        <defs>
+          <linearGradient id="lg-glass" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#c7dbe4" stopOpacity="0.6" />
+            <stop offset="50%" stopColor="#eaf3f7" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#c7dbe4" stopOpacity="0.6" />
+          </linearGradient>
+          <clipPath id="cp-glass"><path d="M60 60 L160 60 L150 290 L70 290 Z" /></clipPath>
+        </defs>
+        <ellipse cx="110" cy="305" rx="60" ry="6" fill="#000" opacity="0.18" />
+        <path d="M60 60 L160 60 L150 290 L70 290 Z" fill="url(#lg-glass)" stroke="#8fa9b3" strokeWidth="1.5" />
+        <path d="M68 70 L74 280" stroke="#fff" strokeOpacity="0.7" strokeWidth="3" />
+        <g clipPath="url(#cp-glass)">
+          <foreignObject x="60" y="60" width="100" height="230">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+      </svg>
+    );
+  }
+  // coconut
+  return (
+    <svg viewBox="0 0 300 300" className="h-full w-full">
+      <defs>
+        <radialGradient id="lg-coco" cx="0.35" cy="0.35" r="0.75">
+          <stop offset="0%" stopColor="#6b3e22" />
+          <stop offset="70%" stopColor="#3a2010" />
+          <stop offset="100%" stopColor="#1a0d05" />
+        </radialGradient>
+        <clipPath id="cp-coco"><circle cx="150" cy="150" r="110" /></clipPath>
+      </defs>
+      <ellipse cx="150" cy="275" rx="105" ry="8" fill="#000" opacity="0.25" />
+      <circle cx="150" cy="150" r="110" fill="url(#lg-coco)" />
+      {/* fiber texture */}
+      {Array.from({ length: 30 }).map((_, i) => (
+        <line key={i} x1={40 + Math.random()*220} y1={40 + Math.random()*220}
+              x2={40 + Math.random()*220} y2={40 + Math.random()*220}
+              stroke="#000" strokeOpacity="0.18" strokeWidth="0.8" />
+      ))}
+      <g clipPath="url(#cp-coco)">
+        <foreignObject x="40" y="40" width="220" height="220">
+          <div style={{ width: "100%", height: "100%" }}>{children}</div>
+        </foreignObject>
+      </g>
+    </svg>
+  );
+}
+
+/* Engraving processor — takes an image URL and returns a monochrome
+   "etched" bitmap (foreground = engrave color, background = transparent).
+   Runs entirely client-side via canvas. */
+function useEngraveBitmap(url: string | null, engraveColor: string, intensity: number) {
+  const [dataUrl, setDataUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!url) { setDataUrl(null); return; }
+    let cancelled = false;
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      if (cancelled) return;
+      const MAX = 512;
+      const scaleF = Math.min(1, MAX / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * scaleF));
+      const h = Math.max(1, Math.round(img.height * scaleF));
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0, w, h);
+      let imgData: ImageData;
+      try { imgData = ctx.getImageData(0, 0, w, h); }
+      catch { setDataUrl(url); return; }
+      const d = imgData.data;
+      // parse engrave color hex → rgb
+      const hex = engraveColor.replace("#", "");
+      const er = parseInt(hex.substring(0, 2), 16);
+      const eg = parseInt(hex.substring(2, 4), 16);
+      const eb = parseInt(hex.substring(4, 6), 16);
+      const threshold = 255 - Math.round(intensity * 2.2); // 0..100 → ~255..35
+      for (let i = 0; i < d.length; i += 4) {
+        const alpha = d[i + 3];
+        if (alpha < 20) { d[i + 3] = 0; continue; }
+        const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        if (lum < threshold) {
+          d[i] = er; d[i + 1] = eg; d[i + 2] = eb; d[i + 3] = 235;
+        } else {
+          d[i + 3] = 0;
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+      setDataUrl(c.toDataURL("image/png"));
+    };
+    img.onerror = () => setDataUrl(null);
+    img.src = url;
+    return () => { cancelled = true; };
+  }, [url, engraveColor, intensity]);
+  return dataUrl;
+}
+
+function LaserDesigner({
+  product, uploaded, preset, onFile, onPreset, onClear, fileRef,
+  qty, setQty, notes, setNotes, price,
+  engraveIntensity, setEngraveIntensity, engraveMode, setEngraveMode,
+  scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
+  duplicated, setDuplicated, onBack,
+}: {
+  product: LaserProduct;
+  uploaded: string | null; preset: string | null;
+  onFile: (f: File | null) => void; onPreset: (p: string) => void; onClear: () => void;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  qty: number; setQty: (n: number) => void;
+  notes: string; setNotes: (s: string) => void;
+  price: number;
+  engraveIntensity: number; setEngraveIntensity: (n: number) => void;
+  engraveMode: "outline" | "original"; setEngraveMode: (m: "outline" | "original") => void;
+  scale: number; setScale: (n: number) => void;
+  offsetX: number; setOffsetX: (n: number) => void;
+  offsetY: number; setOffsetY: (n: number) => void;
+  duplicated: boolean; setDuplicated: (b: boolean | ((d: boolean) => boolean)) => void;
+  onBack: () => void;
+}) {
+  const engraveUrl = useEngraveBitmap(uploaded, product.engrave, engraveIntensity);
+  const hasArt = !!(uploaded || preset);
+  const showOutline = engraveMode === "outline" && !!engraveUrl;
+
+  const centerArt = () => { setOffsetX(0); setOffsetY(0); };
+
+  return (
+    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
+      {/* LEFT: Controls */}
+      <div className="space-y-6">
+        {/* Product info */}
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-soft p-5">
+          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl opacity-30" style={{ background: "var(--brand-orange)" }} />
+          <div className="relative flex items-start gap-3">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-white" style={{ background: "var(--brand-orange)" }}>
+              <Flame className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Producto seleccionado</div>
+              <div className="font-bold leading-tight">{product.name}</div>
+              <p className="mt-1 text-xs text-muted-foreground">{product.desc}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Upload */}
+        <div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+          >
+            <Upload className="h-5 w-5" style={{ color: "var(--brand-orange)" }} />
+            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
+          </button>
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Convertimos automáticamente tu imagen a trazo apto para láser (eliminamos el fondo y dejamos el contorno). Si no se ve bien, usa <strong>Revertir</strong>.
+          </p>
+        </div>
+
+        {/* Presets */}
+        <div>
+          <Label className="mb-2 block text-sm">O elige un arte prediseñado</Label>
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+            {presetArts.map((a) => (
+              <button
+                key={a}
+                onClick={() => onPreset(a)}
+                className={cn(
+                  "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
+                  preset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {a}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Engrave toolbox */}
+        {hasArt && (
+          <div className="rounded-2xl border border-border bg-background p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <Label className="text-sm font-semibold">Ajustes de grabado</Label>
+              <div className="flex gap-1 rounded-md border border-border p-0.5 text-[10px] font-medium">
+                <button
+                  onClick={() => setEngraveMode("outline")}
+                  className={cn("rounded px-2 py-0.5 transition", engraveMode === "outline" ? "bg-foreground text-background" : "text-muted-foreground")}
+                >
+                  Grabado
+                </button>
+                <button
+                  onClick={() => setEngraveMode("original")}
+                  className={cn("rounded px-2 py-0.5 transition inline-flex items-center gap-1", engraveMode === "original" ? "bg-foreground text-background" : "text-muted-foreground")}
+                >
+                  <RotateCcw className="h-3 w-3" /> Revertir
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <ToolSlider
+                icon={<Flame className="h-3.5 w-3.5" />}
+                label="Intensidad de grabado"
+                value={engraveIntensity} min={15} max={95} step={1}
+                onChange={setEngraveIntensity} suffix="%"
+              />
+              <ToolSlider
+                icon={<ZoomIn className="h-3.5 w-3.5" />}
+                label="Escala"
+                value={scale} min={30} max={200} step={1}
+                onChange={setScale} suffix="%"
+              />
+            </div>
+
+            {/* Quick actions */}
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <button
+                onClick={centerArt}
+                className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 py-2 text-[11px] font-medium transition hover:border-foreground/30 hover:shadow-sm"
+              >
+                <Move className="h-3.5 w-3.5" /> Centrar
+              </button>
+              <button
+                onClick={() => setDuplicated((d) => !d)}
+                className={cn(
+                  "flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-[11px] font-medium transition",
+                  duplicated ? "border-transparent bg-foreground text-background" : "border-border hover:border-foreground/30",
+                )}
+              >
+                <Copy className="h-3.5 w-3.5" /> {duplicated ? "Duplicado" : "Duplicar"}
+              </button>
+              <button
+                onClick={onClear}
+                className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 py-2 text-[11px] font-medium text-destructive transition hover:border-destructive hover:shadow-sm"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> Eliminar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Quantity */}
+        <div>
+          <Label htmlFor="lqty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+          <Input id="lqty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {[10, 25, 50, 100].map((n) => (
+              <button
+                key={n}
+                onClick={() => setQty(n)}
+                className={cn(
+                  "rounded-xl border-2 py-2 text-sm font-bold transition",
+                  qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="lnotes" className="mb-2 block text-sm font-semibold">Instrucciones especiales</Label>
+          <Textarea
+            id="lnotes"
+            rows={3}
+            placeholder="Ubicación del grabado, profundidad, tamaño exacto, empaque, entrega, etc."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* RIGHT: Preview */}
+      <div className="lg:sticky lg:top-6 lg:self-start">
+        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
+          <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <span>Vista previa del grabado</span>
+            <span className="rounded-full bg-background px-2 py-0.5">{product.name}</span>
+          </div>
+
+          <div className="relative mx-auto aspect-square max-w-md">
+            <ProductMockup product={product}>
+              <div className="relative h-full w-full">
+                {hasArt && (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center"
+                    style={{
+                      transform: `translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`,
+                      transformOrigin: "center",
+                    }}
+                  >
+                    {uploaded ? (
+                      showOutline && engraveUrl ? (
+                        <img src={engraveUrl} alt="" className="max-h-[75%] max-w-[75%] object-contain" style={{ filter: "drop-shadow(0 0 0.5px rgba(0,0,0,0.4))" }} />
+                      ) : (
+                        <img src={uploaded} alt="" className="max-h-[75%] max-w-[75%] object-contain opacity-90" />
+                      )
+                    ) : (
+                      <div
+                        className="text-[80px] leading-none"
+                        style={{ color: product.engrave, textShadow: "0 0 1px rgba(0,0,0,0.35)" }}
+                      >
+                        {preset}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {duplicated && hasArt && (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center"
+                    style={{
+                      transform: `translate(${offsetX + 25}%, ${offsetY + 15}%) scale(${(scale / 100) * 0.6})`,
+                      transformOrigin: "center",
+                      opacity: 0.85,
+                    }}
+                  >
+                    {uploaded ? (
+                      showOutline && engraveUrl ? (
+                        <img src={engraveUrl} alt="" className="max-h-[75%] max-w-[75%] object-contain" />
+                      ) : (
+                        <img src={uploaded} alt="" className="max-h-[75%] max-w-[75%] object-contain opacity-90" />
+                      )
+                    ) : (
+                      <div className="text-[60px] leading-none" style={{ color: product.engrave }}>{preset}</div>
+                    )}
+                  </div>
+                )}
+                {!hasArt && (
+                  <div className="grid h-full w-full place-items-center">
+                    <div className="rounded-lg border border-white/30 bg-black/30 px-3 py-2 text-center text-[11px] font-medium text-white/80 backdrop-blur">
+                      Sube tu arte para ver el grabado
+                    </div>
+                  </div>
+                )}
+              </div>
+            </ProductMockup>
+          </div>
+
+          <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+            <Stat label="Producto" value={product.name.split(" ")[0]} />
+            <Stat label="Cantidad" value={`${qty}`} />
+            <Stat label="Precio estimado" value={currency(price)} highlight />
+          </div>
+
+          <p className="mt-3 text-center text-[11px] text-muted-foreground">
+            {hasArt
+              ? "Ajusta intensidad, escala, centra o duplica. Si el trazo no convence, usa Revertir para ver el original."
+              : "El grabado es permanente. Cotización final tras revisar el arte."}
+          </p>
+        </div>
+
+        <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
+          Solicitar Cotización de Grabado Láser
+        </button>
+        <NavRow onBack={onBack} />
+      </div>
+    </div>
+  );
+}
