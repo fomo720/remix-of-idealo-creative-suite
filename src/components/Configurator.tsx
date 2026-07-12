@@ -962,33 +962,41 @@ function InteractiveCanvas({
 }
 
 function ShapeGuides({ shapeData }: { shapeData: ShapeDef }) {
-  // Path-based shapes (cloud, heart): render two SVG paths, one inset for bleed
+  // Path-based shapes (cloud, heart): render two SVG paths sharing the same
+  // geometry; the safe-area path is a uniformly scaled-down copy of the cut
+  // path so both lines follow the exact same silhouette.
   if (shapeData.clip && shapeData.path && shapeData.viewBox) {
+    const [vx, vy, vw, vh] = shapeData.viewBox.split(/\s+/).map(Number);
+    const cx = vx + vw / 2;
+    const cy = vy + vh / 2;
+    const safeScale = 0.92; // constant inner padding
     return (
       <svg
         className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible"
         viewBox={shapeData.viewBox}
         preserveAspectRatio="none"
+        aria-hidden="true"
       >
-        {/* Cut line */}
+        {/* Cut line (green, solid) */}
         <path
           d={shapeData.path}
           fill="none"
           stroke="#22c55e"
           strokeWidth={2}
+          strokeLinejoin="round"
           vectorEffect="non-scaling-stroke"
         />
-        {/* Bleed / safe area — inset via transform-origin center */}
-        <g style={{ transformOrigin: "center", transformBox: "fill-box" }} transform="scale(0.92)">
-          <path
-            d={shapeData.path}
-            fill="none"
-            stroke="#f59e0b"
-            strokeWidth={1.5}
-            strokeDasharray="4 3"
-            vectorEffect="non-scaling-stroke"
-          />
-        </g>
+        {/* Safe area (yellow, dashed) — same path, uniformly inset around center */}
+        <path
+          d={shapeData.path}
+          fill="none"
+          stroke="#f59e0b"
+          strokeWidth={1.5}
+          strokeDasharray="4 3"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+          transform={`translate(${cx} ${cy}) scale(${safeScale}) translate(${-cx} ${-cy})`}
+        />
       </svg>
     );
   }
