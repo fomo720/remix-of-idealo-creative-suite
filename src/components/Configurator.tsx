@@ -1204,6 +1204,70 @@ function SelectCard({
   );
 }
 
+function MaterialCard({
+  material: m, active, onClick, isBestSeller,
+}: {
+  material: (typeof materials)[number];
+  active: boolean;
+  onClick: () => void;
+  isBestSeller?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all",
+        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+      )}
+    >
+      {/* Sample image / preview */}
+      <div className="relative h-40 w-full overflow-hidden bg-muted/30" style={{ background: m.sampleImage ? undefined : m.swatch }}>
+        {m.sampleImage ? (
+          <img src={m.sampleImage} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <div className="grid h-full w-full place-items-center text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            {m.finish}
+          </div>
+        )}
+        {isBestSeller && (
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold text-white shadow-md" style={{ background: "var(--brand-orange)" }}>
+            <Tag className="h-3 w-3" /> Más Vendido
+          </span>
+        )}
+        {active && (
+          <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full text-white shadow-md" style={{ background: "var(--brand-violet)" }}>
+            <Check className="h-4 w-4" />
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <h4 className="text-sm font-bold leading-tight">{m.name}</h4>
+
+        <div>
+          <div className="mb-1.5 text-xs font-semibold text-foreground">Características destacadas:</div>
+          <ul className="grid gap-1.5">
+            {m.advantages.map((a, i) => (
+              <li key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="grid h-5 w-5 shrink-0 place-items-center">{a.icon}</span>
+                <span>{a.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-auto border-t border-border pt-3">
+          <div className="mb-1.5 text-xs font-semibold text-foreground">Acabado:</div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-6 w-6 shrink-0 rounded-full border border-border shadow-inner" style={{ background: m.swatch }} />
+            <span className="text-xs text-muted-foreground">{m.finish}</span>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
 function CutIllustration({ id }: { id: CutShape }) {
   // Cloud/blob shape used as the "sticker" in every illustration
   const blob = "M40 55 C15 55 10 30 32 25 C28 8 55 3 65 18 C82 3 115 15 112 35 C135 35 135 65 108 65 C100 82 65 82 60 68 C50 80 25 75 40 55 Z";
