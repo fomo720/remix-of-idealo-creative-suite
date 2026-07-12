@@ -1223,7 +1223,7 @@ function MaterialCard({
       {/* Sample image / preview */}
       <div className="relative h-64 w-full overflow-hidden bg-muted/30" style={{ background: m.sampleImage ? "#f5f1ea" : m.swatch }}>
         {m.sampleImage ? (
-          <img src={m.sampleImage} alt="" className="h-full w-full object-contain p-2" />
+          <img src={m.sampleImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
         ) : (
           <div className="grid h-full w-full place-items-center text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             {m.finish}
