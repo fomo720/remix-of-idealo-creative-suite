@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
-  Copy, Trash2, ZoomIn, ZoomOut, Sun, Contrast, Info, ShieldCheck, Droplets,
+  Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
