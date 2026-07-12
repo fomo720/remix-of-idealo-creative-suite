@@ -1162,18 +1162,18 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
+  // Anchor shape for kiss-cut
+  const anchor = "M70 8 a8 8 0 1 1 0 16 a8 8 0 1 1 0 -16 M70 24 L70 78 M55 40 L85 40 M30 62 C30 78 50 88 70 88 C90 88 110 78 110 62 L100 62 L112 55 L120 62 L110 62 M70 88 L70 78";
   if (id === "kiss-cut") {
     return (
       <svg viewBox="0 0 160 100" className="h-full w-full">
-        <ellipse cx="80" cy="90" rx="60" ry="4" fill="#000" opacity="0.08" />
-        <g transform="translate(10,15) rotate(-4 70 40)">
-          <rect x="0" y="0" width="140" height="70" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        </g>
-        <g transform="translate(20,20)">
-          <rect x="0" y="0" width="130" height="65" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-          <g transform="translate(35,5) scale(0.55)">
-            <path d={blob} fill={fill} stroke={stroke} strokeWidth="4" strokeLinejoin="round" />
-            <path d={blob} fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="2 2" transform="translate(-2,-2) scale(1.05)" />
+        <ellipse cx="80" cy="92" rx="55" ry="4" fill="#000" opacity="0.08" />
+        <g transform="translate(20,8)">
+          <rect x="0" y="0" width="120" height="82" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+          <g transform="translate(20,5) scale(0.72)">
+            <path d={anchor} fill="none" stroke={fill} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+            {/* kiss-cut dashed outline around the anchor silhouette */}
+            <ellipse cx="70" cy="52" rx="52" ry="46" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="3 3" />
           </g>
         </g>
       </svg>
@@ -1199,19 +1199,23 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls
+  // rolls — apple-shaped stickers
+
+  const appleShape = (
+    <g>
+      <path d="M45 40 C45 28 55 22 65 24 C68 20 72 20 75 24 C85 22 95 28 95 40 C95 62 82 78 70 78 C58 78 45 62 45 40 Z" fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
+      <path d="M70 24 C70 18 74 14 80 14" fill="none" stroke="#3d7a1f" strokeWidth="5" strokeLinecap="round" />
+      <path d="M72 22 Q80 16 86 18" fill="none" stroke="#4a9c26" strokeWidth="4" strokeLinecap="round" />
+    </g>
+  );
   return (
     <svg viewBox="0 0 160 100" className="h-full w-full">
       <ellipse cx="80" cy="92" rx="60" ry="4" fill="#000" opacity="0.08" />
       {/* strip */}
-      <g transform="translate(10,45)">
-        <rect x="0" y="0" width="95" height="35" rx="2" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        <g transform="translate(8,4) scale(0.22)">
-          <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
-        </g>
-        <g transform="translate(48,4) scale(0.22)">
-          <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
-        </g>
+      <g transform="translate(10,42)">
+        <rect x="0" y="0" width="95" height="40" rx="2" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        <g transform="translate(6,2) scale(0.36)">{appleShape}</g>
+        <g transform="translate(50,2) scale(0.36)">{appleShape}</g>
       </g>
       {/* roll */}
       <g transform="translate(105,25)">
@@ -1221,6 +1225,8 @@ function CutIllustration({ id }: { id: CutShape }) {
     </svg>
   );
 }
+
+
 
 function CutCard({
   id, title, desc, active, onClick, accent,
