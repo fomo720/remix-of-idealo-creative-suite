@@ -6,7 +6,7 @@ import {
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
   HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
-  Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move,
+  Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,10 @@ import hangtagSticker from "@/assets/hangtag-sticker.jpg.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
+import cadenaFotoMadera from "@/assets/cadena-foto-madera.jpg.asset.json";
+import cadenaBarra from "@/assets/cadena-barra.jpg.asset.json";
+import cadenaCandado from "@/assets/cadena-candado.jpg.asset.json";
+import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -40,7 +44,7 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 type Category = "stickers" | "iron-ons" | "libretas" | "laser";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
-  | "llavero-madera" | "vaso" | "coco";
+  | "llavero-madera" | "vaso" | "coco" | "cadena";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
 type Material =
   | "white-vinyl-removable"
@@ -275,6 +279,7 @@ type LaserVariant = {
   desc: string;
   priceDelta?: number; // added to base
   colors: LaserColor[];
+  image?: string; // optional reference photo URL for this variant
 };
 type LaserProduct = {
   id: LaserProductId;
@@ -285,7 +290,8 @@ type LaserProduct = {
   engrave: string;      // engraved (etched) mark color
   price: number;        // unit price base in Lempiras
   icon: React.ReactNode;
-  shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut";
+  shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut" | "pendant";
+  heroImage?: string;   // optional hero image on the product card
   variantLabel?: string; // e.g. "Modelo", "Estilo"
   variants?: LaserVariant[];
 };
@@ -421,6 +427,27 @@ const laserProducts: LaserProduct[] = [
     surface: "linear-gradient(135deg,#5a3720,#2f1c0e)", engrave: "#120a04", price: 65,
     icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
     // coco es coco — sin variantes
+  },
+  {
+    id: "cadena", name: "Cadenas & Dijes", desc: "Acero inoxidable dorado y plateado", hint: "Regalos con foto o texto",
+    surface: "linear-gradient(135deg,#f2d68a,#c99b3a)", engrave: "#1a1a1a", price: 340,
+    icon: <Gem className="h-8 w-8" />, shape: "pendant",
+    heroImage: cadenaFotoMadera.url,
+    variantLabel: "Tipo de dije",
+    variants: [
+      { id: "redonda-foto", name: "Dije Redondo con Foto", desc: "Ø 2.5 cm · grabado fotográfico", image: cadenaFotoMadera.url, colors: [
+        { name: "Oro", hex: "#d4a63a" }, { name: "Plata", hex: "#c8cdd1" }, { name: "Oro rosa", hex: "#e3b6a7" },
+      ]},
+      { id: "barra-vertical", name: "Barra Vertical 3D", desc: "4 caras · nombres, fechas, coordenadas", image: cadenaBarra.url, priceDelta: 80, colors: [
+        { name: "Plata", hex: "#c8cdd1" }, { name: "Oro", hex: "#d4a63a" }, { name: "Negro mate", hex: "#1a1a1a" },
+      ]},
+      { id: "candado-corazon", name: "Candado Corazón", desc: "Silueta corazón-candado · foto o texto", image: cadenaCandado.url, priceDelta: 40, colors: [
+        { name: "Oro", hex: "#d4a63a" }, { name: "Plata", hex: "#c8cdd1" },
+      ]},
+      { id: "placa-rect", name: "Placa Rectangular con Foto", desc: "Grabado fotográfico de alta definición", image: cadenaPlaca.url, priceDelta: 60, colors: [
+        { name: "Plata", hex: "#c8cdd1" }, { name: "Oro", hex: "#d4a63a" }, { name: "Negro", hex: "#1a1a1a" },
+      ]},
+    ],
   },
 ];
 
@@ -2404,16 +2431,22 @@ function LaserProductCard({
       )}
     >
       <div className="relative h-40 w-full overflow-hidden" style={{ background: product.surface }}>
-        <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
-          backgroundImage:
-            "repeating-linear-gradient(115deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 6px)",
-        }} />
-        <div className="relative grid h-full w-full place-items-center text-white/90">
-          <div className="flex flex-col items-center gap-1.5">
-            {product.icon}
-            <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">Vista de material</span>
+        {product.heroImage ? (
+          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
+            backgroundImage:
+              "repeating-linear-gradient(115deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 6px)",
+          }} />
+        )}
+        {!product.heroImage && (
+          <div className="relative grid h-full w-full place-items-center text-white/90">
+            <div className="flex flex-col items-center gap-1.5">
+              {product.icon}
+              <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">Vista de material</span>
+            </div>
           </div>
-        </div>
+        )}
         {active && (
           <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full text-white shadow-md" style={{ background: "var(--brand-orange)" }}>
             <Check className="h-4 w-4" />
@@ -2553,6 +2586,33 @@ function ProductMockup({
         <path d="M68 70 L74 280" stroke="#fff" strokeOpacity="0.7" strokeWidth="3" />
         <g clipPath="url(#cp-glass)">
           <foreignObject x="60" y="60" width="100" height="230">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+      </svg>
+    );
+  }
+  if (s === "pendant") {
+    return (
+      <svg viewBox="0 0 300 300" className="h-full w-full">
+        <defs>
+          <radialGradient id="lg-pendant" cx="0.35" cy="0.3" r="0.85">
+            <stop offset="0%" stopColor="#f6dd8a" />
+            <stop offset="60%" stopColor="#d4a63a" />
+            <stop offset="100%" stopColor="#7a5a1a" />
+          </radialGradient>
+          <clipPath id="cp-pendant"><circle cx="150" cy="175" r="72" /></clipPath>
+        </defs>
+        {/* chain */}
+        <path d="M20 40 Q150 110 280 40" stroke="#c8a35a" strokeWidth="2.2" fill="none" opacity="0.85" />
+        <path d="M20 40 Q150 110 280 40" stroke="#000" strokeWidth="0.6" fill="none" opacity="0.35" strokeDasharray="3 3" />
+        {/* bail */}
+        <rect x="142" y="88" width="16" height="18" rx="4" fill="url(#lg-pendant)" stroke="#8a6a1a" strokeWidth="0.8" />
+        {/* pendant disc */}
+        <ellipse cx="150" cy="252" rx="70" ry="6" fill="#000" opacity="0.2" />
+        <circle cx="150" cy="175" r="72" fill="url(#lg-pendant)" stroke="#8a6a1a" strokeWidth="1.2" />
+        <g clipPath="url(#cp-pendant)">
+          <foreignObject x="78" y="103" width="144" height="144">
             <div style={{ width: "100%", height: "100%" }}>{children}</div>
           </foreignObject>
         </g>
