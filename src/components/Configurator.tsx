@@ -2499,6 +2499,7 @@ function NotebookDesigner({
 /* ---------- Notebook live preview ---------- */
 function NotebookPreview({
   size, material, showPages, pageType, uploaded, preset,
+  pageArtUploaded, pageArtPreset, pageArtOpacity,
 }: {
   size: (typeof notebookSizes)[number];
   material: (typeof notebookMaterials)[number];
@@ -2506,12 +2507,17 @@ function NotebookPreview({
   pageType: PageType;
   uploaded: string | null;
   preset: string | null;
+  pageArtUploaded?: string | null;
+  pageArtPreset?: string | null;
+  pageArtOpacity?: number;
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
     material.id === "cover-glossy"
       ? "linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#334155 100%)"
       : "linear-gradient(135deg,#3f3f46 0%,#52525b 100%)";
+  const pageArtOpacityPct = (pageArtOpacity ?? 35) / 100;
+  const hasPageArt = !!(pageArtUploaded || pageArtPreset);
 
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
@@ -2529,20 +2535,35 @@ function NotebookPreview({
         {showPages && (
           <>
             <div
-              className="absolute rounded-r-md border border-border bg-white"
+              className="absolute overflow-hidden rounded-r-md border border-border bg-white"
               style={{
                 inset: "3% -6% 3% 4%",
                 boxShadow: "2px 4px 12px rgba(0,0,0,0.1)",
                 ...pageBackground(pageType),
                 backgroundColor: "#ffffff",
               }}
-            />
+            >
+              {hasPageArt && (
+                <div
+                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                  style={{ opacity: pageArtOpacityPct }}
+                >
+                  {pageArtUploaded ? (
+                    <img src={pageArtUploaded} alt="" className="max-h-[60%] max-w-[60%] object-contain" />
+                  ) : (
+                    <span className="text-[3rem] leading-none">{pageArtPreset}</span>
+                  )}
+                </div>
+              )}
+            </div>
             <div
               className="absolute rounded-r-sm border border-border bg-white/95"
               style={{ inset: "1.5% -3% 1.5% 6%" }}
             />
           </>
         )}
+
+
 
         {/* Cover */}
         <div
