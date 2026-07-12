@@ -16,6 +16,7 @@ import appleIcon from "@/assets/apple-icon.png.asset.json";
 import rollIcon from "@/assets/roll-icon.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import fireSticker from "@/assets/fire-sticker.png.asset.json";
+import clearSticker from "@/assets/clear-sticker.png.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
@@ -90,6 +91,7 @@ const materials: {
     id: "clear-vinyl-removable", name: "Stickers de Vinil Transparente Removible Semi-Brillante",
     desc: "Transparente · Impreso con tinta blanca", priceFactor: 1.3, swatch: "linear-gradient(135deg,#f0f9ff,#fdf4ff)",
     finish: "Semi-Brillante",
+    sampleImage: clearSticker.url,
     advantages: [
       { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Material transparente" },
       { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Impreso con tinta blanca" },
