@@ -888,6 +888,7 @@ export function Configurator() {
               product={laserProductData}
               variant={laserVariantData}
               color={laserColor}
+              byob={laserByob}
               uploaded={uploaded}
               preset={preset}
               onFile={handleFile}
