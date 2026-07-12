@@ -1296,7 +1296,7 @@ function ToolSlider({
   );
 }
 
-function Stepper({ step, onGo }: { step: number; onGo: (n: number) => void }) {
+function Stepper({ step, onGo, labels = ["Categoría", "Forma", "Material", "Diseño"] }: { step: number; onGo: (n: number) => void; labels?: string[] }) {
   const labels = ["Categoría", "Forma", "Material", "Diseño"];
   return (
     <div className="mx-auto flex max-w-3xl items-center justify-between gap-2">
