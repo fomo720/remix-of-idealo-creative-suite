@@ -2639,13 +2639,15 @@ function useEngraveBitmap(url: string | null, engraveColor: string, intensity: n
 }
 
 function LaserDesigner({
-  product, uploaded, preset, onFile, onPreset, onClear, fileRef,
+  product, variant, color, uploaded, preset, onFile, onPreset, onClear, fileRef,
   qty, setQty, notes, setNotes, price,
   engraveIntensity, setEngraveIntensity, engraveMode, setEngraveMode,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   duplicated, setDuplicated, onBack,
 }: {
   product: LaserProduct;
+  variant?: LaserVariant;
+  color?: LaserColor;
   uploaded: string | null; preset: string | null;
   onFile: (f: File | null) => void; onPreset: (p: string) => void; onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
