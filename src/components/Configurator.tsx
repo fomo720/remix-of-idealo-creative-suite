@@ -491,6 +491,11 @@ export function Configurator() {
   const [notebookMaterial, setNotebookMaterial] = useState<NotebookMaterial | null>(null);
   const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
   const [pageType, setPageType] = useState<PageType>("blank");
+  // notebook page (interior) art
+  const [pageArtUploaded, setPageArtUploaded] = useState<string | null>(null);
+  const [pageArtPreset, setPageArtPreset] = useState<string | null>(null);
+  const [pageArtOpacity, setPageArtOpacity] = useState(35); // 0-100
+
 
   // laser state
   const [laserProduct, setLaserProduct] = useState<LaserProductId | null>(null);
