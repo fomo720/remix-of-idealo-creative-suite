@@ -799,29 +799,83 @@ export function Configurator() {
                 })}
               </div>
 
-              {/* Color chooser for the selected variant */}
-              {laserVariantData && laserVariantData.colors.length > 1 && (
-                <div className="mt-6 rounded-2xl border border-border bg-gradient-soft p-4">
-                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    Color base — {laserVariantData.name}
+              {/* Color chooser + small live preview + BYOB toggle */}
+              {laserVariantData && (
+                <div className="mt-6 grid gap-4 rounded-2xl border border-border bg-gradient-soft p-4 sm:grid-cols-[auto_1fr]">
+                  {/* Small preview thumbnail (uses the color-specific image when we have one) */}
+                  <div className="flex items-center justify-center rounded-xl border border-border bg-background/70 p-2 sm:h-28 sm:w-28">
+                    {laserColor?.image || laserVariantData.image ? (
+                      <img
+                        key={laserColor?.image ?? laserVariantData.image}
+                        src={laserColor?.image ?? laserVariantData.image}
+                        alt={`${laserVariantData.name} — ${laserColor?.name ?? ""}`}
+                        className="h-24 w-24 object-contain transition-opacity duration-300"
+                      />
+                    ) : (
+                      <div
+                        className="h-20 w-20 rounded-full border border-black/10 shadow-inner"
+                        style={{ background: laserColor?.hex ?? "#ddd" }}
+                      />
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {laserVariantData.colors.map((c, i) => {
-                      const on = laserColorIdx === i;
-                      return (
-                        <button
-                          key={c.name}
-                          onClick={() => setLaserColorIdx(i)}
-                          className={cn(
-                            "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-xs transition",
-                            on ? "border-foreground bg-background" : "border-border bg-background/60 hover:border-foreground/40",
-                          )}
-                        >
-                          <span className="h-4 w-4 rounded-full border border-black/10" style={{ background: c.hex }} />
-                          <span className={cn("font-medium", on ? "text-foreground" : "text-muted-foreground")}>{c.name}</span>
-                        </button>
-                      );
-                    })}
+
+                  <div className="min-w-0">
+                    {laserVariantData.colors.length > 1 && (
+                      <>
+                        <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          Color base — {laserVariantData.name}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {laserVariantData.colors.map((c, i) => {
+                            const on = laserColorIdx === i;
+                            return (
+                              <button
+                                key={c.name}
+                                type="button"
+                                onClick={() => setLaserColorIdx(i)}
+                                className={cn(
+                                  "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-xs transition",
+                                  on ? "border-foreground bg-background" : "border-border bg-background/60 hover:border-foreground/40",
+                                )}
+                              >
+                                <span className="h-4 w-4 rounded-full border border-black/10" style={{ background: c.hex }} />
+                                <span className={cn("font-medium", on ? "text-foreground" : "text-muted-foreground")}>{c.name}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Bring-your-own-product option */}
+                    <button
+                      type="button"
+                      onClick={() => setLaserByob((b) => !b)}
+                      className={cn(
+                        "mt-3 flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left text-xs transition",
+                        laserByob
+                          ? "border-foreground bg-background shadow-card-soft"
+                          : "border-dashed border-border bg-background/60 hover:border-foreground/40",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border-2",
+                          laserByob ? "border-transparent text-white" : "border-border",
+                        )}
+                        style={laserByob ? { background: "var(--brand-orange)" } : {}}
+                      >
+                        {laserByob && <Check className="h-3.5 w-3.5" />}
+                      </span>
+                      <span className="flex-1">
+                        <span className="block font-semibold text-foreground">
+                          Traigo mi propio {laserProductData?.name.toLowerCase() ?? "producto"}
+                        </span>
+                        <span className="mt-0.5 block text-muted-foreground">
+                          Solo cobramos el servicio de grabado (aprox. 40% del precio). Tú traes {laserVariantData.name.toLowerCase()} y nosotros lo grabamos.
+                        </span>
+                      </span>
+                    </button>
                   </div>
                 </div>
               )}
