@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
-  Copy, Trash2, ZoomIn, ZoomOut, Sun, Contrast, Info, ShieldCheck, Droplets,
+  Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -106,16 +106,26 @@ export function Configurator() {
   const [notes, setNotes] = useState("");
 
   // image toolbox
-  const [scale, setScale] = useState(100);       // 30-200%
-  const [offsetX, setOffsetX] = useState(0);     // -50..50
+  const [scale, setScale] = useState(100);       // 30-250%
+  const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
   const [offsetY, setOffsetY] = useState(0);
   const [contrast, setContrast] = useState(100); // %
   const [brightness, setBrightness] = useState(100);
   const [duplicated, setDuplicated] = useState(false);
+  const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const materialData = materials.find((m) => m.id === material);
   const shapeData = shapes.find((s) => s.id === shape)!;
+
+  const bulkFactor = useMemo(() => {
+    if (qty >= 500) return 0.16; // 84% off
+    if (qty >= 250) return 0.20; // 80% off
+    if (qty >= 100) return 0.25; // 75% off
+    if (qty >= 50)  return 0.30; // 70% off
+    if (qty >= 25)  return 0.63; // 37% off
+    return 1;
+  }, [qty]);
 
   const price = useMemo(() => {
     const base = 8;
@@ -123,9 +133,8 @@ export function Configurator() {
     const h = parseFloat(height || "1");
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
-    const bulk = qty >= 500 ? 0.7 : qty >= 200 ? 0.8 : qty >= 100 ? 0.9 : 1;
-    return Math.round(base * area * factor * bulk * qty);
-  }, [width, height, qty, materialData]);
+    return Math.round(base * area * factor * bulkFactor * qty);
+  }, [width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
@@ -333,45 +342,24 @@ export function Configurator() {
                   </div>
                 </div>
 
-                {/* Image Toolbox */}
+                {/* Image Toolbox - only sliders */}
                 {hasArt && (
                   <div className="rounded-2xl border border-border bg-background p-4">
                     <div className="mb-3 flex items-center justify-between">
-                      <Label className="text-sm font-semibold">Herramientas de edición</Label>
-                      <div className="flex items-center gap-1">
-                        <ToolButton title="Centrar horizontalmente" onClick={() => setOffsetX(0)}>
-                          <AlignHorizontalJustifyCenter className="h-4 w-4" />
-                        </ToolButton>
-                        <ToolButton title="Centrar verticalmente" onClick={() => setOffsetY(0)}>
-                          <AlignVerticalJustifyCenter className="h-4 w-4" />
-                        </ToolButton>
-                        <ToolButton title="Duplicar / crear patrón" active={duplicated} onClick={() => setDuplicated((d) => !d)}>
-                          <Copy className="h-4 w-4" />
-                        </ToolButton>
-                        <ToolButton title="Borrar imagen" onClick={clearImage} danger>
-                          <Trash2 className="h-4 w-4" />
-                        </ToolButton>
-                      </div>
+                      <Label className="text-sm font-semibold">Ajustes de imagen</Label>
+                      <span className="hidden items-center gap-1 text-[10px] text-muted-foreground sm:inline-flex">
+                        <MousePointer2 className="h-3 w-3" /> Toca la imagen en la vista previa para editarla
+                      </span>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <ToolSlider
                         icon={<ZoomIn className="h-3.5 w-3.5" />}
-                        label="Escala"
+                        label="Escala (Zoom)"
                         value={scale}
-                        min={30} max={200} step={1}
+                        min={30} max={250} step={1}
                         onChange={setScale}
                         suffix="%"
-                        onMinus={() => setScale((v) => Math.max(30, v - 5))}
-                        onPlus={() => setScale((v) => Math.min(200, v + 5))}
-                        minusIcon={<ZoomOut className="h-3.5 w-3.5" />}
-                        plusIcon={<ZoomIn className="h-3.5 w-3.5" />}
-                      />
-                      <ToolSlider
-                        icon={<Contrast className="h-3.5 w-3.5" />}
-                        label="Contraste"
-                        value={contrast} min={50} max={200} step={1}
-                        onChange={setContrast} suffix="%"
                       />
                       <ToolSlider
                         icon={<Sun className="h-3.5 w-3.5" />}
@@ -379,10 +367,12 @@ export function Configurator() {
                         value={brightness} min={50} max={200} step={1}
                         onChange={setBrightness} suffix="%"
                       />
-                      <div className="grid grid-cols-2 gap-3">
-                        <ToolSlider label="Posición X" value={offsetX} min={-40} max={40} step={1} onChange={setOffsetX} suffix="%" compact />
-                        <ToolSlider label="Posición Y" value={offsetY} min={-40} max={40} step={1} onChange={setOffsetY} suffix="%" compact />
-                      </div>
+                      <ToolSlider
+                        icon={<Contrast className="h-3.5 w-3.5" />}
+                        label="Contraste"
+                        value={contrast} min={50} max={200} step={1}
+                        onChange={setContrast} suffix="%"
+                      />
                     </div>
                   </div>
                 )}
@@ -451,22 +441,39 @@ export function Configurator() {
 
                 {/* Quantity */}
                 <div>
-                  <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+                  <div className="mb-2 flex items-center justify-between">
+                    <Label htmlFor="qty" className="text-sm font-semibold">Cantidad</Label>
+                    {bulkFactor < 1 && (
+                      <span className="rounded-full bg-gradient-cta px-2.5 py-0.5 text-[10px] font-bold text-white">
+                        -{Math.round((1 - bulkFactor) * 100)}% aplicado
+                      </span>
+                    )}
+                  </div>
                   <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {[50, 100, 250, 500, 1000].map((n) => (
+                  <div className="mt-2 grid grid-cols-5 gap-2">
+                    {[
+                      { n: 25, off: 37 },
+                      { n: 50, off: 70 },
+                      { n: 100, off: 75 },
+                      { n: 250, off: 80 },
+                      { n: 500, off: 84 },
+                    ].map(({ n, off }) => (
                       <button
                         key={n}
                         onClick={() => setQty(n)}
                         className={cn(
-                          "rounded-full border px-3 py-1 text-xs font-medium transition",
-                          qty === n ? "border-transparent bg-foreground text-background" : "border-border text-muted-foreground hover:text-foreground",
+                          "group relative rounded-xl border-2 px-2 py-2 text-center transition",
+                          qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
                         )}
                       >
-                        {n} uds
+                        <div className="text-sm font-bold leading-tight">{n}</div>
+                        <div className="text-[9px] font-semibold leading-tight text-gradient-rainbow">-{off}%</div>
                       </button>
                     ))}
                   </div>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Escribe manualmente cualquier cantidad. El descuento se aplica automáticamente al superar cada tramo.
+                  </p>
                 </div>
 
                 <div>
@@ -489,44 +496,28 @@ export function Configurator() {
                     <span className="rounded-full bg-background px-2 py-0.5">{shapeData.name}</span>
                   </div>
 
-                  <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
+                  <InteractiveCanvas
+                    shapeData={shapeData}
+                    materialSwatch={materialData?.swatch ?? "#fff"}
+                    isDieCut={cut === "die-cut"}
+                    hasArt={hasArt}
+                    uploaded={uploaded}
+                    preset={preset}
+                    scale={scale}
+                    setScale={setScale}
+                    offsetX={offsetX}
+                    setOffsetX={setOffsetX}
+                    offsetY={offsetY}
+                    setOffsetY={setOffsetY}
+                    contrast={contrast}
+                    brightness={brightness}
+                    duplicated={duplicated}
+                    setDuplicated={setDuplicated}
+                    selected={selected}
+                    setSelected={setSelected}
+                    onClear={clearImage}
+                  />
 
-                    {/* Shape mask */}
-                    <div
-                      className="relative shadow-elegant transition-all duration-300"
-                      style={{
-                        width: shapeData.aspect >= 1 ? "82%" : `${82 * shapeData.aspect}%`,
-                        aspectRatio: `${shapeData.aspect} / 1`,
-                        background: materialData?.swatch ?? "#fff",
-                        borderRadius: shapeData.radius,
-                        clipPath: shapeData.clip,
-                        outline: cut === "die-cut" && !shapeData.clip ? "3px dashed rgba(0,0,0,0.15)" : "none",
-                        outlineOffset: "6px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {hasArt ? (
-                        <ArtLayer
-                          uploaded={uploaded}
-                          preset={preset}
-                          scale={scale}
-                          offsetX={offsetX}
-                          offsetY={offsetY}
-                          contrast={contrast}
-                          brightness={brightness}
-                          duplicated={duplicated}
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
-                          <div>
-                            <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
-                            <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
 
                   <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
@@ -535,7 +526,9 @@ export function Configurator() {
                   </div>
 
                   <p className="mt-3 text-center text-[11px] text-muted-foreground">
-                    Precio estimado en Lempiras. Cotización final tras revisión de arte.
+                    {hasArt
+                      ? "Arrastra la imagen para moverla · usa las esquinas para redimensionar · toca los iconos para editar."
+                      : "Precio estimado en Lempiras. Cotización final tras revisión de arte."}
                   </p>
                 </div>
 
@@ -552,43 +545,241 @@ export function Configurator() {
   );
 }
 
-/* ---------- Art Layer ---------- */
-function ArtLayer({
-  uploaded, preset, scale, offsetX, offsetY, contrast, brightness, duplicated,
+/* ---------- Interactive Canvas ---------- */
+type ShapeDef = { id: StickerShape; name: string; icon: React.ReactNode; aspect: number; clip?: string; radius?: string };
+
+function InteractiveCanvas({
+  shapeData, materialSwatch, isDieCut, hasArt, uploaded, preset,
+  scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
+  contrast, brightness, duplicated, setDuplicated, selected, setSelected, onClear,
 }: {
+  shapeData: ShapeDef; materialSwatch: string; isDieCut: boolean; hasArt: boolean;
   uploaded: string | null; preset: string | null;
-  scale: number; offsetX: number; offsetY: number;
-  contrast: number; brightness: number; duplicated: boolean;
+  scale: number; setScale: (n: number) => void;
+  offsetX: number; setOffsetX: (n: number) => void;
+  offsetY: number; setOffsetY: (n: number) => void;
+  contrast: number; brightness: number;
+  duplicated: boolean; setDuplicated: (b: boolean | ((d: boolean) => boolean)) => void;
+  selected: boolean; setSelected: (b: boolean) => void;
+  onClear: () => void;
 }) {
-  const style: React.CSSProperties = {
-    transform: `translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`,
-    filter: `contrast(${contrast}%) brightness(${brightness}%)`,
-    transformOrigin: "center",
-    transition: "transform 120ms ease, filter 120ms ease",
+  const maskRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ mode: "move" | "resize"; startX: number; startY: number; startOX: number; startOY: number; startScale: number; corner?: "tl" | "tr" | "bl" | "br"; rect: DOMRect } | null>(null);
+
+  // Deselect when clicking outside
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (!maskRef.current) return;
+      if (!maskRef.current.contains(e.target as Node)) setSelected(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [setSelected]);
+
+  const onPointerDownImage = (e: React.PointerEvent) => {
+    if (!hasArt || !maskRef.current) return;
+    e.stopPropagation();
+    setSelected(true);
+    const rect = maskRef.current.getBoundingClientRect();
+    dragRef.current = {
+      mode: "move",
+      startX: e.clientX, startY: e.clientY,
+      startOX: offsetX, startOY: offsetY,
+      startScale: scale,
+      rect,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
-  const items = duplicated ? [0, 1, 2, 3] : [0];
+  const onPointerDownHandle = (corner: "tl" | "tr" | "bl" | "br") => (e: React.PointerEvent) => {
+    if (!maskRef.current) return;
+    e.stopPropagation();
+    const rect = maskRef.current.getBoundingClientRect();
+    dragRef.current = {
+      mode: "resize",
+      startX: e.clientX, startY: e.clientY,
+      startOX: offsetX, startOY: offsetY,
+      startScale: scale,
+      corner,
+      rect,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (!d) return;
+    const dx = e.clientX - d.startX;
+    const dy = e.clientY - d.startY;
+    if (d.mode === "move") {
+      const pctX = (dx / d.rect.width) * 100;
+      const pctY = (dy / d.rect.height) * 100;
+      setOffsetX(clamp(d.startOX + pctX, -60, 60));
+      setOffsetY(clamp(d.startOY + pctY, -60, 60));
+    } else {
+      // resize: use larger axis delta with corner sign
+      const sign = d.corner === "br" ? 1 : d.corner === "tl" ? 1 : d.corner === "tr" ? 1 : 1;
+      const delta = ((d.corner === "tl" || d.corner === "bl") ? -dx : dx) + ((d.corner === "tl" || d.corner === "tr") ? -dy : dy);
+      const pct = (delta / d.rect.width) * 100 * sign;
+      setScale(clamp(Math.round(d.startScale + pct), 30, 250));
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    dragRef.current = null;
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* noop */ }
+  };
+
+  const filterStyle = `contrast(${contrast}%) brightness(${brightness}%)`;
+  const imgTransform = `translate(-50%, -50%) translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`;
 
   return (
-    <div className={cn("relative h-full w-full", duplicated && "grid grid-cols-2 grid-rows-2 gap-1 p-2")}>
-      {items.map((i) => (
-        <div key={i} className="relative flex h-full w-full items-center justify-center overflow-hidden">
-          {uploaded ? (
-            <img
-              src={uploaded}
-              alt="Tu arte"
-              className="max-h-full max-w-full object-contain"
-              style={style}
-              draggable={false}
-            />
+    <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
+      <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
+
+      {/* Shape mask */}
+      <div
+        ref={maskRef}
+        className="relative shadow-elegant transition-all duration-300 touch-none select-none"
+        style={{
+          width: shapeData.aspect >= 1 ? "82%" : `${82 * shapeData.aspect}%`,
+          aspectRatio: `${shapeData.aspect} / 1`,
+          background: materialSwatch,
+          borderRadius: shapeData.radius,
+          clipPath: shapeData.clip,
+          outline: isDieCut && !shapeData.clip ? "3px dashed rgba(0,0,0,0.15)" : "none",
+          outlineOffset: "6px",
+          overflow: "hidden",
+        }}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        {hasArt ? (
+          duplicated ? (
+            <div className="grid h-full w-full grid-cols-2 grid-rows-2 gap-1 p-2">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="relative flex items-center justify-center overflow-hidden">
+                  {uploaded ? (
+                    <img src={uploaded} alt="" draggable={false}
+                      className="max-h-full max-w-full object-contain"
+                      style={{ filter: filterStyle, transform: `scale(${scale / 100})` }} />
+                  ) : (
+                    <span style={{ filter: filterStyle, transform: `scale(${scale / 100})` }} className="text-[4rem] leading-none">{preset}</span>
+                  )}
+                </div>
+              ))}
+            </div>
           ) : (
-            <span style={style} className="text-[6rem] leading-none">{preset}</span>
-          )}
+            <div
+              className={cn(
+                "absolute left-1/2 top-1/2 flex items-center justify-center transition-[outline] duration-150",
+                selected ? "outline outline-2 outline-offset-2 outline-[var(--brand-violet)] cursor-move" : "cursor-pointer",
+              )}
+              style={{
+                transform: imgTransform,
+                width: "80%", height: "80%",
+              }}
+              onPointerDown={onPointerDownImage}
+            >
+              {uploaded ? (
+                <img src={uploaded} alt="Tu arte" draggable={false}
+                  className="pointer-events-none max-h-full max-w-full object-contain"
+                  style={{ filter: filterStyle }} />
+              ) : (
+                <span className="pointer-events-none text-[6rem] leading-none" style={{ filter: filterStyle }}>{preset}</span>
+              )}
+
+              {selected && (
+                <>
+                  {(["tl", "tr", "bl", "br"] as const).map((c) => (
+                    <span
+                      key={c}
+                      onPointerDown={onPointerDownHandle(c)}
+                      className="absolute h-3.5 w-3.5 rounded-full border-2 border-[var(--brand-violet)] bg-white shadow"
+                      style={{
+                        top: c.startsWith("t") ? "-8px" : "auto",
+                        bottom: c.startsWith("b") ? "-8px" : "auto",
+                        left: c.endsWith("l") ? "-8px" : "auto",
+                        right: c.endsWith("r") ? "-8px" : "auto",
+                        cursor: c === "tl" || c === "br" ? "nwse-resize" : "nesw-resize",
+                        touchAction: "none",
+                      }}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+          )
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
+            <div>
+              <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
+              <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Floating contextual menu */}
+      {hasArt && selected && !duplicated && (
+        <div
+          className="absolute z-20 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
+          style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          <FloatBtn label="Centrar horizontal" onClick={() => setOffsetX(0)}>
+            <AlignHorizontalJustifyCenter className="h-4 w-4" />
+          </FloatBtn>
+          <FloatBtn label="Centrar vertical" onClick={() => setOffsetY(0)}>
+            <AlignVerticalJustifyCenter className="h-4 w-4" />
+          </FloatBtn>
+          <FloatBtn label="Duplicar (patrón)" onClick={() => setDuplicated((d) => !d)}>
+            <Copy className="h-4 w-4" />
+          </FloatBtn>
+          <span className="mx-0.5 h-5 w-px bg-border" />
+          <FloatBtn label="Eliminar" danger onClick={() => { onClear(); setSelected(false); }}>
+            <Trash2 className="h-4 w-4" />
+          </FloatBtn>
         </div>
-      ))}
+      )}
+
+      {hasArt && duplicated && (
+        <button
+          onClick={() => setDuplicated(false)}
+          className="absolute right-2 top-2 z-20 flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-medium shadow-card-soft"
+        >
+          <Copy className="h-3 w-3" /> Salir del patrón
+        </button>
+      )}
     </div>
   );
 }
+
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
+
+function FloatBtn({
+  children, onClick, label, danger,
+}: { children: React.ReactNode; onClick: () => void; label: string; danger?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      title={label}
+      aria-label={label}
+      className={cn(
+        "grid h-9 w-9 place-items-center rounded-full transition active:scale-95",
+        danger
+          ? "text-destructive hover:bg-destructive/10"
+          : "text-foreground hover:bg-muted",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
 
 /* ---------- Small helpers ---------- */
 function ToolButton({
