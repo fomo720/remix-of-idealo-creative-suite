@@ -959,6 +959,14 @@ export function Configurator() {
               onPreset={(p) => { setPreset(p); setUploaded(null); }}
               onClear={clearImage}
               fileRef={fileRef}
+              pageArtUploaded={pageArtUploaded}
+              pageArtPreset={pageArtPreset}
+              pageArtOpacity={pageArtOpacity}
+              setPageArtOpacity={setPageArtOpacity}
+              onPageArtFile={handlePageArtFile}
+              onPageArtPreset={(p) => { setPageArtPreset(p); setPageArtUploaded(null); }}
+              onPageArtClear={clearPageArt}
+              pageFileRef={pageFileRef}
               qty={qty}
               setQty={setQty}
               notes={notes}
