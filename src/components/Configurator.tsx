@@ -106,16 +106,26 @@ export function Configurator() {
   const [notes, setNotes] = useState("");
 
   // image toolbox
-  const [scale, setScale] = useState(100);       // 30-200%
-  const [offsetX, setOffsetX] = useState(0);     // -50..50
+  const [scale, setScale] = useState(100);       // 30-250%
+  const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
   const [offsetY, setOffsetY] = useState(0);
   const [contrast, setContrast] = useState(100); // %
   const [brightness, setBrightness] = useState(100);
   const [duplicated, setDuplicated] = useState(false);
+  const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const materialData = materials.find((m) => m.id === material);
   const shapeData = shapes.find((s) => s.id === shape)!;
+
+  const bulkFactor = useMemo(() => {
+    if (qty >= 500) return 0.16; // 84% off
+    if (qty >= 250) return 0.20; // 80% off
+    if (qty >= 100) return 0.25; // 75% off
+    if (qty >= 50)  return 0.30; // 70% off
+    if (qty >= 25)  return 0.63; // 37% off
+    return 1;
+  }, [qty]);
 
   const price = useMemo(() => {
     const base = 8;
@@ -123,9 +133,8 @@ export function Configurator() {
     const h = parseFloat(height || "1");
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
-    const bulk = qty >= 500 ? 0.7 : qty >= 200 ? 0.8 : qty >= 100 ? 0.9 : 1;
-    return Math.round(base * area * factor * bulk * qty);
-  }, [width, height, qty, materialData]);
+    return Math.round(base * area * factor * bulkFactor * qty);
+  }, [width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
