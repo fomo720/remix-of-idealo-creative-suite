@@ -340,11 +340,16 @@ export function Configurator() {
                         </div>
                         <div className="flex items-start gap-2">
                           <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-green)" }} />
-                          <span>
-                            <strong className="text-foreground">Ventajas:</strong>{" "}
-                            <span className="text-muted-foreground">{materialData.advantages.join(" · ")}.</span>
-                          </span>
+                          <strong className="text-foreground">Ventajas:</strong>
                         </div>
+                        <ul className="ml-6 grid gap-1.5">
+                          {materialData.advantages.map((a, i) => (
+                            <li key={i} className="flex items-center gap-2 text-muted-foreground">
+                              {a.icon}
+                              <span>{a.text}</span>
+                            </li>
+                          ))}
+                        </ul>
                         <div className="flex items-start gap-2">
                           <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-pink)" }} />
                           <span className="text-muted-foreground">{materialData.useCase}</span>
