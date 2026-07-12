@@ -572,12 +572,14 @@ function InteractiveCanvas({
   onClear: () => void;
 }) {
   const maskRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ mode: "move" | "resize"; startX: number; startY: number; startOX: number; startOY: number; startScale: number; corner?: "tl" | "tr" | "bl" | "br"; rect: DOMRect } | null>(null);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
-      if (!maskRef.current) return;
-      if (!maskRef.current.contains(e.target as Node)) setSelected(false);
+      const target = e.target as Node;
+      if (maskRef.current?.contains(target) || menuRef.current?.contains(target)) return;
+      setSelected(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
@@ -819,6 +821,7 @@ function InteractiveCanvas({
       {/* Floating contextual menu */}
       {hasArt && selected && !duplicated && (
         <div
+          ref={menuRef}
           className="absolute z-40 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
           style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
           onMouseDown={(e) => e.stopPropagation()}
