@@ -267,7 +267,58 @@ function pageBackground(type: PageType): React.CSSProperties {
   }
 }
 
-const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
+/* ---------- Grabado Láser ---------- */
+type LaserProduct = {
+  id: LaserProductId;
+  name: string;
+  desc: string;
+  hint: string;
+  surface: string;      // background color / gradient of the material
+  engrave: string;      // engraved (etched) mark color
+  price: number;        // unit price base in Lempiras
+  icon: React.ReactNode;
+  shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut";
+};
+
+const laserProducts: LaserProduct[] = [
+  {
+    id: "tabla", name: "Tabla de Cortar", desc: "Madera de bambú prensada", hint: "Regalos de cocina y bodas",
+    surface: "linear-gradient(135deg,#d9a869,#b8823f)", engrave: "#3a2110", price: 380,
+    icon: <Square className="h-8 w-8" />, shape: "board",
+  },
+  {
+    id: "botella", name: "Botella Metálica", desc: "Estilo Yeti · Owala · Stanley", hint: "Corporativo y deportivo",
+    surface: "linear-gradient(135deg,#3a3a3a,#1c1c1c)", engrave: "#e8ecef", price: 450,
+    icon: <Coffee className="h-8 w-8" />, shape: "bottle",
+  },
+  {
+    id: "cartera", name: "Cartera de Cuero (Varón)", desc: "Piel legítima curtida", hint: "Iniciales y logos",
+    surface: "linear-gradient(135deg,#4a2c1a,#2d180c)", engrave: "#0f0803", price: 520,
+    icon: <Wallet className="h-8 w-8" />, shape: "wallet",
+  },
+  {
+    id: "llavero-cuero", name: "Llavero de Cuero", desc: "Piel natural", hint: "Merch y detalles",
+    surface: "linear-gradient(135deg,#7a4a26,#4d2c14)", engrave: "#1a0d05", price: 120,
+    icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+  },
+  {
+    id: "llavero-madera", name: "Llavero de Madera", desc: "Madera clara pulida", hint: "Souvenirs y eventos",
+    surface: "linear-gradient(135deg,#c99560,#a1703b)", engrave: "#3a2110", price: 90,
+    icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+  },
+  {
+    id: "vaso", name: "Vaso de Vidrio", desc: "Vidrio templado transparente", hint: "Restaurantes y bares",
+    surface: "linear-gradient(135deg,#e8f2f7,#c4d8e2)", engrave: "#4d6a75", price: 180,
+    icon: <Wine className="h-8 w-8" />, shape: "glass",
+  },
+  {
+    id: "coco", name: "Coco (Fruta Natural)", desc: "Grabamos la cáscara del coco", hint: "Eventos tropicales · bodas playa",
+    surface: "linear-gradient(135deg,#5a3720,#2f1c0e)", engrave: "#120a04", price: 65,
+    icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
+  },
+];
+
+
 
 function currency(n: number) {
   return "L. " + n.toLocaleString("es-HN", { maximumFractionDigits: 0 });
