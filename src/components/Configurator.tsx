@@ -214,6 +214,9 @@ export function Configurator() {
               />
             </div>
           )}
+          {step === 1 && (
+            <NavRow onNext={category ? () => goTo(2) : undefined} />
+          )}
 
           {step === 2 && (
             <div className="animate-step-in">
