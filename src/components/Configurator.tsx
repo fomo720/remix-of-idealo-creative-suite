@@ -1174,8 +1174,8 @@ function CategoryCard({
 }
 
 function SelectCard({
-  title, desc, active, onClick, accent, swatch,
-}: { title: string; desc: string; active: boolean; onClick: () => void; accent: string; swatch?: string }) {
+  title, desc, active, onClick, accent, swatch, sampleImage,
+}: { title: string; desc: string; active: boolean; onClick: () => void; accent: string; swatch?: string; sampleImage?: string }) {
   return (
     <button
       onClick={onClick}
@@ -1184,7 +1184,11 @@ function SelectCard({
         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
       )}
     >
-      {swatch && (
+      {sampleImage ? (
+        <div className="mb-3 grid h-32 w-full place-items-center overflow-hidden rounded-lg border border-border" style={{ background: swatch ?? "#ffffff" }}>
+          <img src={sampleImage} alt="" className="max-h-full max-w-full object-contain" />
+        </div>
+      ) : swatch && (
         <div className="mb-3 h-14 w-full rounded-lg border border-border" style={{ background: swatch }} />
       )}
       <div className="flex items-start justify-between gap-2">
