@@ -385,11 +385,15 @@ export function Configurator() {
           </p>
         </div>
 
-        <Stepper step={step} onGo={goTo} />
+        <Stepper
+          step={step}
+          onGo={goTo}
+          labels={isNotebook ? ["Categoría", "Estilo", "Material", "Diseño"] : ["Categoría", "Forma", "Material", "Diseño"]}
+        />
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
-            <div className="animate-step-in grid gap-6 sm:grid-cols-2">
+            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
@@ -406,13 +410,21 @@ export function Configurator() {
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
               />
+              <CategoryCard
+                title="Libretas Personalizadas"
+                desc="Portadas impresas en cartulina premium. Hojas blancas, rayadas, cuadriculadas o punteadas."
+                accent="var(--brand-violet)"
+                icon={<BookOpen className="h-8 w-8" />}
+                active={category === "libretas"}
+                onClick={() => setCategory("libretas")}
+              />
             </div>
           )}
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
 
-          {step === 2 && (
+          {step === 2 && !isNotebook && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -432,7 +444,27 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 3 && (
+          {step === 2 && isNotebook && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<BookOpen className="h-5 w-5" />} title="Elige el estilo de impresión" />
+              <div className="grid gap-5 sm:grid-cols-2">
+                {notebookStyles.map((s) => (
+                  <NotebookStyleCard
+                    key={s.id}
+                    title={s.name}
+                    desc={s.desc}
+                    accent={s.accent}
+                    icon={s.icon}
+                    active={notebookStyle === s.id}
+                    onClick={() => setNotebookStyle(s.id)}
+                  />
+                ))}
+              </div>
+              <NavRow onBack={() => goTo(1)} onNext={notebookStyle ? () => goTo(3) : undefined} />
+            </div>
+          )}
+
+          {step === 3 && !isNotebook && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -447,6 +479,23 @@ export function Configurator() {
                 ))}
               </div>
               <NavRow onBack={() => goTo(2)} onNext={material ? () => goTo(4) : undefined} />
+            </div>
+          )}
+
+          {step === 3 && isNotebook && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Material de la portada" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                {notebookMaterials.map((m) => (
+                  <NotebookMaterialCard
+                    key={m.id}
+                    material={m}
+                    active={notebookMaterial === m.id}
+                    onClick={() => setNotebookMaterial(m.id)}
+                  />
+                ))}
+              </div>
+              <NavRow onBack={() => goTo(2)} onNext={notebookMaterial ? () => goTo(4) : undefined} />
             </div>
           )}
 
