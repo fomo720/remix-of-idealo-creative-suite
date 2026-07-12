@@ -14,6 +14,20 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import appleIcon from "@/assets/apple-icon.png.asset.json";
 import rollIcon from "@/assets/roll-icon.png.asset.json";
+import dinoSticker from "@/assets/dino-sticker.png.asset.json";
+import coinHandIcon from "@/assets/coin-hand.png.asset.json";
+import waterDropIcon from "@/assets/water-drop.png.asset.json";
+import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
+
+const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
+  <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
+);
+const WaterDropBlackIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
+  <img src={waterDropIcon.url} alt="" className={className} style={{ filter: "brightness(0)" }} />
+);
+const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
+  <img src={stickerTagIcon.url} alt="" className={className} />
+);
 
 
 
@@ -57,15 +71,17 @@ const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
 const materials: {
   id: Material; name: string; desc: string; priceFactor: number; swatch: string;
   finish: string; advantages: { icon: React.ReactNode; text: string }[]; useCase: string;
+  sampleImage?: string;
 }[] = [
   {
     id: "white-vinyl-removable", name: "Stickers de Vinil Blanco Removible Semi-Brillante",
     desc: "El más económico · Impermeable · Removible", priceFactor: 1.05, swatch: "#ffffff",
     finish: "Semi-Brillante (Laminado)",
+    sampleImage: dinoSticker.url,
     advantages: [
-      { icon: <HandCoins className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "El más económico" },
-      { icon: <Droplets className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Impermeable" },
-      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Removible sin dejar residuos" },
+      { icon: <CoinHandIcon />, text: "El más económico" },
+      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
+      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
     ],
     useCase: "Ideal para etiquetas de producto y campañas versátiles.",
   },
@@ -76,7 +92,7 @@ const materials: {
     advantages: [
       { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Material transparente" },
       { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Impreso con tinta blanca" },
-      { icon: <Droplets className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Impermeable" },
+      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
     ],
     useCase: "Ideal para vidrio, escaparates y branding con efecto cristal.",
   },
@@ -85,7 +101,7 @@ const materials: {
     desc: "Eco-seguro · Apto microondas · Sin PVC", priceFactor: 1.35, swatch: "#efeae4",
     finish: "Mate",
     advantages: [
-      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Removible sin dejar residuos" },
+      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
       { icon: <Microwave className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Apto para microondas" },
       { icon: <Leaf className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Sin PVC ni ftalatos" },
     ],
@@ -97,8 +113,8 @@ const materials: {
     finish: "Semi-Brillante (Laminado)",
     advantages: [
       { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Adhesivo fuerte y duradero" },
-      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Removible sin dejar residuos" },
-      { icon: <Droplets className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Impermeable" },
+      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
+      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
     ],
     useCase: "Ideal para exteriores, industrial y aplicaciones de larga duración.",
   },
@@ -108,8 +124,8 @@ const materials: {
     finish: "Semi-Brillante (Laminado)",
     advantages: [
       { icon: <Tag className="h-4 w-4" style={{ color: "var(--brand-pink)" }} />, text: "Pestaña personalizada para colgar" },
-      { icon: <Droplets className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Impermeable" },
-      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Removible sin dejar residuos" },
+      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
+      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
     ],
     useCase: "Ideal para etiquetas colgantes en botellas y productos retail.",
   },
@@ -308,6 +324,7 @@ export function Configurator() {
                     active={material === m.id}
                     onClick={() => setMaterial(m.id)}
                     swatch={m.swatch}
+                    sampleImage={m.sampleImage}
                   />
                 ))}
               </div>
@@ -1158,8 +1175,8 @@ function CategoryCard({
 }
 
 function SelectCard({
-  title, desc, active, onClick, accent, swatch,
-}: { title: string; desc: string; active: boolean; onClick: () => void; accent: string; swatch?: string }) {
+  title, desc, active, onClick, accent, swatch, sampleImage,
+}: { title: string; desc: string; active: boolean; onClick: () => void; accent: string; swatch?: string; sampleImage?: string }) {
   return (
     <button
       onClick={onClick}
@@ -1168,7 +1185,11 @@ function SelectCard({
         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
       )}
     >
-      {swatch && (
+      {sampleImage ? (
+        <div className="mb-3 grid h-32 w-full place-items-center overflow-hidden rounded-lg border border-border" style={{ background: swatch ?? "#ffffff" }}>
+          <img src={sampleImage} alt="" className="max-h-full max-w-full object-contain" />
+        </div>
+      ) : swatch && (
         <div className="mb-3 h-14 w-full rounded-lg border border-border" style={{ background: swatch }} />
       )}
       <div className="flex items-start justify-between gap-2">
