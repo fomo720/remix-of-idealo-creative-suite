@@ -2592,6 +2592,33 @@ function ProductMockup({
       </svg>
     );
   }
+  if (s === "pendant") {
+    return (
+      <svg viewBox="0 0 300 300" className="h-full w-full">
+        <defs>
+          <radialGradient id="lg-pendant" cx="0.35" cy="0.3" r="0.85">
+            <stop offset="0%" stopColor="#f6dd8a" />
+            <stop offset="60%" stopColor="#d4a63a" />
+            <stop offset="100%" stopColor="#7a5a1a" />
+          </radialGradient>
+          <clipPath id="cp-pendant"><circle cx="150" cy="175" r="72" /></clipPath>
+        </defs>
+        {/* chain */}
+        <path d="M20 40 Q150 110 280 40" stroke="#c8a35a" strokeWidth="2.2" fill="none" opacity="0.85" />
+        <path d="M20 40 Q150 110 280 40" stroke="#000" strokeWidth="0.6" fill="none" opacity="0.35" strokeDasharray="3 3" />
+        {/* bail */}
+        <rect x="142" y="88" width="16" height="18" rx="4" fill="url(#lg-pendant)" stroke="#8a6a1a" strokeWidth="0.8" />
+        {/* pendant disc */}
+        <ellipse cx="150" cy="252" rx="70" ry="6" fill="#000" opacity="0.2" />
+        <circle cx="150" cy="175" r="72" fill="url(#lg-pendant)" stroke="#8a6a1a" strokeWidth="1.2" />
+        <g clipPath="url(#cp-pendant)">
+          <foreignObject x="78" y="103" width="144" height="144">
+            <div style={{ width: "100%", height: "100%" }}>{children}</div>
+          </foreignObject>
+        </g>
+      </svg>
+    );
+  }
   // coconut
   return (
     <svg viewBox="0 0 300 300" className="h-full w-full">
