@@ -433,6 +433,7 @@ const laserProducts: LaserProduct[] = [
     id: "coco", name: "Coco (Fruta Natural)", desc: "Grabamos la cáscara del coco", hint: "Eventos tropicales · bodas playa",
     surface: "linear-gradient(135deg,#5a3720,#2f1c0e)", engrave: "#120a04", price: 65,
     icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
+    heroImage: cocoGrabado.url,
     // coco es coco — sin variantes
   },
   {
