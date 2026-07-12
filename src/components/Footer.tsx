@@ -25,7 +25,7 @@ export function Footer() {
         <div>
           <h4 className="mb-4 text-sm font-bold uppercase tracking-widest">Contacto</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--brand-pink)" }} /> Tegucigalpa · San Pedro Sula, Honduras</li>
+            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--brand-pink)" }} /> La Ceiba, Honduras · Plaza Almina</li>
             <li className="flex items-center gap-2"><Phone className="h-4 w-4 shrink-0" style={{ color: "var(--brand-orange)" }} /> +504 0000-0000</li>
             <li className="flex items-center gap-2"><Mail className="h-4 w-4 shrink-0" style={{ color: "var(--brand-blue)" }} /> hola@idealo.hn</li>
           </ul>
