@@ -5,6 +5,7 @@ import {
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
   HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
+  BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,7 +36,7 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 
 
 
-type Category = "stickers" | "iron-ons";
+type Category = "stickers" | "iron-ons" | "libretas";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
 type Material =
   | "white-vinyl-removable"
@@ -44,6 +45,9 @@ type Material =
   | "white-vinyl-permanent"
   | "hang-tag-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
+type NotebookStyle = "cover-only" | "cover-pages";
+type NotebookMaterial = "cover-matte" | "cover-glossy";
+type PageType = "blank" | "ruled" | "grid" | "dotted";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   {
@@ -169,6 +173,96 @@ const sizePresets = [
   { w: 5, h: 5, label: '5" x 5"', hint: "Tamaño grande exteriores" },
 ];
 
+/* ---------- Libretas ---------- */
+const notebookStyles: {
+  id: NotebookStyle; name: string; desc: string; accent: string; icon: React.ReactNode;
+}[] = [
+  {
+    id: "cover-only",
+    name: "Solo Portada",
+    desc: "Imprimimos únicamente la carátula con tu diseño. Interior en blanco.",
+    accent: "var(--brand-violet)",
+    icon: <BookOpen className="h-8 w-8" />,
+  },
+  {
+    id: "cover-pages",
+    name: "Portada + Páginas",
+    desc: "Carátula personalizada más logo o marca de agua sutil en cada hoja interior.",
+    accent: "var(--brand-pink)",
+    icon: <NotebookPen className="h-8 w-8" />,
+  },
+];
+
+const notebookMaterials: {
+  id: NotebookMaterial; name: string; desc: string; finish: string; swatch: string;
+  priceFactor: number; advantages: { icon: React.ReactNode; text: string }[]; useCase: string;
+}[] = [
+  {
+    id: "cover-matte",
+    name: "Cartulina Mate 300gsm",
+    desc: "Textura suave, elegante y sin reflejos.",
+    finish: "Mate",
+    swatch: "#efeae4",
+    priceFactor: 1,
+    advantages: [
+      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Look premium sin brillo" },
+      { icon: <ShieldCheck className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Resistente al roce" },
+      { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores sobrios y naturales" },
+    ],
+    useCase: "Ideal para libretas ejecutivas, planners y regalos corporativos.",
+  },
+  {
+    id: "cover-glossy",
+    name: "Cartulina Brillante 300gsm",
+    desc: "Acabado brillante con protección UV.",
+    finish: "Brillante UV",
+    swatch: "linear-gradient(135deg,#f5f7fa,#e4e9f2)",
+    priceFactor: 1.15,
+    advantages: [
+      { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores vibrantes" },
+      { icon: <WaterDropBlackIcon />, text: "Repele humedad y manchas" },
+      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Portada más durable" },
+    ],
+    useCase: "Ideal para fotografía, catálogos y libretas escolares.",
+  },
+];
+
+const notebookSizes = [
+  { id: "a6", label: "A6", cm: "10.5 × 14.8 cm", w: 10.5, h: 14.8, hint: "Bolsillo · ideas rápidas" },
+  { id: "a5", label: "A5", cm: "14.8 × 21 cm", w: 14.8, h: 21, hint: "Estándar · más común" },
+  { id: "b5", label: "B5", cm: "17.6 × 25 cm", w: 17.6, h: 25, hint: "Mediana · notas amplias" },
+  { id: "a4", label: "A4", cm: "21 × 29.7 cm", w: 21, h: 29.7, hint: "Grande · oficina" },
+];
+
+const pageTypes: { id: PageType; name: string; desc: string; icon: React.ReactNode }[] = [
+  { id: "blank", name: "Blanco", desc: "Hojas lisas sin guías", icon: <StickyNote className="h-4 w-4" /> },
+  { id: "ruled", name: "Rayado", desc: "Líneas horizontales", icon: <AlignJustify className="h-4 w-4" /> },
+  { id: "grid", name: "Cuadriculado", desc: "Cuadrícula 5mm", icon: <Grid3x3 className="h-4 w-4" /> },
+  { id: "dotted", name: "Punteado", desc: "Puntos guía discretos", icon: <Dot className="h-4 w-4" /> },
+];
+
+function pageBackground(type: PageType): React.CSSProperties {
+  switch (type) {
+    case "ruled":
+      return {
+        backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 22px, rgba(59,130,246,0.35) 22px 23px)",
+      };
+    case "grid":
+      return {
+        backgroundImage:
+          "linear-gradient(to right, rgba(148,163,184,0.35) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.35) 1px, transparent 1px)",
+        backgroundSize: "18px 18px",
+      };
+    case "dotted":
+      return {
+        backgroundImage: "radial-gradient(circle, rgba(100,116,139,0.55) 1px, transparent 1.4px)",
+        backgroundSize: "16px 16px",
+      };
+    default:
+      return {};
+  }
+}
+
 const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
 
 function currency(n: number) {
@@ -194,6 +288,12 @@ export function Configurator() {
   const [qty, setQty] = useState(100);
   const [notes, setNotes] = useState("");
 
+  // notebook state
+  const [notebookStyle, setNotebookStyle] = useState<NotebookStyle | null>(null);
+  const [notebookMaterial, setNotebookMaterial] = useState<NotebookMaterial | null>(null);
+  const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
+  const [pageType, setPageType] = useState<PageType>("blank");
+
   // image toolbox
   const [scale, setScale] = useState(100);       // 30-250%
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
@@ -204,7 +304,10 @@ export function Configurator() {
   const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const isNotebook = category === "libretas";
   const materialData = materials.find((m) => m.id === material);
+  const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
+  const notebookSizeData = notebookSizes[notebookSizeIdx];
   const shapeData = shapes.find((s) => s.id === shape)!;
 
   const bulkFactor = useMemo(() => {
@@ -217,13 +320,23 @@ export function Configurator() {
   }, [qty]);
 
   const price = useMemo(() => {
+    if (isNotebook) {
+      // notebook base price by size (cm²), plus material/style factors
+      const areaCm = notebookSizeData.w * notebookSizeData.h;
+      const base = 45 + areaCm * 0.35;
+      const matFactor = notebookMaterialData?.priceFactor ?? 1;
+      const styleFactor = notebookStyle === "cover-pages" ? 1.25 : 1;
+      // gentler bulk curve for notebooks
+      const nbBulk = qty >= 100 ? 0.7 : qty >= 50 ? 0.8 : qty >= 25 ? 0.9 : 1;
+      return Math.round(base * matFactor * styleFactor * nbBulk * qty);
+    }
     const base = 8;
     const w = parseFloat(width || "1");
     const h = parseFloat(height || "1");
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     return Math.round(base * area * factor * bulkFactor * qty);
-  }, [width, height, qty, materialData, bulkFactor]);
+  }, [isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
@@ -272,11 +385,15 @@ export function Configurator() {
           </p>
         </div>
 
-        <Stepper step={step} onGo={goTo} />
+        <Stepper
+          step={step}
+          onGo={goTo}
+          labels={isNotebook ? ["Categoría", "Estilo", "Material", "Diseño"] : ["Categoría", "Forma", "Material", "Diseño"]}
+        />
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
-            <div className="animate-step-in grid gap-6 sm:grid-cols-2">
+            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
@@ -293,13 +410,21 @@ export function Configurator() {
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
               />
+              <CategoryCard
+                title="Libretas Personalizadas"
+                desc="Portadas impresas en cartulina premium. Hojas blancas, rayadas, cuadriculadas o punteadas."
+                accent="var(--brand-violet)"
+                icon={<BookOpen className="h-8 w-8" />}
+                active={category === "libretas"}
+                onClick={() => setCategory("libretas")}
+              />
             </div>
           )}
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
 
-          {step === 2 && (
+          {step === 2 && !isNotebook && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -319,7 +444,27 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 3 && (
+          {step === 2 && isNotebook && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<BookOpen className="h-5 w-5" />} title="Elige el estilo de impresión" />
+              <div className="grid gap-5 sm:grid-cols-2">
+                {notebookStyles.map((s) => (
+                  <NotebookStyleCard
+                    key={s.id}
+                    title={s.name}
+                    desc={s.desc}
+                    accent={s.accent}
+                    icon={s.icon}
+                    active={notebookStyle === s.id}
+                    onClick={() => setNotebookStyle(s.id)}
+                  />
+                ))}
+              </div>
+              <NavRow onBack={() => goTo(1)} onNext={notebookStyle ? () => goTo(3) : undefined} />
+            </div>
+          )}
+
+          {step === 3 && !isNotebook && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -337,7 +482,47 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 4 && (
+          {step === 3 && isNotebook && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Material de la portada" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                {notebookMaterials.map((m) => (
+                  <NotebookMaterialCard
+                    key={m.id}
+                    material={m}
+                    active={notebookMaterial === m.id}
+                    onClick={() => setNotebookMaterial(m.id)}
+                  />
+                ))}
+              </div>
+              <NavRow onBack={() => goTo(2)} onNext={notebookMaterial ? () => goTo(4) : undefined} />
+            </div>
+          )}
+
+          {step === 4 && isNotebook && (
+            <NotebookDesigner
+              styleId={notebookStyle!}
+              material={notebookMaterialData!}
+              sizeIdx={notebookSizeIdx}
+              setSizeIdx={setNotebookSizeIdx}
+              pageType={pageType}
+              setPageType={setPageType}
+              uploaded={uploaded}
+              preset={preset}
+              onFile={handleFile}
+              onPreset={(p) => { setPreset(p); setUploaded(null); }}
+              onClear={clearImage}
+              fileRef={fileRef}
+              qty={qty}
+              setQty={setQty}
+              notes={notes}
+              setNotes={setNotes}
+              price={price}
+              onBack={() => goTo(3)}
+            />
+          )}
+
+          {step === 4 && !isNotebook && (
             <div className="animate-step-in grid gap-8 lg:grid-cols-2">
               {/* LEFT: Configurator */}
               <div className="space-y-6">
@@ -1111,8 +1296,8 @@ function ToolSlider({
   );
 }
 
-function Stepper({ step, onGo }: { step: number; onGo: (n: number) => void }) {
-  const labels = ["Categoría", "Forma", "Material", "Diseño"];
+function Stepper({ step, onGo, labels = ["Categoría", "Forma", "Material", "Diseño"] }: { step: number; onGo: (n: number) => void; labels?: string[] }) {
+  
   return (
     <div className="mx-auto flex max-w-3xl items-center justify-between gap-2">
       {labels.map((l, i) => {
@@ -1416,3 +1601,452 @@ function Stat({ label, value, highlight }: { label: string; value: string; highl
     </div>
   );
 }
+
+/* ---------- Notebook cards ---------- */
+function NotebookStyleCard({
+  title, desc, icon, active, onClick, accent,
+}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "group relative overflow-hidden rounded-3xl border-2 p-6 text-left transition-all rainbow-splash",
+        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+      )}
+    >
+      <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-15 blur-3xl" style={{ background: accent }} />
+      <div className="relative flex items-start gap-4">
+        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white shadow-md" style={{ background: accent }}>
+          {icon}
+        </div>
+        <div className="flex-1">
+          <h4 className="text-lg font-bold leading-tight">{title}</h4>
+          <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
+        </div>
+        {active && (
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-white" style={{ background: accent }}>
+            <Check className="h-3.5 w-3.5" />
+          </span>
+        )}
+      </div>
+      {/* Little notebook preview */}
+      <div className="mt-5 flex h-28 items-end justify-center overflow-hidden rounded-xl bg-muted/50 p-3">
+        <MiniNotebook variant={title.includes("Solo") ? "cover" : "pages"} />
+      </div>
+    </button>
+  );
+}
+
+function MiniNotebook({ variant }: { variant: "cover" | "pages" }) {
+  return (
+    <svg viewBox="0 0 140 90" className="h-full w-auto">
+      <ellipse cx="72" cy="84" rx="46" ry="3" fill="#000" opacity="0.1" />
+      {/* pages behind (only for pages variant) */}
+      {variant === "pages" && (
+        <>
+          <rect x="34" y="14" width="80" height="66" rx="2" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1" />
+          <line x1="42" y1="26" x2="106" y2="26" stroke="#c7d2fe" strokeWidth="0.8" />
+          <line x1="42" y1="34" x2="106" y2="34" stroke="#c7d2fe" strokeWidth="0.8" />
+          <line x1="42" y1="42" x2="106" y2="42" stroke="#c7d2fe" strokeWidth="0.8" />
+          <line x1="42" y1="50" x2="106" y2="50" stroke="#c7d2fe" strokeWidth="0.8" />
+          <line x1="42" y1="58" x2="86" y2="58" stroke="#c7d2fe" strokeWidth="0.8" />
+        </>
+      )}
+      {/* cover */}
+      <rect x="28" y="10" width="80" height="70" rx="3" fill="url(#coverGrad)" stroke="#334155" strokeWidth="1" />
+      <defs>
+        <linearGradient id="coverGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="100%" stopColor="#ec4899" />
+        </linearGradient>
+      </defs>
+      {/* spiral */}
+      {[0,1,2,3,4,5,6].map((i) => (
+        <circle key={i} cx={30} cy={18 + i * 9} r="2.2" fill="none" stroke="#94a3b8" strokeWidth="1.2" />
+      ))}
+      {/* logo mark */}
+      <circle cx="68" cy="45" r="12" fill="#ffffff" opacity="0.9" />
+      <text x="68" y="49" textAnchor="middle" fontSize="12" fontWeight="700" fill="#7c3aed">L</text>
+    </svg>
+  );
+}
+
+function NotebookMaterialCard({
+  material: m, active, onClick,
+}: {
+  material: (typeof notebookMaterials)[number];
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all",
+        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+      )}
+    >
+      <div className="relative flex h-56 w-full items-center justify-center p-6" style={{ background: m.swatch }}>
+        <div
+          className="relative h-40 w-32 rounded-md shadow-elegant"
+          style={{
+            background: m.id === "cover-glossy"
+              ? "linear-gradient(135deg,#1e293b,#334155)"
+              : "linear-gradient(135deg,#3f3f46,#52525b)",
+          }}
+        >
+          {m.id === "cover-glossy" && (
+            <div className="absolute inset-0 rounded-md" style={{ background: "linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%)" }} />
+          )}
+          <div className="absolute left-0 top-4 flex flex-col gap-2">
+            {[0,1,2,3,4,5,6,7].map((i) => (
+              <span key={i} className="ml-[-6px] block h-1.5 w-4 rounded-full bg-white/70 shadow" />
+            ))}
+          </div>
+          <div className="absolute inset-0 grid place-items-center text-white/90 text-3xl font-black">A</div>
+        </div>
+        {active && (
+          <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full text-white shadow-md" style={{ background: "var(--brand-violet)" }}>
+            <Check className="h-4 w-4" />
+          </span>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <h4 className="text-sm font-bold leading-tight">{m.name}</h4>
+        <p className="text-xs text-muted-foreground">{m.desc}</p>
+        <ul className="grid gap-1.5">
+          {m.advantages.map((a, i) => (
+            <li key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="grid h-5 w-5 shrink-0 place-items-center">{a.icon}</span>
+              <span>{a.text}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-auto border-t border-border pt-3 text-xs">
+          <span className="font-semibold">Acabado:</span>{" "}
+          <span className="text-muted-foreground">{m.finish}</span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+/* ---------- Notebook designer (step 4) ---------- */
+function NotebookDesigner({
+  styleId, material, sizeIdx, setSizeIdx, pageType, setPageType,
+  uploaded, preset, onFile, onPreset, onClear, fileRef,
+  qty, setQty, notes, setNotes, price, onBack,
+}: {
+  styleId: NotebookStyle;
+  material: (typeof notebookMaterials)[number];
+  sizeIdx: number;
+  setSizeIdx: (n: number) => void;
+  pageType: PageType;
+  setPageType: (p: PageType) => void;
+  uploaded: string | null;
+  preset: string | null;
+  onFile: (f: File | null) => void;
+  onPreset: (p: string) => void;
+  onClear: () => void;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  qty: number;
+  setQty: (n: number) => void;
+  notes: string;
+  setNotes: (v: string) => void;
+  price: number;
+  onBack: () => void;
+}) {
+  const size = notebookSizes[sizeIdx];
+  const hasArt = !!(uploaded || preset);
+  const showPages = styleId === "cover-pages";
+
+  return (
+    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
+      {/* LEFT: controls */}
+      <div className="space-y-6">
+        {/* Material info */}
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-soft p-5">
+          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-rainbow opacity-10 blur-2xl" />
+          <div className="relative">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-background" style={{ color: "var(--brand-violet)" }}>
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Libreta seleccionada</div>
+                <div className="font-bold leading-tight">
+                  {material.name} · {styleId === "cover-only" ? "Solo Portada" : "Portada + Páginas"}
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">{material.useCase}</p>
+          </div>
+        </div>
+
+        {/* Size */}
+        <div>
+          <Label className="mb-3 block text-sm font-semibold">Tamaño de la libreta</Label>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {notebookSizes.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => setSizeIdx(i)}
+                className={cn(
+                  "rounded-xl border-2 p-3 text-left transition",
+                  sizeIdx === i ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                <div className="text-sm font-bold">{s.label}</div>
+                <div className="mt-0.5 text-[10px] font-medium text-foreground/70">{s.cm}</div>
+                <div className="mt-0.5 text-[10px] leading-tight text-muted-foreground">{s.hint}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Page type — only when cover+pages */}
+        {showPages && (
+          <div>
+            <Label className="mb-3 block text-sm font-semibold">Tipo de página interior</Label>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {pageTypes.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => setPageType(p.id)}
+                  className={cn(
+                    "flex flex-col items-start gap-1.5 rounded-xl border-2 p-3 text-left transition",
+                    pageType === p.id ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                  )}
+                >
+                  <div className="h-10 w-full rounded-md border border-border bg-white" style={pageBackground(p.id)} />
+                  <div className="flex items-center gap-1.5 text-xs font-bold">
+                    {p.icon}
+                    {p.name}
+                  </div>
+                  <div className="text-[10px] leading-tight text-muted-foreground">{p.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Upload cover art */}
+        <div>
+          <Label className="mb-2 block text-sm font-semibold">Arte para la portada</Label>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+          >
+            <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
+            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
+          </button>
+
+          <div className="mt-3">
+            <Label className="mb-2 block text-xs text-muted-foreground">O elige un arte prediseñado</Label>
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+              {presetArts.map((a) => (
+                <button
+                  key={a}
+                  onClick={() => onPreset(a)}
+                  className={cn(
+                    "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
+                    preset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                  )}
+                >
+                  {a}
+                </button>
+              ))}
+            </div>
+          </div>
+          {hasArt && (
+            <button onClick={onClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
+              <Trash2 className="h-3.5 w-3.5" /> Quitar arte
+            </button>
+          )}
+        </div>
+
+        {/* Quantity */}
+        <div>
+          <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+          <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {[10, 25, 50, 100].map((n) => (
+              <button
+                key={n}
+                onClick={() => setQty(n)}
+                className={cn(
+                  "rounded-xl border-2 py-2 text-sm font-bold transition",
+                  qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Descuentos por volumen se aplican automáticamente al superar 25, 50 y 100 unidades.
+          </p>
+        </div>
+
+        {/* Notes */}
+        <div>
+          <Label htmlFor="notes" className="mb-2 block text-sm font-semibold">Instrucciones especiales</Label>
+          <Textarea
+            id="notes"
+            rows={3}
+            placeholder="Colores Pantone, número de hojas, encuadernado (espiral, cosido, hotmelt), etc."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* RIGHT: preview */}
+      <div className="lg:sticky lg:top-6 lg:self-start">
+        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
+          <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <span>Vista previa en vivo</span>
+            <span className="rounded-full bg-background px-2 py-0.5">
+              Libreta {size.label}
+            </span>
+          </div>
+
+          <NotebookPreview
+            size={size}
+            material={material}
+            showPages={showPages}
+            pageType={pageType}
+            uploaded={uploaded}
+            preset={preset}
+          />
+
+          <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+            <Stat label="Tamaño" value={`${size.label} · ${size.cm}`} />
+            <Stat label="Cantidad" value={`${qty}`} />
+            <Stat label="Precio estimado" value={currency(price)} highlight />
+          </div>
+          <p className="mt-3 text-center text-[11px] text-muted-foreground">
+            {showPages
+              ? `Interior ${pageTypes.find((p) => p.id === pageType)?.name.toLowerCase()} con logo sutil en cada hoja.`
+              : "Interior en blanco. Solo se imprime la portada."}
+          </p>
+        </div>
+
+        <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
+          Añadir a la orden / Solicitar Cotización Profesional
+        </button>
+        <NavRow onBack={onBack} />
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Notebook live preview ---------- */
+function NotebookPreview({
+  size, material, showPages, pageType, uploaded, preset,
+}: {
+  size: (typeof notebookSizes)[number];
+  material: (typeof notebookMaterials)[number];
+  showPages: boolean;
+  pageType: PageType;
+  uploaded: string | null;
+  preset: string | null;
+}) {
+  const aspect = size.w / size.h; // portrait ~0.71
+  const coverGradient =
+    material.id === "cover-glossy"
+      ? "linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#334155 100%)"
+      : "linear-gradient(135deg,#3f3f46 0%,#52525b 100%)";
+
+  return (
+    <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
+      <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
+
+      <div
+        className="relative"
+        style={{
+          height: "85%",
+          aspectRatio: `${aspect} / 1`,
+          perspective: "1200px",
+        }}
+      >
+        {/* Pages sticking out behind */}
+        {showPages && (
+          <>
+            <div
+              className="absolute rounded-r-md border border-border bg-white"
+              style={{
+                inset: "3% -6% 3% 4%",
+                boxShadow: "2px 4px 12px rgba(0,0,0,0.1)",
+                ...pageBackground(pageType),
+                backgroundColor: "#ffffff",
+              }}
+            />
+            <div
+              className="absolute rounded-r-sm border border-border bg-white/95"
+              style={{ inset: "1.5% -3% 1.5% 6%" }}
+            />
+          </>
+        )}
+
+        {/* Cover */}
+        <div
+          className="absolute inset-0 overflow-hidden rounded-md rounded-l-none shadow-2xl"
+          style={{
+            background: coverGradient,
+            transform: "rotateY(-4deg)",
+            transformOrigin: "left center",
+          }}
+        >
+          {/* Glossy sheen */}
+          {material.id === "cover-glossy" && (
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(115deg, transparent 45%, rgba(255,255,255,0.28) 52%, transparent 60%)",
+              }}
+            />
+          )}
+
+          {/* Art placed on cover */}
+          <div className="absolute inset-0 flex items-center justify-center p-6">
+            {uploaded ? (
+              <img src={uploaded} alt="" className="max-h-[70%] max-w-[80%] object-contain drop-shadow-lg" />
+            ) : preset ? (
+              <span className="text-[5rem] leading-none drop-shadow-lg">{preset}</span>
+            ) : (
+              <div className="text-center text-white/60">
+                <BookOpen className="mx-auto mb-2 h-10 w-10" />
+                <div className="text-xs font-medium">Sube tu diseño de portada</div>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom brand line */}
+          <div className="absolute inset-x-0 bottom-3 text-center text-[10px] font-semibold tracking-widest text-white/40">
+            IDEALO · {size.label}
+          </div>
+        </div>
+
+        {/* Spiral binding on the left */}
+        <div className="absolute -left-2 top-0 flex h-full flex-col items-center justify-around py-3">
+          {Array.from({ length: 14 }).map((_, i) => (
+            <span
+              key={i}
+              className="block h-3 w-3 rounded-full border-2 border-slate-400/80 bg-slate-200 shadow-inner"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
