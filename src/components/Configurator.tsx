@@ -1200,7 +1200,7 @@ function CutIllustration({ id }: { id: CutShape }) {
     );
   }
   // rolls — apple-shaped stickers
-  const apple = "M70 20 C55 20 40 32 40 52 C40 72 55 88 70 88 C85 88 100 72 100 52 C100 32 85 20 70 20 Z M70 20 C70 12 76 6 84 6 M68 18 Q72 10 78 8";
+
   const appleShape = (
     <g>
       <path d="M45 40 C45 28 55 22 65 24 C68 20 72 20 75 24 C85 22 95 28 95 40 C95 62 82 78 70 78 C58 78 45 62 45 40 Z" fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
