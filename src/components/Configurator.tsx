@@ -584,6 +584,20 @@ export function Configurator() {
     if (fileRef.current) fileRef.current.value = "";
   };
 
+  const handlePageArtFile = (f: File | null) => {
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    setPageArtUploaded(url);
+    setPageArtPreset(null);
+  };
+  const clearPageArt = () => {
+    setPageArtUploaded(null);
+    setPageArtPreset(null);
+    if (pageFileRef.current) pageFileRef.current.value = "";
+  };
+
+
+
   const applyPreset = (i: number) => {
     setActivePreset(i);
     setSizeMode("preset");
