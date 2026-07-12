@@ -88,6 +88,7 @@ const materials: {
     finish: "Mate Ultra Suave",
     advantages: ["Sin reflejos ni brillos", "Textura sofisticada al tacto", "Fotografiable sin destellos"],
     useCase: "Ideal para marcas premium, packaging boutique y branding editorial.",
+  },
   {
     id: "white-vinyl-removable", name: "White Vinyl Removable Semi-Gloss Stickers",
     desc: "Más económico · Impermeable · Removible", priceFactor: 1.05, swatch: "#ffffff",
