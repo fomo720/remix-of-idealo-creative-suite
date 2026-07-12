@@ -671,7 +671,13 @@ export function Configurator() {
                     key={p.id}
                     product={p}
                     active={laserProduct === p.id}
-                    onClick={() => setLaserProduct(p.id)}
+                    onClick={() => {
+                      setLaserProduct(p.id);
+                      // reset variant selection when the product changes
+                      const first = p.variants?.[0]?.id ?? null;
+                      setLaserVariantId(first);
+                      setLaserColorIdx(0);
+                    }}
                   />
                 ))}
               </div>
@@ -682,9 +688,92 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 3 && isLaser && (
+          {/* Laser step 3: variant / color picker (only when the product has variants) */}
+          {step === 3 && isLaser && laserHasVariants && laserProductData && (
+            <div className="animate-step-in">
+              <SectionTitle
+                icon={<Package className="h-5 w-5" />}
+                title={`${laserProductData.variantLabel ?? "Modelo"} para ${laserProductData.name}`}
+              />
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {laserProductData.variants!.map((v) => {
+                  const active = laserVariantId === v.id;
+                  return (
+                    <button
+                      key={v.id}
+                      onClick={() => { setLaserVariantId(v.id); setLaserColorIdx(0); }}
+                      className={cn(
+                        "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
+                        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h4 className="text-sm font-bold leading-tight">{v.name}</h4>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{v.desc}</p>
+                        </div>
+                        {active && (
+                          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-orange)" }}>
+                            <Check className="h-3.5 w-3.5" />
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                        {v.colors.map((c) => (
+                          <span
+                            key={c.name}
+                            title={c.name}
+                            className="h-5 w-5 rounded-full border border-border shadow-sm"
+                            style={{ background: c.hex }}
+                          />
+                        ))}
+                        <span className="ml-1 text-[10px] text-muted-foreground">{v.colors.length} color{v.colors.length === 1 ? "" : "es"}</span>
+                      </div>
+                      {typeof v.priceDelta === "number" && v.priceDelta !== 0 && (
+                        <span className="mt-1 text-[11px] font-semibold" style={{ color: "var(--brand-orange)" }}>
+                          {v.priceDelta > 0 ? "+" : ""}{currency(v.priceDelta)} por unidad
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Color chooser for the selected variant */}
+              {laserVariantData && laserVariantData.colors.length > 1 && (
+                <div className="mt-6 rounded-2xl border border-border bg-gradient-soft p-4">
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Color base — {laserVariantData.name}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {laserVariantData.colors.map((c, i) => {
+                      const on = laserColorIdx === i;
+                      return (
+                        <button
+                          key={c.name}
+                          onClick={() => setLaserColorIdx(i)}
+                          className={cn(
+                            "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-xs transition",
+                            on ? "border-foreground bg-background" : "border-border bg-background/60 hover:border-foreground/40",
+                          )}
+                        >
+                          <span className="h-4 w-4 rounded-full border border-black/10" style={{ background: c.hex }} />
+                          <span className={cn("font-medium", on ? "text-foreground" : "text-muted-foreground")}>{c.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              <NavRow onBack={() => goTo(2)} onNext={laserVariantId ? () => goTo(4) : undefined} />
+            </div>
+          )}
+
+          {step === laserDesignStep && isLaser && laserProductData && (
             <LaserDesigner
-              product={laserProductData!}
+              product={laserProductData}
+              variant={laserVariantData}
+              color={laserColor}
               uploaded={uploaded}
               preset={preset}
               onFile={handleFile}
@@ -708,7 +797,7 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               duplicated={duplicated}
               setDuplicated={setDuplicated}
-              onBack={() => goTo(2)}
+              onBack={() => goTo(laserDesignStep - 1)}
             />
           )}
 
