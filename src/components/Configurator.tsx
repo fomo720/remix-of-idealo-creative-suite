@@ -731,6 +731,7 @@ export function Configurator() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {laserProductData.variants!.map((v) => {
                   const active = laserVariantId === v.id;
+                  const thumb = active && laserColor?.image ? laserColor.image : v.image;
                   return (
                     <button
                       key={v.id}
@@ -740,6 +741,16 @@ export function Configurator() {
                         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
                       )}
                     >
+                      {thumb && (
+                        <div className="relative mb-1 h-32 w-full overflow-hidden rounded-xl bg-gradient-to-br from-muted/60 to-background">
+                          <img
+                            key={thumb}
+                            src={thumb}
+                            alt={v.name}
+                            className="absolute inset-0 h-full w-full object-contain p-2 transition-opacity duration-300"
+                          />
+                        </div>
+                      )}
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <h4 className="text-sm font-bold leading-tight">{v.name}</h4>
@@ -752,14 +763,20 @@ export function Configurator() {
                         )}
                       </div>
                       <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                        {v.colors.map((c) => (
-                          <span
-                            key={c.name}
-                            title={c.name}
-                            className="h-5 w-5 rounded-full border border-border shadow-sm"
-                            style={{ background: c.hex }}
-                          />
-                        ))}
+                        {v.colors.map((c, ci) => {
+                          const highlighted = active && laserColorIdx === ci;
+                          return (
+                            <span
+                              key={c.name}
+                              title={c.name}
+                              className={cn(
+                                "h-5 w-5 rounded-full border shadow-sm transition",
+                                highlighted ? "ring-2 ring-offset-1 ring-offset-background scale-110" : "border-border",
+                              )}
+                              style={{ background: c.hex, ...(highlighted ? { boxShadow: `0 0 0 2px var(--brand-orange)` } : {}) }}
+                            />
+                          );
+                        })}
                         <span className="ml-1 text-[10px] text-muted-foreground">{v.colors.length} color{v.colors.length === 1 ? "" : "es"}</span>
                       </div>
                       {typeof v.priceDelta === "number" && v.priceDelta !== 0 && (
