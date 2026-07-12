@@ -497,7 +497,7 @@ export function Configurator() {
 
   const price = useMemo(() => {
     if (isLaser) {
-      const base = laserProductData?.price ?? 200;
+      const base = (laserProductData?.price ?? 200) + (laserVariantData?.priceDelta ?? 0);
       // gentle bulk curve for engraving
       const lBulk = qty >= 100 ? 0.75 : qty >= 50 ? 0.85 : qty >= 25 ? 0.92 : 1;
       return Math.round(base * qty * lBulk);
