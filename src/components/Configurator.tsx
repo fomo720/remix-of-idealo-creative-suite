@@ -17,6 +17,7 @@ import rollIcon from "@/assets/roll-icon.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
+import ecoSticker from "@/assets/eco-sticker.png.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
@@ -109,6 +110,7 @@ const materials: {
       { icon: <Leaf className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Sin PVC ni ftalatos" },
     ],
     useCase: "Ideal para empaques de alimentos y marcas eco-conscientes.",
+    sampleImage: ecoSticker.url,
   },
   {
     id: "white-vinyl-permanent", name: "Stickers de Vinil Blanco Permanente Semi-Brillante",
