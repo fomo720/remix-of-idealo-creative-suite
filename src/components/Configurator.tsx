@@ -18,6 +18,7 @@ import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
 import ecoSticker from "@/assets/eco-sticker.png.asset.json";
+import hangtagSticker from "@/assets/hangtag-sticker.jpg.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
@@ -134,6 +135,7 @@ const materials: {
       { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
     ],
     useCase: "Ideal para etiquetas colgantes en botellas y productos retail.",
+    sampleImage: hangtagSticker.url,
   },
 ];
 
