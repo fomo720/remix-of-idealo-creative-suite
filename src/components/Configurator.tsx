@@ -441,22 +441,39 @@ export function Configurator() {
 
                 {/* Quantity */}
                 <div>
-                  <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+                  <div className="mb-2 flex items-center justify-between">
+                    <Label htmlFor="qty" className="text-sm font-semibold">Cantidad</Label>
+                    {bulkFactor < 1 && (
+                      <span className="rounded-full bg-gradient-cta px-2.5 py-0.5 text-[10px] font-bold text-white">
+                        -{Math.round((1 - bulkFactor) * 100)}% aplicado
+                      </span>
+                    )}
+                  </div>
                   <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {[50, 100, 250, 500, 1000].map((n) => (
+                  <div className="mt-2 grid grid-cols-5 gap-2">
+                    {[
+                      { n: 25, off: 37 },
+                      { n: 50, off: 70 },
+                      { n: 100, off: 75 },
+                      { n: 250, off: 80 },
+                      { n: 500, off: 84 },
+                    ].map(({ n, off }) => (
                       <button
                         key={n}
                         onClick={() => setQty(n)}
                         className={cn(
-                          "rounded-full border px-3 py-1 text-xs font-medium transition",
-                          qty === n ? "border-transparent bg-foreground text-background" : "border-border text-muted-foreground hover:text-foreground",
+                          "group relative rounded-xl border-2 px-2 py-2 text-center transition",
+                          qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
                         )}
                       >
-                        {n} uds
+                        <div className="text-sm font-bold leading-tight">{n}</div>
+                        <div className="text-[9px] font-semibold leading-tight text-gradient-rainbow">-{off}%</div>
                       </button>
                     ))}
                   </div>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Escribe manualmente cualquier cantidad. El descuento se aplica automáticamente al superar cada tramo.
+                  </p>
                 </div>
 
                 <div>
