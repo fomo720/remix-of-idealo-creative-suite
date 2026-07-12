@@ -1,4 +1,5 @@
 import { Instagram, Facebook, MessageCircle, Mail, MapPin, Phone } from "lucide-react";
+import logo from "@/assets/idealo-logo.png.asset.json";
 
 export function Footer() {
   return (
@@ -6,10 +7,8 @@ export function Footer() {
       <div className="h-1.5 w-full bg-gradient-rainbow" />
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-cta text-lg font-black text-white shadow-elegant">i</span>
-            <span className="text-xl font-bold">Idealo</span>
-          </div>
+          <img src={logo.url} alt="Idealo" className="h-14 w-auto" />
+
           <p className="mt-4 max-w-md text-sm text-muted-foreground">
             Si puedes imaginarlo, Idealo lo hace realidad. Sin límites para tu marca.
             Imprenta profesional y estudio creativo en Honduras.
