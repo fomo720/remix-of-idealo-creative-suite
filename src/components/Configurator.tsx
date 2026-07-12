@@ -711,14 +711,48 @@ export function Configurator() {
                     active={laserProduct === p.id}
                     onClick={() => {
                       setLaserProduct(p.id);
-                      // reset variant selection when the product changes
+                      // reset variant + byob selection when the product changes
                       const first = p.variants?.[0]?.id ?? null;
                       setLaserVariantId(first);
                       setLaserColorIdx(0);
+                      setLaserByob(false);
                     }}
                   />
                 ))}
               </div>
+
+              {/* Bring-your-own-product option (per product) */}
+              {laserProductData && (
+                <button
+                  type="button"
+                  onClick={() => setLaserByob((b) => !b)}
+                  className={cn(
+                    "mt-5 flex w-full items-start gap-3 rounded-2xl border-2 p-4 text-left text-sm transition",
+                    laserByob
+                      ? "border-foreground bg-background shadow-card-soft"
+                      : "border-dashed border-border bg-background/60 hover:border-foreground/40",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2",
+                      laserByob ? "border-transparent text-white" : "border-border",
+                    )}
+                    style={laserByob ? { background: "var(--brand-orange)" } : {}}
+                  >
+                    {laserByob && <Check className="h-4 w-4" />}
+                  </span>
+                  <span className="flex-1">
+                    <span className="block font-semibold text-foreground">
+                      Yo llevo mi propio {laserProductData.name.toLowerCase()}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">
+                      Solo cobramos el servicio de grabado (aprox. 40% del precio). Tú traes el producto y nosotros lo grabamos.
+                    </span>
+                  </span>
+                </button>
+              )}
+
               <p className="mt-4 text-center text-xs text-muted-foreground">
                 Grabado permanente sin tinta · el arte se convierte automáticamente en trazo apto para láser.
               </p>
