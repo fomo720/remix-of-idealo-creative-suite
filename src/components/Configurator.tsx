@@ -279,6 +279,7 @@ type LaserVariant = {
   desc: string;
   priceDelta?: number; // added to base
   colors: LaserColor[];
+  image?: string; // optional reference photo URL for this variant
 };
 type LaserProduct = {
   id: LaserProductId;
@@ -289,7 +290,8 @@ type LaserProduct = {
   engrave: string;      // engraved (etched) mark color
   price: number;        // unit price base in Lempiras
   icon: React.ReactNode;
-  shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut";
+  shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut" | "pendant";
+  heroImage?: string;   // optional hero image on the product card
   variantLabel?: string; // e.g. "Modelo", "Estilo"
   variants?: LaserVariant[];
 };
