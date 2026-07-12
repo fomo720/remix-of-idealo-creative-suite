@@ -856,7 +856,7 @@ function InteractiveCanvas({
       )}
 
       {/* Legend */}
-      <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 translate-y-full items-center gap-3 rounded-full border border-border bg-card/90 px-3 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
+      <div className="pointer-events-none absolute -bottom-3 left-1/2 z-10 flex -translate-x-1/2 translate-y-full items-center gap-3 whitespace-nowrap rounded-full border border-border bg-card/95 px-2.5 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
         <span className="inline-flex items-center gap-1">
           <span className="inline-block h-2 w-4 rounded-sm" style={{ background: "#22c55e" }} />
           Corte
