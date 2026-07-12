@@ -25,7 +25,7 @@ export function Navbar() {
                 href={l.href}
                 className={
                   isPrimary
-                    ? "rainbow-text-hover text-sm font-bold text-foreground"
+                    ? "rainbow-text-hover text-sm font-medium text-muted-foreground transition"
                     : "text-sm font-medium text-muted-foreground transition hover:text-foreground"
                 }
               >
