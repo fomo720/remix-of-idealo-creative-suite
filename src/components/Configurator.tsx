@@ -528,7 +528,7 @@ export function Configurator() {
                   />
 
 
-                  <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+                  <div className="mt-10 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
                     <Stat label="Precio estimado" value={currency(price)} highlight />
