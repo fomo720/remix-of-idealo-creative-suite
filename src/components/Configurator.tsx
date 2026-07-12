@@ -1224,8 +1224,8 @@ function CutIllustration({ id }: { id: CutShape }) {
       </g>
     </svg>
   );
-  void apple;
 }
+
 
 
 function CutCard({
