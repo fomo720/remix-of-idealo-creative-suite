@@ -2796,6 +2796,7 @@ function LaserDesigner({
   product: LaserProduct;
   variant?: LaserVariant;
   color?: LaserColor;
+  byob?: boolean;
   uploaded: string | null; preset: string | null;
   onFile: (f: File | null) => void; onPreset: (p: string) => void; onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
