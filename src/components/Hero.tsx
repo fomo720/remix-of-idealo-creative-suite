@@ -1,4 +1,5 @@
-import { ArrowRight, Sparkles, Star } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import hondurasFlag from "@/assets/honduras-flag.png.asset.json";
 
 export function Hero() {
   return (
@@ -43,34 +44,11 @@ export function Hero() {
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
-              <svg
-                viewBox="0 0 60 30"
-                aria-label="Bandera de Honduras"
-                className="h-4 w-8 shrink-0 overflow-hidden rounded-[2px] ring-1 ring-border"
-              >
-                <rect x="0" y="0" width="60" height="10" fill="#0073CF" />
-                <rect x="0" y="10" width="60" height="10" fill="#ffffff" />
-                <rect x="0" y="20" width="60" height="10" fill="#0073CF" />
-                {[
-                  [24, 15],
-                  [30, 12],
-                  [36, 15],
-                  [27, 18],
-                  [33, 18],
-                ].map(([cx, cy], i) => (
-                  <polygon
-                    key={i}
-                    fill="#0073CF"
-                    points={Array.from({ length: 10 })
-                      .map((_, k) => {
-                        const r = k % 2 === 0 ? 1.6 : 0.7;
-                        const a = (Math.PI / 5) * k - Math.PI / 2;
-                        return `${(cx + r * Math.cos(a)).toFixed(2)},${(cy + r * Math.sin(a)).toFixed(2)}`;
-                      })
-                      .join(" ")}
-                  />
-                ))}
-              </svg>
+              <img
+                src={hondurasFlag.url}
+                alt="Bandera de Honduras"
+                className="h-5 w-auto shrink-0"
+              />
               +200 marcas hondureñas
             </div>
             <div>Entrega nacional</div>
