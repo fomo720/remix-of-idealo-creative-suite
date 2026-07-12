@@ -572,12 +572,14 @@ function InteractiveCanvas({
   onClear: () => void;
 }) {
   const maskRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ mode: "move" | "resize"; startX: number; startY: number; startOX: number; startOY: number; startScale: number; corner?: "tl" | "tr" | "bl" | "br"; rect: DOMRect } | null>(null);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
-      if (!maskRef.current) return;
-      if (!maskRef.current.contains(e.target as Node)) setSelected(false);
+      const target = e.target as Node;
+      if (maskRef.current?.contains(target) || menuRef.current?.contains(target)) return;
+      setSelected(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
@@ -633,6 +635,18 @@ function InteractiveCanvas({
   const onPointerUp = (e: React.PointerEvent) => {
     dragRef.current = null;
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* noop */ }
+  };
+
+  const centerHorizontal = () => {
+    dragRef.current = null;
+    setSelected(true);
+    setOffsetX(0);
+  };
+
+  const centerVertical = () => {
+    dragRef.current = null;
+    setSelected(true);
+    setOffsetY(0);
   };
 
   const filterStyle = `contrast(${contrast}%) brightness(${brightness}%)`;
@@ -807,15 +821,17 @@ function InteractiveCanvas({
       {/* Floating contextual menu */}
       {hasArt && selected && !duplicated && (
         <div
+          ref={menuRef}
           className="absolute z-40 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
           style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
           onMouseDown={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
         >
-          <FloatBtn label="Centrar horizontal" onClick={() => setOffsetX(0)}>
+          <FloatBtn label="Centrar horizontal" onClick={centerHorizontal}>
             <AlignHorizontalJustifyCenter className="h-4 w-4" />
           </FloatBtn>
-          <FloatBtn label="Centrar vertical" onClick={() => setOffsetY(0)}>
+          <FloatBtn label="Centrar vertical" onClick={centerVertical}>
             <AlignVerticalJustifyCenter className="h-4 w-4" />
           </FloatBtn>
           <FloatBtn label="Duplicar (patrón)" onClick={() => setDuplicated((d) => !d)}>
