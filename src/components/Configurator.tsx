@@ -48,13 +48,13 @@ type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "h
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   {
     id: "die-cut",
-    name: "Die-Cut",
+    name: "Troquelado",
     desc: "Stickers individuales cortados con precisión al contorno exacto de tu diseño.",
     accent: "var(--brand-red)",
   },
   {
     id: "kiss-cut",
-    name: "Kiss-Cut",
+    name: "Corte de Beso",
     desc: "Cortados alrededor de tu forma dejando el papel base intacto para despegarlos fácilmente.",
     accent: "var(--brand-orange)",
   },
@@ -153,7 +153,7 @@ const shapes: ShapeItem[] = [
   { id: "rectangle", name: "Rectángulo", icon: <RectangleHorizontal className="h-5 w-5" />, aspect: 1.6, radius: "0px" },
   { id: "rounded", name: "Esq. Redondeada", icon: <Squircle className="h-5 w-5" />, aspect: 1, radius: "28px" },
   {
-    id: "cloud", name: "Nube (Die-Cut)", icon: <Cloud className="h-5 w-5" />, aspect: 1.4,
+    id: "cloud", name: "Nube (Troquelado)", icon: <Cloud className="h-5 w-5" />, aspect: 1.4,
     clip: `path('${CLOUD_PATH}')`, path: CLOUD_PATH, viewBox: "0 0 220 135",
   },
   {
