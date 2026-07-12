@@ -494,6 +494,7 @@ export function Configurator() {
   const [laserProduct, setLaserProduct] = useState<LaserProductId | null>(null);
   const [laserVariantId, setLaserVariantId] = useState<string | null>(null);
   const [laserColorIdx, setLaserColorIdx] = useState(0);
+  const [laserByob, setLaserByob] = useState(false); // "Traigo mi propio producto"
   const [engraveIntensity, setEngraveIntensity] = useState(55); // 0-100 threshold
   const [engraveMode, setEngraveMode] = useState<"outline" | "original">("outline");
 
@@ -533,7 +534,9 @@ export function Configurator() {
       const base = (laserProductData?.price ?? 200) + (laserVariantData?.priceDelta ?? 0);
       // gentle bulk curve for engraving
       const lBulk = qty >= 100 ? 0.75 : qty >= 50 ? 0.85 : qty >= 25 ? 0.92 : 1;
-      return Math.round(base * qty * lBulk);
+      // If the customer brings their own item, we only charge the engraving service (~40%).
+      const byobFactor = laserByob ? 0.4 : 1;
+      return Math.round(base * qty * lBulk * byobFactor);
     }
     if (isNotebook) {
       // notebook base price by size (cm²), plus material/style factors
@@ -551,7 +554,7 @@ export function Configurator() {
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     return Math.round(base * area * factor * bulkFactor * qty);
-  }, [isLaser, laserProductData, laserVariantData, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
+  }, [isLaser, laserProductData, laserVariantData, laserByob, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
@@ -735,7 +738,14 @@ export function Configurator() {
                   return (
                     <button
                       key={v.id}
-                      onClick={() => { setLaserVariantId(v.id); setLaserColorIdx(0); }}
+                      type="button"
+                      onClick={() => {
+                        const y = window.scrollY;
+                        setLaserVariantId(v.id);
+                        setLaserColorIdx(0);
+                        // Prevent layout jump when the color panel appears below
+                        requestAnimationFrame(() => window.scrollTo({ top: y }));
+                      }}
                       className={cn(
                         "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
                         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
@@ -789,29 +799,83 @@ export function Configurator() {
                 })}
               </div>
 
-              {/* Color chooser for the selected variant */}
-              {laserVariantData && laserVariantData.colors.length > 1 && (
-                <div className="mt-6 rounded-2xl border border-border bg-gradient-soft p-4">
-                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    Color base — {laserVariantData.name}
+              {/* Color chooser + small live preview + BYOB toggle */}
+              {laserVariantData && (
+                <div className="mt-6 grid gap-4 rounded-2xl border border-border bg-gradient-soft p-4 sm:grid-cols-[auto_1fr]">
+                  {/* Small preview thumbnail (uses the color-specific image when we have one) */}
+                  <div className="flex items-center justify-center rounded-xl border border-border bg-background/70 p-2 sm:h-28 sm:w-28">
+                    {laserColor?.image || laserVariantData.image ? (
+                      <img
+                        key={laserColor?.image ?? laserVariantData.image}
+                        src={laserColor?.image ?? laserVariantData.image}
+                        alt={`${laserVariantData.name} — ${laserColor?.name ?? ""}`}
+                        className="h-24 w-24 object-contain transition-opacity duration-300"
+                      />
+                    ) : (
+                      <div
+                        className="h-20 w-20 rounded-full border border-black/10 shadow-inner"
+                        style={{ background: laserColor?.hex ?? "#ddd" }}
+                      />
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {laserVariantData.colors.map((c, i) => {
-                      const on = laserColorIdx === i;
-                      return (
-                        <button
-                          key={c.name}
-                          onClick={() => setLaserColorIdx(i)}
-                          className={cn(
-                            "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-xs transition",
-                            on ? "border-foreground bg-background" : "border-border bg-background/60 hover:border-foreground/40",
-                          )}
-                        >
-                          <span className="h-4 w-4 rounded-full border border-black/10" style={{ background: c.hex }} />
-                          <span className={cn("font-medium", on ? "text-foreground" : "text-muted-foreground")}>{c.name}</span>
-                        </button>
-                      );
-                    })}
+
+                  <div className="min-w-0">
+                    {laserVariantData.colors.length > 1 && (
+                      <>
+                        <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          Color base — {laserVariantData.name}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {laserVariantData.colors.map((c, i) => {
+                            const on = laserColorIdx === i;
+                            return (
+                              <button
+                                key={c.name}
+                                type="button"
+                                onClick={() => setLaserColorIdx(i)}
+                                className={cn(
+                                  "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-xs transition",
+                                  on ? "border-foreground bg-background" : "border-border bg-background/60 hover:border-foreground/40",
+                                )}
+                              >
+                                <span className="h-4 w-4 rounded-full border border-black/10" style={{ background: c.hex }} />
+                                <span className={cn("font-medium", on ? "text-foreground" : "text-muted-foreground")}>{c.name}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Bring-your-own-product option */}
+                    <button
+                      type="button"
+                      onClick={() => setLaserByob((b) => !b)}
+                      className={cn(
+                        "mt-3 flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left text-xs transition",
+                        laserByob
+                          ? "border-foreground bg-background shadow-card-soft"
+                          : "border-dashed border-border bg-background/60 hover:border-foreground/40",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border-2",
+                          laserByob ? "border-transparent text-white" : "border-border",
+                        )}
+                        style={laserByob ? { background: "var(--brand-orange)" } : {}}
+                      >
+                        {laserByob && <Check className="h-3.5 w-3.5" />}
+                      </span>
+                      <span className="flex-1">
+                        <span className="block font-semibold text-foreground">
+                          Traigo mi propio {laserProductData?.name.toLowerCase() ?? "producto"}
+                        </span>
+                        <span className="mt-0.5 block text-muted-foreground">
+                          Solo cobramos el servicio de grabado (aprox. 40% del precio). Tú traes {laserVariantData.name.toLowerCase()} y nosotros lo grabamos.
+                        </span>
+                      </span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -824,6 +888,7 @@ export function Configurator() {
               product={laserProductData}
               variant={laserVariantData}
               color={laserColor}
+              byob={laserByob}
               uploaded={uploaded}
               preset={preset}
               onFile={handleFile}
@@ -2722,7 +2787,7 @@ function useEngraveBitmap(url: string | null, engraveColor: string, intensity: n
 }
 
 function LaserDesigner({
-  product, variant, color, uploaded, preset, onFile, onPreset, onClear, fileRef,
+  product, variant, color, byob, uploaded, preset, onFile, onPreset, onClear, fileRef,
   qty, setQty, notes, setNotes, price,
   engraveIntensity, setEngraveIntensity, engraveMode, setEngraveMode,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
@@ -2731,6 +2796,7 @@ function LaserDesigner({
   product: LaserProduct;
   variant?: LaserVariant;
   color?: LaserColor;
+  byob?: boolean;
   uploaded: string | null; preset: string | null;
   onFile: (f: File | null) => void; onPreset: (p: string) => void; onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
@@ -2777,6 +2843,12 @@ function LaserDesigner({
                 </div>
               )}
               <p className="mt-1 text-xs text-muted-foreground">{variant?.desc ?? product.desc}</p>
+              {byob && (
+                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-foreground/20 bg-background px-2 py-0.5 text-[10px] font-semibold text-foreground">
+                  <Check className="h-3 w-3" style={{ color: "var(--brand-orange)" }} />
+                  Cliente trae su propio {product.name.toLowerCase()} · solo servicio de grabado
+                </div>
+              )}
             </div>
           </div>
         </div>
