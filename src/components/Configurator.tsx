@@ -499,7 +499,30 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 4 && (
+          {step === 4 && isNotebook && (
+            <NotebookDesigner
+              styleId={notebookStyle!}
+              material={notebookMaterialData!}
+              sizeIdx={notebookSizeIdx}
+              setSizeIdx={setNotebookSizeIdx}
+              pageType={pageType}
+              setPageType={setPageType}
+              uploaded={uploaded}
+              preset={preset}
+              onFile={handleFile}
+              onPreset={(p) => { setPreset(p); setUploaded(null); }}
+              onClear={clearImage}
+              fileRef={fileRef}
+              qty={qty}
+              setQty={setQty}
+              notes={notes}
+              setNotes={setNotes}
+              price={price}
+              onBack={() => goTo(3)}
+            />
+          )}
+
+          {step === 4 && !isNotebook && (
             <div className="animate-step-in grid gap-8 lg:grid-cols-2">
               {/* LEFT: Configurator */}
               <div className="space-y-6">
