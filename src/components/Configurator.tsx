@@ -1216,7 +1216,9 @@ function CutIllustration({ id }: { id: CutShape }) {
   return (
     <svg viewBox="0 0 160 100" className="h-full w-full" style={{ overflow: "hidden" }}>
       <image href={rollIcon.url} x="-5" y="-35" width="170" height="170" preserveAspectRatio="xMidYMid meet" />
+      <circle cx="98" cy="54" r="20" fill="none" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="3 3" />
       {appleImg(32, 82, 38)}
+
     </svg>
   );
 }
