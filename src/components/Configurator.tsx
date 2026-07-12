@@ -572,7 +572,9 @@ export function Configurator() {
           onGo={goTo}
           labels={
             isLaser
-              ? ["Categoría", "Producto", "Diseño"]
+              ? laserHasVariants
+                ? ["Categoría", "Producto", laserProductData?.variantLabel ?? "Modelo", "Diseño"]
+                : ["Categoría", "Producto", "Diseño"]
               : isNotebook
               ? ["Categoría", "Estilo", "Material", "Diseño"]
               : ["Categoría", "Forma", "Material", "Diseño"]
