@@ -25,6 +25,7 @@ import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
 import cadenaFotoMadera from "@/assets/cadena-foto-madera.jpg.asset.json";
+import cocoGrabado from "@/assets/coco-grabado.jpg.asset.json";
 import cadenaBarra from "@/assets/cadena-barra.jpg.asset.json";
 import cadenaCandado from "@/assets/cadena-candado.jpg.asset.json";
 import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
@@ -432,6 +433,7 @@ const laserProducts: LaserProduct[] = [
     id: "coco", name: "Coco (Fruta Natural)", desc: "Grabamos la cáscara del coco", hint: "Eventos tropicales · bodas playa",
     surface: "linear-gradient(135deg,#5a3720,#2f1c0e)", engrave: "#120a04", price: 65,
     icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
+    heroImage: cocoGrabado.url,
     // coco es coco — sin variantes
   },
   {
