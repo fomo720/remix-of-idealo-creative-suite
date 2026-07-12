@@ -324,6 +324,7 @@ export function Configurator() {
                     active={material === m.id}
                     onClick={() => setMaterial(m.id)}
                     swatch={m.swatch}
+                    sampleImage={m.sampleImage}
                   />
                 ))}
               </div>
