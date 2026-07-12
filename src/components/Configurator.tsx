@@ -58,18 +58,26 @@ const materials: {
   },
 ];
 
-const shapes: { id: StickerShape; name: string; icon: React.ReactNode; aspect: number; clip?: string; radius?: string }[] = [
+type ShapeItem = {
+  id: StickerShape; name: string; icon: React.ReactNode; aspect: number;
+  clip?: string; radius?: string; path?: string; viewBox?: string;
+};
+
+const CLOUD_PATH = "M 60 90 C 20 90 10 55 40 45 C 30 15 80 5 95 30 C 120 5 175 20 170 55 C 210 55 210 100 170 100 C 155 130 100 130 90 105 C 75 125 40 120 60 90 Z";
+const HEART_PATH = "M 100 180 L 30 110 C 5 85 5 45 35 25 C 60 8 90 20 100 45 C 110 20 140 8 165 25 C 195 45 195 85 170 110 Z";
+
+const shapes: ShapeItem[] = [
   { id: "circle", name: "Círculo", icon: <Circle className="h-5 w-5" />, aspect: 1, radius: "9999px" },
   { id: "square", name: "Cuadrado", icon: <Square className="h-5 w-5" />, aspect: 1, radius: "0px" },
   { id: "rectangle", name: "Rectángulo", icon: <RectangleHorizontal className="h-5 w-5" />, aspect: 1.6, radius: "0px" },
   { id: "rounded", name: "Esq. Redondeada", icon: <Squircle className="h-5 w-5" />, aspect: 1, radius: "28px" },
   {
     id: "cloud", name: "Nube (Die-Cut)", icon: <Cloud className="h-5 w-5" />, aspect: 1.4,
-    clip: "path('M 60 90 C 20 90 10 55 40 45 C 30 15 80 5 95 30 C 120 5 175 20 170 55 C 210 55 210 100 170 100 C 155 130 100 130 90 105 C 75 125 40 120 60 90 Z')",
+    clip: `path('${CLOUD_PATH}')`, path: CLOUD_PATH, viewBox: "0 0 220 135",
   },
   {
     id: "heart", name: "Corazón", icon: <Heart className="h-5 w-5" />, aspect: 1,
-    clip: "path('M 100 180 L 30 110 C 5 85 5 45 35 25 C 60 8 90 20 100 45 C 110 20 140 8 165 25 C 195 45 195 85 170 110 Z')",
+    clip: `path('${HEART_PATH}')`, path: HEART_PATH, viewBox: "0 0 200 185",
   },
 ];
 
