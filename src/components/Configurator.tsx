@@ -18,10 +18,30 @@ type Material = "vinyl-white" | "vinyl-clear" | "semi-gloss" | "matte";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
-  { id: "die-cut", name: "Die-Cut", desc: "Corte individual exacto al contorno", accent: "var(--brand-red)" },
-  { id: "kiss-cut", name: "Kiss-Cut", desc: "Corte sobre el papel base", accent: "var(--brand-orange)" },
-  { id: "sheets", name: "Hojas de Stickers", desc: "Varios diseños por hoja", accent: "var(--brand-green)" },
-  { id: "rolls", name: "Rollos", desc: "Ideal para producción a escala", accent: "var(--brand-blue)" },
+  {
+    id: "die-cut",
+    name: "Die-Cut",
+    desc: "Stickers individuales cortados con precisión al contorno exacto de tu diseño.",
+    accent: "var(--brand-red)",
+  },
+  {
+    id: "kiss-cut",
+    name: "Kiss-Cut",
+    desc: "Cortados alrededor de tu forma dejando el papel base intacto para despegarlos fácilmente.",
+    accent: "var(--brand-orange)",
+  },
+  {
+    id: "sheets",
+    name: "Hoja (Diseño Único)",
+    desc: "Stickers personalizados cortados con precisión en hojas, sin cantidad mínima.",
+    accent: "var(--brand-green)",
+  },
+  {
+    id: "rolls",
+    name: "Rollos",
+    desc: "Stickers impresos y cortados en rollo para dispensado fácil y mayor rentabilidad.",
+    accent: "var(--brand-blue)",
+  },
 ];
 
 const materials: {
