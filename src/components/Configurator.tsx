@@ -342,45 +342,24 @@ export function Configurator() {
                   </div>
                 </div>
 
-                {/* Image Toolbox */}
+                {/* Image Toolbox - only sliders */}
                 {hasArt && (
                   <div className="rounded-2xl border border-border bg-background p-4">
                     <div className="mb-3 flex items-center justify-between">
-                      <Label className="text-sm font-semibold">Herramientas de edición</Label>
-                      <div className="flex items-center gap-1">
-                        <ToolButton title="Centrar horizontalmente" onClick={() => setOffsetX(0)}>
-                          <AlignHorizontalJustifyCenter className="h-4 w-4" />
-                        </ToolButton>
-                        <ToolButton title="Centrar verticalmente" onClick={() => setOffsetY(0)}>
-                          <AlignVerticalJustifyCenter className="h-4 w-4" />
-                        </ToolButton>
-                        <ToolButton title="Duplicar / crear patrón" active={duplicated} onClick={() => setDuplicated((d) => !d)}>
-                          <Copy className="h-4 w-4" />
-                        </ToolButton>
-                        <ToolButton title="Borrar imagen" onClick={clearImage} danger>
-                          <Trash2 className="h-4 w-4" />
-                        </ToolButton>
-                      </div>
+                      <Label className="text-sm font-semibold">Ajustes de imagen</Label>
+                      <span className="hidden items-center gap-1 text-[10px] text-muted-foreground sm:inline-flex">
+                        <MousePointer2 className="h-3 w-3" /> Toca la imagen en la vista previa para editarla
+                      </span>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <ToolSlider
                         icon={<ZoomIn className="h-3.5 w-3.5" />}
-                        label="Escala"
+                        label="Escala (Zoom)"
                         value={scale}
-                        min={30} max={200} step={1}
+                        min={30} max={250} step={1}
                         onChange={setScale}
                         suffix="%"
-                        onMinus={() => setScale((v) => Math.max(30, v - 5))}
-                        onPlus={() => setScale((v) => Math.min(200, v + 5))}
-                        minusIcon={<ZoomOut className="h-3.5 w-3.5" />}
-                        plusIcon={<ZoomIn className="h-3.5 w-3.5" />}
-                      />
-                      <ToolSlider
-                        icon={<Contrast className="h-3.5 w-3.5" />}
-                        label="Contraste"
-                        value={contrast} min={50} max={200} step={1}
-                        onChange={setContrast} suffix="%"
                       />
                       <ToolSlider
                         icon={<Sun className="h-3.5 w-3.5" />}
@@ -388,10 +367,12 @@ export function Configurator() {
                         value={brightness} min={50} max={200} step={1}
                         onChange={setBrightness} suffix="%"
                       />
-                      <div className="grid grid-cols-2 gap-3">
-                        <ToolSlider label="Posición X" value={offsetX} min={-40} max={40} step={1} onChange={setOffsetX} suffix="%" compact />
-                        <ToolSlider label="Posición Y" value={offsetY} min={-40} max={40} step={1} onChange={setOffsetY} suffix="%" compact />
-                      </div>
+                      <ToolSlider
+                        icon={<Contrast className="h-3.5 w-3.5" />}
+                        label="Contraste"
+                        value={contrast} min={50} max={200} step={1}
+                        onChange={setContrast} suffix="%"
+                      />
                     </div>
                   </div>
                 )}
