@@ -173,6 +173,96 @@ const sizePresets = [
   { w: 5, h: 5, label: '5" x 5"', hint: "Tamaño grande exteriores" },
 ];
 
+/* ---------- Libretas ---------- */
+const notebookStyles: {
+  id: NotebookStyle; name: string; desc: string; accent: string; icon: React.ReactNode;
+}[] = [
+  {
+    id: "cover-only",
+    name: "Solo Portada",
+    desc: "Imprimimos únicamente la carátula con tu diseño. Interior en blanco.",
+    accent: "var(--brand-violet)",
+    icon: <BookOpen className="h-8 w-8" />,
+  },
+  {
+    id: "cover-pages",
+    name: "Portada + Páginas",
+    desc: "Carátula personalizada más logo o marca de agua sutil en cada hoja interior.",
+    accent: "var(--brand-pink)",
+    icon: <NotebookPen className="h-8 w-8" />,
+  },
+];
+
+const notebookMaterials: {
+  id: NotebookMaterial; name: string; desc: string; finish: string; swatch: string;
+  priceFactor: number; advantages: { icon: React.ReactNode; text: string }[]; useCase: string;
+}[] = [
+  {
+    id: "cover-matte",
+    name: "Cartulina Mate 300gsm",
+    desc: "Textura suave, elegante y sin reflejos.",
+    finish: "Mate",
+    swatch: "#efeae4",
+    priceFactor: 1,
+    advantages: [
+      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Look premium sin brillo" },
+      { icon: <ShieldCheck className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Resistente al roce" },
+      { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores sobrios y naturales" },
+    ],
+    useCase: "Ideal para libretas ejecutivas, planners y regalos corporativos.",
+  },
+  {
+    id: "cover-glossy",
+    name: "Cartulina Brillante 300gsm",
+    desc: "Acabado brillante con protección UV.",
+    finish: "Brillante UV",
+    swatch: "linear-gradient(135deg,#f5f7fa,#e4e9f2)",
+    priceFactor: 1.15,
+    advantages: [
+      { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores vibrantes" },
+      { icon: <WaterDropBlackIcon />, text: "Repele humedad y manchas" },
+      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Portada más durable" },
+    ],
+    useCase: "Ideal para fotografía, catálogos y libretas escolares.",
+  },
+];
+
+const notebookSizes = [
+  { id: "a6", label: "A6", cm: "10.5 × 14.8 cm", w: 10.5, h: 14.8, hint: "Bolsillo · ideas rápidas" },
+  { id: "a5", label: "A5", cm: "14.8 × 21 cm", w: 14.8, h: 21, hint: "Estándar · más común" },
+  { id: "b5", label: "B5", cm: "17.6 × 25 cm", w: 17.6, h: 25, hint: "Mediana · notas amplias" },
+  { id: "a4", label: "A4", cm: "21 × 29.7 cm", w: 21, h: 29.7, hint: "Grande · oficina" },
+];
+
+const pageTypes: { id: PageType; name: string; desc: string; icon: React.ReactNode }[] = [
+  { id: "blank", name: "Blanco", desc: "Hojas lisas sin guías", icon: <StickyNote className="h-4 w-4" /> },
+  { id: "ruled", name: "Rayado", desc: "Líneas horizontales", icon: <AlignJustify className="h-4 w-4" /> },
+  { id: "grid", name: "Cuadriculado", desc: "Cuadrícula 5mm", icon: <Grid3x3 className="h-4 w-4" /> },
+  { id: "dotted", name: "Punteado", desc: "Puntos guía discretos", icon: <Dot className="h-4 w-4" /> },
+];
+
+function pageBackground(type: PageType): React.CSSProperties {
+  switch (type) {
+    case "ruled":
+      return {
+        backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 22px, rgba(59,130,246,0.35) 22px 23px)",
+      };
+    case "grid":
+      return {
+        backgroundImage:
+          "linear-gradient(to right, rgba(148,163,184,0.35) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.35) 1px, transparent 1px)",
+        backgroundSize: "18px 18px",
+      };
+    case "dotted":
+      return {
+        backgroundImage: "radial-gradient(circle, rgba(100,116,139,0.55) 1px, transparent 1.4px)",
+        backgroundSize: "16px 16px",
+      };
+    default:
+      return {};
+  }
+}
+
 const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
 
 function currency(n: number) {
