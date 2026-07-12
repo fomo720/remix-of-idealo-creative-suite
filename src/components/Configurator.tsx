@@ -480,6 +480,10 @@ export function Configurator() {
   const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
   const notebookSizeData = notebookSizes[notebookSizeIdx];
   const laserProductData = laserProducts.find((p) => p.id === laserProduct);
+  const laserHasVariants = !!laserProductData?.variants?.length;
+  const laserVariantData = laserProductData?.variants?.find((v) => v.id === laserVariantId);
+  const laserColor = laserVariantData?.colors[Math.min(laserColorIdx, laserVariantData.colors.length - 1)];
+  const laserDesignStep = laserHasVariants ? 4 : 3;
   const shapeData = shapes.find((s) => s.id === shape)!;
 
   const bulkFactor = useMemo(() => {
