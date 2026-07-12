@@ -1,14 +1,21 @@
 import { useMemo, useRef, useState } from "react";
-import { Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors, FileImage, ImagePlus } from "lucide-react";
+import {
+  Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
+  FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
+  Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
+  Copy, Trash2, ZoomIn, ZoomOut, Sun, Contrast, Info, ShieldCheck, Droplets,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 type Category = "stickers" | "iron-ons";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
 type Material = "vinyl-white" | "vinyl-clear" | "semi-gloss" | "matte";
+type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   { id: "die-cut", name: "Die-Cut", desc: "Corte individual exacto al contorno", accent: "var(--brand-red)" },
@@ -17,11 +24,60 @@ const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   { id: "rolls", name: "Rollos", desc: "Ideal para producción a escala", accent: "var(--brand-blue)" },
 ];
 
-const materials: { id: Material; name: string; desc: string; priceFactor: number; swatch: string }[] = [
-  { id: "vinyl-white", name: "Vinil Blanco Removible", desc: "Premium · Impermeable · Duradero", priceFactor: 1.15, swatch: "#ffffff" },
-  { id: "vinyl-clear", name: "Vinil Transparente", desc: "Efecto sin fondo, look profesional", priceFactor: 1.25, swatch: "linear-gradient(135deg,#e0f2fe,#fce7f3)" },
-  { id: "semi-gloss", name: "Papel Semi-Gloss", desc: "Económico, brillo sutil", priceFactor: 0.85, swatch: "#f5f5f4" },
-  { id: "matte", name: "Acabado Mate Elegante", desc: "Textura mate premium, sin reflejos", priceFactor: 1.1, swatch: "#e7e5e4" },
+const materials: {
+  id: Material; name: string; desc: string; priceFactor: number; swatch: string;
+  finish: string; advantages: string[]; useCase: string;
+}[] = [
+  {
+    id: "vinyl-white", name: "Vinil Blanco Removible",
+    desc: "Premium · Impermeable · Duradero", priceFactor: 1.15, swatch: "#ffffff",
+    finish: "Semi-Gloss Premium",
+    advantages: ["Resistente al agua y sol", "Removible sin residuos", "Colores vibrantes de alta fidelidad"],
+    useCase: "Ideal para exteriores y etiquetado de productos de restaurantes.",
+  },
+  {
+    id: "vinyl-clear", name: "Vinil Transparente",
+    desc: "Efecto sin fondo, look profesional", priceFactor: 1.25, swatch: "linear-gradient(135deg,#e0f2fe,#fce7f3)",
+    finish: "Cristal Transparente",
+    advantages: ["Fondo invisible sobre cualquier superficie", "Resistente a la intemperie", "Acabado premium tipo cristal"],
+    useCase: "Ideal para escaparates, botellas de vidrio y branding elegante.",
+  },
+  {
+    id: "semi-gloss", name: "Papel Semi-Gloss",
+    desc: "Económico, brillo sutil", priceFactor: 0.85, swatch: "#f5f5f4",
+    finish: "Papel Semi-Brillante",
+    advantages: ["Costo accesible para tirajes grandes", "Impresión de alta definición", "Brillo sutil elegante"],
+    useCase: "Ideal para promociones, empaques y campañas de corto plazo (uso en interior).",
+  },
+  {
+    id: "matte", name: "Acabado Mate Elegante",
+    desc: "Textura mate premium, sin reflejos", priceFactor: 1.1, swatch: "#e7e5e4",
+    finish: "Mate Ultra Suave",
+    advantages: ["Sin reflejos ni brillos", "Textura sofisticada al tacto", "Fotografiable sin destellos"],
+    useCase: "Ideal para marcas premium, packaging boutique y branding editorial.",
+  },
+];
+
+const shapes: { id: StickerShape; name: string; icon: React.ReactNode; aspect: number; clip?: string; radius?: string }[] = [
+  { id: "circle", name: "Círculo", icon: <Circle className="h-5 w-5" />, aspect: 1, radius: "9999px" },
+  { id: "square", name: "Cuadrado", icon: <Square className="h-5 w-5" />, aspect: 1, radius: "0px" },
+  { id: "rectangle", name: "Rectángulo", icon: <RectangleHorizontal className="h-5 w-5" />, aspect: 1.6, radius: "0px" },
+  { id: "rounded", name: "Esq. Redondeada", icon: <Squircle className="h-5 w-5" />, aspect: 1, radius: "28px" },
+  {
+    id: "cloud", name: "Nube (Die-Cut)", icon: <Cloud className="h-5 w-5" />, aspect: 1.4,
+    clip: "path('M 60 90 C 20 90 10 55 40 45 C 30 15 80 5 95 30 C 120 5 175 20 170 55 C 210 55 210 100 170 100 C 155 130 100 130 90 105 C 75 125 40 120 60 90 Z')",
+  },
+  {
+    id: "heart", name: "Corazón", icon: <Heart className="h-5 w-5" />, aspect: 1,
+    clip: "path('M 100 180 L 30 110 C 5 85 5 45 35 25 C 60 8 90 20 100 45 C 110 20 140 8 165 25 C 195 45 195 85 170 110 Z')",
+  },
+];
+
+const sizePresets = [
+  { w: 2, h: 2, label: '2" x 2"', hint: "Logos pequeños en empaques" },
+  { w: 3, h: 3, label: '3" x 3"', hint: "Estándar laptops y termos" },
+  { w: 4, h: 4, label: '4" x 4"', hint: "Branding visible y ventanas" },
+  { w: 5, h: 5, label: '5" x 5"', hint: "Tamaño grande exteriores" },
 ];
 
 const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
@@ -35,22 +91,41 @@ export function Configurator() {
   const [category, setCategory] = useState<Category | null>(null);
   const [cut, setCut] = useState<CutShape | null>(null);
   const [material, setMaterial] = useState<Material | null>(null);
+  const [shape, setShape] = useState<StickerShape>("circle");
   const [preset, setPreset] = useState<string | null>(null);
   const [uploaded, setUploaded] = useState<string | null>(null);
-  const [size, setSize] = useState("3");
+
+  // size
+  const [width, setWidth] = useState("3");
+  const [height, setHeight] = useState("3");
   const [unit, setUnit] = useState<"in" | "cm">("in");
+  const [sizeMode, setSizeMode] = useState<"preset" | "custom">("preset");
+  const [activePreset, setActivePreset] = useState<number>(1); // index into sizePresets
+
   const [qty, setQty] = useState(100);
   const [notes, setNotes] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
 
+  // image toolbox
+  const [scale, setScale] = useState(100);       // 30-200%
+  const [offsetX, setOffsetX] = useState(0);     // -50..50
+  const [offsetY, setOffsetY] = useState(0);
+  const [contrast, setContrast] = useState(100); // %
+  const [brightness, setBrightness] = useState(100);
+  const [duplicated, setDuplicated] = useState(false);
+
+  const fileRef = useRef<HTMLInputElement>(null);
   const materialData = materials.find((m) => m.id === material);
+  const shapeData = shapes.find((s) => s.id === shape)!;
+
   const price = useMemo(() => {
-    const base = 8; // L. per sticker base
-    const sizeMult = Math.max(1, parseFloat(size || "1") / 2);
+    const base = 8;
+    const w = parseFloat(width || "1");
+    const h = parseFloat(height || "1");
+    const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     const bulk = qty >= 500 ? 0.7 : qty >= 200 ? 0.8 : qty >= 100 ? 0.9 : 1;
-    return Math.round(base * sizeMult * factor * bulk * qty);
-  }, [size, qty, materialData]);
+    return Math.round(base * area * factor * bulk * qty);
+  }, [width, height, qty, materialData]);
 
   const goTo = (s: number) => setStep(s);
 
@@ -59,7 +134,27 @@ export function Configurator() {
     const url = URL.createObjectURL(f);
     setUploaded(url);
     setPreset(null);
+    resetImageTools();
   };
+
+  const resetImageTools = () => {
+    setScale(100); setOffsetX(0); setOffsetY(0);
+    setContrast(100); setBrightness(100); setDuplicated(false);
+  };
+
+  const clearImage = () => {
+    setUploaded(null); setPreset(null); resetImageTools();
+  };
+
+  const applyPreset = (i: number) => {
+    setActivePreset(i);
+    setSizeMode("preset");
+    setWidth(String(sizePresets[i].w));
+    setHeight(String(sizePresets[i].h));
+    setUnit("in");
+  };
+
+  const hasArt = !!(uploaded || preset);
 
   return (
     <section id="personalizar" className="relative py-20 sm:py-28">
@@ -71,7 +166,7 @@ export function Configurator() {
           </div>
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Diseña tu producto en{" "}
-            <span className="text-gradient-rainbow">3 pasos</span>
+            <span className="text-gradient-rainbow">4 pasos</span>
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
             Elige categoría, material y sube tu arte. Verás un mockup en vivo con precio en Lempiras.
@@ -143,10 +238,65 @@ export function Configurator() {
 
           {step === 4 && (
             <div className="animate-step-in grid gap-8 lg:grid-cols-2">
-              {/* Configurator column */}
+              {/* LEFT: Configurator */}
               <div className="space-y-6">
-                <SectionTitle icon={<ImagePlus className="h-5 w-5" />} title="Personaliza tu arte" />
+                {/* Material info panel */}
+                {materialData && (
+                  <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-soft p-5">
+                    <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-rainbow opacity-10 blur-2xl" />
+                    <div className="relative">
+                      <div className="mb-3 flex items-center gap-2">
+                        <div className="grid h-8 w-8 place-items-center rounded-lg bg-background" style={{ color: "var(--brand-violet)" }}>
+                          <Info className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Material seleccionado</div>
+                          <div className="font-bold leading-tight">{materialData.name}</div>
+                        </div>
+                      </div>
+                      <div className="grid gap-2 text-xs">
+                        <div className="flex items-start gap-2">
+                          <Droplets className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-blue)" }} />
+                          <span><strong className="text-foreground">Acabado:</strong> <span className="text-muted-foreground">{materialData.finish}</span></span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-green)" }} />
+                          <span>
+                            <strong className="text-foreground">Ventajas:</strong>{" "}
+                            <span className="text-muted-foreground">{materialData.advantages.join(" · ")}.</span>
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-pink)" }} />
+                          <span className="text-muted-foreground">{materialData.useCase}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
+                {/* Shape selector */}
+                <div>
+                  <Label className="mb-3 block text-sm font-semibold">Forma del sticker</Label>
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+                    {shapes.map((s) => (
+                      <button
+                        key={s.id}
+                        onClick={() => setShape(s.id)}
+                        className={cn(
+                          "flex flex-col items-center gap-1 rounded-xl border-2 p-2.5 text-[10px] font-medium transition",
+                          shape === s.id ? "rainbow-border-active" : "border-border text-muted-foreground hover:text-foreground",
+                        )}
+                        title={s.name}
+                      >
+                        {s.icon}
+                        <span className="truncate">{s.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Upload */}
                 <div>
                   <input
                     ref={fileRef}
@@ -158,20 +308,20 @@ export function Configurator() {
                   <button
                     onClick={() => fileRef.current?.click()}
                     className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
-                    style={{ backgroundImage: uploaded ? "none" : undefined }}
                   >
                     <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
                     {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
                   </button>
                 </div>
 
+                {/* Art presets */}
                 <div>
                   <Label className="mb-2 block text-sm">O elige un arte prediseñado</Label>
                   <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
                     {presetArts.map((a) => (
                       <button
                         key={a}
-                        onClick={() => { setPreset(a); setUploaded(null); }}
+                        onClick={() => { setPreset(a); setUploaded(null); resetImageTools(); }}
                         className={cn(
                           "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
                           preset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
@@ -183,53 +333,147 @@ export function Configurator() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="col-span-2">
-                    <Label htmlFor="size" className="mb-2 block text-sm">Medida</Label>
-                    <div className="flex gap-2">
-                      <Input id="size" value={size} onChange={(e) => setSize(e.target.value)} inputMode="decimal" />
-                      <div className="flex rounded-md border border-border p-1 text-xs">
-                        {(["in", "cm"] as const).map((u) => (
-                          <button
-                            key={u}
-                            onClick={() => setUnit(u)}
-                            className={cn(
-                              "rounded px-2 py-1 font-medium transition",
-                              unit === u ? "bg-foreground text-background" : "text-muted-foreground",
-                            )}
-                          >
-                            {u}
-                          </button>
-                        ))}
+                {/* Image Toolbox */}
+                {hasArt && (
+                  <div className="rounded-2xl border border-border bg-background p-4">
+                    <div className="mb-3 flex items-center justify-between">
+                      <Label className="text-sm font-semibold">Herramientas de edición</Label>
+                      <div className="flex items-center gap-1">
+                        <ToolButton title="Centrar horizontalmente" onClick={() => setOffsetX(0)}>
+                          <AlignHorizontalJustifyCenter className="h-4 w-4" />
+                        </ToolButton>
+                        <ToolButton title="Centrar verticalmente" onClick={() => setOffsetY(0)}>
+                          <AlignVerticalJustifyCenter className="h-4 w-4" />
+                        </ToolButton>
+                        <ToolButton title="Duplicar / crear patrón" active={duplicated} onClick={() => setDuplicated((d) => !d)}>
+                          <Copy className="h-4 w-4" />
+                        </ToolButton>
+                        <ToolButton title="Borrar imagen" onClick={clearImage} danger>
+                          <Trash2 className="h-4 w-4" />
+                        </ToolButton>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <ToolSlider
+                        icon={<ZoomIn className="h-3.5 w-3.5" />}
+                        label="Escala"
+                        value={scale}
+                        min={30} max={200} step={1}
+                        onChange={setScale}
+                        suffix="%"
+                        onMinus={() => setScale((v) => Math.max(30, v - 5))}
+                        onPlus={() => setScale((v) => Math.min(200, v + 5))}
+                        minusIcon={<ZoomOut className="h-3.5 w-3.5" />}
+                        plusIcon={<ZoomIn className="h-3.5 w-3.5" />}
+                      />
+                      <ToolSlider
+                        icon={<Contrast className="h-3.5 w-3.5" />}
+                        label="Contraste"
+                        value={contrast} min={50} max={200} step={1}
+                        onChange={setContrast} suffix="%"
+                      />
+                      <ToolSlider
+                        icon={<Sun className="h-3.5 w-3.5" />}
+                        label="Brillo"
+                        value={brightness} min={50} max={200} step={1}
+                        onChange={setBrightness} suffix="%"
+                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <ToolSlider label="Posición X" value={offsetX} min={-40} max={40} step={1} onChange={setOffsetX} suffix="%" compact />
+                        <ToolSlider label="Posición Y" value={offsetY} min={-40} max={40} step={1} onChange={setOffsetY} suffix="%" compact />
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <Label htmlFor="qty" className="mb-2 block text-sm">Cantidad</Label>
-                    <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
+                )}
+
+                {/* Size presets */}
+                <div>
+                  <Label className="mb-3 block text-sm font-semibold">Tamaño del sticker</Label>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {sizePresets.map((p, i) => (
+                      <button
+                        key={p.label}
+                        onClick={() => applyPreset(i)}
+                        className={cn(
+                          "rounded-xl border-2 p-3 text-left transition",
+                          sizeMode === "preset" && activePreset === i
+                            ? "rainbow-border-active"
+                            : "border-border hover:border-foreground/20",
+                        )}
+                      >
+                        <div className="text-sm font-bold">{p.label}</div>
+                        <div className="mt-0.5 text-[10px] leading-tight text-muted-foreground">{p.hint}</div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setSizeMode("custom")}
+                    className={cn(
+                      "mt-2 w-full rounded-xl border-2 p-3 text-left text-sm font-medium transition",
+                      sizeMode === "custom" ? "rainbow-border-active" : "border-dashed border-border hover:border-foreground/20",
+                    )}
+                  >
+                    Tamaño Personalizado
+                  </button>
+
+                  {sizeMode === "custom" && (
+                    <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
+                      <div>
+                        <Label htmlFor="w" className="mb-1 block text-[11px] text-muted-foreground">Ancho</Label>
+                        <Input id="w" value={width} onChange={(e) => setWidth(e.target.value)} inputMode="decimal" />
+                      </div>
+                      <div>
+                        <Label htmlFor="h" className="mb-1 block text-[11px] text-muted-foreground">Alto</Label>
+                        <Input id="h" value={height} onChange={(e) => setHeight(e.target.value)} inputMode="decimal" />
+                      </div>
+                      <div>
+                        <Label className="mb-1 block text-[11px] text-muted-foreground">Unidad</Label>
+                        <div className="flex h-9 rounded-md border border-border p-1 text-xs">
+                          {(["in", "cm"] as const).map((u) => (
+                            <button
+                              key={u}
+                              onClick={() => setUnit(u)}
+                              className={cn(
+                                "rounded px-2 font-medium transition",
+                                unit === u ? "bg-foreground text-background" : "text-muted-foreground",
+                              )}
+                            >
+                              {u}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Quantity */}
+                <div>
+                  <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+                  <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {[50, 100, 250, 500, 1000].map((n) => (
+                      <button
+                        key={n}
+                        onClick={() => setQty(n)}
+                        className={cn(
+                          "rounded-full border px-3 py-1 text-xs font-medium transition",
+                          qty === n ? "border-transparent bg-foreground text-background" : "border-border text-muted-foreground hover:text-foreground",
+                        )}
+                      >
+                        {n} uds
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {[50, 100, 250, 500, 1000].map((n) => (
-                    <button
-                      key={n}
-                      onClick={() => setQty(n)}
-                      className={cn(
-                        "rounded-full border px-3 py-1 text-xs font-medium transition",
-                        qty === n ? "border-transparent bg-foreground text-background" : "border-border text-muted-foreground hover:text-foreground",
-                      )}
-                    >
-                      {n} uds
-                    </button>
-                  ))}
-                </div>
-
                 <div>
-                  <Label htmlFor="notes" className="mb-2 block text-sm">Instrucciones especiales</Label>
+                  <Label htmlFor="notes" className="mb-2 block text-sm font-semibold">Instrucciones especiales</Label>
                   <Textarea
                     id="notes"
-                    rows={4}
+                    rows={3}
                     placeholder="Colores Pantone, tipo de laminado, entrega, empaque, etc."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
@@ -237,39 +481,55 @@ export function Configurator() {
                 </div>
               </div>
 
-              {/* Preview column */}
+              {/* RIGHT: Preview */}
               <div className="lg:sticky lg:top-6 lg:self-start">
                 <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
                   <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
                     <span>Vista previa en vivo</span>
-                    <span className="rounded-full bg-background px-2 py-0.5">{materialData?.name ?? "—"}</span>
+                    <span className="rounded-full bg-background px-2 py-0.5">{shapeData.name}</span>
                   </div>
 
                   <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
+
+                    {/* Shape mask */}
                     <div
-                      className="relative flex aspect-square w-4/5 items-center justify-center overflow-hidden rounded-3xl shadow-elegant"
+                      className="relative shadow-elegant transition-all duration-300"
                       style={{
+                        width: shapeData.aspect >= 1 ? "82%" : `${82 * shapeData.aspect}%`,
+                        aspectRatio: `${shapeData.aspect} / 1`,
                         background: materialData?.swatch ?? "#fff",
-                        outline: cut === "die-cut" ? "3px dashed rgba(0,0,0,0.12)" : "none",
+                        borderRadius: shapeData.radius,
+                        clipPath: shapeData.clip,
+                        outline: cut === "die-cut" && !shapeData.clip ? "3px dashed rgba(0,0,0,0.15)" : "none",
                         outlineOffset: "6px",
+                        overflow: "hidden",
                       }}
                     >
-                      {uploaded ? (
-                        <img src={uploaded} alt="Tu arte" className="h-full w-full object-contain p-6" />
-                      ) : preset ? (
-                        <span className="text-8xl">{preset}</span>
+                      {hasArt ? (
+                        <ArtLayer
+                          uploaded={uploaded}
+                          preset={preset}
+                          scale={scale}
+                          offsetX={offsetX}
+                          offsetY={offsetY}
+                          contrast={contrast}
+                          brightness={brightness}
+                          duplicated={duplicated}
+                        />
                       ) : (
-                        <div className="text-center text-muted-foreground">
-                          <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
-                          <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
+                        <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
+                          <div>
+                            <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
+                            <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
+                          </div>
                         </div>
                       )}
                     </div>
                   </div>
 
                   <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
-                    <Stat label="Tamaño" value={`${size || "—"} ${unit}`} />
+                    <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
                     <Stat label="Precio estimado" value={currency(price)} highlight />
                   </div>
@@ -289,6 +549,100 @@ export function Configurator() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------- Art Layer ---------- */
+function ArtLayer({
+  uploaded, preset, scale, offsetX, offsetY, contrast, brightness, duplicated,
+}: {
+  uploaded: string | null; preset: string | null;
+  scale: number; offsetX: number; offsetY: number;
+  contrast: number; brightness: number; duplicated: boolean;
+}) {
+  const style: React.CSSProperties = {
+    transform: `translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`,
+    filter: `contrast(${contrast}%) brightness(${brightness}%)`,
+    transformOrigin: "center",
+    transition: "transform 120ms ease, filter 120ms ease",
+  };
+
+  const items = duplicated ? [0, 1, 2, 3] : [0];
+
+  return (
+    <div className={cn("relative h-full w-full", duplicated && "grid grid-cols-2 grid-rows-2 gap-1 p-2")}>
+      {items.map((i) => (
+        <div key={i} className="relative flex h-full w-full items-center justify-center overflow-hidden">
+          {uploaded ? (
+            <img
+              src={uploaded}
+              alt="Tu arte"
+              className="max-h-full max-w-full object-contain"
+              style={style}
+              draggable={false}
+            />
+          ) : (
+            <span style={style} className="text-[6rem] leading-none">{preset}</span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- Small helpers ---------- */
+function ToolButton({
+  children, onClick, title, active, danger,
+}: { children: React.ReactNode; onClick: () => void; title: string; active?: boolean; danger?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      className={cn(
+        "grid h-8 w-8 place-items-center rounded-lg border transition",
+        active ? "rainbow-border-active" :
+          danger ? "border-border text-muted-foreground hover:border-destructive hover:text-destructive"
+                 : "border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ToolSlider({
+  icon, label, value, min, max, step, onChange, suffix, onMinus, onPlus, minusIcon, plusIcon, compact,
+}: {
+  icon?: React.ReactNode; label: string; value: number; min: number; max: number; step: number;
+  onChange: (v: number) => void; suffix?: string;
+  onMinus?: () => void; onPlus?: () => void; minusIcon?: React.ReactNode; plusIcon?: React.ReactNode;
+  compact?: boolean;
+}) {
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-[11px] text-muted-foreground">
+        <span className="flex items-center gap-1.5">{icon}{label}</span>
+        <span className="font-mono font-medium text-foreground">{value}{suffix}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        {onMinus && !compact && (
+          <button onClick={onMinus} className="grid h-7 w-7 place-items-center rounded-md border border-border text-muted-foreground hover:text-foreground">
+            {minusIcon}
+          </button>
+        )}
+        <Slider
+          value={[value]}
+          min={min} max={max} step={step}
+          onValueChange={(v) => onChange(v[0])}
+          className="flex-1"
+        />
+        {onPlus && !compact && (
+          <button onClick={onPlus} className="grid h-7 w-7 place-items-center rounded-md border border-border text-muted-foreground hover:text-foreground">
+            {plusIcon}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
