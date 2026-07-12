@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import appleIcon from "@/assets/apple-icon.png.asset.json";
 import rollIcon from "@/assets/roll-icon.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
+import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
@@ -111,6 +112,7 @@ const materials: {
     id: "white-vinyl-permanent", name: "Stickers de Vinil Blanco Permanente Semi-Brillante",
     desc: "Adhesivo fuerte y duradero", priceFactor: 1.2, swatch: "#fafafa",
     finish: "Semi-Brillante (Laminado)",
+    sampleImage: fireSticker.url,
     advantages: [
       { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Adhesivo fuerte y duradero" },
       { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
