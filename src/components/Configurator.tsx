@@ -153,11 +153,11 @@ const shapes: ShapeItem[] = [
   { id: "rectangle", name: "Rectángulo", icon: <RectangleHorizontal className="h-5 w-5" />, aspect: 1.6, radius: "0px" },
   { id: "rounded", name: "Esq. Redondeada", icon: <Squircle className="h-5 w-5" />, aspect: 1, radius: "28px" },
   {
-    id: "cloud", name: "Nube (Troquelado)", icon: <Cloud className="h-5 w-5" />, aspect: 1.4,
+    id: "cloud", name: "Nube (Troquelado)", icon: <Cloud className="h-5 w-5" />, aspect: 220 / 135,
     clip: `path('${CLOUD_PATH}')`, path: CLOUD_PATH, viewBox: "0 0 220 135",
   },
   {
-    id: "heart", name: "Corazón", icon: <Heart className="h-5 w-5" />, aspect: 1,
+    id: "heart", name: "Corazón", icon: <Heart className="h-5 w-5" />, aspect: 200 / 185,
     clip: `path('${HEART_PATH}')`, path: HEART_PATH, viewBox: "0 0 200 185",
   },
 ];
