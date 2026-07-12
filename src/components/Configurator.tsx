@@ -28,6 +28,9 @@ import cadenaFotoMadera from "@/assets/cadena-foto-madera.jpg.asset.json";
 import cadenaBarra from "@/assets/cadena-barra.jpg.asset.json";
 import cadenaCandado from "@/assets/cadena-candado.jpg.asset.json";
 import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
+import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
+import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
+import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -272,7 +275,7 @@ function pageBackground(type: PageType): React.CSSProperties {
 }
 
 /* ---------- Grabado Láser ---------- */
-type LaserColor = { name: string; hex: string };
+type LaserColor = { name: string; hex: string; image?: string };
 type LaserVariant = {
   id: string;
   name: string;
@@ -340,8 +343,11 @@ const laserProducts: LaserProduct[] = [
       { id: "owala-slider", name: "Owala SmoothSip® Slider", desc: "Anti-derrame · frío o caliente", priceDelta: 90, colors: [
         { name: "Rosado", hex: "#e6a3b8" }, { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
       ]},
-      { id: "owala-freesip", name: "Owala FreeSip®", desc: "Award winning · 24 h frío", priceDelta: 110, colors: [
-        { name: "Rosado", hex: "#e6a3b8" }, { name: "Azul", hex: "#2b4d8e" }, { name: "Negro", hex: "#111111" },
+      { id: "owala-freesip", name: "Owala FreeSip® 24 oz", desc: "710 ml · Award winning · anti-derrame · 24 h frío",
+        priceDelta: 110, image: owalaFreesipBlue.url, colors: [
+        { name: "Azul Hydrangea", hex: "#8ba6dc", image: owalaFreesipBlue.url },
+        { name: "Rosado Sandía", hex: "#eaa8b3", image: owalaFreesipPink.url },
+        { name: "Verde Bosque", hex: "#3a4a3f", image: owalaFreesipDark.url },
       ]},
     ],
   },
@@ -725,6 +731,7 @@ export function Configurator() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {laserProductData.variants!.map((v) => {
                   const active = laserVariantId === v.id;
+                  const thumb = active && laserColor?.image ? laserColor.image : v.image;
                   return (
                     <button
                       key={v.id}
@@ -734,6 +741,16 @@ export function Configurator() {
                         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
                       )}
                     >
+                      {thumb && (
+                        <div className="relative mb-1 h-32 w-full overflow-hidden rounded-xl bg-gradient-to-br from-muted/60 to-background">
+                          <img
+                            key={thumb}
+                            src={thumb}
+                            alt={v.name}
+                            className="absolute inset-0 h-full w-full object-contain p-2 transition-opacity duration-300"
+                          />
+                        </div>
+                      )}
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <h4 className="text-sm font-bold leading-tight">{v.name}</h4>
@@ -746,14 +763,20 @@ export function Configurator() {
                         )}
                       </div>
                       <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                        {v.colors.map((c) => (
-                          <span
-                            key={c.name}
-                            title={c.name}
-                            className="h-5 w-5 rounded-full border border-border shadow-sm"
-                            style={{ background: c.hex }}
-                          />
-                        ))}
+                        {v.colors.map((c, ci) => {
+                          const highlighted = active && laserColorIdx === ci;
+                          return (
+                            <span
+                              key={c.name}
+                              title={c.name}
+                              className={cn(
+                                "h-5 w-5 rounded-full border shadow-sm transition",
+                                highlighted ? "ring-2 ring-offset-1 ring-offset-background scale-110" : "border-border",
+                              )}
+                              style={{ background: c.hex, ...(highlighted ? { boxShadow: `0 0 0 2px var(--brand-orange)` } : {}) }}
+                            />
+                          );
+                        })}
                         <span className="ml-1 text-[10px] text-muted-foreground">{v.colors.length} color{v.colors.length === 1 ? "" : "es"}</span>
                       </div>
                       {typeof v.priceDelta === "number" && v.priceDelta !== 0 && (
