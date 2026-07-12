@@ -496,23 +496,6 @@ export function Configurator() {
                     <span className="rounded-full bg-background px-2 py-0.5">{shapeData.name}</span>
                   </div>
 
-                  <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
-
-                    {/* Shape mask */}
-                    <div
-                      className="relative shadow-elegant transition-all duration-300"
-                      style={{
-                        width: shapeData.aspect >= 1 ? "82%" : `${82 * shapeData.aspect}%`,
-                        aspectRatio: `${shapeData.aspect} / 1`,
-                        background: materialData?.swatch ?? "#fff",
-                        borderRadius: shapeData.radius,
-                        clipPath: shapeData.clip,
-                        outline: cut === "die-cut" && !shapeData.clip ? "3px dashed rgba(0,0,0,0.15)" : "none",
-                        outlineOffset: "6px",
-                        overflow: "hidden",
-                      }}
-                    >
                   <InteractiveCanvas
                     shapeData={shapeData}
                     materialSwatch={materialData?.swatch ?? "#fff"}
@@ -534,6 +517,7 @@ export function Configurator() {
                     setSelected={setSelected}
                     onClear={clearImage}
                   />
+
 
                   <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
