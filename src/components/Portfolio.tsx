@@ -1,3 +1,4 @@
+import menus from "@/assets/portfolio-menus.jpg.asset.json";
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
 import carpetas from "@/assets/portfolio-carpetas.jpg.asset.json";
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
