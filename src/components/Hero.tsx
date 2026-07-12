@@ -42,8 +42,22 @@ export function Hero() {
           </div>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <div className="flex">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-current" style={{ color: "var(--brand-yellow)" }} />)}</div>
+            <div className="flex items-center gap-2">
+              <span
+                aria-label="Bandera de Honduras"
+                className="inline-flex h-3.5 w-6 overflow-hidden rounded-[2px] ring-1 ring-border"
+              >
+                <span className="h-full w-full" style={{ background: "#0073CF" }} />
+                <span className="relative -mx-2 h-full w-full bg-white">
+                  <span
+                    className="absolute inset-0 grid place-items-center text-[6px] leading-none tracking-[1px]"
+                    style={{ color: "#0073CF" }}
+                  >
+                    ★★★★★
+                  </span>
+                </span>
+                <span className="h-full w-full" style={{ background: "#0073CF" }} />
+              </span>
               +200 marcas hondureñas
             </div>
             <div>Entrega nacional</div>
