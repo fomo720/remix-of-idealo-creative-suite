@@ -1,10 +1,76 @@
-const projects = [
-  { title: "Menús para restaurantes", tag: "Restaurantes", gradient: "linear-gradient(135deg,#fb923c,#ec4899)" },
-  { title: "Stickers de marca", tag: "Emprendedores", gradient: "linear-gradient(135deg,#22d3ee,#8b5cf6)" },
-  { title: "Banners sublimados", tag: "Corporativo", gradient: "linear-gradient(135deg,#84cc16,#06b6d4)" },
-  { title: "Empaques a medida", tag: "Retail", gradient: "linear-gradient(135deg,#f59e0b,#ef4444)" },
-  { title: "Uniformes estampados", tag: "Textil", gradient: "linear-gradient(135deg,#a78bfa,#f472b6)" },
-  { title: "Señalética corporativa", tag: "Empresas", gradient: "linear-gradient(135deg,#38bdf8,#818cf8)" },
+import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
+import carpetas from "@/assets/portfolio-carpetas.jpg.asset.json";
+import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
+import banner from "@/assets/portfolio-banner.jpg.asset.json";
+import microperforado from "@/assets/portfolio-microperforado.jpg.asset.json";
+import rotulacion from "@/assets/portfolio-rotulacion.jpg.asset.json";
+import tarjetas from "@/assets/portfolio-tarjetas.jpg.asset.json";
+
+type Project = {
+  title: string;
+  tag: string;
+  subtitle: string;
+  image?: string;
+  gradient?: string;
+  bg?: string;
+};
+
+const projects: Project[] = [
+  {
+    title: "Menús para restaurantes",
+    tag: "Restaurantes",
+    subtitle: "Impresión premium · acabado mate",
+    gradient: "linear-gradient(135deg,#fb923c,#ec4899)",
+  },
+  {
+    title: "Stickers de marca",
+    tag: "Emprendedores",
+    subtitle: "Impresión de alta calidad · material impermeable",
+    image: stickersMarca.url,
+    bg: "#1a1410",
+  },
+  {
+    title: "Carpetas corporativas",
+    tag: "Corporativo",
+    subtitle: "Cartón laminado · doble compartimiento",
+    image: carpetas.url,
+    bg: "#ffffff",
+  },
+  {
+    title: "Stickers troquelados",
+    tag: "Personalizados",
+    subtitle: "Cualquier forma, diseño y tamaño",
+    image: troquelados.url,
+    bg: "#fafafa",
+  },
+  {
+    title: "Banners Roll Up",
+    tag: "Publicidad",
+    subtitle: "33.5 × 78.7 pulgadas · incluye araña y estuche",
+    image: banner.url,
+    bg: "#ffffff",
+  },
+  {
+    title: "Microperforado",
+    tag: "Fachadas",
+    subtitle: "Vinil para vidrieras y locales comerciales",
+    image: microperforado.url,
+    bg: "#5b6672",
+  },
+  {
+    title: "Rotulación industrial",
+    tag: "Señalética",
+    subtitle: "Señales de seguridad y rotulación empresarial",
+    image: rotulacion.url,
+    bg: "#1f4a7a",
+  },
+  {
+    title: "Tarjetas de presentación profesionales",
+    tag: "Branding",
+    subtitle: "Papel premium · acabados brillantes o mate",
+    image: tarjetas.url,
+    bg: "#eaf4fb",
+  },
 ];
 
 export function Portfolio() {
@@ -29,8 +95,19 @@ export function Portfolio() {
               key={p.title}
               className="group relative overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
             >
-              <div className="aspect-[4/5] w-full" style={{ background: p.gradient }}>
-                <div className="flex h-full items-end p-6">
+              <div
+                className="relative aspect-[4/5] w-full overflow-hidden"
+                style={{ background: p.image ? p.bg : p.gradient }}
+              >
+                {p.image ? (
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : null}
+                <div className="absolute inset-x-0 bottom-0 flex items-end p-4">
                   <div className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur">
                     #{String(i + 1).padStart(2, "0")} · {p.tag}
                   </div>
@@ -38,7 +115,7 @@ export function Portfolio() {
               </div>
               <div className="p-5">
                 <h3 className="text-lg font-bold">{p.title}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">Producción pesada · acabado premium</p>
+                <p className="mt-1 text-xs text-muted-foreground">{p.subtitle}</p>
               </div>
             </div>
           ))}
