@@ -658,7 +658,9 @@ export function Configurator() {
                 icon={<Package className="h-8 w-8" />}
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
+                shirtLogo={idealoLogo.url}
               />
+
               <CategoryCard
                 title="Libretas Personalizadas"
                 desc="Portadas impresas en cartulina premium. Hojas blancas, rayadas, cuadriculadas o punteadas."
