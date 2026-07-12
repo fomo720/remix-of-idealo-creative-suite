@@ -1,4 +1,5 @@
-import { ArrowRight, Sparkles, Star } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import hondurasFlag from "@/assets/honduras-flag.png.asset.json";
 
 export function Hero() {
   return (
