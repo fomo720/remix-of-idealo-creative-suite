@@ -161,6 +161,7 @@ export function Configurator() {
 
   const clearImage = () => {
     setUploaded(null); setPreset(null); resetImageTools();
+    if (fileRef.current) fileRef.current.value = "";
   };
 
   const applyPreset = (i: number) => {
@@ -822,11 +823,12 @@ function InteractiveCanvas({
       {hasArt && selected && !duplicated && (
         <div
           ref={menuRef}
-          className="absolute z-40 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
-          style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
-          onMouseDown={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
+          className="absolute z-50 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
+          style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)", pointerEvents: "auto" }}
+          onMouseDown={(e) => { e.stopPropagation(); dragRef.current = null; }}
+          onPointerDown={(e) => { e.stopPropagation(); dragRef.current = null; }}
           onPointerUp={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <FloatBtn label="Centrar horizontal" onClick={centerHorizontal}>
             <AlignHorizontalJustifyCenter className="h-4 w-4" />
@@ -834,11 +836,11 @@ function InteractiveCanvas({
           <FloatBtn label="Centrar vertical" onClick={centerVertical}>
             <AlignVerticalJustifyCenter className="h-4 w-4" />
           </FloatBtn>
-          <FloatBtn label="Duplicar (patrón)" onClick={() => setDuplicated((d) => !d)}>
+          <FloatBtn label="Duplicar (patrón)" onClick={() => { dragRef.current = null; setDuplicated((d) => !d); }}>
             <Copy className="h-4 w-4" />
           </FloatBtn>
           <span className="mx-0.5 h-5 w-px bg-border" />
-          <FloatBtn label="Eliminar" danger onClick={() => { onClear(); setSelected(false); }}>
+          <FloatBtn label="Eliminar" danger onClick={() => { dragRef.current = null; onClear(); setSelected(false); }}>
             <Trash2 className="h-4 w-4" />
           </FloatBtn>
         </div>
@@ -938,11 +940,14 @@ function FloatBtn({
 }: { children: React.ReactNode; onClick: () => void; label: string; danger?: boolean }) {
   return (
     <button
-      onClick={onClick}
+      type="button"
+      onPointerDown={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={(e) => { e.stopPropagation(); e.preventDefault(); onClick(); }}
       title={label}
       aria-label={label}
       className={cn(
-        "grid h-9 w-9 place-items-center rounded-full transition active:scale-95",
+        "grid h-9 w-9 place-items-center rounded-full transition active:scale-95 cursor-pointer",
         danger
           ? "text-destructive hover:bg-destructive/10"
           : "text-foreground hover:bg-muted",
