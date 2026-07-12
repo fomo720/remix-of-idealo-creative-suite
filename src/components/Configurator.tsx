@@ -2787,7 +2787,7 @@ function useEngraveBitmap(url: string | null, engraveColor: string, intensity: n
 }
 
 function LaserDesigner({
-  product, variant, color, uploaded, preset, onFile, onPreset, onClear, fileRef,
+  product, variant, color, byob, uploaded, preset, onFile, onPreset, onClear, fileRef,
   qty, setQty, notes, setNotes, price,
   engraveIntensity, setEngraveIntensity, engraveMode, setEngraveMode,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
