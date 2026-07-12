@@ -227,8 +227,8 @@
   background-position: 0% 50%;
   background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
   transition: transform 180ms ease, filter 200ms ease;
 }
 .rainbow-text-hover::after {
@@ -245,6 +245,8 @@
   transition: transform 250ms ease;
 }
 .rainbow-text-hover:hover {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
   animation: rainbow-flow 2.2s linear infinite;
   filter: drop-shadow(0 2px 8px rgba(255, 84, 112, 0.35));
 }
