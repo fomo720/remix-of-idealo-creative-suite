@@ -17,11 +17,22 @@ export function Navbar() {
         </a>
 
         <nav className="hidden items-center gap-7 md:flex">
-          {links.map((l) => (
-            <a key={l.href} href={l.href} className="text-sm font-medium text-muted-foreground transition hover:text-foreground">
-              {l.label}
-            </a>
-          ))}
+          {links.map((l) => {
+            const isPrimary = l.href === "#personalizar";
+            return (
+              <a
+                key={l.href}
+                href={l.href}
+                className={
+                  isPrimary
+                    ? "rainbow-text-hover text-sm font-bold text-foreground"
+                    : "text-sm font-medium text-muted-foreground transition hover:text-foreground"
+                }
+              >
+                {l.label}
+              </a>
+            );
+          })}
         </nav>
         <a
           href="https://wa.me/50400000000"
