@@ -428,6 +428,27 @@ const laserProducts: LaserProduct[] = [
     icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
     // coco es coco — sin variantes
   },
+  {
+    id: "cadena", name: "Cadenas & Dijes", desc: "Acero inoxidable dorado y plateado", hint: "Regalos con foto o texto",
+    surface: "linear-gradient(135deg,#f2d68a,#c99b3a)", engrave: "#1a1a1a", price: 340,
+    icon: <Gem className="h-8 w-8" />, shape: "pendant",
+    heroImage: cadenaFotoMadera.url,
+    variantLabel: "Tipo de dije",
+    variants: [
+      { id: "redonda-foto", name: "Dije Redondo con Foto", desc: "Ø 2.5 cm · grabado fotográfico", image: cadenaFotoMadera.url, colors: [
+        { name: "Oro", hex: "#d4a63a" }, { name: "Plata", hex: "#c8cdd1" }, { name: "Oro rosa", hex: "#e3b6a7" },
+      ]},
+      { id: "barra-vertical", name: "Barra Vertical 3D", desc: "4 caras · nombres, fechas, coordenadas", image: cadenaBarra.url, priceDelta: 80, colors: [
+        { name: "Plata", hex: "#c8cdd1" }, { name: "Oro", hex: "#d4a63a" }, { name: "Negro mate", hex: "#1a1a1a" },
+      ]},
+      { id: "candado-corazon", name: "Candado Corazón", desc: "Silueta corazón-candado · foto o texto", image: cadenaCandado.url, priceDelta: 40, colors: [
+        { name: "Oro", hex: "#d4a63a" }, { name: "Plata", hex: "#c8cdd1" },
+      ]},
+      { id: "placa-rect", name: "Placa Rectangular con Foto", desc: "Grabado fotográfico de alta definición", image: cadenaPlaca.url, priceDelta: 60, colors: [
+        { name: "Plata", hex: "#c8cdd1" }, { name: "Oro", hex: "#d4a63a" }, { name: "Negro", hex: "#1a1a1a" },
+      ]},
+    ],
+  },
 ];
 
 const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
