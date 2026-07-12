@@ -1801,8 +1801,8 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 }
 
 function CategoryCard({
-  title, desc, icon, active, onClick, accent,
-}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string }) {
+  title, desc, icon, active, onClick, accent, shirtLogo,
+}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; shirtLogo?: string }) {
   return (
     <button
       onClick={onClick}
@@ -1816,9 +1816,15 @@ function CategoryCard({
         style={{ background: accent }}
       />
       <div className="relative">
-        <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: accent }}>
-          {icon}
-        </div>
+        {shirtLogo ? (
+          <div className="mb-4 flex h-28 w-full items-center justify-center">
+            <ShirtWithLogo accent={accent} logoUrl={shirtLogo} />
+          </div>
+        ) : (
+          <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: accent }}>
+            {icon}
+          </div>
+        )}
         <h4 className="text-2xl font-bold">{title}</h4>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
         <div className="mt-6 flex items-center gap-2 text-sm font-medium">
@@ -1828,6 +1834,41 @@ function CategoryCard({
     </button>
   );
 }
+
+function ShirtWithLogo({ accent, logoUrl }: { accent: string; logoUrl: string }) {
+  return (
+    <div className="relative h-full w-auto" style={{ aspectRatio: "1 / 1" }}>
+      <svg viewBox="0 0 200 200" className="h-full w-full drop-shadow-md" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="shirtGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={accent} stopOpacity="1" />
+            <stop offset="100%" stopColor={accent} stopOpacity="0.75" />
+          </linearGradient>
+        </defs>
+        {/* Shirt body */}
+        <path
+          d="M40 55 L75 30 Q100 55 125 30 L160 55 L145 85 L130 78 L130 175 Q100 182 70 175 L70 78 L55 85 Z"
+          fill="url(#shirtGrad)"
+          stroke="rgba(0,0,0,0.15)"
+          strokeWidth="1.5"
+        />
+        {/* Neck shadow */}
+        <path d="M75 30 Q100 55 125 30 Q113 42 100 42 Q87 42 75 30 Z" fill="rgba(0,0,0,0.18)" />
+        {/* Subtle stitch */}
+        <path d="M70 78 L70 175" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" strokeDasharray="2 3" />
+        <path d="M130 78 L130 175" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" strokeDasharray="2 3" />
+      </svg>
+      {/* Logo sublimated in the middle */}
+      <img
+        src={logoUrl}
+        alt=""
+        className="pointer-events-none absolute left-1/2 top-[58%] w-[42%] -translate-x-1/2 -translate-y-1/2 object-contain mix-blend-luminosity opacity-90"
+      />
+    </div>
+  );
+}
+
+
 
 function SelectCard({
   title, desc, active, onClick, accent, swatch, sampleImage,
