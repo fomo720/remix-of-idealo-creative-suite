@@ -88,6 +88,40 @@ const materials: {
     finish: "Mate Ultra Suave",
     advantages: ["Sin reflejos ni brillos", "Textura sofisticada al tacto", "Fotografiable sin destellos"],
     useCase: "Ideal para marcas premium, packaging boutique y branding editorial.",
+  {
+    id: "white-vinyl-removable", name: "White Vinyl Removable Semi-Gloss Stickers",
+    desc: "Más económico · Impermeable · Removible", priceFactor: 1.05, swatch: "#ffffff",
+    finish: "Semi-Gloss (Laminated)",
+    advantages: ["Más económico", "Impermeable", "Removible sin residuos"],
+    useCase: "Ideal para etiquetas de producto y campañas versátiles.",
+  },
+  {
+    id: "clear-vinyl-removable", name: "Clear Vinyl Removable Semi-Gloss Stickers",
+    desc: "Transparente · Impreso con tinta blanca", priceFactor: 1.3, swatch: "linear-gradient(135deg,#f0f9ff,#fdf4ff)",
+    finish: "Semi-Gloss",
+    advantages: ["Material transparente (see-through)", "Impreso con tinta blanca", "Impermeable"],
+    useCase: "Ideal para vidrio, escaparates y branding con efecto cristal.",
+  },
+  {
+    id: "eco-pet-matte", name: "Eco-Safe PET Removable Matte Stickers",
+    desc: "Eco-safe · Apto microondas · Sin PVC", priceFactor: 1.35, swatch: "#efeae4",
+    finish: "Matte",
+    advantages: ["Removible sin residuos", "Apto para microondas", "Sin PVC/ftalatos"],
+    useCase: "Ideal para empaques de alimentos y marcas eco-conscientes.",
+  },
+  {
+    id: "white-vinyl-permanent", name: "White Vinyl Permanent Semi-Gloss Stickers",
+    desc: "Adhesivo fuerte y duradero", priceFactor: 1.2, swatch: "#fafafa",
+    finish: "Semi-Gloss (Laminated)",
+    advantages: ["Adhesivo fuerte y duradero", "Removible sin residuos", "Impermeable"],
+    useCase: "Ideal para exteriores, industrial y aplicaciones de larga duración.",
+  },
+  {
+    id: "hang-tag-removable", name: "Hang Tag Removable Stickers",
+    desc: "Con pestaña para colgar", priceFactor: 1.4, swatch: "#fdfdfd",
+    finish: "Semi-Gloss (Laminated)",
+    advantages: ["Custom hang tab", "Impermeable", "Removible sin residuos"],
+    useCase: "Ideal para etiquetas colgantes en botellas y productos retail.",
   },
 ];
 
