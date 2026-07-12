@@ -1029,19 +1029,25 @@ function Stepper({ step, onGo }: { step: number; onGo: (n: number) => void }) {
         return (
           <div key={l} className="flex flex-1 items-center gap-2">
             <button
+              type="button"
               onClick={() => onGo(n)}
+              title={`Ir al paso ${n}: ${l}`}
               className={cn(
-                "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition",
+                "flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 text-sm font-semibold transition hover:scale-105 hover:shadow-md",
                 active && "rainbow-border-active",
                 done && "border-transparent bg-foreground text-background",
-                !active && !done && "border-border text-muted-foreground",
+                !active && !done && "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground",
               )}
             >
               {done ? <Check className="h-4 w-4" /> : n}
             </button>
-            <span className={cn("hidden truncate text-sm font-medium sm:inline", active ? "text-foreground" : "text-muted-foreground")}>
+            <button
+              type="button"
+              onClick={() => onGo(n)}
+              className={cn("hidden truncate text-sm font-medium sm:inline cursor-pointer hover:text-foreground transition", active ? "text-foreground" : "text-muted-foreground")}
+            >
               {l}
-            </span>
+            </button>
             {i < labels.length - 1 && <div className="h-px flex-1 bg-border" />}
           </div>
         );
