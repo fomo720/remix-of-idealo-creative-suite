@@ -161,6 +161,7 @@ export function Configurator() {
 
   const clearImage = () => {
     setUploaded(null); setPreset(null); resetImageTools();
+    if (fileRef.current) fileRef.current.value = "";
   };
 
   const applyPreset = (i: number) => {
