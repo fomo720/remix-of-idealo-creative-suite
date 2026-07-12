@@ -20,8 +20,9 @@ const projects: Project[] = [
   {
     title: "Menús para restaurantes",
     tag: "Restaurantes",
-    subtitle: "Impresión premium · acabado mate",
-    gradient: "linear-gradient(135deg,#fb923c,#ec4899)",
+    subtitle: "Impresión doble lado · espiral de metal · laminado",
+    image: menus.url,
+    bg: "#d9d9d9",
   },
   {
     title: "Stickers de marca",
