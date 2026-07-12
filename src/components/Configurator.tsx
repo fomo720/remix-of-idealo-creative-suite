@@ -788,7 +788,7 @@ export function Configurator() {
                       )}
                     >
                       {thumb && (
-                        <div className="relative mb-1 h-32 w-full overflow-hidden rounded-xl bg-gradient-to-br from-muted/60 to-background">
+                        <div className="relative mb-1 h-64 w-full overflow-hidden rounded-xl bg-gradient-to-br from-muted/60 to-background sm:h-72">
                           <img
                             key={thumb}
                             src={thumb}
