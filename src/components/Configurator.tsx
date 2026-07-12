@@ -458,12 +458,18 @@ export function Configurator() {
         <Stepper
           step={step}
           onGo={goTo}
-          labels={isNotebook ? ["Categoría", "Estilo", "Material", "Diseño"] : ["Categoría", "Forma", "Material", "Diseño"]}
+          labels={
+            isLaser
+              ? ["Categoría", "Producto", "Diseño"]
+              : isNotebook
+              ? ["Categoría", "Estilo", "Material", "Diseño"]
+              : ["Categoría", "Forma", "Material", "Diseño"]
+          }
         />
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
-            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
@@ -488,13 +494,21 @@ export function Configurator() {
                 active={category === "libretas"}
                 onClick={() => setCategory("libretas")}
               />
+              <CategoryCard
+                title="Grabado Láser"
+                desc="Tablas, botellas metálicas, carteras, llaveros, vasos y hasta cocos. Grabado permanente y elegante."
+                accent="var(--brand-orange)"
+                icon={<Flame className="h-8 w-8" />}
+                active={category === "laser"}
+                onClick={() => setCategory("laser")}
+              />
             </div>
           )}
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
 
-          {step === 2 && !isNotebook && (
+          {step === 2 && !isNotebook && !isLaser && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
