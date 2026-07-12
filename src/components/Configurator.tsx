@@ -548,7 +548,57 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 3 && !isNotebook && (
+          {step === 2 && isLaser && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<Flame className="h-5 w-5" />} title="¿Qué producto vamos a grabar?" />
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {laserProducts.map((p) => (
+                  <LaserProductCard
+                    key={p.id}
+                    product={p}
+                    active={laserProduct === p.id}
+                    onClick={() => setLaserProduct(p.id)}
+                  />
+                ))}
+              </div>
+              <p className="mt-4 text-center text-xs text-muted-foreground">
+                Grabado permanente sin tinta · el arte se convierte automáticamente en trazo apto para láser.
+              </p>
+              <NavRow onBack={() => goTo(1)} onNext={laserProduct ? () => goTo(3) : undefined} />
+            </div>
+          )}
+
+          {step === 3 && isLaser && (
+            <LaserDesigner
+              product={laserProductData!}
+              uploaded={uploaded}
+              preset={preset}
+              onFile={handleFile}
+              onPreset={(p) => { setPreset(p); setUploaded(null); resetImageTools(); }}
+              onClear={clearImage}
+              fileRef={fileRef}
+              qty={qty}
+              setQty={setQty}
+              notes={notes}
+              setNotes={setNotes}
+              price={price}
+              engraveIntensity={engraveIntensity}
+              setEngraveIntensity={setEngraveIntensity}
+              engraveMode={engraveMode}
+              setEngraveMode={setEngraveMode}
+              scale={scale}
+              setScale={setScale}
+              offsetX={offsetX}
+              setOffsetX={setOffsetX}
+              offsetY={offsetY}
+              setOffsetY={setOffsetY}
+              duplicated={duplicated}
+              setDuplicated={setDuplicated}
+              onBack={() => goTo(2)}
+            />
+          )}
+
+          {step === 3 && !isNotebook && !isLaser && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
