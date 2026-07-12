@@ -545,43 +545,241 @@ export function Configurator() {
   );
 }
 
-/* ---------- Art Layer ---------- */
-function ArtLayer({
-  uploaded, preset, scale, offsetX, offsetY, contrast, brightness, duplicated,
+/* ---------- Interactive Canvas ---------- */
+type ShapeDef = { id: StickerShape; name: string; icon: React.ReactNode; aspect: number; clip?: string; radius?: string };
+
+function InteractiveCanvas({
+  shapeData, materialSwatch, isDieCut, hasArt, uploaded, preset,
+  scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
+  contrast, brightness, duplicated, setDuplicated, selected, setSelected, onClear,
 }: {
+  shapeData: ShapeDef; materialSwatch: string; isDieCut: boolean; hasArt: boolean;
   uploaded: string | null; preset: string | null;
-  scale: number; offsetX: number; offsetY: number;
-  contrast: number; brightness: number; duplicated: boolean;
+  scale: number; setScale: (n: number) => void;
+  offsetX: number; setOffsetX: (n: number) => void;
+  offsetY: number; setOffsetY: (n: number) => void;
+  contrast: number; brightness: number;
+  duplicated: boolean; setDuplicated: (b: boolean | ((d: boolean) => boolean)) => void;
+  selected: boolean; setSelected: (b: boolean) => void;
+  onClear: () => void;
 }) {
-  const style: React.CSSProperties = {
-    transform: `translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`,
-    filter: `contrast(${contrast}%) brightness(${brightness}%)`,
-    transformOrigin: "center",
-    transition: "transform 120ms ease, filter 120ms ease",
+  const maskRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ mode: "move" | "resize"; startX: number; startY: number; startOX: number; startOY: number; startScale: number; corner?: "tl" | "tr" | "bl" | "br"; rect: DOMRect } | null>(null);
+
+  // Deselect when clicking outside
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (!maskRef.current) return;
+      if (!maskRef.current.contains(e.target as Node)) setSelected(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [setSelected]);
+
+  const onPointerDownImage = (e: React.PointerEvent) => {
+    if (!hasArt || !maskRef.current) return;
+    e.stopPropagation();
+    setSelected(true);
+    const rect = maskRef.current.getBoundingClientRect();
+    dragRef.current = {
+      mode: "move",
+      startX: e.clientX, startY: e.clientY,
+      startOX: offsetX, startOY: offsetY,
+      startScale: scale,
+      rect,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
-  const items = duplicated ? [0, 1, 2, 3] : [0];
+  const onPointerDownHandle = (corner: "tl" | "tr" | "bl" | "br") => (e: React.PointerEvent) => {
+    if (!maskRef.current) return;
+    e.stopPropagation();
+    const rect = maskRef.current.getBoundingClientRect();
+    dragRef.current = {
+      mode: "resize",
+      startX: e.clientX, startY: e.clientY,
+      startOX: offsetX, startOY: offsetY,
+      startScale: scale,
+      corner,
+      rect,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (!d) return;
+    const dx = e.clientX - d.startX;
+    const dy = e.clientY - d.startY;
+    if (d.mode === "move") {
+      const pctX = (dx / d.rect.width) * 100;
+      const pctY = (dy / d.rect.height) * 100;
+      setOffsetX(clamp(d.startOX + pctX, -60, 60));
+      setOffsetY(clamp(d.startOY + pctY, -60, 60));
+    } else {
+      // resize: use larger axis delta with corner sign
+      const sign = d.corner === "br" ? 1 : d.corner === "tl" ? 1 : d.corner === "tr" ? 1 : 1;
+      const delta = ((d.corner === "tl" || d.corner === "bl") ? -dx : dx) + ((d.corner === "tl" || d.corner === "tr") ? -dy : dy);
+      const pct = (delta / d.rect.width) * 100 * sign;
+      setScale(clamp(Math.round(d.startScale + pct), 30, 250));
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    dragRef.current = null;
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* noop */ }
+  };
+
+  const filterStyle = `contrast(${contrast}%) brightness(${brightness}%)`;
+  const imgTransform = `translate(-50%, -50%) translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`;
 
   return (
-    <div className={cn("relative h-full w-full", duplicated && "grid grid-cols-2 grid-rows-2 gap-1 p-2")}>
-      {items.map((i) => (
-        <div key={i} className="relative flex h-full w-full items-center justify-center overflow-hidden">
-          {uploaded ? (
-            <img
-              src={uploaded}
-              alt="Tu arte"
-              className="max-h-full max-w-full object-contain"
-              style={style}
-              draggable={false}
-            />
+    <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
+      <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
+
+      {/* Shape mask */}
+      <div
+        ref={maskRef}
+        className="relative shadow-elegant transition-all duration-300 touch-none select-none"
+        style={{
+          width: shapeData.aspect >= 1 ? "82%" : `${82 * shapeData.aspect}%`,
+          aspectRatio: `${shapeData.aspect} / 1`,
+          background: materialSwatch,
+          borderRadius: shapeData.radius,
+          clipPath: shapeData.clip,
+          outline: isDieCut && !shapeData.clip ? "3px dashed rgba(0,0,0,0.15)" : "none",
+          outlineOffset: "6px",
+          overflow: "hidden",
+        }}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        {hasArt ? (
+          duplicated ? (
+            <div className="grid h-full w-full grid-cols-2 grid-rows-2 gap-1 p-2">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="relative flex items-center justify-center overflow-hidden">
+                  {uploaded ? (
+                    <img src={uploaded} alt="" draggable={false}
+                      className="max-h-full max-w-full object-contain"
+                      style={{ filter: filterStyle, transform: `scale(${scale / 100})` }} />
+                  ) : (
+                    <span style={{ filter: filterStyle, transform: `scale(${scale / 100})` }} className="text-[4rem] leading-none">{preset}</span>
+                  )}
+                </div>
+              ))}
+            </div>
           ) : (
-            <span style={style} className="text-[6rem] leading-none">{preset}</span>
-          )}
+            <div
+              className={cn(
+                "absolute left-1/2 top-1/2 flex items-center justify-center transition-[outline] duration-150",
+                selected ? "outline outline-2 outline-offset-2 outline-[var(--brand-violet)] cursor-move" : "cursor-pointer",
+              )}
+              style={{
+                transform: imgTransform,
+                width: "80%", height: "80%",
+              }}
+              onPointerDown={onPointerDownImage}
+            >
+              {uploaded ? (
+                <img src={uploaded} alt="Tu arte" draggable={false}
+                  className="pointer-events-none max-h-full max-w-full object-contain"
+                  style={{ filter: filterStyle }} />
+              ) : (
+                <span className="pointer-events-none text-[6rem] leading-none" style={{ filter: filterStyle }}>{preset}</span>
+              )}
+
+              {selected && (
+                <>
+                  {(["tl", "tr", "bl", "br"] as const).map((c) => (
+                    <span
+                      key={c}
+                      onPointerDown={onPointerDownHandle(c)}
+                      className="absolute h-3.5 w-3.5 rounded-full border-2 border-[var(--brand-violet)] bg-white shadow"
+                      style={{
+                        top: c.startsWith("t") ? "-8px" : "auto",
+                        bottom: c.startsWith("b") ? "-8px" : "auto",
+                        left: c.endsWith("l") ? "-8px" : "auto",
+                        right: c.endsWith("r") ? "-8px" : "auto",
+                        cursor: c === "tl" || c === "br" ? "nwse-resize" : "nesw-resize",
+                        touchAction: "none",
+                      }}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+          )
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
+            <div>
+              <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
+              <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Floating contextual menu */}
+      {hasArt && selected && !duplicated && (
+        <div
+          className="absolute z-20 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
+          style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          <FloatBtn label="Centrar horizontal" onClick={() => setOffsetX(0)}>
+            <AlignHorizontalJustifyCenter className="h-4 w-4" />
+          </FloatBtn>
+          <FloatBtn label="Centrar vertical" onClick={() => setOffsetY(0)}>
+            <AlignVerticalJustifyCenter className="h-4 w-4" />
+          </FloatBtn>
+          <FloatBtn label="Duplicar (patrón)" onClick={() => setDuplicated((d) => !d)}>
+            <Copy className="h-4 w-4" />
+          </FloatBtn>
+          <span className="mx-0.5 h-5 w-px bg-border" />
+          <FloatBtn label="Eliminar" danger onClick={() => { onClear(); setSelected(false); }}>
+            <Trash2 className="h-4 w-4" />
+          </FloatBtn>
         </div>
-      ))}
+      )}
+
+      {hasArt && duplicated && (
+        <button
+          onClick={() => setDuplicated(false)}
+          className="absolute right-2 top-2 z-20 flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-medium shadow-card-soft"
+        >
+          <Copy className="h-3 w-3" /> Salir del patrón
+        </button>
+      )}
     </div>
   );
 }
+
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
+
+function FloatBtn({
+  children, onClick, label, danger,
+}: { children: React.ReactNode; onClick: () => void; label: string; danger?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      title={label}
+      aria-label={label}
+      className={cn(
+        "grid h-9 w-9 place-items-center rounded-full transition active:scale-95",
+        danger
+          ? "text-destructive hover:bg-destructive/10"
+          : "text-foreground hover:bg-muted",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
 
 /* ---------- Small helpers ---------- */
 function ToolButton({
