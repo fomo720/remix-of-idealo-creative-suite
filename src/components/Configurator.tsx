@@ -809,6 +809,7 @@ function InteractiveCanvas({
         <div
           className="absolute z-40 flex items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-elegant animate-fade-up"
           style={{ top: "-8px", left: "50%", transform: "translate(-50%, -100%)" }}
+          onMouseDown={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
         >
           <FloatBtn label="Centrar horizontal" onClick={() => setOffsetX(0)}>
