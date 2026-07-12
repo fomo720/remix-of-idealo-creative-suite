@@ -106,7 +106,7 @@ export function Portfolio() {
                     src={p.image}
                     alt={p.title}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-contain p-0 scale-[2] transition-transform duration-500 group-hover:scale-[2.1]"
+                    className="absolute inset-0 h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : null}
                 <div className="absolute inset-x-0 bottom-0 flex items-end p-4">
