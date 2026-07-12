@@ -28,6 +28,7 @@ import cadenaFotoMadera from "@/assets/cadena-foto-madera.jpg.asset.json";
 import cocoGrabado from "@/assets/coco-grabado.jpg.asset.json";
 import cadenaBarra from "@/assets/cadena-barra.jpg.asset.json";
 import cadenaCandado from "@/assets/cadena-candado.jpg.asset.json";
+import idealoLogo from "@/assets/idealo-logo.png.asset.json";
 import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
 import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
 import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
