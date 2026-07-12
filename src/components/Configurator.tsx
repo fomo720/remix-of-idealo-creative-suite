@@ -36,7 +36,7 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 
 
 
-type Category = "stickers" | "iron-ons";
+type Category = "stickers" | "iron-ons" | "libretas";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
 type Material =
   | "white-vinyl-removable"
@@ -45,6 +45,9 @@ type Material =
   | "white-vinyl-permanent"
   | "hang-tag-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
+type NotebookStyle = "cover-only" | "cover-pages";
+type NotebookMaterial = "cover-matte" | "cover-glossy";
+type PageType = "blank" | "ruled" | "grid" | "dotted";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   {
