@@ -513,27 +513,27 @@ export function Configurator() {
                         overflow: "hidden",
                       }}
                     >
-                      {hasArt ? (
-                        <ArtLayer
-                          uploaded={uploaded}
-                          preset={preset}
-                          scale={scale}
-                          offsetX={offsetX}
-                          offsetY={offsetY}
-                          contrast={contrast}
-                          brightness={brightness}
-                          duplicated={duplicated}
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
-                          <div>
-                            <ImagePlus className="mx-auto h-10 w-10 opacity-40" />
-                            <p className="mt-2 text-xs">Sube tu arte para verlo aquí</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  <InteractiveCanvas
+                    shapeData={shapeData}
+                    materialSwatch={materialData?.swatch ?? "#fff"}
+                    isDieCut={cut === "die-cut"}
+                    hasArt={hasArt}
+                    uploaded={uploaded}
+                    preset={preset}
+                    scale={scale}
+                    setScale={setScale}
+                    offsetX={offsetX}
+                    setOffsetX={setOffsetX}
+                    offsetY={offsetY}
+                    setOffsetY={setOffsetY}
+                    contrast={contrast}
+                    brightness={brightness}
+                    duplicated={duplicated}
+                    setDuplicated={setDuplicated}
+                    selected={selected}
+                    setSelected={setSelected}
+                    onClear={clearImage}
+                  />
 
                   <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
@@ -542,7 +542,9 @@ export function Configurator() {
                   </div>
 
                   <p className="mt-3 text-center text-[11px] text-muted-foreground">
-                    Precio estimado en Lempiras. Cotización final tras revisión de arte.
+                    {hasArt
+                      ? "Arrastra la imagen para moverla · usa las esquinas para redimensionar · toca los iconos para editar."
+                      : "Precio estimado en Lempiras. Cotización final tras revisión de arte."}
                   </p>
                 </div>
 
