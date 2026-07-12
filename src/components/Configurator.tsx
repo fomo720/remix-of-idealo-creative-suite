@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import appleIcon from "@/assets/apple-icon.png.asset.json";
+
 
 type Category = "stickers" | "iron-ons";
 type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
@@ -1162,69 +1164,78 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // Anchor shape for kiss-cut
-  const anchor = "M70 8 a8 8 0 1 1 0 16 a8 8 0 1 1 0 -16 M70 24 L70 78 M55 40 L85 40 M30 62 C30 78 50 88 70 88 C90 88 110 78 110 62 L100 62 L112 55 L120 62 L110 62 M70 88 L70 78";
+  // Centered apple sticker image
+  const appleImg = (size: number, x: number, y: number) => (
+    <image href={appleIcon.url} x={x} y={y} width={size} height={size} preserveAspectRatio="xMidYMid meet" />
+  );
+
   if (id === "kiss-cut") {
     return (
       <svg viewBox="0 0 160 100" className="h-full w-full">
         <ellipse cx="80" cy="92" rx="55" ry="4" fill="#000" opacity="0.08" />
         <g transform="translate(20,8)">
           <rect x="0" y="0" width="120" height="82" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-          <g transform="translate(20,5) scale(0.72)">
-            <path d={anchor} fill="none" stroke={fill} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
-            {/* kiss-cut dashed outline around the anchor silhouette */}
-            <ellipse cx="70" cy="52" rx="52" ry="46" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="3 3" />
-          </g>
+          {/* dashed kiss-cut outline around the apple */}
+          <circle cx="60" cy="41" r="32" fill="none" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="3 3" />
+          {appleImg(60, 30, 11)}
         </g>
       </svg>
     );
   }
   if (id === "sheets") {
+    const cloudsOn = (offsetX: number, offsetY: number) => (
+      <g transform={`translate(${offsetX},${offsetY})`}>
+        {[0,1,2].map((row) =>
+          [0,1].map((col) => (
+            <g key={`${row}-${col}`} transform={`translate(${8 + col*36},${6 + row*26}) scale(0.22)`}>
+              <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
+            </g>
+          ))
+        )}
+      </g>
+    );
     return (
       <svg viewBox="0 0 160 100" className="h-full w-full">
         <ellipse cx="80" cy="92" rx="55" ry="4" fill="#000" opacity="0.08" />
+        {/* back sheet (rotated) with same cloud pattern */}
         <g transform="translate(45,8) rotate(8 40 45)">
           <rect x="0" y="0" width="80" height="85" rx="3" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+          {cloudsOn(0, 0)}
         </g>
+        {/* front sheet */}
         <g transform="translate(15,12)">
           <rect x="0" y="0" width="80" height="85" rx="3" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-          {[0,1,2].map((row) =>
-            [0,1].map((col) => (
-              <g key={`${row}-${col}`} transform={`translate(${8 + col*36},${6 + row*26}) scale(0.22)`}>
-                <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
-              </g>
-            ))
-          )}
+          {cloudsOn(0, 0)}
         </g>
       </svg>
     );
   }
-  // rolls — apple-shaped stickers
-
-  const appleShape = (
-    <g>
-      <path d="M45 40 C45 28 55 22 65 24 C68 20 72 20 75 24 C85 22 95 28 95 40 C95 62 82 78 70 78 C58 78 45 62 45 40 Z" fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
-      <path d="M70 24 C70 18 74 14 80 14" fill="none" stroke="#3d7a1f" strokeWidth="5" strokeLinecap="round" />
-      <path d="M72 22 Q80 16 86 18" fill="none" stroke="#4a9c26" strokeWidth="4" strokeLinecap="round" />
-    </g>
-  );
+  // rolls — vertical toilet-paper-style roll with apple stickers hanging down
   return (
     <svg viewBox="0 0 160 100" className="h-full w-full">
-      <ellipse cx="80" cy="92" rx="60" ry="4" fill="#000" opacity="0.08" />
-      {/* strip */}
-      <g transform="translate(10,42)">
-        <rect x="0" y="0" width="95" height="40" rx="2" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        <g transform="translate(6,2) scale(0.36)">{appleShape}</g>
-        <g transform="translate(50,2) scale(0.36)">{appleShape}</g>
+      <ellipse cx="80" cy="95" rx="40" ry="3" fill="#000" opacity="0.08" />
+      {/* roll cylinder at top */}
+      <g transform="translate(52,6)">
+        {/* body */}
+        <rect x="0" y="8" width="56" height="18" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        {/* top rim */}
+        <ellipse cx="28" cy="8" rx="28" ry="7" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        {/* inner hole */}
+        <ellipse cx="28" cy="8" rx="9" ry="2.5" fill="#1f2937" />
+        {/* bottom edge line */}
+        <ellipse cx="28" cy="26" rx="28" ry="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
       </g>
-      {/* roll */}
-      <g transform="translate(105,25)">
-        <circle cx="25" cy="30" r="28" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-        <circle cx="25" cy="30" r="10" fill="#1f2937" />
+      {/* paper strip hanging vertically */}
+      <g transform="translate(62,30)">
+        <rect x="0" y="0" width="36" height="62" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
+        {/* two apple stickers stacked */}
+        {appleImg(28, 4, 3)}
+        {appleImg(28, 4, 32)}
       </g>
     </svg>
   );
 }
+
 
 
 
