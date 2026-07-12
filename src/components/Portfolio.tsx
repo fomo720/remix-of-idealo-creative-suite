@@ -109,8 +109,8 @@ export function Portfolio() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : null}
-                <div className="absolute inset-x-0 bottom-0 flex items-end p-4">
-                  <div className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur">
+                <div className="absolute left-3 top-3">
+                  <div className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur shadow-sm">
                     #{String(i + 1).padStart(2, "0")} · {p.tag}
                   </div>
                 </div>
