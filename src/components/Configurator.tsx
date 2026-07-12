@@ -518,7 +518,7 @@ export function Configurator() {
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     return Math.round(base * area * factor * bulkFactor * qty);
-  }, [isLaser, laserProductData, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
+  }, [isLaser, laserProductData, laserVariantData, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
