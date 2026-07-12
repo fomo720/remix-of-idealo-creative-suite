@@ -351,6 +351,11 @@ export function Configurator() {
   const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
   const [pageType, setPageType] = useState<PageType>("blank");
 
+  // laser state
+  const [laserProduct, setLaserProduct] = useState<LaserProductId | null>(null);
+  const [engraveIntensity, setEngraveIntensity] = useState(55); // 0-100 threshold
+  const [engraveMode, setEngraveMode] = useState<"outline" | "original">("outline");
+
   // image toolbox
   const [scale, setScale] = useState(100);       // 30-250%
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
@@ -362,9 +367,11 @@ export function Configurator() {
 
   const fileRef = useRef<HTMLInputElement>(null);
   const isNotebook = category === "libretas";
+  const isLaser = category === "laser";
   const materialData = materials.find((m) => m.id === material);
   const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
   const notebookSizeData = notebookSizes[notebookSizeIdx];
+  const laserProductData = laserProducts.find((p) => p.id === laserProduct);
   const shapeData = shapes.find((s) => s.id === shape)!;
 
   const bulkFactor = useMemo(() => {
