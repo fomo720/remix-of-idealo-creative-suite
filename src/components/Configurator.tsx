@@ -24,6 +24,10 @@ import hangtagSticker from "@/assets/hangtag-sticker.jpg.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
+import cadenaFotoMadera from "@/assets/cadena-foto-madera.jpg.asset.json";
+import cadenaBarra from "@/assets/cadena-barra.jpg.asset.json";
+import cadenaCandado from "@/assets/cadena-candado.jpg.asset.json";
+import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
