@@ -459,6 +459,8 @@ export function Configurator() {
 
   // laser state
   const [laserProduct, setLaserProduct] = useState<LaserProductId | null>(null);
+  const [laserVariantId, setLaserVariantId] = useState<string | null>(null);
+  const [laserColorIdx, setLaserColorIdx] = useState(0);
   const [engraveIntensity, setEngraveIntensity] = useState(55); // 0-100 threshold
   const [engraveMode, setEngraveMode] = useState<"outline" | "original">("outline");
 
