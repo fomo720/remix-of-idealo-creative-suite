@@ -343,8 +343,11 @@ const laserProducts: LaserProduct[] = [
       { id: "owala-slider", name: "Owala SmoothSip® Slider", desc: "Anti-derrame · frío o caliente", priceDelta: 90, colors: [
         { name: "Rosado", hex: "#e6a3b8" }, { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
       ]},
-      { id: "owala-freesip", name: "Owala FreeSip®", desc: "Award winning · 24 h frío", priceDelta: 110, colors: [
-        { name: "Rosado", hex: "#e6a3b8" }, { name: "Azul", hex: "#2b4d8e" }, { name: "Negro", hex: "#111111" },
+      { id: "owala-freesip", name: "Owala FreeSip® 24 oz", desc: "710 ml · Award winning · anti-derrame · 24 h frío",
+        priceDelta: 110, image: owalaFreesipBlue.url, colors: [
+        { name: "Azul Hydrangea", hex: "#8ba6dc", image: owalaFreesipBlue.url },
+        { name: "Rosado Sandía", hex: "#eaa8b3", image: owalaFreesipPink.url },
+        { name: "Verde Bosque", hex: "#3a4a3f", image: owalaFreesipDark.url },
       ]},
     ],
   },
