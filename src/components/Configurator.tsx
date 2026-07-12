@@ -318,6 +318,8 @@ const laserProducts: LaserProduct[] = [
   },
 ];
 
+const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
+
 
 
 function currency(n: number) {
