@@ -268,6 +268,14 @@ function pageBackground(type: PageType): React.CSSProperties {
 }
 
 /* ---------- Grabado Láser ---------- */
+type LaserColor = { name: string; hex: string };
+type LaserVariant = {
+  id: string;
+  name: string;
+  desc: string;
+  priceDelta?: number; // added to base
+  colors: LaserColor[];
+};
 type LaserProduct = {
   id: LaserProductId;
   name: string;
@@ -278,6 +286,8 @@ type LaserProduct = {
   price: number;        // unit price base in Lempiras
   icon: React.ReactNode;
   shape: "board" | "bottle" | "wallet" | "tag" | "glass" | "coconut";
+  variantLabel?: string; // e.g. "Modelo", "Estilo"
+  variants?: LaserVariant[];
 };
 
 const laserProducts: LaserProduct[] = [
@@ -285,36 +295,132 @@ const laserProducts: LaserProduct[] = [
     id: "tabla", name: "Tabla de Cortar", desc: "Madera de bambú prensada", hint: "Regalos de cocina y bodas",
     surface: "linear-gradient(135deg,#d9a869,#b8823f)", engrave: "#3a2110", price: 380,
     icon: <Square className="h-8 w-8" />, shape: "board",
+    variantLabel: "Estilo de tabla",
+    variants: [
+      { id: "rect-grande", name: "Rectangular Grande", desc: "38 × 25 cm · bambú prensado", colors: [
+        { name: "Bambú natural", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "rect-manija", name: "Con Manija (Paleta)", desc: "40 × 20 cm · agarre lateral", colors: [
+        { name: "Bambú natural", hex: "#c99560" }, { name: "Cerezo", hex: "#8a4a2a" },
+      ]},
+      { id: "redonda", name: "Redonda de Quesos", desc: "Ø 28 cm · borde biselado", colors: [
+        { name: "Bambú natural", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "picnic", name: "Set Picnic (larga)", desc: "45 × 18 cm · para tablas de embutidos", priceDelta: 60, colors: [
+        { name: "Bambú natural", hex: "#c99560" },
+      ]},
+    ],
   },
   {
     id: "botella", name: "Botella Metálica", desc: "Estilo Yeti · Owala · Stanley", hint: "Corporativo y deportivo",
     surface: "linear-gradient(135deg,#3a3a3a,#1c1c1c)", engrave: "#e8ecef", price: 450,
     icon: <Coffee className="h-8 w-8" />, shape: "bottle",
+    variantLabel: "Modelo",
+    variants: [
+      { id: "yeti-stack-16", name: "Yeti Rambler® Apilable 16 oz", desc: "473 ml · para café y cerveza", colors: [
+        { name: "Negro", hex: "#111111" }, { name: "Rojo", hex: "#c8352b" },
+        { name: "Amarillo", hex: "#f0c419" }, { name: "Azul", hex: "#2b4d8e" }, { name: "Blanco", hex: "#f2f2f2" },
+      ]},
+      { id: "yeti-jr-10", name: "Yeti Rambler® Jr. 10 oz", desc: "Para niños · irrompible", priceDelta: -60, colors: [
+        { name: "Verde", hex: "#3e6b3a" }, { name: "Amarillo", hex: "#f0c419" },
+        { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "yeti-straw-42", name: "Yeti Rambler® 42 oz c/sorbete", desc: "1.2 L · caja/deportivo", priceDelta: 180, colors: [
+        { name: "Amarillo", hex: "#f0c419" }, { name: "Naranja", hex: "#e07a29" }, { name: "Verde", hex: "#3e6b3a" },
+      ]},
+      { id: "yeti-30", name: "Yeti Rambler® 30 oz", desc: "887 ml · viajes y oficina", priceDelta: 120, colors: [
+        { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" }, { name: "Verde", hex: "#3e6b3a" },
+      ]},
+      { id: "owala-slider", name: "Owala SmoothSip® Slider", desc: "Anti-derrame · frío o caliente", priceDelta: 90, colors: [
+        { name: "Rosado", hex: "#e6a3b8" }, { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "owala-freesip", name: "Owala FreeSip®", desc: "Award winning · 24 h frío", priceDelta: 110, colors: [
+        { name: "Rosado", hex: "#e6a3b8" }, { name: "Azul", hex: "#2b4d8e" }, { name: "Negro", hex: "#111111" },
+      ]},
+    ],
   },
   {
     id: "cartera", name: "Cartera de Cuero (Varón)", desc: "Piel legítima curtida", hint: "Iniciales y logos",
     surface: "linear-gradient(135deg,#4a2c1a,#2d180c)", engrave: "#0f0803", price: 520,
     icon: <Wallet className="h-8 w-8" />, shape: "wallet",
+    variantLabel: "Tipo de cartera",
+    variants: [
+      { id: "bifold", name: "Bifold Clásica", desc: "Doble pliegue · 8 tarjetas", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" }, { name: "Miel", hex: "#8a5a2a" },
+      ]},
+      { id: "trifold", name: "Trifold", desc: "Triple pliegue · más espacio", priceDelta: 40, colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "cardholder", name: "Tarjetero Slim", desc: "Ultra delgado · 6 tarjetas", priceDelta: -80, colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" }, { name: "Cognac", hex: "#7a4a26" },
+      ]},
+    ],
   },
   {
     id: "llavero-cuero", name: "Llavero de Cuero", desc: "Piel natural", hint: "Merch y detalles",
     surface: "linear-gradient(135deg,#7a4a26,#4d2c14)", engrave: "#1a0d05", price: 120,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+    variantLabel: "Forma",
+    variants: [
+      { id: "rect", name: "Rectangular", desc: "Clásico · 7 × 3 cm", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" }, { name: "Miel", hex: "#8a5a2a" },
+      ]},
+      { id: "redondo", name: "Redondo", desc: "Ø 4 cm · logos centrados", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "hueso", name: "Hueso (Mascotas)", desc: "Para placas de perros/gatos", colors: [
+        { name: "Café", hex: "#5a3720" }, { name: "Rojo", hex: "#8b2a24" },
+      ]},
+      { id: "corazon", name: "Corazón", desc: "Regalos y parejas", colors: [
+        { name: "Rojo", hex: "#8b2a24" }, { name: "Rosado", hex: "#c68796" },
+      ]},
+    ],
   },
   {
     id: "llavero-madera", name: "Llavero de Madera", desc: "Madera clara pulida", hint: "Souvenirs y eventos",
     surface: "linear-gradient(135deg,#c99560,#a1703b)", engrave: "#3a2110", price: 90,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+    variantLabel: "Forma",
+    variants: [
+      { id: "circulo", name: "Círculo", desc: "Ø 4 cm · logos", colors: [
+        { name: "Bambú", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "rect", name: "Rectangular", desc: "7 × 3 cm · nombres", colors: [
+        { name: "Bambú", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+      { id: "casa", name: "Casita", desc: "Bienvenida y bienes raíces", colors: [
+        { name: "Bambú", hex: "#c99560" },
+      ]},
+      { id: "estrella", name: "Estrella", desc: "Eventos y premios", colors: [
+        { name: "Bambú", hex: "#c99560" }, { name: "Nogal", hex: "#5a3720" },
+      ]},
+    ],
   },
   {
     id: "vaso", name: "Vaso de Vidrio", desc: "Vidrio templado transparente", hint: "Restaurantes y bares",
     surface: "linear-gradient(135deg,#e8f2f7,#c4d8e2)", engrave: "#4d6a75", price: 180,
     icon: <Wine className="h-8 w-8" />, shape: "glass",
+    variantLabel: "Tipo de vaso",
+    variants: [
+      { id: "highball", name: "Highball 12 oz", desc: "Tragos largos · agua/refrescos", colors: [
+        { name: "Cristal", hex: "#e8f2f7" },
+      ]},
+      { id: "whiskey", name: "Whiskey / Old Fashioned", desc: "10 oz · base gruesa", priceDelta: 30, colors: [
+        { name: "Cristal", hex: "#e8f2f7" }, { name: "Ámbar", hex: "#d6a95a" },
+      ]},
+      { id: "pinta", name: "Pinta de Cerveza 16 oz", desc: "Clásico bar", priceDelta: 20, colors: [
+        { name: "Cristal", hex: "#e8f2f7" },
+      ]},
+      { id: "vino", name: "Copa de Vino", desc: "Tallada · 12 oz", priceDelta: 60, colors: [
+        { name: "Cristal", hex: "#e8f2f7" },
+      ]},
+    ],
   },
   {
     id: "coco", name: "Coco (Fruta Natural)", desc: "Grabamos la cáscara del coco", hint: "Eventos tropicales · bodas playa",
     surface: "linear-gradient(135deg,#5a3720,#2f1c0e)", engrave: "#120a04", price: 65,
     icon: <TreePalm className="h-8 w-8" />, shape: "coconut",
+    // coco es coco — sin variantes
   },
 ];
 
@@ -353,6 +459,8 @@ export function Configurator() {
 
   // laser state
   const [laserProduct, setLaserProduct] = useState<LaserProductId | null>(null);
+  const [laserVariantId, setLaserVariantId] = useState<string | null>(null);
+  const [laserColorIdx, setLaserColorIdx] = useState(0);
   const [engraveIntensity, setEngraveIntensity] = useState(55); // 0-100 threshold
   const [engraveMode, setEngraveMode] = useState<"outline" | "original">("outline");
 
@@ -372,6 +480,10 @@ export function Configurator() {
   const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
   const notebookSizeData = notebookSizes[notebookSizeIdx];
   const laserProductData = laserProducts.find((p) => p.id === laserProduct);
+  const laserHasVariants = !!laserProductData?.variants?.length;
+  const laserVariantData = laserProductData?.variants?.find((v) => v.id === laserVariantId);
+  const laserColor = laserVariantData?.colors[Math.min(laserColorIdx, laserVariantData.colors.length - 1)];
+  const laserDesignStep = laserHasVariants ? 4 : 3;
   const shapeData = shapes.find((s) => s.id === shape)!;
 
   const bulkFactor = useMemo(() => {
@@ -385,7 +497,7 @@ export function Configurator() {
 
   const price = useMemo(() => {
     if (isLaser) {
-      const base = laserProductData?.price ?? 200;
+      const base = (laserProductData?.price ?? 200) + (laserVariantData?.priceDelta ?? 0);
       // gentle bulk curve for engraving
       const lBulk = qty >= 100 ? 0.75 : qty >= 50 ? 0.85 : qty >= 25 ? 0.92 : 1;
       return Math.round(base * qty * lBulk);
@@ -406,7 +518,7 @@ export function Configurator() {
     const area = Math.max(1, (w * h) / 4);
     const factor = materialData?.priceFactor ?? 1;
     return Math.round(base * area * factor * bulkFactor * qty);
-  }, [isLaser, laserProductData, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
+  }, [isLaser, laserProductData, laserVariantData, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => setStep(s);
 
@@ -460,7 +572,9 @@ export function Configurator() {
           onGo={goTo}
           labels={
             isLaser
-              ? ["Categoría", "Producto", "Diseño"]
+              ? laserHasVariants
+                ? ["Categoría", "Producto", laserProductData?.variantLabel ?? "Modelo", "Diseño"]
+                : ["Categoría", "Producto", "Diseño"]
               : isNotebook
               ? ["Categoría", "Estilo", "Material", "Diseño"]
               : ["Categoría", "Forma", "Material", "Diseño"]
@@ -557,7 +671,13 @@ export function Configurator() {
                     key={p.id}
                     product={p}
                     active={laserProduct === p.id}
-                    onClick={() => setLaserProduct(p.id)}
+                    onClick={() => {
+                      setLaserProduct(p.id);
+                      // reset variant selection when the product changes
+                      const first = p.variants?.[0]?.id ?? null;
+                      setLaserVariantId(first);
+                      setLaserColorIdx(0);
+                    }}
                   />
                 ))}
               </div>
@@ -568,9 +688,92 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 3 && isLaser && (
+          {/* Laser step 3: variant / color picker (only when the product has variants) */}
+          {step === 3 && isLaser && laserHasVariants && laserProductData && (
+            <div className="animate-step-in">
+              <SectionTitle
+                icon={<Package className="h-5 w-5" />}
+                title={`${laserProductData.variantLabel ?? "Modelo"} para ${laserProductData.name}`}
+              />
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {laserProductData.variants!.map((v) => {
+                  const active = laserVariantId === v.id;
+                  return (
+                    <button
+                      key={v.id}
+                      onClick={() => { setLaserVariantId(v.id); setLaserColorIdx(0); }}
+                      className={cn(
+                        "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
+                        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h4 className="text-sm font-bold leading-tight">{v.name}</h4>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{v.desc}</p>
+                        </div>
+                        {active && (
+                          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-orange)" }}>
+                            <Check className="h-3.5 w-3.5" />
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                        {v.colors.map((c) => (
+                          <span
+                            key={c.name}
+                            title={c.name}
+                            className="h-5 w-5 rounded-full border border-border shadow-sm"
+                            style={{ background: c.hex }}
+                          />
+                        ))}
+                        <span className="ml-1 text-[10px] text-muted-foreground">{v.colors.length} color{v.colors.length === 1 ? "" : "es"}</span>
+                      </div>
+                      {typeof v.priceDelta === "number" && v.priceDelta !== 0 && (
+                        <span className="mt-1 text-[11px] font-semibold" style={{ color: "var(--brand-orange)" }}>
+                          {v.priceDelta > 0 ? "+" : ""}{currency(v.priceDelta)} por unidad
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Color chooser for the selected variant */}
+              {laserVariantData && laserVariantData.colors.length > 1 && (
+                <div className="mt-6 rounded-2xl border border-border bg-gradient-soft p-4">
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Color base — {laserVariantData.name}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {laserVariantData.colors.map((c, i) => {
+                      const on = laserColorIdx === i;
+                      return (
+                        <button
+                          key={c.name}
+                          onClick={() => setLaserColorIdx(i)}
+                          className={cn(
+                            "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-xs transition",
+                            on ? "border-foreground bg-background" : "border-border bg-background/60 hover:border-foreground/40",
+                          )}
+                        >
+                          <span className="h-4 w-4 rounded-full border border-black/10" style={{ background: c.hex }} />
+                          <span className={cn("font-medium", on ? "text-foreground" : "text-muted-foreground")}>{c.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              <NavRow onBack={() => goTo(2)} onNext={laserVariantId ? () => goTo(4) : undefined} />
+            </div>
+          )}
+
+          {step === laserDesignStep && isLaser && laserProductData && (
             <LaserDesigner
-              product={laserProductData!}
+              product={laserProductData}
+              variant={laserVariantData}
+              color={laserColor}
               uploaded={uploaded}
               preset={preset}
               onFile={handleFile}
@@ -594,7 +797,7 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               duplicated={duplicated}
               setDuplicated={setDuplicated}
-              onBack={() => goTo(2)}
+              onBack={() => goTo(laserDesignStep - 1)}
             />
           )}
 
@@ -2436,13 +2639,15 @@ function useEngraveBitmap(url: string | null, engraveColor: string, intensity: n
 }
 
 function LaserDesigner({
-  product, uploaded, preset, onFile, onPreset, onClear, fileRef,
+  product, variant, color, uploaded, preset, onFile, onPreset, onClear, fileRef,
   qty, setQty, notes, setNotes, price,
   engraveIntensity, setEngraveIntensity, engraveMode, setEngraveMode,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   duplicated, setDuplicated, onBack,
 }: {
   product: LaserProduct;
+  variant?: LaserVariant;
+  color?: LaserColor;
   uploaded: string | null; preset: string | null;
   onFile: (f: File | null) => void; onPreset: (p: string) => void; onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
@@ -2477,7 +2682,18 @@ function LaserDesigner({
             <div>
               <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Producto seleccionado</div>
               <div className="font-bold leading-tight">{product.name}</div>
-              <p className="mt-1 text-xs text-muted-foreground">{product.desc}</p>
+              {variant && (
+                <div className="mt-1 text-xs">
+                  <span className="font-semibold text-foreground">{variant.name}</span>
+                  {color && (
+                    <span className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] text-muted-foreground">
+                      <span className="h-3 w-3 rounded-full border border-black/10" style={{ background: color.hex }} />
+                      {color.name}
+                    </span>
+                  )}
+                </div>
+              )}
+              <p className="mt-1 text-xs text-muted-foreground">{variant?.desc ?? product.desc}</p>
             </div>
           </div>
         </div>
