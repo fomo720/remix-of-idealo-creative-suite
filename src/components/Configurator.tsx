@@ -528,7 +528,7 @@ export function Configurator() {
                   />
 
 
-                  <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+                  <div className="mt-10 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
                     <Stat label="Precio estimado" value={currency(price)} highlight />
@@ -856,7 +856,7 @@ function InteractiveCanvas({
       )}
 
       {/* Legend */}
-      <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 translate-y-full items-center gap-3 rounded-full border border-border bg-card/90 px-3 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
+      <div className="pointer-events-none absolute -bottom-3 left-1/2 z-10 flex -translate-x-1/2 translate-y-full items-center gap-3 whitespace-nowrap rounded-full border border-border bg-card/95 px-2.5 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
         <span className="inline-flex items-center gap-1">
           <span className="inline-block h-2 w-4 rounded-sm" style={{ background: "#22c55e" }} />
           Corte
