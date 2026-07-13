@@ -17,13 +17,10 @@ export function Navbar() {
         <Link to="/" className="flex items-center" aria-label="Idealo">
           <img src={logo.url} alt="Idealo · Nosotros lo creamos" className="h-10 w-auto sm:h-12" />
         </Link>
-        <a href="#" className="hidden" aria-hidden="true" tabIndex={-1}>
-          <img src={logo.url} alt="Idealo · Nosotros lo creamos" className="h-10 w-auto sm:h-12" />
-        </a>
 
         <nav className="hidden items-center gap-7 md:flex">
           {links.map((l) => {
-            const isPrimary = l.href === "#personalizar";
+            const isPrimary = l.href === "/#personalizar";
             return (
               <a
                 key={l.href}
