@@ -32,6 +32,7 @@ import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
 import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
 import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
+import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
