@@ -143,7 +143,7 @@ function ProductoDesigner() {
     `Producto: ${prod.title}`,
     `Tamaño: ${size.label} (${size.dim})`,
     `Estilo: ${style}`,
-    ...(prod.askText ?? []).map((f, i) => `${f.label}: ${text[i] || "-"}`),
+    ...(prod.askText ?? []).map((f: {label:string;placeholder:string}, i: number) => `${f.label}: ${text[i] || "-"}`),
   ].join("\n");
 
   const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`);
