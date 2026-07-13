@@ -3285,6 +3285,7 @@ function StickersQuickInfo() {
           </div>
         ))}
       </div>
+      </div>
     </div>
   );
 }
