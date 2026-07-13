@@ -33,7 +33,9 @@ import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
 import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
 import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
-import carteraVenado from "@/assets/cartera-venado.jpg.asset.json";
+import carteraVenado from "@/assets/cartera-venado-v2.jpg.asset.json";
+import llaveroDavid from "@/assets/llavero-david.jpg.asset.json";
+import tablaSalmo from "@/assets/tabla-salmo.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -307,6 +309,7 @@ const laserProducts: LaserProduct[] = [
     id: "tabla", name: "Tabla de Cortar", desc: "Madera de bambú prensada", hint: "Regalos de cocina y bodas",
     surface: "linear-gradient(135deg,#d9a869,#b8823f)", engrave: "#3a2110", price: 380,
     icon: <Square className="h-8 w-8" />, shape: "board",
+    heroImage: tablaSalmo.url,
     variantLabel: "Estilo de tabla",
     variants: [
       { id: "rect-grande", name: "Rectangular Grande", desc: "38 × 25 cm · bambú prensado", colors: [
@@ -377,6 +380,7 @@ const laserProducts: LaserProduct[] = [
     id: "llavero-cuero", name: "Llavero de Cuero", desc: "Piel natural", hint: "Merch y detalles",
     surface: "linear-gradient(135deg,#7a4a26,#4d2c14)", engrave: "#1a0d05", price: 120,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+    heroImage: llaveroDavid.url,
     variantLabel: "Forma",
     variants: [
       { id: "rect", name: "Rectangular", desc: "Clásico · 7 × 3 cm", colors: [
@@ -2641,7 +2645,7 @@ function LaserProductCard({
     >
       <div className="relative h-40 w-full overflow-hidden" style={{ background: product.surface }}>
         {product.heroImage ? (
-          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-contain object-center p-2" />
         ) : (
           <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
             backgroundImage:
