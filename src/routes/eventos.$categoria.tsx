@@ -65,7 +65,8 @@ const CATEGORIAS: Record<string, Categoria> = {
 };
 
 function CategoriaPage() {
-  const { cat, slug } = Route.useLoaderData();
+  const { slug } = Route.useLoaderData();
+  const cat = CATEGORIAS[slug]!;
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-pink-50 via-orange-50 to-rose-50" />
