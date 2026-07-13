@@ -2643,9 +2643,9 @@ function LaserProductCard({
         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
       )}
     >
-      <div className="relative h-40 w-full overflow-hidden" style={{ background: product.surface }}>
+      <div className="relative h-56 w-full overflow-hidden" style={{ background: product.heroImage ? "#f5f5f5" : product.surface }}>
         {product.heroImage ? (
-          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-contain object-center p-2" />
+          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
         ) : (
           <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
             backgroundImage:
