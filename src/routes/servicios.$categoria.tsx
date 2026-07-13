@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, MessageCircle } from "lucide-react";
-import { findCategory, whatsappLink } from "@/data/catalog";
+import { findCategory, whatsappLink, type Category } from "@/data/catalog";
 import { colorVar, colorSoftBg } from "@/lib/category-colors";
 
 export const Route = createFileRoute("/servicios/$categoria")({
