@@ -33,6 +33,7 @@ import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
 import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
 import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
+import carteraVenado from "@/assets/cartera-venado.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -326,6 +327,7 @@ const laserProducts: LaserProduct[] = [
     id: "botella", name: "Botella Metálica", desc: "Estilo Yeti · Owala · Stanley", hint: "Corporativo y deportivo",
     surface: "linear-gradient(135deg,#3a3a3a,#1c1c1c)", engrave: "#e8ecef", price: 450,
     icon: <Coffee className="h-8 w-8" />, shape: "bottle",
+    heroImage: yetiMoto.url,
     variantLabel: "Modelo",
     variants: [
       { id: "yeti-stack-16", name: "Yeti Rambler® Apilable 16 oz", desc: "473 ml · para café y cerveza", colors: [
@@ -335,11 +337,6 @@ const laserProducts: LaserProduct[] = [
       { id: "yeti-jr-10", name: "Yeti Rambler® Jr. 10 oz", desc: "Para niños · irrompible", priceDelta: -60, colors: [
         { name: "Verde", hex: "#3e6b3a" }, { name: "Amarillo", hex: "#f0c419" },
         { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
-      ]},
-      { id: "yeti-lowball-10", name: "Yeti Rambler® Lowball 10 oz", desc: "295 ml · whisky, café o postre · grabado láser en acero",
-        priceDelta: 40, image: yetiMoto.url, colors: [
-        { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
-        { name: "Acero", hex: "#c8ccd1" }, { name: "Verde Bosque", hex: "#3e6b3a" },
       ]},
       { id: "yeti-straw-42", name: "Yeti Rambler® 42 oz c/sorbete", desc: "1.2 L · caja/deportivo", priceDelta: 180, colors: [
         { name: "Amarillo", hex: "#f0c419" }, { name: "Naranja", hex: "#e07a29" }, { name: "Verde", hex: "#3e6b3a" },
@@ -362,6 +359,7 @@ const laserProducts: LaserProduct[] = [
     id: "cartera", name: "Cartera de Cuero (Varón)", desc: "Piel legítima curtida", hint: "Iniciales y logos",
     surface: "linear-gradient(135deg,#4a2c1a,#2d180c)", engrave: "#0f0803", price: 520,
     icon: <Wallet className="h-8 w-8" />, shape: "wallet",
+    heroImage: carteraVenado.url,
     variantLabel: "Tipo de cartera",
     variants: [
       { id: "bifold", name: "Bifold Clásica", desc: "Doble pliegue · 8 tarjetas", colors: [
