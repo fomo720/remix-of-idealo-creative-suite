@@ -124,6 +124,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Etiquetas para Botellas",
     desc: "Etiquetas adhesivas para agua, vino o licores.",
     emoji: "🍾",
+    hero: etiquetaHero.url,
+
     sizes: [
       { label: "Agua 600ml", dim: "18 × 6 cm" },
       { label: "Vino", dim: "10 × 8 cm" },
