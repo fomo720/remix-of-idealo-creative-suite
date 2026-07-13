@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Upload, MessageCircle, Check } from "lucide-react";
+import pvcHero from "@/assets/evt-pvc-jessie.jpg.asset.json";
+import etiquetaHero from "@/assets/evt-etiqueta-botella.jpg.asset.json";
+import menuHero from "@/assets/evt-menu.jpg.asset.json";
+import mesaHero from "@/assets/evt-mesa.jpg.asset.json";
+import cajitaHero from "@/assets/evt-cajita.jpg.asset.json";
+import bannerHero from "@/assets/evt-banner.jpg.asset.json";
+
 
 export const Route = createFileRoute("/eventos/$categoria/$producto")({
   loader: ({ params }) => {
