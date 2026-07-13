@@ -359,6 +359,7 @@ const laserProducts: LaserProduct[] = [
     id: "cartera", name: "Cartera de Cuero (Varón)", desc: "Piel legítima curtida", hint: "Iniciales y logos",
     surface: "linear-gradient(135deg,#4a2c1a,#2d180c)", engrave: "#0f0803", price: 520,
     icon: <Wallet className="h-8 w-8" />, shape: "wallet",
+    heroImage: carteraVenado.url,
     variantLabel: "Tipo de cartera",
     variants: [
       { id: "bifold", name: "Bifold Clásica", desc: "Doble pliegue · 8 tarjetas", colors: [
