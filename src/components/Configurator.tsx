@@ -1284,7 +1284,11 @@ export function Configurator() {
                 <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
                   Añadir a la orden / Solicitar Cotización Profesional
                 </button>
+
+                <StickersQuickInfo />
+
                 <NavRow onBack={() => goTo(3)} />
+
               </div>
             </div>
           )}
