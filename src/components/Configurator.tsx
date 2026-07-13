@@ -34,7 +34,9 @@ import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
 import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
 import carteraVenado from "@/assets/cartera-venado-v2.jpg.asset.json";
-import llaveroDavid from "@/assets/llavero-david.jpg.asset.json";
+import llaveroDavid from "@/assets/llavero-cuero-oval.jpg.asset.json";
+import llaveroMadera from "@/assets/llavero-madera-cali.jpg.asset.json";
+import vasoAves from "@/assets/vaso-aves.jpg.asset.json";
 import tablaSalmo from "@/assets/tabla-salmo.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
@@ -400,6 +402,7 @@ const laserProducts: LaserProduct[] = [
   {
     id: "llavero-madera", name: "Llavero de Madera", desc: "Madera clara pulida", hint: "Souvenirs y eventos",
     surface: "linear-gradient(135deg,#c99560,#a1703b)", engrave: "#3a2110", price: 90,
+    heroImage: llaveroMadera.url,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
     variantLabel: "Forma",
     variants: [
@@ -420,6 +423,7 @@ const laserProducts: LaserProduct[] = [
   {
     id: "vaso", name: "Vaso de Vidrio", desc: "Vidrio templado transparente", hint: "Restaurantes y bares",
     surface: "linear-gradient(135deg,#e8f2f7,#c4d8e2)", engrave: "#4d6a75", price: 180,
+    heroImage: vasoAves.url,
     icon: <Wine className="h-8 w-8" />, shape: "glass",
     variantLabel: "Tipo de vaso",
     variants: [
