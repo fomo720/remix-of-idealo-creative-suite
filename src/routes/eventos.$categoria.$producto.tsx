@@ -50,6 +50,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "PVC de Bienvenida",
     desc: "Letrero rígido con el nombre del cumpleañero y frase de bienvenida.",
     emoji: "🎉",
+    hero: pvcHero.url,
+
     sizes: [
       { label: "Pequeño", dim: "40 × 60 cm", note: "Para mesa de entrada" },
       { label: "Mediano", dim: "60 × 90 cm", note: "El más popular" },
