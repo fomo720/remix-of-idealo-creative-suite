@@ -990,6 +990,7 @@ export function Configurator() {
           )}
 
           {step === 4 && !isNotebook && !isLaser && (
+            <>
             <div className="animate-step-in grid gap-8 lg:grid-cols-2">
               {/* LEFT: Configurator */}
               <div className="space-y-6">
