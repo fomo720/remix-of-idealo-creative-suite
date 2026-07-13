@@ -68,6 +68,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Banner Parador",
     desc: "Backdrop vertical de gran formato para foto y bienvenida.",
     emoji: "🚩",
+    hero: bannerHero.url,
+
     sizes: [
       { label: "1.5 × 2 m", dim: "150 × 200 cm" },
       { label: "2 × 2.5 m", dim: "200 × 250 cm", note: "El más pedido" },
