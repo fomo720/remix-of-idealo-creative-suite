@@ -423,6 +423,7 @@ const laserProducts: LaserProduct[] = [
   {
     id: "vaso", name: "Vaso de Vidrio", desc: "Vidrio templado transparente", hint: "Restaurantes y bares",
     surface: "linear-gradient(135deg,#e8f2f7,#c4d8e2)", engrave: "#4d6a75", price: 180,
+    heroImage: vasoAves.url,
     icon: <Wine className="h-8 w-8" />, shape: "glass",
     variantLabel: "Tipo de vaso",
     variants: [
