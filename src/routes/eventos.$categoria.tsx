@@ -97,7 +97,7 @@ function CategoriaPage() {
         <p className="mt-1 text-sm text-muted-foreground">Elegí uno para personalizar tamaño, estilo y diseño.</p>
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cat.productos.map((p) => (
+          {cat.productos.map((p: Producto) => (
             <Link
               key={p.slug}
               to="/eventos/$categoria/$producto"
