@@ -32,6 +32,7 @@ import cadenaPlaca from "@/assets/cadena-placa.jpg.asset.json";
 import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
 import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
+import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -334,6 +335,11 @@ const laserProducts: LaserProduct[] = [
       { id: "yeti-jr-10", name: "Yeti Rambler® Jr. 10 oz", desc: "Para niños · irrompible", priceDelta: -60, colors: [
         { name: "Verde", hex: "#3e6b3a" }, { name: "Amarillo", hex: "#f0c419" },
         { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
+      ]},
+      { id: "yeti-lowball-10", name: "Yeti Rambler® Lowball 10 oz", desc: "295 ml · whisky, café o postre · grabado láser en acero",
+        priceDelta: 40, image: yetiMoto.url, colors: [
+        { name: "Blanco", hex: "#f2f2f2" }, { name: "Negro", hex: "#111111" },
+        { name: "Acero", hex: "#c8ccd1" }, { name: "Verde Bosque", hex: "#3e6b3a" },
       ]},
       { id: "yeti-straw-42", name: "Yeti Rambler® 42 oz c/sorbete", desc: "1.2 L · caja/deportivo", priceDelta: 180, colors: [
         { name: "Amarillo", hex: "#f0c419" }, { name: "Naranja", hex: "#e07a29" }, { name: "Verde", hex: "#3e6b3a" },
