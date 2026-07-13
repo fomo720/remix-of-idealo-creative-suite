@@ -110,6 +110,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Cajitas",
     desc: "Cajitas para dulces, sorpresas o regalos temáticos.",
     emoji: "🎁",
+    hero: cajitaHero.url,
+
     sizes: [
       { label: "Chica", dim: "8 × 8 × 8 cm" },
       { label: "Mediana", dim: "12 × 12 × 12 cm" },
