@@ -7,6 +7,7 @@ import {
   HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
+  FileCheck2, Printer, Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1283,7 +1284,11 @@ export function Configurator() {
                 <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
                   Añadir a la orden / Solicitar Cotización Profesional
                 </button>
+
+                <StickersQuickInfo />
+
                 <NavRow onBack={() => goTo(3)} />
+
               </div>
             </div>
           )}
@@ -3204,3 +3209,70 @@ function LaserDesigner({
     </div>
   );
 }
+
+/* ---------- Stickers Quick Info (proceso 1-2-3) ---------- */
+function StickersQuickInfo() {
+  const steps = [
+    {
+      icon: FileCheck2,
+      title: "APROBÁ TU PRUEBA",
+      desc: "Solicitá y recibí una prueba digital de tu sticker en 1 a 3 días.",
+    },
+    {
+      icon: Printer,
+      title: "PROCESO DE IMPRESIÓN",
+      desc: "Una vez aprobada la prueba, la mayoría de órdenes se envían en 24 horas.",
+    },
+    {
+      icon: Truck,
+      title: "¡EN CAMINO!",
+      desc: "Recibí tu pedido en 3 a 5 días, o en 1 a 2 días con envío exprés.",
+    },
+  ];
+
+  return (
+    <div className="mt-10">
+      <div className="text-center">
+        <h3 className="text-2xl font-black tracking-tight sm:text-3xl">
+          Recibí tus Stickers Rápido
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Entrega en 24 horas y opciones de envío exprés.
+        </p>
+      </div>
+
+      <div className="relative mt-8 grid gap-6 sm:grid-cols-3">
+        {steps.map((s, i) => (
+          <div key={s.title} className="relative">
+            <div className="flex h-full flex-col items-center rounded-2xl border-[3px] border-black bg-yellow-400 p-6 text-center shadow-[6px_6px_0_0_#000]">
+              <s.icon className="h-12 w-12 text-black" strokeWidth={2.25} />
+              <h4 className="mt-4 text-base font-black tracking-tight text-black">
+                {s.title}
+              </h4>
+              <p className="mt-3 text-sm font-medium text-black/80">{s.desc}</p>
+            </div>
+            {i < steps.length - 1 && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-full z-10 -translate-x-1/2 translate-y-[-50%] rotate-90 text-red-600 sm:left-full sm:top-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 sm:rotate-0"
+              >
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none">
+                  <path
+                    d="M2 12 Q 20 -4, 38 12"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeDasharray="3 3"
+                    fill="none"
+                  />
+                  <path d="M32 4 L44 12 L32 20 Z" fill="currentColor" />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
