@@ -1,24 +1,26 @@
 import { Menu, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/idealo-logo.png.asset.json";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#personalizar", label: "Personalizar Ahora" },
-    { href: "#empresas", label: "Servicios para Empresas" },
-    { href: "#portafolio", label: "Portafolio" },
+    { href: "/#personalizar", label: "Personalizar Ahora" },
+    { href: "/#empresas", label: "Servicios para Empresas" },
+    { href: "/eventos", label: "Eventos" },
+    { href: "/#portafolio", label: "Portafolio" },
   ];
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <a href="#" className="flex items-center" aria-label="Idealo">
+        <Link to="/" className="flex items-center" aria-label="Idealo">
           <img src={logo.url} alt="Idealo · Nosotros lo creamos" className="h-10 w-auto sm:h-12" />
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
           {links.map((l) => {
-            const isPrimary = l.href === "#personalizar";
+            const isPrimary = l.href === "/#personalizar";
             return (
               <a
                 key={l.href}
