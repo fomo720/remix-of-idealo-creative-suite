@@ -1,76 +1,61 @@
-import { Menu, MessageCircle, X } from "lucide-react";
+import { Menu, MessageCircle } from "lucide-react";
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
 import logo from "@/assets/idealo-logo.png.asset.json";
-import { WHATSAPP_NUMBER } from "@/data/catalog";
-
-const links = [
-  { to: "/", label: "Inicio" },
-  { to: "/servicios", label: "Servicios" },
-  { to: "/eventos", label: "Eventos" },
-  { to: "/portafolio", label: "Portafolio" },
-  { to: "/contacto", label: "Contacto" },
-] as const;
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const links = [
+    { href: "#personalizar", label: "Personalizar Ahora" },
+    { href: "#empresas", label: "Servicios para Empresas" },
+    { href: "#portafolio", label: "Portafolio" },
+  ];
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="flex items-center" aria-label="Idealo">
+        <a href="#" className="flex items-center" aria-label="Idealo">
           <img src={logo.url} alt="Idealo · Nosotros lo creamos" className="h-10 w-auto sm:h-12" />
-        </Link>
+        </a>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
-              activeProps={{ className: "text-foreground font-semibold" }}
-              activeOptions={{ exact: l.to === "/" }}
-            >
-              {l.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-7 md:flex">
+          {links.map((l) => {
+            const isPrimary = l.href === "#personalizar";
+            return (
+              <a
+                key={l.href}
+                href={l.href}
+                className={
+                  isPrimary
+                    ? "rainbow-text-hover text-sm font-medium text-muted-foreground transition"
+                    : "text-sm font-medium text-muted-foreground transition hover:text-foreground"
+                }
+              >
+                {l.label}
+              </a>
+            );
+          })}
         </nav>
-
         <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}`}
+          href="https://wa.me/50400000000"
           target="_blank"
           rel="noreferrer"
           className="hidden items-center gap-2 rounded-full bg-gradient-cta px-4 py-2 text-sm font-semibold text-white shadow-elegant transition hover:scale-105 md:inline-flex"
         >
-          <MessageCircle className="h-4 w-4" /> Cotizar
+          <MessageCircle className="h-4 w-4" /> WhatsApp
         </a>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="rounded-lg border border-border p-2 md:hidden"
-          aria-label="Menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        <button onClick={() => setOpen((v) => !v)} className="rounded-lg border border-border p-2 md:hidden" aria-label="Menu">
+          <Menu className="h-5 w-5" />
         </button>
       </div>
       {open && (
         <div className="border-t border-border bg-background md:hidden">
           <div className="flex flex-col gap-1 px-4 py-3">
             {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted"
-                activeProps={{ className: "bg-muted font-semibold" }}
-                activeOptions={{ exact: l.to === "/" }}
-              >
+              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted">
                 {l.label}
-              </Link>
+              </a>
             ))}
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-4 py-2 text-sm font-semibold text-white"
-            >
-              <MessageCircle className="h-4 w-4" /> Cotizar por WhatsApp
+            <a href="https://wa.me/50400000000" className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-4 py-2 text-sm font-semibold text-white">
+              <MessageCircle className="h-4 w-4" /> Contacto WhatsApp
             </a>
           </div>
         </div>
