@@ -14,7 +14,10 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <a href="#" className="flex items-center" aria-label="Idealo">
+        <Link to="/" className="flex items-center" aria-label="Idealo">
+          <img src={logo.url} alt="Idealo · Nosotros lo creamos" className="h-10 w-auto sm:h-12" />
+        </Link>
+        <a href="#" className="hidden" aria-hidden="true" tabIndex={-1}>
           <img src={logo.url} alt="Idealo · Nosotros lo creamos" className="h-10 w-auto sm:h-12" />
         </a>
 
