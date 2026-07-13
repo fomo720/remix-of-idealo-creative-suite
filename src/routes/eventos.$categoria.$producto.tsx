@@ -7,7 +7,7 @@ import menuHero from "@/assets/evt-menu.jpg.asset.json";
 import mesaHero from "@/assets/evt-mesa.jpg.asset.json";
 import cajitaHero from "@/assets/evt-cajita.jpg.asset.json";
 import bannerHero from "@/assets/evt-banner.jpg.asset.json";
-import tablaHero from "@/assets/evt-tabla-cortar.jpg.asset.json";
+
 
 
 export const Route = createFileRoute("/eventos/$categoria/$producto")({
