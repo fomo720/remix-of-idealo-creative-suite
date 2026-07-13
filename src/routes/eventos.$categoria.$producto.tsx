@@ -149,7 +149,21 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     styles: ["Números grandes", "Con nombre del invitado", "Temático", "Elegante"],
     askText: [{ label: "Cantidad de mesas", placeholder: "Ej: 12" }],
   },
+  "tabla-cortar": {
+    title: "Tabla de Cortar",
+    desc: "Tabla de madera grabada con nombre, iniciales o diseño personalizado.",
+    emoji: "🪵",
+    hero: tablaHero.url,
+    sizes: [
+      { label: "Pequeña", dim: "20 × 15 cm" },
+      { label: "Mediana", dim: "30 × 20 cm", note: "La más pedida" },
+      { label: "Grande", dim: "40 × 25 cm" },
+    ],
+    styles: ["Iniciales grandes", "Nombre con adornos", "Monograma", "Frase personalizada"],
+    askText: [{ label: "Nombre / iniciales", placeholder: "Ej: TELLER" }],
+  },
 };
+
 
 function ProductoDesigner() {
   const { prod, categoria } = Route.useLoaderData();
