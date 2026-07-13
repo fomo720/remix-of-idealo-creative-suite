@@ -7,14 +7,15 @@ export const Route = createFileRoute("/eventos/$categoria")({
   loader: ({ params }) => {
     const cat = CATEGORIAS[params.categoria];
     if (!cat) throw notFound();
-    return { cat, slug: params.categoria };
+    return { slug: params.categoria };
   },
-  head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Evento no encontrado" }, { name: "robots", content: "noindex" }] };
+  head: ({ params }) => {
+    const cat = params ? CATEGORIAS[params.categoria] : undefined;
+    if (!cat) return { meta: [{ title: "Evento no encontrado" }, { name: "robots", content: "noindex" }] };
     return {
       meta: [
-        { title: `${loaderData.cat.title} — Eventos Idealo` },
-        { name: "description", content: loaderData.cat.intro },
+        { title: `${cat.title} — Eventos Idealo` },
+        { name: "description", content: cat.intro },
       ],
     };
   },
@@ -64,7 +65,8 @@ const CATEGORIAS: Record<string, Categoria> = {
 };
 
 function CategoriaPage() {
-  const { cat, slug } = Route.useLoaderData();
+  const { slug } = Route.useLoaderData();
+  const cat = CATEGORIAS[slug]!;
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-pink-50 via-orange-50 to-rose-50" />
