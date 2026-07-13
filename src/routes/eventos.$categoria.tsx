@@ -79,7 +79,7 @@ function CategoriaPage() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div>
             {slug === "cumpleanos" ? (
-              <img src={cumpleLogo.url} alt="" className="h-24 w-auto sm:h-28" />
+              <img src={cumpleLogo.url} alt="" className="h-48 w-auto sm:h-56" />
             ) : (
               <div className="text-6xl">{cat.emoji}</div>
             )}
