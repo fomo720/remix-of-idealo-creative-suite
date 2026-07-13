@@ -91,8 +91,7 @@ function CategoriaPage() {
               <img
                 src={cat.hero}
                 alt={cat.title}
-                className="h-full w-full object-cover"
-                style={{ transform: "scale(2)", transformOrigin: "center" }}
+                className="h-full w-full object-contain"
               />
             </div>
           )}
