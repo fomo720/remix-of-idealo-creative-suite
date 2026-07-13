@@ -7,6 +7,7 @@ import {
   HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
+  FileCheck2, Printer, Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
