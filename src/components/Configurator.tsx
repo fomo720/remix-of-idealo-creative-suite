@@ -380,6 +380,7 @@ const laserProducts: LaserProduct[] = [
     id: "llavero-cuero", name: "Llavero de Cuero", desc: "Piel natural", hint: "Merch y detalles",
     surface: "linear-gradient(135deg,#7a4a26,#4d2c14)", engrave: "#1a0d05", price: 120,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
+    heroImage: llaveroDavid.url,
     variantLabel: "Forma",
     variants: [
       { id: "rect", name: "Rectangular", desc: "Clásico · 7 × 3 cm", colors: [
