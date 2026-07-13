@@ -196,6 +196,13 @@ function ProductoDesigner() {
             <div className="relative mt-4 flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100 via-white to-orange-100">
               {file ? (
                 <img src={file} alt="Diseño" className="max-h-full max-w-full object-contain" />
+              ) : prod.hero ? (
+                <img
+                  src={prod.hero}
+                  alt={prod.title}
+                  className="h-full w-full object-cover"
+                  style={{ transform: "scale(2)", transformOrigin: "center" }}
+                />
               ) : (
                 <div className="text-center">
                   <div className="text-8xl">{prod.emoji}</div>
@@ -206,6 +213,7 @@ function ProductoDesigner() {
                   </p>
                 </div>
               )}
+
             </div>
           </div>
 
