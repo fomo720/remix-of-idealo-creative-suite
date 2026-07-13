@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Upload, MessageCircle, Check } from "lucide-react";
+import pvcHero from "@/assets/evt-pvc-jessie.jpg.asset.json";
+import etiquetaHero from "@/assets/evt-etiqueta-botella.jpg.asset.json";
+import menuHero from "@/assets/evt-menu.jpg.asset.json";
+import mesaHero from "@/assets/evt-mesa.jpg.asset.json";
+import cajitaHero from "@/assets/evt-cajita.jpg.asset.json";
+import bannerHero from "@/assets/evt-banner.jpg.asset.json";
+
 
 export const Route = createFileRoute("/eventos/$categoria/$producto")({
   loader: ({ params }) => {
@@ -31,16 +38,20 @@ type Producto = {
   title: string;
   desc: string;
   emoji: string;
+  hero?: string;
   sizes: SizeOpt[];
   styles: string[];
   askText?: { label: string; placeholder: string }[];
 };
+
 
 const PRODUCT_CONFIG: Record<string, Producto> = {
   "pvc-bienvenida": {
     title: "PVC de Bienvenida",
     desc: "Letrero rígido con el nombre del cumpleañero y frase de bienvenida.",
     emoji: "🎉",
+    hero: pvcHero.url,
+
     sizes: [
       { label: "Pequeño", dim: "40 × 60 cm", note: "Para mesa de entrada" },
       { label: "Mediano", dim: "60 × 90 cm", note: "El más popular" },
@@ -57,6 +68,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Banner Parador",
     desc: "Backdrop vertical de gran formato para foto y bienvenida.",
     emoji: "🚩",
+    hero: bannerHero.url,
+
     sizes: [
       { label: "1.5 × 2 m", dim: "150 × 200 cm" },
       { label: "2 × 2.5 m", dim: "200 × 250 cm", note: "El más pedido" },
@@ -83,6 +96,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Menú",
     desc: "Menú impreso individual para cada invitado.",
     emoji: "📖",
+    hero: menuHero.url,
+
     sizes: [
       { label: "A6", dim: "10.5 × 14.8 cm" },
       { label: "A5", dim: "14.8 × 21 cm", note: "El más común" },
@@ -95,6 +110,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Cajitas",
     desc: "Cajitas para dulces, sorpresas o regalos temáticos.",
     emoji: "🎁",
+    hero: cajitaHero.url,
+
     sizes: [
       { label: "Chica", dim: "8 × 8 × 8 cm" },
       { label: "Mediana", dim: "12 × 12 × 12 cm" },
@@ -107,6 +124,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Etiquetas para Botellas",
     desc: "Etiquetas adhesivas para agua, vino o licores.",
     emoji: "🍾",
+    hero: etiquetaHero.url,
+
     sizes: [
       { label: "Agua 600ml", dim: "18 × 6 cm" },
       { label: "Vino", dim: "10 × 8 cm" },
@@ -119,6 +138,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Número de Mesa",
     desc: "Señalética numerada para identificar cada mesa.",
     emoji: "🔢",
+    hero: mesaHero.url,
+
     sizes: [
       { label: "Tarjeta", dim: "10 × 15 cm", note: "Sobre la mesa" },
       { label: "PVC con base", dim: "15 × 20 cm" },
@@ -175,6 +196,13 @@ function ProductoDesigner() {
             <div className="relative mt-4 flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100 via-white to-orange-100">
               {file ? (
                 <img src={file} alt="Diseño" className="max-h-full max-w-full object-contain" />
+              ) : prod.hero ? (
+                <img
+                  src={prod.hero}
+                  alt={prod.title}
+                  className="h-full w-full object-cover"
+                  style={{ transform: "scale(2)", transformOrigin: "center" }}
+                />
               ) : (
                 <div className="text-center">
                   <div className="text-8xl">{prod.emoji}</div>
@@ -185,6 +213,7 @@ function ProductoDesigner() {
                   </p>
                 </div>
               )}
+
             </div>
           </div>
 
