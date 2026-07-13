@@ -309,6 +309,7 @@ const laserProducts: LaserProduct[] = [
     id: "tabla", name: "Tabla de Cortar", desc: "Madera de bambú prensada", hint: "Regalos de cocina y bodas",
     surface: "linear-gradient(135deg,#d9a869,#b8823f)", engrave: "#3a2110", price: 380,
     icon: <Square className="h-8 w-8" />, shape: "board",
+    heroImage: tablaSalmo.url,
     variantLabel: "Estilo de tabla",
     variants: [
       { id: "rect-grande", name: "Rectangular Grande", desc: "38 × 25 cm · bambú prensado", colors: [
