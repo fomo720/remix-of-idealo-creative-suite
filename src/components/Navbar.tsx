@@ -1,13 +1,15 @@
 import { Menu, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/idealo-logo.png.asset.json";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#personalizar", label: "Personalizar Ahora" },
-    { href: "#empresas", label: "Servicios para Empresas" },
-    { href: "#portafolio", label: "Portafolio" },
+    { href: "/#personalizar", label: "Personalizar Ahora" },
+    { href: "/#empresas", label: "Servicios para Empresas" },
+    { href: "/eventos", label: "Eventos" },
+    { href: "/#portafolio", label: "Portafolio" },
   ];
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
