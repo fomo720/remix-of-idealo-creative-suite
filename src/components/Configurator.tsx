@@ -3236,14 +3236,15 @@ function StickersQuickInfo() {
   ];
 
   return (
-    <div className="mt-10">
+    <div className="mt-20 border-t border-border/60 pt-16">
+      <div className="mx-auto max-w-5xl">
       <div className="text-center">
-        <h3 className="text-2xl font-black tracking-tight sm:text-3xl">
+        <h3 className="text-3xl font-black tracking-tight sm:text-4xl">
           <span className="bg-gradient-cta bg-clip-text text-transparent">
             Recibí tus Stickers Rápido
           </span>
         </h3>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-3 text-base text-muted-foreground">
           Entrega en 24 horas y opciones de envío exprés.
         </p>
       </div>
