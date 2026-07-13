@@ -38,10 +38,12 @@ type Producto = {
   title: string;
   desc: string;
   emoji: string;
+  hero?: string;
   sizes: SizeOpt[];
   styles: string[];
   askText?: { label: string; placeholder: string }[];
 };
+
 
 const PRODUCT_CONFIG: Record<string, Producto> = {
   "pvc-bienvenida": {
