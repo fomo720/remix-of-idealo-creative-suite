@@ -69,9 +69,13 @@ function EventCard({ cat }: { cat: EventCat }) {
   const scaledEmoji = cat.slug === "cumpleanos" ? "text-6xl" : "text-4xl";
   const body = (
     <div className={`group relative flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition ${cat.available ? "hover:-translate-y-1 hover:border-foreground/30 hover:shadow-elegant" : "opacity-90"}`}>
-      <div className={`${scaledEmoji} mb-4 transition ${cat.available ? "group-hover:scale-110" : ""}`} style={{ transformOrigin: "left center" }}>
-        {cat.emoji}
-      </div>
+      {cat.slug === "cumpleanos" ? (
+        <img src={cumpleLogo.url} alt="" className={`mb-4 h-24 w-auto transition ${cat.available ? "group-hover:scale-110" : ""}`} style={{ transformOrigin: "left center" }} />
+      ) : (
+        <div className={`${scaledEmoji} mb-4 transition ${cat.available ? "group-hover:scale-110" : ""}`} style={{ transformOrigin: "left center" }}>
+          {cat.emoji}
+        </div>
+      )}
       <h3 className="text-xl font-bold">{cat.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{cat.desc}</p>
       {cat.available ? (
