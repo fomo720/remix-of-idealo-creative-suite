@@ -1,5 +1,7 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, MessageCircle } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import hondurasFlag from "@/assets/honduras-flag.png.asset.json";
+import { whatsappLink } from "@/data/catalog";
 
 /* Tiny decorative shapes floating around the hero — pure SVG, brand palette */
 type ShapeKind = "cross" | "sparkle" | "dot" | "ring" | "dash" | "diamond";
@@ -123,28 +125,30 @@ export function Hero() {
           </div>
 
           <h1 className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-            Producción gráfica{" "}
-            <span className="text-gradient-rainbow animate-rainbow-shimmer">profesional</span>{" "}
-            para marcas imparables
+            Si podés{" "}
+            <span className="text-gradient-rainbow animate-rainbow-shimmer">imaginarlo</span>,
+            <br className="hidden sm:block" /> nosotros lo creamos.
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Stickers, banners sublimados y soluciones a gran escala para restaurantes y empresas en Honduras.
-            Diseña tu producto ideal en <strong className="text-foreground">3 pasos</strong>.
+            Impresión, stickers, banners, grabado láser, sublimación, textiles, eventos y branding
+            corporativo. Todo <strong className="text-foreground">100% personalizable</strong> en La Ceiba, Honduras.
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href="#personalizar"
+            <Link
+              to="/servicios"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-cta animate-rainbow-shimmer px-7 py-3.5 text-base font-semibold text-white shadow-elegant transition hover:scale-105"
             >
-              Comenzar a Crear <ArrowRight className="h-4 w-4" />
-            </a>
+              Ver todos los servicios <ArrowRight className="h-4 w-4" />
+            </Link>
             <a
-              href="#portafolio"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3.5 text-sm font-semibold transition hover:border-foreground/30"
+              href={whatsappLink("Hola Idealo, quiero cotizar un producto.")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-foreground/10 bg-card px-6 py-3.5 text-sm font-semibold transition hover:border-foreground/30"
             >
-              Ver Portafolio
+              <MessageCircle className="h-4 w-4" /> Cotizar por WhatsApp
             </a>
           </div>
 
