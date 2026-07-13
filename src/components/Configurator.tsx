@@ -34,7 +34,7 @@ import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
 import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
 import carteraVenado from "@/assets/cartera-venado-v2.jpg.asset.json";
-import llaveroDavid from "@/assets/llavero-cuero-oval.jpg.asset.json";
+import llaveroDavid from "@/assets/llavero-cuero-madera.jpg.asset.json";
 import llaveroMadera from "@/assets/llavero-madera-cali.jpg.asset.json";
 import vasoAves from "@/assets/vaso-aves.jpg.asset.json";
 import tablaSalmo from "@/assets/tabla-salmo.jpg.asset.json";
