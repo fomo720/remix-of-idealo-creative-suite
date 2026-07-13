@@ -2645,7 +2645,7 @@ function LaserProductCard({
     >
       <div className="relative h-40 w-full overflow-hidden" style={{ background: product.surface }}>
         {product.heroImage ? (
-          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={product.heroImage} alt="" className="absolute inset-0 h-full w-full object-contain object-center p-2" />
         ) : (
           <div className="absolute inset-0 opacity-25 mix-blend-overlay" style={{
             backgroundImage:
