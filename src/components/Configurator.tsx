@@ -37,7 +37,7 @@ import carteraVenado from "@/assets/cartera-venado-v2.jpg.asset.json";
 import llaveroDavid from "@/assets/llavero-cuero-madera.jpg.asset.json";
 import llaveroMadera from "@/assets/llavero-madera-cali.jpg.asset.json";
 import vasoAves from "@/assets/vaso-aves.jpg.asset.json";
-import tablaSalmo from "@/assets/tabla-salmo.jpg.asset.json";
+import tablaSalmo from "@/assets/tabla-teller.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
