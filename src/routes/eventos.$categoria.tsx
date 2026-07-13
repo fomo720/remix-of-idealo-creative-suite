@@ -2,7 +2,6 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import evtCumple from "@/assets/evt-cumple-ejemplo.jpg.asset.json";
-import cumpleLogo from "@/assets/cumple-logo.png.asset.json";
 
 export const Route = createFileRoute("/eventos/$categoria")({
   loader: ({ params }) => {
@@ -78,11 +77,7 @@ function CategoriaPage() {
 
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div>
-            {slug === "cumpleanos" ? (
-              <img src={cumpleLogo.url} alt="" className="h-48 w-auto sm:h-56" />
-            ) : (
-              <div className="text-6xl">{cat.emoji}</div>
-            )}
+            <div className="text-6xl">{cat.emoji}</div>
             <h1 className="mt-4 text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
               {cat.title}
             </h1>
