@@ -230,7 +230,7 @@ function ProductoDesigner() {
             {prod.askText && (
               <Section title="3 · Personalizá el texto">
                 <div className="space-y-3">
-                  {prod.askText.map((f, i) => (
+                  {prod.askText.map((f: {label:string;placeholder:string}, i: number) => (
                     <div key={i}>
                       <label className="text-sm font-medium">{f.label}</label>
                       <input
