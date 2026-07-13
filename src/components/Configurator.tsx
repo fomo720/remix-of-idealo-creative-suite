@@ -402,6 +402,7 @@ const laserProducts: LaserProduct[] = [
   {
     id: "llavero-madera", name: "Llavero de Madera", desc: "Madera clara pulida", hint: "Souvenirs y eventos",
     surface: "linear-gradient(135deg,#c99560,#a1703b)", engrave: "#3a2110", price: 90,
+    heroImage: llaveroMadera.url,
     icon: <KeyRound className="h-8 w-8" />, shape: "tag",
     variantLabel: "Forma",
     variants: [
