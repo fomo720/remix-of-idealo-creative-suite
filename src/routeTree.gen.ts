@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EventosIndexRouteImport } from './routes/eventos.index'
 import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
 import { Route as EventosCategoriaProductoRouteImport } from './routes/eventos.$categoria.$producto'
 
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EventosIndexRoute = EventosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventosRoute,
 } as any)
 const EventosCategoriaRoute = EventosCategoriaRouteImport.update({
   id: '/$categoria',
@@ -40,12 +46,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/eventos': typeof EventosRouteWithChildren
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/eventos': typeof EventosRouteWithChildren
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/eventos': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
 }
 export interface FileRoutesById {
@@ -53,6 +60,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/eventos': typeof EventosRouteWithChildren
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
 }
 export interface FileRouteTypes {
@@ -61,14 +69,16 @@ export interface FileRouteTypes {
     | '/'
     | '/eventos'
     | '/eventos/$categoria'
+    | '/eventos/'
     | '/eventos/$categoria/$producto'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/eventos' | '/eventos/$categoria' | '/eventos/$categoria/$producto'
+  to: '/' | '/eventos/$categoria' | '/eventos' | '/eventos/$categoria/$producto'
   id:
     | '__root__'
     | '/'
     | '/eventos'
     | '/eventos/$categoria'
+    | '/eventos/'
     | '/eventos/$categoria/$producto'
   fileRoutesById: FileRoutesById
 }
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/eventos/': {
+      id: '/eventos/'
+      path: '/'
+      fullPath: '/eventos/'
+      preLoaderRoute: typeof EventosIndexRouteImport
+      parentRoute: typeof EventosRoute
     }
     '/eventos/$categoria': {
       id: '/eventos/$categoria'
@@ -123,10 +140,12 @@ const EventosCategoriaRouteWithChildren =
 
 interface EventosRouteChildren {
   EventosCategoriaRoute: typeof EventosCategoriaRouteWithChildren
+  EventosIndexRoute: typeof EventosIndexRoute
 }
 
 const EventosRouteChildren: EventosRouteChildren = {
   EventosCategoriaRoute: EventosCategoriaRouteWithChildren,
+  EventosIndexRoute: EventosIndexRoute,
 }
 
 const EventosRouteWithChildren =
