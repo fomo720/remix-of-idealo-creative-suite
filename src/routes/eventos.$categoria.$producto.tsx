@@ -96,6 +96,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Menú",
     desc: "Menú impreso individual para cada invitado.",
     emoji: "📖",
+    hero: menuHero.url,
+
     sizes: [
       { label: "A6", dim: "10.5 × 14.8 cm" },
       { label: "A5", dim: "14.8 × 21 cm", note: "El más común" },
