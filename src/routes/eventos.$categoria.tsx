@@ -7,14 +7,15 @@ export const Route = createFileRoute("/eventos/$categoria")({
   loader: ({ params }) => {
     const cat = CATEGORIAS[params.categoria];
     if (!cat) throw notFound();
-    return { cat, slug: params.categoria };
+    return { slug: params.categoria };
   },
-  head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Evento no encontrado" }, { name: "robots", content: "noindex" }] };
+  head: ({ params }) => {
+    const cat = params ? CATEGORIAS[params.categoria] : undefined;
+    if (!cat) return { meta: [{ title: "Evento no encontrado" }, { name: "robots", content: "noindex" }] };
     return {
       meta: [
-        { title: `${loaderData.cat.title} — Eventos Idealo` },
-        { name: "description", content: loaderData.cat.intro },
+        { title: `${cat.title} — Eventos Idealo` },
+        { name: "description", content: cat.intro },
       ],
     };
   },
