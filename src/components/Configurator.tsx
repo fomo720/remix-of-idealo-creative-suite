@@ -3246,19 +3246,20 @@ function StickersQuickInfo() {
         </p>
       </div>
 
-      <div className="relative mt-8 grid gap-6 sm:grid-cols-3">
+      <div className="relative mt-8 grid items-stretch gap-6 sm:grid-cols-3">
         {steps.map((s, i) => (
-          <div key={s.title} className="relative">
+          <div key={s.title} className="relative flex h-full">
             <div
-              className="flex h-full flex-col items-center rounded-2xl border-[3px] border-foreground p-6 text-center text-white shadow-[6px_6px_0_0_hsl(var(--foreground)/0.9)]"
+              className="flex h-full w-full flex-col items-center rounded-2xl border-[3px] border-foreground p-6 text-center text-white shadow-[6px_6px_0_0_hsl(var(--foreground)/0.9)]"
               style={{ background: `linear-gradient(135deg, ${s.bg}, color-mix(in oklab, ${s.bg} 75%, white))` }}
             >
-              <s.icon className="h-12 w-12 text-white drop-shadow-sm" strokeWidth={2.25} />
-              <h4 className="mt-4 text-base font-black tracking-tight">
+              <s.icon className="h-12 w-12 shrink-0 text-white drop-shadow-sm" strokeWidth={2.25} />
+              <h4 className="mt-4 min-h-[3rem] text-base font-black leading-tight tracking-tight">
                 {s.title}
               </h4>
               <p className="mt-3 text-sm font-medium text-white/90">{s.desc}</p>
             </div>
+
             {i < steps.length - 1 && (
               <div
                 aria-hidden
