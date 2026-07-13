@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import cumpleLogo from "@/assets/cumple-logo.png.asset.json";
 
 export const Route = createFileRoute("/eventos/")({
   head: () => ({
