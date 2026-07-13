@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft } from "lucide-react";
+import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, Utensils, ArrowLeft } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import evtCumple from "@/assets/evt-cumple-ejemplo.jpg.asset.json";
+
 
 export const Route = createFileRoute("/eventos/$categoria")({
   loader: ({ params }) => {
