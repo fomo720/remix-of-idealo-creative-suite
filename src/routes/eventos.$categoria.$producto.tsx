@@ -138,6 +138,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Número de Mesa",
     desc: "Señalética numerada para identificar cada mesa.",
     emoji: "🔢",
+    hero: mesaHero.url,
+
     sizes: [
       { label: "Tarjeta", dim: "10 × 15 cm", note: "Sobre la mesa" },
       { label: "PVC con base", dim: "15 × 20 cm" },
