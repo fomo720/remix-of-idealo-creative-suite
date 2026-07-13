@@ -48,7 +48,7 @@ export const Route = createFileRoute("/servicios/$categoria")({
 });
 
 function CategoryPage() {
-  const { category } = Route.useLoaderData();
+  const { category } = Route.useLoaderData() as { category: Category };
   const c = category;
 
   return (
