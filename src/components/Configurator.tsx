@@ -1285,12 +1285,13 @@ export function Configurator() {
                   Añadir a la orden / Solicitar Cotización Profesional
                 </button>
 
-                <StickersQuickInfo />
-
                 <NavRow onBack={() => goTo(3)} />
 
               </div>
             </div>
+
+            <StickersQuickInfo />
+            </>
           )}
         </div>
       </div>
