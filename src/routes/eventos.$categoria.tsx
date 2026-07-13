@@ -53,6 +53,8 @@ const PRODUCTOS_CUMPLE: Producto[] = [
   { slug: "cajitas", title: "Cajitas", icon: Package, desc: "Cajas de regalo o dulces temáticas.", color: "var(--brand-blue)" },
   { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
   { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
+  { slug: "tabla-cortar", title: "Tabla de Cortar", icon: Utensils, desc: "Tabla de madera grabada con nombre o iniciales.", color: "var(--brand-orange)" },
+
 ];
 
 const CATEGORIAS: Record<string, Categoria> = {
