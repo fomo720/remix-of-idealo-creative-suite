@@ -33,7 +33,9 @@ import owalaFreesipBlue from "@/assets/owala-freesip-blue.png.asset.json";
 import owalaFreesipPink from "@/assets/owala-freesip-pink.png.asset.json";
 import owalaFreesipDark from "@/assets/owala-freesip-dark.png.asset.json";
 import yetiMoto from "@/assets/yeti-moto.jpg.asset.json";
-import carteraVenado from "@/assets/cartera-venado.jpg.asset.json";
+import carteraVenado from "@/assets/cartera-venado-v2.jpg.asset.json";
+import llaveroDavid from "@/assets/llavero-david.jpg.asset.json";
+import tablaSalmo from "@/assets/tabla-salmo.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
