@@ -82,12 +82,11 @@ function CategoriaPage() {
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">{cat.intro}</p>
           </div>
           {cat.hero && (
-            <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
+            <div className="overflow-hidden rounded-3xl border border-border bg-white shadow-elegant">
               <img
                 src={cat.hero}
                 alt={cat.title}
-                className="h-full w-full object-cover"
-                style={{ transform: "scale(2)", transformOrigin: "center" }}
+                className="h-full w-full object-contain"
               />
             </div>
           )}
