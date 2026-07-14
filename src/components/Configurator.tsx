@@ -3481,3 +3481,195 @@ function StickersQuickInfo() {
 }
 
 
+
+/* ---------- Imprenta Final Step ---------- */
+function ImprentaFinal({
+  product, style, specs, setSpecs, qty, setQty, file, setFile, notes, setNotes, fileRef, onBack,
+}: {
+  product: ImprentaProduct;
+  style: { id: ImprentaStyleId; name: string; desc: string; icon: React.ReactNode; accent: string };
+  specs: Record<string, string>;
+  setSpecs: (s: Record<string, string>) => void;
+  qty: number;
+  setQty: (n: number) => void;
+  file: string | null;
+  setFile: (v: string | null) => void;
+  notes: string;
+  setNotes: (v: string) => void;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  onBack: () => void;
+}) {
+  const needsUpload = style.id === "propio";
+  const allSpecsChosen = product.fields.every((f) => specs[f.key]);
+
+  const summary = [
+    `Producto: ${product.name}`,
+    `Estilo de diseño: ${style.name}`,
+    `Cantidad: ${qty}`,
+    ...product.fields.map((f) => `${f.label}: ${specs[f.key] || "-"}`),
+    notes ? `Notas: ${notes}` : "",
+    file ? "Diseño: adjunto (se envía por WhatsApp)" : needsUpload ? "Diseño: pendiente de enviar" : "Diseño: a cargo de Idealo",
+  ].filter(Boolean).join("\n");
+
+  const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar imprenta:\n\n${summary}`);
+
+  const handleFile = (f: File | null) => {
+    if (!f) return;
+    setFile(URL.createObjectURL(f));
+  };
+
+  return (
+    <div className="animate-step-in grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+      {/* LEFT: specs */}
+      <div className="space-y-6">
+        <SectionTitle icon={<FileCheck2 className="h-5 w-5" />} title="Especificaciones del producto" />
+
+        {product.fields.map((f) => (
+          <div key={f.key}>
+            <Label className="text-sm font-semibold">{f.label}</Label>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {f.options.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setSpecs({ ...specs, [f.key]: opt })}
+                  className={cn(
+                    "rounded-full border-2 px-4 py-2 text-sm font-medium transition",
+                    specs[f.key] === opt
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border bg-card hover:border-foreground/40",
+                  )}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div>
+          <Label className="text-sm font-semibold">Cantidad</Label>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {product.qtyOptions.map((n) => (
+              <button
+                key={n}
+                onClick={() => setQty(n)}
+                className={cn(
+                  "rounded-full border-2 px-4 py-2 text-sm font-medium transition",
+                  qty === n
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card hover:border-foreground/40",
+                )}
+              >
+                {n.toLocaleString()}
+              </button>
+            ))}
+            <Input
+              type="number"
+              min={1}
+              value={qty}
+              onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || "1", 10)))}
+              className="h-10 w-28 rounded-full border-2"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-sm font-semibold">
+            {needsUpload ? "Subí tu diseño (obligatorio)" : "Subí referencia o logo (opcional)"}
+          </Label>
+          <label className="mt-2 flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium text-muted-foreground transition hover:border-foreground/40 hover:text-foreground">
+            <Upload className="h-4 w-4" />
+            {file ? "Cambiar archivo" : "Seleccionar PDF, AI, PSD o imagen"}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*,.pdf,.ai,.psd"
+              className="hidden"
+              onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+          {file && (
+            <div className="mt-3 flex items-center gap-3 rounded-xl border border-border bg-background p-3">
+              <div className="h-14 w-14 overflow-hidden rounded-lg bg-muted">
+                <img src={file} alt="preview" className="h-full w-full object-cover" />
+              </div>
+              <div className="flex-1 text-xs text-muted-foreground">Archivo listo · lo enviaremos con tu cotización.</div>
+              <Button variant="ghost" size="sm" onClick={() => { setFile(null); if (fileRef.current) fileRef.current.value = ""; }}>
+                Quitar
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <Label className="text-sm font-semibold">Notas para el equipo (opcional)</Label>
+          <Textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Ej: colores exactos, fecha límite, referencias visuales…"
+            className="mt-2 min-h-[90px] rounded-2xl border-2"
+          />
+        </div>
+      </div>
+
+      {/* RIGHT: resumen + CTA */}
+      <div className="space-y-4">
+        <div className="rounded-3xl border border-border bg-background p-6 shadow-card-soft">
+          <div className="flex items-center gap-3">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl text-white" style={{ background: product.accent }}>
+              {product.icon}
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground">Tu pedido</div>
+              <div className="text-lg font-bold">{product.name}</div>
+            </div>
+          </div>
+
+          <dl className="mt-5 space-y-2 text-sm">
+            <div className="flex justify-between border-b border-border/60 pb-2">
+              <dt className="text-muted-foreground">Estilo de diseño</dt>
+              <dd className="font-semibold">{style.name}</dd>
+            </div>
+            <div className="flex justify-between border-b border-border/60 pb-2">
+              <dt className="text-muted-foreground">Cantidad</dt>
+              <dd className="font-semibold">{qty.toLocaleString()}</dd>
+            </div>
+            {product.fields.map((f) => (
+              <div key={f.key} className="flex justify-between border-b border-border/60 pb-2">
+                <dt className="text-muted-foreground">{f.label}</dt>
+                <dd className="font-semibold">{specs[f.key] || <span className="text-muted-foreground/70">Elegir</span>}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="mt-4 text-xs text-muted-foreground">
+            Cotización final tras revisión de arte y confirmación con nuestro equipo.
+          </p>
+        </div>
+
+        <a
+          href={`https://wa.me/50433635666?text=${waMsg}`}
+          target="_blank"
+          rel="noreferrer"
+          aria-disabled={!allSpecsChosen || (needsUpload && !file)}
+          onClick={(e) => {
+            if (!allSpecsChosen || (needsUpload && !file)) e.preventDefault();
+          }}
+          className={cn(
+            "flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
+            (!allSpecsChosen || (needsUpload && !file)) ? "cursor-not-allowed opacity-60" : "hover:scale-[1.01]",
+          )}
+        >
+          <MessageCircle className="h-5 w-5" /> Enviar cotización por WhatsApp
+        </a>
+        {(!allSpecsChosen || (needsUpload && !file)) && (
+          <p className="text-center text-xs text-muted-foreground">
+            {!allSpecsChosen ? "Elegí todas las especificaciones para continuar." : "Subí tu diseño para enviar la cotización."}
+          </p>
+        )}
+
+        <NavRow onBack={onBack} />
+      </div>
+    </div>
+  );
+}
