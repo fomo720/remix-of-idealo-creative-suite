@@ -746,13 +746,15 @@ export function Configurator() {
                 : ["Categoría", "Producto", "Diseño"]
               : isNotebook
               ? ["Categoría", "Estilo", "Material", "Diseño"]
+              : isImprenta
+              ? ["Categoría", "Producto", "Estilo de diseño", "Especificaciones + Envío"]
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
-            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
@@ -785,13 +787,21 @@ export function Configurator() {
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
               />
+              <CategoryCard
+                title="Imprenta & Papelería"
+                desc="Tarjetas, menús, carpetas y brochures. Papel premium con acabado profesional."
+                accent="var(--brand-indigo)"
+                icon={<Printer className="h-8 w-8" />}
+                active={category === "imprenta"}
+                onClick={() => setCategory("imprenta")}
+              />
             </div>
           )}
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
 
-          {step === 2 && !isNotebook && !isLaser && (
+          {step === 2 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
