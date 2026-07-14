@@ -94,10 +94,25 @@ export function Portfolio() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p, i) => (
+          {projects.map((p, i) => {
+            const clickable = p.action === "die-cut";
+            const handleClick = () => {
+              if (!clickable) return;
+              window.dispatchEvent(
+                new CustomEvent("idealo:configure", {
+                  detail: { category: "stickers", cut: "die-cut", step: 3 },
+                }),
+              );
+              document.getElementById("personalizar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            };
+            return (
             <div
               key={p.title}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
+              onClick={clickable ? handleClick : undefined}
+              role={clickable ? "button" : undefined}
+              tabIndex={clickable ? 0 : undefined}
+              onKeyDown={clickable ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleClick(); } } : undefined}
+              className={`group relative overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant ${clickable ? "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground" : ""}`}
             >
               <div
                 className="relative aspect-[4/5] w-full overflow-hidden"
@@ -116,13 +131,21 @@ export function Portfolio() {
                     #{String(i + 1).padStart(2, "0")} · {p.tag}
                   </div>
                 </div>
+                {clickable && (
+                  <div className="absolute right-3 top-3">
+                    <div className="rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold text-background shadow-sm">
+                      Personalizar →
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="p-5">
                 <h3 className="text-lg font-bold">{p.title}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">{p.subtitle}</p>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
