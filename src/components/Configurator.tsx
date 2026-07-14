@@ -477,6 +477,79 @@ const laserProducts: LaserProduct[] = [
 
 const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
 
+type ImprentaProduct = {
+  id: ImprentaProductId;
+  name: string;
+  desc: string;
+  icon: React.ReactNode;
+  accent: string;
+  qtyOptions: number[];
+  fields: { key: string; label: string; options: string[] }[];
+};
+
+const imprentaProducts: ImprentaProduct[] = [
+  {
+    id: "tarjetas",
+    name: "Tarjetas de Presentación",
+    desc: "Papel premium, acabados brillante o mate, doble lado.",
+    icon: <CreditCard className="h-8 w-8" />,
+    accent: "var(--brand-blue)",
+    qtyOptions: [100, 250, 500, 1000],
+    fields: [
+      { key: "papel", label: "Papel", options: ["Cartulina 300g", "Kraft", "Reciclado"] },
+      { key: "acabado", label: "Acabado", options: ["Mate", "Brillante", "UV Selectivo"] },
+      { key: "lados", label: "Impresión", options: ["Un lado", "Doble lado"] },
+    ],
+  },
+  {
+    id: "menus",
+    name: "Menús para Restaurantes",
+    desc: "Impresión doble lado, espiral metal, laminado impermeable.",
+    icon: <FileText className="h-8 w-8" />,
+    accent: "var(--brand-orange)",
+    qtyOptions: [10, 25, 50, 100],
+    fields: [
+      { key: "formato", label: "Formato", options: ["A4", "Tabloide", "Custom"] },
+      { key: "acabado", label: "Acabado", options: ["Laminado mate", "Laminado brillante", "Sin laminar"] },
+      { key: "encuadernacion", label: "Encuadernación", options: ["Espiral metal", "Grapa", "Suelto"] },
+    ],
+  },
+  {
+    id: "carpetas",
+    name: "Carpetas Corporativas",
+    desc: "Cartón laminado con doble compartimento para propuestas.",
+    icon: <FolderOpen className="h-8 w-8" />,
+    accent: "var(--brand-violet)",
+    qtyOptions: [25, 50, 100, 250],
+    fields: [
+      { key: "papel", label: "Cartón", options: ["Cartón 300g", "Cartón 350g laminado"] },
+      { key: "acabado", label: "Acabado", options: ["Mate", "Brillante", "UV Selectivo"] },
+      { key: "compartimentos", label: "Compartimentos", options: ["Sencillo", "Doble", "Con ranura tarjeta"] },
+    ],
+  },
+  {
+    id: "brochures",
+    name: "Brochures y Volantes",
+    desc: "Trifoliares, bifoliares, volantes tamaño carta o media carta.",
+    icon: <Newspaper className="h-8 w-8" />,
+    accent: "var(--brand-pink)",
+    qtyOptions: [100, 250, 500, 1000],
+    fields: [
+      { key: "formato", label: "Formato", options: ["Volante 1/2 carta", "Volante carta", "Trifoliar", "Bifoliar"] },
+      { key: "papel", label: "Papel", options: ["Couché 150g", "Couché 200g", "Bond 90g"] },
+      { key: "acabado", label: "Acabado", options: ["Mate", "Brillante", "Sin acabado"] },
+    ],
+  },
+];
+
+const imprentaStyles: { id: ImprentaStyleId; name: string; desc: string; icon: React.ReactNode; accent: string }[] = [
+  { id: "plantilla", name: "Diseño desde plantilla", desc: "Elegimos una plantilla profesional y la adaptamos con tus datos. Rápido y económico.", icon: <Layers className="h-7 w-7" />, accent: "var(--brand-blue)" },
+  { id: "personalizado", name: "Diseño 100% personalizado", desc: "Nuestro equipo crea el arte desde cero para tu marca. Ideal si querés algo único.", icon: <Palette className="h-7 w-7" />, accent: "var(--brand-violet)" },
+  { id: "propio", name: "Ya tengo mi diseño listo", desc: "Subís tu archivo (PDF, AI, PSD o imagen alta resolución) y lo imprimimos.", icon: <PencilRuler className="h-7 w-7" />, accent: "var(--brand-orange)" },
+];
+
+
+
 
 
 function currency(n: number) {
