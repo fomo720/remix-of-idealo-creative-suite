@@ -579,6 +579,17 @@ export function Configurator() {
 
   const goTo = (s: number) => setStep(s);
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ category?: Category; cut?: CutShape; step?: number }>).detail || {};
+      if (detail.category) setCategory(detail.category);
+      if (detail.cut) setCut(detail.cut);
+      if (typeof detail.step === "number") setStep(detail.step);
+    };
+    window.addEventListener("idealo:configure", handler as EventListener);
+    return () => window.removeEventListener("idealo:configure", handler as EventListener);
+  }, []);
+
   const handleFile = (f: File | null) => {
     if (!f) return;
     const url = URL.createObjectURL(f);
