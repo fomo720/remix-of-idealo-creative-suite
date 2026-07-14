@@ -7,7 +7,8 @@ import {
   HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
-  FileCheck2, Printer, Truck,
+  FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper,
+  Palette, PencilRuler, MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +53,9 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 
 
 
-type Category = "stickers" | "iron-ons" | "libretas" | "laser";
+type Category = "stickers" | "iron-ons" | "libretas" | "laser" | "imprenta";
+type ImprentaProductId = "tarjetas" | "menus" | "carpetas" | "brochures";
+type ImprentaStyleId = "plantilla" | "personalizado" | "propio";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
   | "llavero-madera" | "vaso" | "coco" | "cadena";
@@ -474,6 +477,79 @@ const laserProducts: LaserProduct[] = [
 
 const presetArts = ["🌈", "⚡", "🔥", "⭐", "🎨", "🚀", "🍕", "🌮"];
 
+type ImprentaProduct = {
+  id: ImprentaProductId;
+  name: string;
+  desc: string;
+  icon: React.ReactNode;
+  accent: string;
+  qtyOptions: number[];
+  fields: { key: string; label: string; options: string[] }[];
+};
+
+const imprentaProducts: ImprentaProduct[] = [
+  {
+    id: "tarjetas",
+    name: "Tarjetas de Presentación",
+    desc: "Papel premium, acabados brillante o mate, doble lado.",
+    icon: <CreditCard className="h-8 w-8" />,
+    accent: "var(--brand-blue)",
+    qtyOptions: [100, 250, 500, 1000],
+    fields: [
+      { key: "papel", label: "Papel", options: ["Cartulina 300g", "Kraft", "Reciclado"] },
+      { key: "acabado", label: "Acabado", options: ["Mate", "Brillante", "UV Selectivo"] },
+      { key: "lados", label: "Impresión", options: ["Un lado", "Doble lado"] },
+    ],
+  },
+  {
+    id: "menus",
+    name: "Menús para Restaurantes",
+    desc: "Impresión doble lado, espiral metal, laminado impermeable.",
+    icon: <FileText className="h-8 w-8" />,
+    accent: "var(--brand-orange)",
+    qtyOptions: [10, 25, 50, 100],
+    fields: [
+      { key: "formato", label: "Formato", options: ["A4", "Tabloide", "Custom"] },
+      { key: "acabado", label: "Acabado", options: ["Laminado mate", "Laminado brillante", "Sin laminar"] },
+      { key: "encuadernacion", label: "Encuadernación", options: ["Espiral metal", "Grapa", "Suelto"] },
+    ],
+  },
+  {
+    id: "carpetas",
+    name: "Carpetas Corporativas",
+    desc: "Cartón laminado con doble compartimento para propuestas.",
+    icon: <FolderOpen className="h-8 w-8" />,
+    accent: "var(--brand-violet)",
+    qtyOptions: [25, 50, 100, 250],
+    fields: [
+      { key: "papel", label: "Cartón", options: ["Cartón 300g", "Cartón 350g laminado"] },
+      { key: "acabado", label: "Acabado", options: ["Mate", "Brillante", "UV Selectivo"] },
+      { key: "compartimentos", label: "Compartimentos", options: ["Sencillo", "Doble", "Con ranura tarjeta"] },
+    ],
+  },
+  {
+    id: "brochures",
+    name: "Brochures y Volantes",
+    desc: "Trifoliares, bifoliares, volantes tamaño carta o media carta.",
+    icon: <Newspaper className="h-8 w-8" />,
+    accent: "var(--brand-pink)",
+    qtyOptions: [100, 250, 500, 1000],
+    fields: [
+      { key: "formato", label: "Formato", options: ["Volante 1/2 carta", "Volante carta", "Trifoliar", "Bifoliar"] },
+      { key: "papel", label: "Papel", options: ["Couché 150g", "Couché 200g", "Bond 90g"] },
+      { key: "acabado", label: "Acabado", options: ["Mate", "Brillante", "Sin acabado"] },
+    ],
+  },
+];
+
+const imprentaStyles: { id: ImprentaStyleId; name: string; desc: string; icon: React.ReactNode; accent: string }[] = [
+  { id: "plantilla", name: "Diseño desde plantilla", desc: "Elegimos una plantilla profesional y la adaptamos con tus datos. Rápido y económico.", icon: <Layers className="h-7 w-7" />, accent: "var(--brand-blue)" },
+  { id: "personalizado", name: "Diseño 100% personalizado", desc: "Nuestro equipo crea el arte desde cero para tu marca. Ideal si querés algo único.", icon: <Palette className="h-7 w-7" />, accent: "var(--brand-violet)" },
+  { id: "propio", name: "Ya tengo mi diseño listo", desc: "Subís tu archivo (PDF, AI, PSD o imagen alta resolución) y lo imprimimos.", icon: <PencilRuler className="h-7 w-7" />, accent: "var(--brand-orange)" },
+];
+
+
+
 
 
 function currency(n: number) {
@@ -518,6 +594,15 @@ export function Configurator() {
   const [engraveIntensity, setEngraveIntensity] = useState(55); // 0-100 threshold
   const [engraveMode, setEngraveMode] = useState<"outline" | "original">("outline");
 
+  // imprenta state
+  const [imprentaProduct, setImprentaProduct] = useState<ImprentaProductId | null>(null);
+  const [imprentaStyle, setImprentaStyle] = useState<ImprentaStyleId | null>(null);
+  const [imprentaSpecs, setImprentaSpecs] = useState<Record<string, string>>({});
+  const [imprentaQty, setImprentaQty] = useState<number>(100);
+  const [imprentaFile, setImprentaFile] = useState<string | null>(null);
+  const [imprentaNotes, setImprentaNotes] = useState("");
+  const imprentaFileRef = useRef<HTMLInputElement>(null);
+
   // image toolbox
   const [scale, setScale] = useState(100);       // 30-250%
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
@@ -531,6 +616,8 @@ export function Configurator() {
   const pageFileRef = useRef<HTMLInputElement>(null);
   const isNotebook = category === "libretas";
   const isLaser = category === "laser";
+  const isImprenta = category === "imprenta";
+  const imprentaProductData = imprentaProducts.find((p) => p.id === imprentaProduct);
   const materialData = materials.find((m) => m.id === material);
   const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
   const notebookSizeData = notebookSizes[notebookSizeIdx];
@@ -659,13 +746,15 @@ export function Configurator() {
                 : ["Categoría", "Producto", "Diseño"]
               : isNotebook
               ? ["Categoría", "Estilo", "Material", "Diseño"]
+              : isImprenta
+              ? ["Categoría", "Producto", "Estilo de diseño", "Especificaciones + Envío"]
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
-            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
@@ -698,13 +787,21 @@ export function Configurator() {
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
               />
+              <CategoryCard
+                title="Imprenta & Papelería"
+                desc="Tarjetas, menús, carpetas y brochures. Papel premium con acabado profesional."
+                accent="var(--brand-indigo)"
+                icon={<Printer className="h-8 w-8" />}
+                active={category === "imprenta"}
+                onClick={() => setCategory("imprenta")}
+              />
             </div>
           )}
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
 
-          {step === 2 && !isNotebook && !isLaser && (
+          {step === 2 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -934,7 +1031,7 @@ export function Configurator() {
             />
           )}
 
-          {step === 3 && !isNotebook && !isLaser && (
+          {step === 3 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -969,6 +1066,88 @@ export function Configurator() {
             </div>
           )}
 
+          {/* ===== IMPRENTA FLOW ===== */}
+          {step === 2 && isImprenta && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<Printer className="h-5 w-5" />} title="¿Qué producto de imprenta necesitás?" />
+              <div className="grid gap-5 sm:grid-cols-2">
+                {imprentaProducts.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      setImprentaProduct(p.id);
+                      setImprentaSpecs({});
+                      setImprentaQty(p.qtyOptions[0]);
+                    }}
+                    className={cn(
+                      "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
+                      imprentaProduct === p.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                    )}
+                  >
+                    <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: p.accent }}>
+                      {p.icon}
+                    </div>
+                    <h4 className="text-lg font-bold">{p.name}</h4>
+                    <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
+                    {imprentaProduct === p.id && (
+                      <span className="absolute right-4 top-4 grid h-6 w-6 place-items-center rounded-full text-white" style={{ background: p.accent }}>
+                        <Check className="h-3.5 w-3.5" />
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <NavRow onBack={() => goTo(1)} onNext={imprentaProduct ? () => goTo(3) : undefined} />
+            </div>
+          )}
+
+          {step === 3 && isImprenta && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<Palette className="h-5 w-5" />} title="¿Cómo querés el diseño?" />
+              <div className="grid gap-4 sm:grid-cols-3">
+                {imprentaStyles.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setImprentaStyle(s.id)}
+                    className={cn(
+                      "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
+                      imprentaStyle === s.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                    )}
+                  >
+                    <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl text-white" style={{ background: s.accent }}>
+                      {s.icon}
+                    </div>
+                    <h4 className="font-bold">{s.name}</h4>
+                    <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
+                  </button>
+                ))}
+              </div>
+              <p className="mt-4 text-center text-xs text-muted-foreground">
+                Recomendado: si es tu primera impresión con nosotros, elegí "Diseño desde plantilla" — es más rápido y económico.
+              </p>
+              <NavRow onBack={() => goTo(2)} onNext={imprentaStyle ? () => goTo(4) : undefined} />
+            </div>
+          )}
+
+          {step === 4 && isImprenta && imprentaProductData && (
+            <ImprentaFinal
+              product={imprentaProductData}
+              style={imprentaStyles.find((s) => s.id === imprentaStyle)!}
+              specs={imprentaSpecs}
+              setSpecs={setImprentaSpecs}
+              qty={imprentaQty}
+              setQty={setImprentaQty}
+              file={imprentaFile}
+              setFile={setImprentaFile}
+              notes={imprentaNotes}
+              setNotes={setImprentaNotes}
+              fileRef={imprentaFileRef}
+              onBack={() => goTo(3)}
+            />
+          )}
+
+
+
           {step === 4 && isNotebook && (
             <NotebookDesigner
               styleId={notebookStyle!}
@@ -1000,7 +1179,7 @@ export function Configurator() {
             />
           )}
 
-          {step === 4 && !isNotebook && !isLaser && (
+          {step === 4 && !isNotebook && !isLaser && !isImprenta && (
             <>
             <div className="animate-step-in grid gap-8 lg:grid-cols-2">
               {/* LEFT: Configurator */}
@@ -3302,3 +3481,195 @@ function StickersQuickInfo() {
 }
 
 
+
+/* ---------- Imprenta Final Step ---------- */
+function ImprentaFinal({
+  product, style, specs, setSpecs, qty, setQty, file, setFile, notes, setNotes, fileRef, onBack,
+}: {
+  product: ImprentaProduct;
+  style: { id: ImprentaStyleId; name: string; desc: string; icon: React.ReactNode; accent: string };
+  specs: Record<string, string>;
+  setSpecs: (s: Record<string, string>) => void;
+  qty: number;
+  setQty: (n: number) => void;
+  file: string | null;
+  setFile: (v: string | null) => void;
+  notes: string;
+  setNotes: (v: string) => void;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  onBack: () => void;
+}) {
+  const needsUpload = style.id === "propio";
+  const allSpecsChosen = product.fields.every((f) => specs[f.key]);
+
+  const summary = [
+    `Producto: ${product.name}`,
+    `Estilo de diseño: ${style.name}`,
+    `Cantidad: ${qty}`,
+    ...product.fields.map((f) => `${f.label}: ${specs[f.key] || "-"}`),
+    notes ? `Notas: ${notes}` : "",
+    file ? "Diseño: adjunto (se envía por WhatsApp)" : needsUpload ? "Diseño: pendiente de enviar" : "Diseño: a cargo de Idealo",
+  ].filter(Boolean).join("\n");
+
+  const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar imprenta:\n\n${summary}`);
+
+  const handleFile = (f: File | null) => {
+    if (!f) return;
+    setFile(URL.createObjectURL(f));
+  };
+
+  return (
+    <div className="animate-step-in grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+      {/* LEFT: specs */}
+      <div className="space-y-6">
+        <SectionTitle icon={<FileCheck2 className="h-5 w-5" />} title="Especificaciones del producto" />
+
+        {product.fields.map((f) => (
+          <div key={f.key}>
+            <Label className="text-sm font-semibold">{f.label}</Label>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {f.options.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setSpecs({ ...specs, [f.key]: opt })}
+                  className={cn(
+                    "rounded-full border-2 px-4 py-2 text-sm font-medium transition",
+                    specs[f.key] === opt
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border bg-card hover:border-foreground/40",
+                  )}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div>
+          <Label className="text-sm font-semibold">Cantidad</Label>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {product.qtyOptions.map((n) => (
+              <button
+                key={n}
+                onClick={() => setQty(n)}
+                className={cn(
+                  "rounded-full border-2 px-4 py-2 text-sm font-medium transition",
+                  qty === n
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card hover:border-foreground/40",
+                )}
+              >
+                {n.toLocaleString()}
+              </button>
+            ))}
+            <Input
+              type="number"
+              min={1}
+              value={qty}
+              onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || "1", 10)))}
+              className="h-10 w-28 rounded-full border-2"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-sm font-semibold">
+            {needsUpload ? "Subí tu diseño (obligatorio)" : "Subí referencia o logo (opcional)"}
+          </Label>
+          <label className="mt-2 flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium text-muted-foreground transition hover:border-foreground/40 hover:text-foreground">
+            <Upload className="h-4 w-4" />
+            {file ? "Cambiar archivo" : "Seleccionar PDF, AI, PSD o imagen"}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*,.pdf,.ai,.psd"
+              className="hidden"
+              onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+          {file && (
+            <div className="mt-3 flex items-center gap-3 rounded-xl border border-border bg-background p-3">
+              <div className="h-14 w-14 overflow-hidden rounded-lg bg-muted">
+                <img src={file} alt="preview" className="h-full w-full object-cover" />
+              </div>
+              <div className="flex-1 text-xs text-muted-foreground">Archivo listo · lo enviaremos con tu cotización.</div>
+              <Button variant="ghost" size="sm" onClick={() => { setFile(null); if (fileRef.current) fileRef.current.value = ""; }}>
+                Quitar
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <Label className="text-sm font-semibold">Notas para el equipo (opcional)</Label>
+          <Textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Ej: colores exactos, fecha límite, referencias visuales…"
+            className="mt-2 min-h-[90px] rounded-2xl border-2"
+          />
+        </div>
+      </div>
+
+      {/* RIGHT: resumen + CTA */}
+      <div className="space-y-4">
+        <div className="rounded-3xl border border-border bg-background p-6 shadow-card-soft">
+          <div className="flex items-center gap-3">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl text-white" style={{ background: product.accent }}>
+              {product.icon}
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground">Tu pedido</div>
+              <div className="text-lg font-bold">{product.name}</div>
+            </div>
+          </div>
+
+          <dl className="mt-5 space-y-2 text-sm">
+            <div className="flex justify-between border-b border-border/60 pb-2">
+              <dt className="text-muted-foreground">Estilo de diseño</dt>
+              <dd className="font-semibold">{style.name}</dd>
+            </div>
+            <div className="flex justify-between border-b border-border/60 pb-2">
+              <dt className="text-muted-foreground">Cantidad</dt>
+              <dd className="font-semibold">{qty.toLocaleString()}</dd>
+            </div>
+            {product.fields.map((f) => (
+              <div key={f.key} className="flex justify-between border-b border-border/60 pb-2">
+                <dt className="text-muted-foreground">{f.label}</dt>
+                <dd className="font-semibold">{specs[f.key] || <span className="text-muted-foreground/70">Elegir</span>}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="mt-4 text-xs text-muted-foreground">
+            Cotización final tras revisión de arte y confirmación con nuestro equipo.
+          </p>
+        </div>
+
+        <a
+          href={`https://wa.me/50433635666?text=${waMsg}`}
+          target="_blank"
+          rel="noreferrer"
+          aria-disabled={!allSpecsChosen || (needsUpload && !file)}
+          onClick={(e) => {
+            if (!allSpecsChosen || (needsUpload && !file)) e.preventDefault();
+          }}
+          className={cn(
+            "flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
+            (!allSpecsChosen || (needsUpload && !file)) ? "cursor-not-allowed opacity-60" : "hover:scale-[1.01]",
+          )}
+        >
+          <MessageCircle className="h-5 w-5" /> Enviar cotización por WhatsApp
+        </a>
+        {(!allSpecsChosen || (needsUpload && !file)) && (
+          <p className="text-center text-xs text-muted-foreground">
+            {!allSpecsChosen ? "Elegí todas las especificaciones para continuar." : "Subí tu diseño para enviar la cotización."}
+          </p>
+        )}
+
+        <NavRow onBack={onBack} />
+      </div>
+    </div>
+  );
+}
