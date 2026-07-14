@@ -1031,7 +1031,7 @@ export function Configurator() {
             />
           )}
 
-          {step === 3 && !isNotebook && !isLaser && (
+          {step === 3 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
