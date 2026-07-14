@@ -594,6 +594,15 @@ export function Configurator() {
   const [engraveIntensity, setEngraveIntensity] = useState(55); // 0-100 threshold
   const [engraveMode, setEngraveMode] = useState<"outline" | "original">("outline");
 
+  // imprenta state
+  const [imprentaProduct, setImprentaProduct] = useState<ImprentaProductId | null>(null);
+  const [imprentaStyle, setImprentaStyle] = useState<ImprentaStyleId | null>(null);
+  const [imprentaSpecs, setImprentaSpecs] = useState<Record<string, string>>({});
+  const [imprentaQty, setImprentaQty] = useState<number>(100);
+  const [imprentaFile, setImprentaFile] = useState<string | null>(null);
+  const [imprentaNotes, setImprentaNotes] = useState("");
+  const imprentaFileRef = useRef<HTMLInputElement>(null);
+
   // image toolbox
   const [scale, setScale] = useState(100);       // 30-250%
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
@@ -607,6 +616,8 @@ export function Configurator() {
   const pageFileRef = useRef<HTMLInputElement>(null);
   const isNotebook = category === "libretas";
   const isLaser = category === "laser";
+  const isImprenta = category === "imprenta";
+  const imprentaProductData = imprentaProducts.find((p) => p.id === imprentaProduct);
   const materialData = materials.find((m) => m.id === material);
   const notebookMaterialData = notebookMaterials.find((m) => m.id === notebookMaterial);
   const notebookSizeData = notebookSizes[notebookSizeIdx];
