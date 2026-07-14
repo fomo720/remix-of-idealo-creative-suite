@@ -1066,6 +1066,88 @@ export function Configurator() {
             </div>
           )}
 
+          {/* ===== IMPRENTA FLOW ===== */}
+          {step === 2 && isImprenta && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<Printer className="h-5 w-5" />} title="¿Qué producto de imprenta necesitás?" />
+              <div className="grid gap-5 sm:grid-cols-2">
+                {imprentaProducts.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      setImprentaProduct(p.id);
+                      setImprentaSpecs({});
+                      setImprentaQty(p.qtyOptions[0]);
+                    }}
+                    className={cn(
+                      "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
+                      imprentaProduct === p.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                    )}
+                  >
+                    <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: p.accent }}>
+                      {p.icon}
+                    </div>
+                    <h4 className="text-lg font-bold">{p.name}</h4>
+                    <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
+                    {imprentaProduct === p.id && (
+                      <span className="absolute right-4 top-4 grid h-6 w-6 place-items-center rounded-full text-white" style={{ background: p.accent }}>
+                        <Check className="h-3.5 w-3.5" />
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <NavRow onBack={() => goTo(1)} onNext={imprentaProduct ? () => goTo(3) : undefined} />
+            </div>
+          )}
+
+          {step === 3 && isImprenta && (
+            <div className="animate-step-in">
+              <SectionTitle icon={<Palette className="h-5 w-5" />} title="¿Cómo querés el diseño?" />
+              <div className="grid gap-4 sm:grid-cols-3">
+                {imprentaStyles.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setImprentaStyle(s.id)}
+                    className={cn(
+                      "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
+                      imprentaStyle === s.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                    )}
+                  >
+                    <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl text-white" style={{ background: s.accent }}>
+                      {s.icon}
+                    </div>
+                    <h4 className="font-bold">{s.name}</h4>
+                    <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
+                  </button>
+                ))}
+              </div>
+              <p className="mt-4 text-center text-xs text-muted-foreground">
+                Recomendado: si es tu primera impresión con nosotros, elegí "Diseño desde plantilla" — es más rápido y económico.
+              </p>
+              <NavRow onBack={() => goTo(2)} onNext={imprentaStyle ? () => goTo(4) : undefined} />
+            </div>
+          )}
+
+          {step === 4 && isImprenta && imprentaProductData && (
+            <ImprentaFinal
+              product={imprentaProductData}
+              style={imprentaStyles.find((s) => s.id === imprentaStyle)!}
+              specs={imprentaSpecs}
+              setSpecs={setImprentaSpecs}
+              qty={imprentaQty}
+              setQty={setImprentaQty}
+              file={imprentaFile}
+              setFile={setImprentaFile}
+              notes={imprentaNotes}
+              setNotes={setImprentaNotes}
+              fileRef={imprentaFileRef}
+              onBack={() => goTo(3)}
+            />
+          )}
+
+
+
           {step === 4 && isNotebook && (
             <NotebookDesigner
               styleId={notebookStyle!}
