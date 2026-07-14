@@ -53,7 +53,9 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 
 
 
-type Category = "stickers" | "iron-ons" | "libretas" | "laser";
+type Category = "stickers" | "iron-ons" | "libretas" | "laser" | "imprenta";
+type ImprentaProductId = "tarjetas" | "menus" | "carpetas" | "brochures";
+type ImprentaStyleId = "plantilla" | "personalizado" | "propio";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
   | "llavero-madera" | "vaso" | "coco" | "cadena";
