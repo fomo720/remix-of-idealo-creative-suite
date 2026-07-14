@@ -44,6 +44,7 @@ const projects: Project[] = [
     subtitle: "Cualquier forma, diseño y tamaño",
     image: troquelados.url,
     bg: "#fafafa",
+    action: "die-cut" as const,
   },
   {
     title: "Banners Roll Up",
