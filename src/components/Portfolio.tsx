@@ -14,6 +14,7 @@ type Project = {
   image?: string;
   gradient?: string;
   bg?: string;
+  action?: "die-cut";
 };
 
 const projects: Project[] = [
