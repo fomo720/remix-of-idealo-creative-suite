@@ -7,7 +7,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const links = [
     { href: "/#personalizar", label: "Personalizar Ahora" },
-    { href: "/#empresas", label: "Servicios para Empresas" },
+    { href: "/empresas", label: "Empresas" },
     { href: "/eventos", label: "Eventos" },
     { href: "/#portafolio", label: "Portafolio" },
   ];
