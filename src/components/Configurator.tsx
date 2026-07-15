@@ -18,6 +18,8 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import appleIcon from "@/assets/apple-icon.png.asset.json";
 import rollIcon from "@/assets/roll-icon.png.asset.json";
+import kissCutSample from "@/assets/kiss-cut-sample.png.asset.json";
+import rollsSample from "@/assets/rolls-sample.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
