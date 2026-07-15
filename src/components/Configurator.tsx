@@ -2493,7 +2493,7 @@ function CutCard({
         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
       )}
     >
-      <div className="flex h-36 w-full items-center justify-center bg-muted/60 p-4">
+      <div className="flex h-64 w-full items-center justify-center bg-muted/60 p-4 sm:h-72">
         <CutIllustration id={id} />
       </div>
       <div className="flex flex-1 items-start justify-between gap-2 p-5">
