@@ -3893,7 +3893,7 @@ function ImprentaFinal({
         </div>
 
         <a
-          href={`https://wa.me/50433635666?text=${waMsg}`}
+          href={`https://wa.me/50432316100?text=${waMsg}`}
           target="_blank"
           rel="noreferrer"
           aria-disabled={!allSpecsChosen || (needsUpload && !file)}
