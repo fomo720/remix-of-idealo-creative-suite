@@ -3647,7 +3647,7 @@ function StickersQuickInfo() {
     {
       icon: FileCheck2,
       title: "APROBÁ TU PRUEBA",
-      desc: "Recibí una prueba digital en 1 a 3 días. Si sos de La Ceiba, podés verla física en vivo.",
+      desc: "Recibí una prueba digital en 1 a 3 días. Si sos de La Ceiba, podés ver la prueba física.",
       bg: "var(--brand-pink)",
     },
     {
