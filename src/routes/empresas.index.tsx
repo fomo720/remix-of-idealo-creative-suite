@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, Briefcase, Utensils, Truck, CheckCircle2, MessageCircle } from "lucide-react";
+import kitOficinasImg from "@/assets/kit-oficinas-clinicas.jpg.asset.json";
+import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
+import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
+import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 
 export const Route = createFileRoute("/empresas/")({
   head: () => ({
@@ -18,6 +22,7 @@ type Kit = {
   icon: typeof Utensils;
   includes: string[];
   accent: string;
+  image: string;
 };
 
 const KITS: Kit[] = [
@@ -28,6 +33,7 @@ const KITS: Kit[] = [
     icon: Utensils,
     includes: ["Diseño e impresión de menús", "Stickers para empaques y bolsas", "Branding e identidad visual", "Banners y rótulos exteriores"],
     accent: "from-amber-500/15 to-orange-500/10 border-amber-500/30",
+    image: kitRestaurantesImg.url,
   },
   {
     slug: "oficinas-clinicas",
@@ -36,6 +42,7 @@ const KITS: Kit[] = [
     icon: Briefcase,
     includes: ["Señalética y wayfinding", "Papelería corporativa completa", "Vinilos para ventanales", "Cuadros y decoración de marca"],
     accent: "from-sky-500/15 to-blue-500/10 border-sky-500/30",
+    image: kitOficinasImg.url,
   },
   {
     slug: "emprendedores-startups",
@@ -44,6 +51,7 @@ const KITS: Kit[] = [
     icon: Building2,
     includes: ["Logo e identidad de marca", "Tarjetas de presentación", "Stickers de marca", "Kit de redes sociales"],
     accent: "from-fuchsia-500/15 to-pink-500/10 border-fuchsia-500/30",
+    image: kitEmprendedoresImg.url,
   },
   {
     slug: "flota-logistica",
@@ -52,6 +60,7 @@ const KITS: Kit[] = [
     icon: Truck,
     includes: ["Vinilo de corte para autos", "Rotulación de camiones y motos", "Microperforado para vidrios", "Identidad para uniformes"],
     accent: "from-emerald-500/15 to-teal-500/10 border-emerald-500/30",
+    image: kitFlotaImg.url,
   },
 ];
 
@@ -160,6 +169,14 @@ function KitCard({ kit }: { kit: Kit }) {
       params={{ kit: kit.slug }}
       className={`group relative flex flex-col overflow-hidden rounded-3xl border bg-gradient-to-br ${kit.accent} p-7 transition hover:-translate-y-1 hover:shadow-elegant`}
     >
+      <div className="mb-5 -mx-7 -mt-7 aspect-[16/10] overflow-hidden bg-muted">
+        <img
+          src={kit.image}
+          alt={kit.title}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
+      </div>
       <div className="flex items-start justify-between">
         <div className="grid h-14 w-14 place-items-center rounded-2xl bg-background/80 backdrop-blur">
           <Icon className="h-7 w-7" />
