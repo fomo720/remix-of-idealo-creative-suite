@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos.index'
+import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
 import { Route as EventosCategoriaIndexRouteImport } from './routes/eventos.$categoria.index'
 import { Route as EventosCategoriaProductoRouteImport } from './routes/eventos.$categoria.$producto'
 
@@ -30,21 +31,27 @@ const EventosIndexRoute = EventosIndexRouteImport.update({
   path: '/',
   getParentRoute: () => EventosRoute,
 } as any)
-const EventosCategoriaIndexRoute = EventosCategoriaIndexRouteImport.update({
-  id: '/$categoria/',
-  path: '/$categoria/',
+const EventosCategoriaRoute = EventosCategoriaRouteImport.update({
+  id: '/$categoria',
+  path: '/$categoria',
   getParentRoute: () => EventosRoute,
+} as any)
+const EventosCategoriaIndexRoute = EventosCategoriaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventosCategoriaRoute,
 } as any)
 const EventosCategoriaProductoRoute =
   EventosCategoriaProductoRouteImport.update({
-    id: '/$categoria/$producto',
-    path: '/$categoria/$producto',
-    getParentRoute: () => EventosRoute,
+    id: '/$producto',
+    path: '/$producto',
+    getParentRoute: () => EventosCategoriaRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/eventos': typeof EventosRouteWithChildren
+  '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
   '/eventos/$categoria/': typeof EventosCategoriaIndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/eventos': typeof EventosRouteWithChildren
+  '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
   '/eventos/$categoria/': typeof EventosCategoriaIndexRoute
@@ -68,6 +76,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/eventos'
+    | '/eventos/$categoria'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
     | '/eventos/$categoria/'
@@ -77,6 +86,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/eventos'
+    | '/eventos/$categoria'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
     | '/eventos/$categoria/'
@@ -110,33 +120,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventosIndexRouteImport
       parentRoute: typeof EventosRoute
     }
+    '/eventos/$categoria': {
+      id: '/eventos/$categoria'
+      path: '/$categoria'
+      fullPath: '/eventos/$categoria'
+      preLoaderRoute: typeof EventosCategoriaRouteImport
+      parentRoute: typeof EventosRoute
+    }
     '/eventos/$categoria/': {
       id: '/eventos/$categoria/'
-      path: '/$categoria'
+      path: '/'
       fullPath: '/eventos/$categoria/'
       preLoaderRoute: typeof EventosCategoriaIndexRouteImport
-      parentRoute: typeof EventosRoute
+      parentRoute: typeof EventosCategoriaRoute
     }
     '/eventos/$categoria/$producto': {
       id: '/eventos/$categoria/$producto'
-      path: '/$categoria/$producto'
+      path: '/$producto'
       fullPath: '/eventos/$categoria/$producto'
       preLoaderRoute: typeof EventosCategoriaProductoRouteImport
-      parentRoute: typeof EventosRoute
+      parentRoute: typeof EventosCategoriaRoute
     }
   }
 }
 
-interface EventosRouteChildren {
-  EventosIndexRoute: typeof EventosIndexRoute
+interface EventosCategoriaRouteChildren {
   EventosCategoriaProductoRoute: typeof EventosCategoriaProductoRoute
   EventosCategoriaIndexRoute: typeof EventosCategoriaIndexRoute
 }
 
-const EventosRouteChildren: EventosRouteChildren = {
-  EventosIndexRoute: EventosIndexRoute,
+const EventosCategoriaRouteChildren: EventosCategoriaRouteChildren = {
   EventosCategoriaProductoRoute: EventosCategoriaProductoRoute,
   EventosCategoriaIndexRoute: EventosCategoriaIndexRoute,
+}
+
+const EventosCategoriaRouteWithChildren =
+  EventosCategoriaRoute._addFileChildren(EventosCategoriaRouteChildren)
+
+interface EventosRouteChildren {
+  EventosCategoriaRoute: typeof EventosCategoriaRouteWithChildren
+  EventosIndexRoute: typeof EventosIndexRoute
+}
+
+const EventosRouteChildren: EventosRouteChildren = {
+  EventosCategoriaRoute: EventosCategoriaRouteWithChildren,
+  EventosIndexRoute: EventosIndexRoute,
 }
 
 const EventosRouteWithChildren =
@@ -149,3 +177,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
