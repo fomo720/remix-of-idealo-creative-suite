@@ -2025,7 +2025,7 @@ function CategoryCard({
         <div className="mb-4 grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white" style={{ background: accent }}>
           {icon}
         </div>
-        <h4 className="min-h-[3.5rem] text-2xl font-bold leading-tight">{title}</h4>
+        <h4 className="text-xl font-bold leading-tight break-words xl:text-lg 2xl:text-xl">{title}</h4>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
         <div className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium">
           Comenzar <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
