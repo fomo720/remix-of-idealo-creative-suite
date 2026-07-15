@@ -152,8 +152,9 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
 type DesignMode = "propio" | "ayuda";
 
 function ProductoDesigner() {
-  const { prod, categoria } = Route.useLoaderData();
-  const [designMode, setDesignMode] = useState<DesignMode | null>(null);
+  const data = Route.useLoaderData();
+  const prod: Producto = data.prod;
+  const { categoria } = data;
   const [materialIdx, setMaterialIdx] = useState<number | null>(null);
   const [sizeIdx, setSizeIdx] = useState<number | null>(null);
   const [styleIdx, setStyleIdx] = useState(0);
