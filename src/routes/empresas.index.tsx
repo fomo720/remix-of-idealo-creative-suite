@@ -169,6 +169,14 @@ function KitCard({ kit }: { kit: Kit }) {
       params={{ kit: kit.slug }}
       className={`group relative flex flex-col overflow-hidden rounded-3xl border bg-gradient-to-br ${kit.accent} p-7 transition hover:-translate-y-1 hover:shadow-elegant`}
     >
+      <div className="mb-5 -mx-7 -mt-7 aspect-[16/10] overflow-hidden bg-muted">
+        <img
+          src={kit.image}
+          alt={kit.title}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
+      </div>
       <div className="flex items-start justify-between">
         <div className="grid h-14 w-14 place-items-center rounded-2xl bg-background/80 backdrop-blur">
           <Icon className="h-7 w-7" />
