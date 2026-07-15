@@ -34,9 +34,10 @@ export function Footer() {
         <div>
           <h4 className="mb-4 text-sm font-bold uppercase tracking-widest">Explorar</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href="#personalizar" className="hover:text-foreground">Personalizar</a></li>
-            <li><a href="#empresas" className="hover:text-foreground">Empresas</a></li>
-            <li><a href="#portafolio" className="hover:text-foreground">Portafolio</a></li>
+            <li><a href="/#personalizar" className="hover:text-foreground">Personalizar</a></li>
+            <li><a href="/empresas" className="hover:text-foreground">Empresas</a></li>
+            <li><a href="/eventos" className="hover:text-foreground">Eventos</a></li>
+            <li><a href="/#portafolio" className="hover:text-foreground">Portafolio</a></li>
             <li><a href="https://wa.me/50432316100" className="hover:text-foreground">WhatsApp</a></li>
           </ul>
         </div>

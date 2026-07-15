@@ -10,15 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as EventosRouteImport } from './routes/eventos'
+import { Route as EmpresasRouteImport } from './routes/empresas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos.index'
+import { Route as EmpresasIndexRouteImport } from './routes/empresas.index'
 import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
+import { Route as EmpresasKitRouteImport } from './routes/empresas.$kit'
 import { Route as EventosCategoriaIndexRouteImport } from './routes/eventos.$categoria.index'
 import { Route as EventosCategoriaProductoRouteImport } from './routes/eventos.$categoria.$producto'
 
 const EventosRoute = EventosRouteImport.update({
   id: '/eventos',
   path: '/eventos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmpresasRoute = EmpresasRouteImport.update({
+  id: '/empresas',
+  path: '/empresas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,10 +39,20 @@ const EventosIndexRoute = EventosIndexRouteImport.update({
   path: '/',
   getParentRoute: () => EventosRoute,
 } as any)
+const EmpresasIndexRoute = EmpresasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EmpresasRoute,
+} as any)
 const EventosCategoriaRoute = EventosCategoriaRouteImport.update({
   id: '/$categoria',
   path: '/$categoria',
   getParentRoute: () => EventosRoute,
+} as any)
+const EmpresasKitRoute = EmpresasKitRouteImport.update({
+  id: '/$kit',
+  path: '/$kit',
+  getParentRoute: () => EmpresasRoute,
 } as any)
 const EventosCategoriaIndexRoute = EventosCategoriaIndexRouteImport.update({
   id: '/',
@@ -50,14 +68,19 @@ const EventosCategoriaProductoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/empresas': typeof EmpresasRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
+  '/empresas/$kit': typeof EmpresasKitRoute
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/empresas/': typeof EmpresasIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
   '/eventos/$categoria/': typeof EventosCategoriaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/empresas/$kit': typeof EmpresasKitRoute
+  '/empresas': typeof EmpresasIndexRoute
   '/eventos': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
   '/eventos/$categoria': typeof EventosCategoriaIndexRoute
@@ -65,8 +88,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/empresas': typeof EmpresasRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
+  '/empresas/$kit': typeof EmpresasKitRoute
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/empresas/': typeof EmpresasIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
   '/eventos/$categoria/': typeof EventosCategoriaIndexRoute
@@ -75,18 +101,30 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/empresas'
     | '/eventos'
+    | '/empresas/$kit'
     | '/eventos/$categoria'
+    | '/empresas/'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
     | '/eventos/$categoria/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/eventos' | '/eventos/$categoria/$producto' | '/eventos/$categoria'
+  to:
+    | '/'
+    | '/empresas/$kit'
+    | '/empresas'
+    | '/eventos'
+    | '/eventos/$categoria/$producto'
+    | '/eventos/$categoria'
   id:
     | '__root__'
     | '/'
+    | '/empresas'
     | '/eventos'
+    | '/empresas/$kit'
     | '/eventos/$categoria'
+    | '/empresas/'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
     | '/eventos/$categoria/'
@@ -94,6 +132,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EmpresasRoute: typeof EmpresasRouteWithChildren
   EventosRoute: typeof EventosRouteWithChildren
 }
 
@@ -104,6 +143,13 @@ declare module '@tanstack/react-router' {
       path: '/eventos'
       fullPath: '/eventos'
       preLoaderRoute: typeof EventosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/empresas': {
+      id: '/empresas'
+      path: '/empresas'
+      fullPath: '/empresas'
+      preLoaderRoute: typeof EmpresasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -120,12 +166,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventosIndexRouteImport
       parentRoute: typeof EventosRoute
     }
+    '/empresas/': {
+      id: '/empresas/'
+      path: '/'
+      fullPath: '/empresas/'
+      preLoaderRoute: typeof EmpresasIndexRouteImport
+      parentRoute: typeof EmpresasRoute
+    }
     '/eventos/$categoria': {
       id: '/eventos/$categoria'
       path: '/$categoria'
       fullPath: '/eventos/$categoria'
       preLoaderRoute: typeof EventosCategoriaRouteImport
       parentRoute: typeof EventosRoute
+    }
+    '/empresas/$kit': {
+      id: '/empresas/$kit'
+      path: '/$kit'
+      fullPath: '/empresas/$kit'
+      preLoaderRoute: typeof EmpresasKitRouteImport
+      parentRoute: typeof EmpresasRoute
     }
     '/eventos/$categoria/': {
       id: '/eventos/$categoria/'
@@ -143,6 +203,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface EmpresasRouteChildren {
+  EmpresasKitRoute: typeof EmpresasKitRoute
+  EmpresasIndexRoute: typeof EmpresasIndexRoute
+}
+
+const EmpresasRouteChildren: EmpresasRouteChildren = {
+  EmpresasKitRoute: EmpresasKitRoute,
+  EmpresasIndexRoute: EmpresasIndexRoute,
+}
+
+const EmpresasRouteWithChildren = EmpresasRoute._addFileChildren(
+  EmpresasRouteChildren,
+)
 
 interface EventosCategoriaRouteChildren {
   EventosCategoriaProductoRoute: typeof EventosCategoriaProductoRoute
@@ -172,6 +246,7 @@ const EventosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EmpresasRoute: EmpresasRouteWithChildren,
   EventosRoute: EventosRouteWithChildren,
 }
 export const routeTree = rootRouteImport
