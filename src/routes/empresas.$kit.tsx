@@ -121,22 +121,27 @@ function KitPage() {
   return (
     <>
       <section className="border-b border-border/60 bg-gradient-to-b from-slate-50 to-background">
-        <div className="mx-auto max-w-6xl px-4 py-16">
-          <Link to="/empresas" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> Todos los kits
-          </Link>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">{kit.title}</h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{kit.tagline}</p>
-          <p className="mt-3 max-w-2xl text-sm text-muted-foreground">{kit.description}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-elegant transition hover:scale-[1.02]"
-            >
-              <MessageCircle className="h-4 w-4" /> Cotizar este kit
-            </a>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:items-center">
+          <div>
+            <Link to="/empresas" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" /> Todos los kits
+            </Link>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">{kit.title}</h1>
+            <p className="mt-4 text-lg text-muted-foreground">{kit.tagline}</p>
+            <p className="mt-3 text-sm text-muted-foreground">{kit.description}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-elegant transition hover:scale-[1.02]"
+              >
+                <MessageCircle className="h-4 w-4" /> Cotizar este kit
+              </a>
+            </div>
+          </div>
+          <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
+            <img src={kit.image} alt={kit.title} className="aspect-[4/3] h-full w-full object-cover" />
           </div>
         </div>
       </section>
@@ -157,6 +162,17 @@ function KitPage() {
             </div>
           ))}
         </div>
+
+        {kit.showcaseImage && (
+          <div className="mt-12 overflow-hidden rounded-3xl border border-border bg-card">
+            <img src={kit.showcaseImage} alt={kit.showcaseCaption ?? "Servicios"} className="w-full" />
+            {kit.showcaseCaption && (
+              <p className="border-t border-border px-6 py-4 text-center text-sm text-muted-foreground">
+                {kit.showcaseCaption}
+              </p>
+            )}
+          </div>
+        )}
       </section>
 
       <section className="border-t border-border/60 bg-card">
