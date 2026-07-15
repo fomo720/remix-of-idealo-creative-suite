@@ -37,7 +37,7 @@ export function Footer() {
             <li><a href="#personalizar" className="hover:text-foreground">Personalizar</a></li>
             <li><a href="#empresas" className="hover:text-foreground">Empresas</a></li>
             <li><a href="#portafolio" className="hover:text-foreground">Portafolio</a></li>
-            <li><a href="https://wa.me/50400000000" className="hover:text-foreground">WhatsApp</a></li>
+            <li><a href="https://wa.me/50432316100" className="hover:text-foreground">WhatsApp</a></li>
           </ul>
         </div>
       </div>

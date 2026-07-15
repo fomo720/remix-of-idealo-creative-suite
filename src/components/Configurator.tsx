@@ -1467,9 +1467,41 @@ export function Configurator() {
                   </p>
                 </div>
 
-                <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
-                  Añadir a la orden / Solicitar Cotización Profesional
-                </button>
+                {(() => {
+                  const catName = category === "iron-ons" ? "Iron-on / Estampado textil" : "Sticker";
+                  const isTransparent = /transparente|clear/i.test(materialData?.name ?? "");
+                  const summary = [
+                    `Producto: ${catName}`,
+                    `Forma / corte: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
+                    materialData ? `Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
+                    `Tamaño: ${width} × ${height} ${unit}`,
+                    `Cantidad: ${qty}`,
+                    `Escala: ${scale}%`,
+                    `Contraste: ${contrast}%`,
+                    `Brillo / opacidad: ${brightness}%`,
+                    duplicated ? "Duplicado: sí" : "",
+                    notes ? `Notas: ${notes}` : "",
+                    uploaded ? "Diseño: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño: preset "${preset}"` : "Diseño: pendiente de enviar",
+                    "",
+                    "Solicito una cotización, gracias 🙌",
+                  ].filter(Boolean).join("\n");
+                  const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`)}`;
+                  return (
+                    <a
+                      href={waHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+                    >
+                      <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
+                    </a>
+                  );
+                })()}
+                {uploaded && (
+                  <p className="mt-2 text-center text-[11px] text-muted-foreground">
+                    📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
+                  </p>
+                )}
 
                 <NavRow onBack={() => goTo(3)} />
 
@@ -2935,9 +2967,37 @@ function NotebookDesigner({
           </p>
         </div>
 
-        <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
-          Añadir a la orden / Solicitar Cotización Profesional
-        </button>
+        {(() => {
+          const summary = [
+            `Producto: Libreta Personalizada`,
+            `Material: ${material.name}`,
+            `Tamaño: ${size.label} (${size.cm})`,
+            `Estilo: ${styleId === "cover-only" ? "Solo portada" : "Portada + páginas"}`,
+            showPages ? `Interior: ${pageType}` : "",
+            hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
+            `Cantidad: ${qty}`,
+            notes ? `Notas: ${notes}` : "",
+            uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
+            "",
+            "Solicito una cotización, gracias 🙌",
+          ].filter(Boolean).join("\n");
+          const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar una libreta:\n\n${summary}`)}`;
+          return (
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+            >
+              <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
+            </a>
+          );
+        })()}
+        {(uploaded || pageArtUploaded) && (
+          <p className="mt-2 text-center text-[11px] text-muted-foreground">
+            📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
+          </p>
+        )}
         <NavRow onBack={onBack} />
       </div>
     </div>
@@ -3632,9 +3692,39 @@ function LaserDesigner({
           </p>
         </div>
 
-        <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
-          Solicitar Cotización de Grabado Láser
-        </button>
+        {(() => {
+          const summary = [
+            `Producto: ${product.name} (Grabado Láser)`,
+            variant ? `Modelo: ${variant.name}` : "",
+            color ? `Color: ${color.name}` : "",
+            byob ? "Cliente aporta el producto (solo servicio de grabado)" : "",
+            `Modo de grabado: ${engraveMode === "outline" ? "Trazo / outline" : "Original"}`,
+            `Intensidad del grabado: ${engraveIntensity}%`,
+            `Escala del arte: ${scale}%`,
+            duplicated ? "Arte duplicado: sí" : "",
+            `Cantidad: ${qty}`,
+            notes ? `Notas: ${notes}` : "",
+            uploaded ? "Diseño: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño: preset "${preset}"` : "Diseño: pendiente de enviar",
+            "",
+            "Solicito una cotización, gracias 🙌",
+          ].filter(Boolean).join("\n");
+          const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar grabado láser:\n\n${summary}`)}`;
+          return (
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+            >
+              <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
+            </a>
+          );
+        })()}
+        {uploaded && (
+          <p className="mt-2 text-center text-[11px] text-muted-foreground">
+            📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
+          </p>
+        )}
         <NavRow onBack={onBack} />
       </div>
     </div>
@@ -3893,7 +3983,7 @@ function ImprentaFinal({
         </div>
 
         <a
-          href={`https://wa.me/50433635666?text=${waMsg}`}
+          href={`https://wa.me/50432316100?text=${waMsg}`}
           target="_blank"
           rel="noreferrer"
           aria-disabled={!allSpecsChosen || (needsUpload && !file)}
