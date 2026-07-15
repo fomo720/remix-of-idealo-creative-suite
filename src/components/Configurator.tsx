@@ -2040,6 +2040,58 @@ function CategoryCard({
   );
 }
 
+const imprentaTemplateTags: Record<ImprentaProductId, { tag: string; label: string }> = {
+  tarjetas: { tag: "business,card", label: "Tarjetas de presentación" },
+  menus: { tag: "restaurant,menu", label: "Menús de restaurante" },
+  carpetas: { tag: "corporate,folder", label: "Carpetas corporativas" },
+  brochures: { tag: "brochure,flyer", label: "Brochures y volantes" },
+};
+
+function ImprentaTemplateGallery({ product }: { product: ImprentaProduct }) {
+  const info = imprentaTemplateTags[product.id];
+  const seeds = [11, 22, 33, 44, 55, 66, 77, 88];
+  const urls = seeds.map((s) => `https://loremflickr.com/480/360/${info.tag}?lock=${s}`);
+  return (
+    <div className="mt-8 rounded-2xl border border-border bg-gradient-soft p-5 sm:p-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <Sparkles className="h-3 w-3" style={{ color: "var(--brand-pink)" }} />
+            Inspiración · experimental
+          </div>
+          <h5 className="mt-1 text-lg font-bold">Ejemplos para {info.label.toLowerCase()}</h5>
+          <p className="text-xs text-muted-foreground">
+            Referencias tomadas de la web. Al continuar, contanos cuál te gusta y adaptamos la plantilla a tu marca.
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {urls.map((u, i) => (
+          <a
+            key={i}
+            href={u}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-muted"
+          >
+            <img
+              src={u}
+              alt={`Ejemplo ${i + 1} de ${info.label}`}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+            <div className="absolute right-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-white opacity-0 transition group-hover:opacity-100">
+              Ejemplo {i + 1}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+
 function SelectCard({
   title, desc, active, onClick, accent, swatch, sampleImage,
 }: { title: string; desc: string; active: boolean; onClick: () => void; accent: string; swatch?: string; sampleImage?: string }) {
