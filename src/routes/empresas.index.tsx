@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, Briefcase, Utensils, Truck, CheckCircle2, MessageCircle } from "lucide-react";
+import kitOficinasImg from "@/assets/kit-oficinas-clinicas.jpg.asset.json";
+import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
+import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
+import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 
 export const Route = createFileRoute("/empresas/")({
   head: () => ({
