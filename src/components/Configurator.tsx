@@ -2091,6 +2091,9 @@ function ImprentaTemplateGallery({ product }: { product: ImprentaProduct }) {
       </div>
     </div>
   );
+}
+
+
 
 function SelectCard({
   title, desc, active, onClick, accent, swatch, sampleImage,
