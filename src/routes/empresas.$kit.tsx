@@ -1,5 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, MessageCircle, Sparkles } from "lucide-react";
+import kitOficinasImg from "@/assets/kit-oficinas-clinicas.jpg.asset.json";
+import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
+import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
+import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
+import serviciosClinicaImg from "@/assets/servicios-clinica.jpg.asset.json";
+import serviciosRestauranteImg from "@/assets/servicios-restaurante.jpg.asset.json";
 
 type KitDetail = {
   slug: string;
