@@ -3647,7 +3647,7 @@ function StickersQuickInfo() {
     {
       icon: FileCheck2,
       title: "APROBÁ TU PRUEBA",
-      desc: "Solicitá y recibí una prueba digital de tu sticker en 1 a 3 días.",
+      desc: "Recibí una prueba digital en 1 a 3 días. Si sos de La Ceiba, podés verla física en vivo.",
       bg: "var(--brand-pink)",
     },
     {
@@ -3659,7 +3659,7 @@ function StickersQuickInfo() {
     {
       icon: Truck,
       title: "¡EN CAMINO!",
-      desc: "Recibí tu pedido en 3 a 5 días, o en 1 a 2 días con envío exprés.",
+      desc: "Envío gratis dentro de La Ceiba. Fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
       bg: "var(--brand-blue)",
     },
   ];
