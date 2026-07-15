@@ -97,7 +97,7 @@ function KitNotFound() {
 }
 
 function KitPage() {
-  const { kit } = Route.useLoaderData();
+  const { kit } = Route.useLoaderData() as { kit: KitDetail };
   const waMsg = `Hola Idealo, quiero cotizar el ${kit.title}. Les cuento sobre mi negocio:`;
   const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(waMsg)}`;
 
