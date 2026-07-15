@@ -155,6 +155,7 @@ function ProductoDesigner() {
   const data = Route.useLoaderData();
   const prod: Producto = data.prod;
   const { categoria } = data;
+  const [designMode, setDesignMode] = useState<DesignMode | null>(null);
   const [materialIdx, setMaterialIdx] = useState<number | null>(null);
   const [sizeIdx, setSizeIdx] = useState<number | null>(null);
   const [styleIdx, setStyleIdx] = useState(0);
