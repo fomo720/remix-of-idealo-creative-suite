@@ -2430,15 +2430,11 @@ function CutIllustration({ id }: { id: CutShape }) {
 
   if (id === "kiss-cut") {
     return (
-      <svg viewBox="0 0 160 100" className="h-full w-full">
-        <ellipse cx="80" cy="92" rx="55" ry="4" fill="#000" opacity="0.08" />
-        <g transform="translate(20,8)">
-          <rect x="0" y="0" width="120" height="82" rx="4" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-          {/* dashed kiss-cut outline around the apple */}
-          <circle cx="60" cy="41" r="32" fill="none" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="3 3" />
-          {appleImg(60, 30, 11)}
-        </g>
-      </svg>
+      <img
+        src={kissCutSample.url}
+        alt="Ejemplo de corte de beso"
+        className="h-full w-full object-contain"
+      />
     );
   }
   if (id === "sheets") {
@@ -2469,16 +2465,13 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls — clean roll icon with a single apple sticker centered on the paper
+  // rolls
   return (
-    <svg viewBox="0 0 160 100" className="h-full w-full" style={{ overflow: "hidden" }}>
-      <ellipse cx="82" cy="92" rx="52" ry="3.5" fill="#000" opacity="0.1" />
-
-      <image href={rollIcon.url} x="-5" y="-35" width="170" height="170" preserveAspectRatio="xMidYMid meet" />
-      <circle cx="98" cy="54" r="20" fill="none" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="3 3" />
-      {appleImg(32, 82, 38)}
-
-    </svg>
+    <img
+      src={rollsSample.url}
+      alt="Ejemplo de rollo de stickers"
+      className="h-full w-full object-contain"
+    />
   );
 }
 
