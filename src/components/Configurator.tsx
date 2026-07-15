@@ -1317,20 +1317,20 @@ export function Configurator() {
                 {/* Size presets */}
                 <div>
                   <Label className="mb-3 block text-sm font-semibold">Tamaño del sticker</Label>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-2">
                     {sizePresets.map((p, i) => (
                       <button
                         key={p.label}
                         onClick={() => applyPreset(i)}
                         className={cn(
-                          "rounded-xl border-2 p-3 text-left transition",
+                          "rounded-2xl border-2 p-5 text-left transition",
                           sizeMode === "preset" && activePreset === i
                             ? "rainbow-border-active"
                             : "border-border hover:border-foreground/20",
                         )}
                       >
-                        <div className="text-sm font-bold">{p.label}</div>
-                        <div className="mt-0.5 text-[10px] leading-tight text-muted-foreground">{p.hint}</div>
+                        <div className="text-xl font-bold sm:text-2xl">{p.label}</div>
+                        <div className="mt-1 text-sm leading-snug text-muted-foreground">{p.hint}</div>
                       </button>
                     ))}
                   </div>
