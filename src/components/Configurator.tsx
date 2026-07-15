@@ -3747,13 +3747,16 @@ function ImprentaFinal({
   onBack: () => void;
 }) {
   const needsUpload = style.id === "propio";
+  const isTemplate = style.id === "plantilla";
   const allSpecsChosen = product.fields.every((f) => specs[f.key]);
+  const [tplSummary, setTplSummary] = useState("");
 
   const summary = [
     `Producto: ${product.name}`,
     `Estilo de diseño: ${style.name}`,
     `Cantidad: ${qty}`,
     ...product.fields.map((f) => `${f.label}: ${specs[f.key] || "-"}`),
+    isTemplate && tplSummary ? `\n--- Plantilla editada ---\n${tplSummary}` : "",
     notes ? `Notas: ${notes}` : "",
     file ? "Diseño: adjunto (se envía por WhatsApp)" : needsUpload ? "Diseño: pendiente de enviar" : "Diseño: a cargo de Idealo",
   ].filter(Boolean).join("\n");
@@ -3769,6 +3772,9 @@ function ImprentaFinal({
     <div className="animate-step-in grid gap-8 lg:grid-cols-[1.1fr_1fr]">
       {/* LEFT: specs */}
       <div className="space-y-6">
+        {isTemplate && (
+          <ImprentaTemplateEditor product={product} onExport={setTplSummary} />
+        )}
         <SectionTitle icon={<FileCheck2 className="h-5 w-5" />} title="Especificaciones del producto" />
 
         {product.fields.map((f) => (
