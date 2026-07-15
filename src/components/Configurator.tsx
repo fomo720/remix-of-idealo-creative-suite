@@ -2967,9 +2967,37 @@ function NotebookDesigner({
           </p>
         </div>
 
-        <button className="mt-4 w-full rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
-          Añadir a la orden / Solicitar Cotización Profesional
-        </button>
+        {(() => {
+          const summary = [
+            `Producto: Libreta Personalizada`,
+            `Material: ${material.name}`,
+            `Tamaño: ${size.label} (${size.cm})`,
+            `Estilo: ${styleId === "cover-only" ? "Solo portada" : "Portada + páginas"}`,
+            showPages ? `Interior: ${pageType}` : "",
+            hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
+            `Cantidad: ${qty}`,
+            notes ? `Notas: ${notes}` : "",
+            uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
+            "",
+            "Solicito una cotización, gracias 🙌",
+          ].filter(Boolean).join("\n");
+          const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar una libreta:\n\n${summary}`)}`;
+          return (
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+            >
+              <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
+            </a>
+          );
+        })()}
+        {(uploaded || pageArtUploaded) && (
+          <p className="mt-2 text-center text-[11px] text-muted-foreground">
+            📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
+          </p>
+        )}
         <NavRow onBack={onBack} />
       </div>
     </div>
