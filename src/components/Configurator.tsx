@@ -2470,7 +2470,7 @@ function CutIllustration({ id }: { id: CutShape }) {
     <img
       src={rollsSample.url}
       alt="Ejemplo de rollo de stickers"
-      className="h-full w-full object-cover"
+      className="h-full w-full object-contain"
     />
   );
 }
