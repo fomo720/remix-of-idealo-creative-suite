@@ -418,11 +418,13 @@ function ProductoDesigner() {
               <p className="text-center text-xs text-muted-foreground">
                 {designMode === null
                   ? "Elegí cómo querés el diseño para continuar."
-                  : designMode === "propio" && !file
-                    ? "Subí tu diseño para enviar la cotización."
-                    : material === null
-                      ? "Elegí el material."
-                      : "Elegí el tamaño."}
+                  : material === null
+                    ? "Elegí el material."
+                    : size === null
+                      ? "Elegí el tamaño."
+                      : designMode === "propio"
+                        ? "Subí tu diseño para enviar la cotización."
+                        : "Subí una imagen de referencia para enviar la cotización."}
               </p>
             )}
           </div>
