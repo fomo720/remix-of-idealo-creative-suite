@@ -33,6 +33,7 @@ const KITS: Kit[] = [
     icon: Utensils,
     includes: ["Diseño e impresión de menús", "Stickers para empaques y bolsas", "Branding e identidad visual", "Banners y rótulos exteriores"],
     accent: "from-amber-500/15 to-orange-500/10 border-amber-500/30",
+    image: kitRestaurantesImg.url,
   },
   {
     slug: "oficinas-clinicas",
@@ -41,6 +42,7 @@ const KITS: Kit[] = [
     icon: Briefcase,
     includes: ["Señalética y wayfinding", "Papelería corporativa completa", "Vinilos para ventanales", "Cuadros y decoración de marca"],
     accent: "from-sky-500/15 to-blue-500/10 border-sky-500/30",
+    image: kitOficinasImg.url,
   },
   {
     slug: "emprendedores-startups",
@@ -49,6 +51,7 @@ const KITS: Kit[] = [
     icon: Building2,
     includes: ["Logo e identidad de marca", "Tarjetas de presentación", "Stickers de marca", "Kit de redes sociales"],
     accent: "from-fuchsia-500/15 to-pink-500/10 border-fuchsia-500/30",
+    image: kitEmprendedoresImg.url,
   },
   {
     slug: "flota-logistica",
@@ -57,6 +60,7 @@ const KITS: Kit[] = [
     icon: Truck,
     includes: ["Vinilo de corte para autos", "Rotulación de camiones y motos", "Microperforado para vidrios", "Identidad para uniformes"],
     accent: "from-emerald-500/15 to-teal-500/10 border-emerald-500/30",
+    image: kitFlotaImg.url,
   },
 ];
 
