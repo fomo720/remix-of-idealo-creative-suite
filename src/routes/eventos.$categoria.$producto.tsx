@@ -406,7 +406,7 @@ function ProductoDesigner() {
                 target="_blank"
                 rel="noreferrer"
                 aria-disabled={!readyToQuote}
-                onClick={(e) => { if (!readyToQuote) e.preventDefault(); }}
+                onClick={handleWhatsAppClick}
                 className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-cta animate-rainbow-shimmer px-6 py-3.5 text-sm font-semibold text-white shadow-elegant transition ${
                   readyToQuote ? "hover:scale-[1.02]" : "cursor-not-allowed opacity-60"
                 }`}
