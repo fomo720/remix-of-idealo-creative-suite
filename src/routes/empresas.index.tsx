@@ -22,6 +22,7 @@ type Kit = {
   icon: typeof Utensils;
   includes: string[];
   accent: string;
+  image: string;
 };
 
 const KITS: Kit[] = [
