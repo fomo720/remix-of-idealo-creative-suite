@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import evtCumple from "@/assets/evt-cumple-ejemplo.jpg.asset.json";
 
 
-export const Route = createFileRoute("/eventos/$categoria")({
+export const Route = createFileRoute("/eventos/$categoria/")({
   loader: ({ params }) => {
     const cat = CATEGORIAS[params.categoria];
     if (!cat) throw notFound();
