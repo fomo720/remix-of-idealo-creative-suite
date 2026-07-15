@@ -292,7 +292,7 @@ function ProductoDesigner() {
                       ? `Cambiar archivo · ${fileName}`
                       : designMode === "propio"
                         ? "Subí tu diseño (obligatorio)"
-                        : "Subí una referencia visual (opcional)"}
+                        : "Subí una imagen de referencia (obligatorio)"}
                     <input
                       ref={fileRef}
                       type="file"
