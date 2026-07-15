@@ -187,12 +187,31 @@ function ProductoDesigner() {
     notes ? `Notas: ${notes}` : "",
   ].filter(Boolean).join("\n");
 
-  const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`);
+  const attachReminder = file
+    ? `\n\n📎 IMPORTANTE: Adjuntá también el archivo "${fileName}" en este chat (se descargó automáticamente a tu dispositivo).`
+    : "";
+
+  const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}${attachReminder}`);
 
   const handleFile = (f: File | null) => {
     if (!f) return;
     setFile(URL.createObjectURL(f));
     setFileName(f.name);
+  };
+
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!readyToQuote) {
+      e.preventDefault();
+      return;
+    }
+    if (file && fileName) {
+      const a = document.createElement("a");
+      a.href = file;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   };
 
   return (
