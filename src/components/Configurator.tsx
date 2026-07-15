@@ -1123,9 +1123,7 @@ export function Configurator() {
                 ))}
               </div>
 
-              {imprentaStyle === "plantilla" && imprentaProductData && (
-                <ImprentaTemplateGallery product={imprentaProductData} />
-              )}
+
 
               <p className="mt-4 text-center text-xs text-muted-foreground">
                 Recomendado: si es tu primera impresión con nosotros, elegí "Diseño desde plantilla" — es más rápido y económico.
