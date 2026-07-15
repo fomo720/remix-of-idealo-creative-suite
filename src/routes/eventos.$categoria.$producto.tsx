@@ -187,12 +187,31 @@ function ProductoDesigner() {
     notes ? `Notas: ${notes}` : "",
   ].filter(Boolean).join("\n");
 
-  const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`);
+  const attachReminder = file
+    ? `\n\n📎 IMPORTANTE: Adjuntá también el archivo "${fileName}" en este chat (se descargó automáticamente a tu dispositivo).`
+    : "";
+
+  const waMsg = encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}${attachReminder}`);
 
   const handleFile = (f: File | null) => {
     if (!f) return;
     setFile(URL.createObjectURL(f));
     setFileName(f.name);
+  };
+
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!readyToQuote) {
+      e.preventDefault();
+      return;
+    }
+    if (file && fileName) {
+      const a = document.createElement("a");
+      a.href = file;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   };
 
   return (
@@ -387,7 +406,7 @@ function ProductoDesigner() {
                 target="_blank"
                 rel="noreferrer"
                 aria-disabled={!readyToQuote}
-                onClick={(e) => { if (!readyToQuote) e.preventDefault(); }}
+                onClick={handleWhatsAppClick}
                 className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-cta animate-rainbow-shimmer px-6 py-3.5 text-sm font-semibold text-white shadow-elegant transition ${
                   readyToQuote ? "hover:scale-[1.02]" : "cursor-not-allowed opacity-60"
                 }`}
