@@ -13,6 +13,7 @@ import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos.index'
 import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
+import { Route as EventosCategoriaIndexRouteImport } from './routes/eventos.$categoria.index'
 import { Route as EventosCategoriaProductoRouteImport } from './routes/eventos.$categoria.$producto'
 
 const EventosRoute = EventosRouteImport.update({
@@ -35,6 +36,11 @@ const EventosCategoriaRoute = EventosCategoriaRouteImport.update({
   path: '/$categoria',
   getParentRoute: () => EventosRoute,
 } as any)
+const EventosCategoriaIndexRoute = EventosCategoriaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventosCategoriaRoute,
+} as any)
 const EventosCategoriaProductoRoute =
   EventosCategoriaProductoRouteImport.update({
     id: '/$producto',
@@ -48,12 +54,13 @@ export interface FileRoutesByFullPath {
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
+  '/eventos/$categoria/': typeof EventosCategoriaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
   '/eventos': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
+  '/eventos/$categoria': typeof EventosCategoriaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,6 +69,7 @@ export interface FileRoutesById {
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
+  '/eventos/$categoria/': typeof EventosCategoriaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,8 +79,9 @@ export interface FileRouteTypes {
     | '/eventos/$categoria'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
+    | '/eventos/$categoria/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/eventos/$categoria' | '/eventos' | '/eventos/$categoria/$producto'
+  to: '/' | '/eventos' | '/eventos/$categoria/$producto' | '/eventos/$categoria'
   id:
     | '__root__'
     | '/'
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/eventos/$categoria'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
+    | '/eventos/$categoria/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventosCategoriaRouteImport
       parentRoute: typeof EventosRoute
     }
+    '/eventos/$categoria/': {
+      id: '/eventos/$categoria/'
+      path: '/'
+      fullPath: '/eventos/$categoria/'
+      preLoaderRoute: typeof EventosCategoriaIndexRouteImport
+      parentRoute: typeof EventosCategoriaRoute
+    }
     '/eventos/$categoria/$producto': {
       id: '/eventos/$categoria/$producto'
       path: '/$producto'
@@ -129,10 +146,12 @@ declare module '@tanstack/react-router' {
 
 interface EventosCategoriaRouteChildren {
   EventosCategoriaProductoRoute: typeof EventosCategoriaProductoRoute
+  EventosCategoriaIndexRoute: typeof EventosCategoriaIndexRoute
 }
 
 const EventosCategoriaRouteChildren: EventosCategoriaRouteChildren = {
   EventosCategoriaProductoRoute: EventosCategoriaProductoRoute,
+  EventosCategoriaIndexRoute: EventosCategoriaIndexRoute,
 }
 
 const EventosCategoriaRouteWithChildren =
@@ -158,3 +177,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
