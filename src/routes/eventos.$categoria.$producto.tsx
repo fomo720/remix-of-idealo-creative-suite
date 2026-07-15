@@ -173,7 +173,7 @@ function ProductoDesigner() {
     designMode !== null &&
     material !== null &&
     size !== null &&
-    (designMode === "propio" ? !!file : true);
+    !!file;
 
   const summary = [
     `Producto: ${prod.title}`,
