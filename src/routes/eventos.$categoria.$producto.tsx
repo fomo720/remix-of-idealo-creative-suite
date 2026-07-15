@@ -173,7 +173,7 @@ function ProductoDesigner() {
     designMode !== null &&
     material !== null &&
     size !== null &&
-    (designMode === "propio" ? !!file : true);
+    !!file;
 
   const summary = [
     `Producto: ${prod.title}`,
@@ -292,7 +292,7 @@ function ProductoDesigner() {
                       ? `Cambiar archivo · ${fileName}`
                       : designMode === "propio"
                         ? "Subí tu diseño (obligatorio)"
-                        : "Subí una referencia visual (opcional)"}
+                        : "Subí una imagen de referencia (obligatorio)"}
                     <input
                       ref={fileRef}
                       type="file"
@@ -418,11 +418,13 @@ function ProductoDesigner() {
               <p className="text-center text-xs text-muted-foreground">
                 {designMode === null
                   ? "Elegí cómo querés el diseño para continuar."
-                  : designMode === "propio" && !file
-                    ? "Subí tu diseño para enviar la cotización."
-                    : material === null
-                      ? "Elegí el material."
-                      : "Elegí el tamaño."}
+                  : material === null
+                    ? "Elegí el material."
+                    : size === null
+                      ? "Elegí el tamaño."
+                      : designMode === "propio"
+                        ? "Subí tu diseño para enviar la cotización."
+                        : "Subí una imagen de referencia para enviar la cotización."}
               </p>
             )}
           </div>
