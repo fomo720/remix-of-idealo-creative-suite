@@ -14,6 +14,9 @@ type KitDetail = {
   description: string;
   includes: { title: string; desc: string }[];
   ideal: string[];
+  image: string;
+  showcaseImage?: string;
+  showcaseCaption?: string;
 };
 
 const KITS: Record<string, KitDetail> = {
@@ -30,6 +33,9 @@ const KITS: Record<string, KitDetail> = {
       { title: "Banners y rótulos", desc: "Impresión gran formato para fachada, terraza o eventos temporales." },
     ],
     ideal: ["Cafeterías", "Restaurantes casuales y fine dining", "Food trucks", "Dark kitchens y delivery"],
+    image: kitRestaurantesImg.url,
+    showcaseImage: serviciosRestauranteImg.url,
+    showcaseCaption: "Todos los servicios que ofrecemos para restaurantes y cafés",
   },
   "oficinas-clinicas": {
     slug: "oficinas-clinicas",
@@ -44,6 +50,9 @@ const KITS: Record<string, KitDetail> = {
       { title: "Cuadros y decoración", desc: "Impresión decorativa con misión, visión o arte institucional." },
     ],
     ideal: ["Clínicas médicas y dentales", "Bufetes y consultorías", "Coworkings", "Oficinas administrativas"],
+    image: kitOficinasImg.url,
+    showcaseImage: serviciosClinicaImg.url,
+    showcaseCaption: "Todos los servicios que ofrecemos para clínicas y oficinas",
   },
   "emprendedores-startups": {
     slug: "emprendedores-startups",
@@ -58,6 +67,7 @@ const KITS: Record<string, KitDetail> = {
       { title: "Kit de redes sociales", desc: "Plantillas y arte inicial para tu presencia digital." },
     ],
     ideal: ["Marcas nuevas", "Freelancers y consultores", "Tiendas online", "Pequeños productores"],
+    image: kitEmprendedoresImg.url,
   },
   "flota-logistica": {
     slug: "flota-logistica",
@@ -72,6 +82,7 @@ const KITS: Record<string, KitDetail> = {
       { title: "Uniformes e identidad", desc: "Identidad coherente entre vehículos, uniformes y papelería." },
     ],
     ideal: ["Empresas de reparto", "Servicios técnicos y mantenimiento", "Transporte ejecutivo", "Ambulancias y emergencias"],
+    image: kitFlotaImg.url,
   },
 };
 
