@@ -2013,21 +2013,21 @@ function CategoryCard({
     <button
       onClick={onClick}
       className={cn(
-        "group relative overflow-hidden rounded-3xl border-2 p-8 text-left transition-all rainbow-splash",
+        "group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 p-8 text-left transition-all rainbow-splash",
         active ? "rainbow-border-active" : "border-border hover:-translate-y-1 hover:shadow-elegant",
       )}
     >
       <div
-        className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
+        className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
         style={{ background: accent }}
       />
-      <div className="relative">
-        <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: accent }}>
+      <div className="relative flex h-full flex-col">
+        <div className="mb-4 grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white" style={{ background: accent }}>
           {icon}
         </div>
-        <h4 className="text-2xl font-bold">{title}</h4>
+        <h4 className="min-h-[3.5rem] text-2xl font-bold leading-tight">{title}</h4>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-6 flex items-center gap-2 text-sm font-medium">
+        <div className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium">
           Comenzar <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
         </div>
       </div>
