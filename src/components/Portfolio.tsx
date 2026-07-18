@@ -145,7 +145,7 @@ export function Portfolio() {
                   className="group relative cursor-pointer overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
                 >
                   <div
-                    className="relative aspect-square w-full overflow-hidden sm:aspect-[4/5]"
+                    className="relative aspect-[4/5] w-full overflow-hidden"
                     style={{ background: p.image ? p.bg : p.gradient }}
                   >
                     {p.image ? (
@@ -153,9 +153,7 @@ export function Portfolio() {
                         src={p.image}
                         alt={p.title}
                         loading="lazy"
-                        className={`absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-105 ${
-                          p.fit === "contain" ? "object-contain p-3 sm:p-4" : "object-cover"
-                        }`}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : null}
                     <div className="absolute left-3 top-3">
