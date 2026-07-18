@@ -462,6 +462,27 @@ function ProductoDesigner() {
               </div>
             </Section>
 
+            {/* Tipo de página (opcional) */}
+            {prod.pageTypes && (
+              <Section icon={<Layers className="h-4 w-4" />} title="4 · Tipo de página">
+                <div className="flex flex-wrap gap-2">
+                  {prod.pageTypes.map((p, i) => (
+                    <button
+                      key={p}
+                      onClick={() => setPageTypeIdx(i)}
+                      className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition ${
+                        i === pageTypeIdx
+                          ? "border-foreground bg-foreground text-background"
+                          : "border-border bg-card hover:border-foreground/40"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </Section>
+            )}
+
             {/* Estilo (opcional, cuando aplica) */}
             {prod.styles && (
               <Section icon={<Palette className="h-4 w-4" />} title="Estilo visual">
