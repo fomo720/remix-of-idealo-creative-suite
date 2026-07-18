@@ -175,6 +175,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Sticker para Panita",
     desc: "Sticker impermeable resistente para lonchera con nombre.",
     emoji: "🏷️",
+    hero: panitaChristianHero.url,
+    simplePreview: true,
     materials: ["Vinil impermeable brillante", "Vinil mate premium", "Vinil transparente", "Vinil holográfico"],
     sizes: [
       { label: "Chico", dim: "5 × 3 cm" },
