@@ -39,9 +39,11 @@ type Producto = {
   desc: string;
   emoji: string;
   hero?: string;
+  simplePreview?: boolean;
   sizes: SizeOpt[];
   materials: string[];
   styles?: string[];
+  pageTypes?: string[];
   askText?: { label: string; placeholder: string }[];
 };
 
