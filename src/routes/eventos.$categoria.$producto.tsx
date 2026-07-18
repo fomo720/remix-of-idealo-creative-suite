@@ -7,6 +7,7 @@ import menuHero from "@/assets/evt-menu.jpg.asset.json";
 import mesaHero from "@/assets/evt-mesa.jpg.asset.json";
 import cajitaHero from "@/assets/evt-cajita.jpg.asset.json";
 import bannerHero from "@/assets/evt-banner.jpg.asset.json";
+import cuadernoHero from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
 
 export const Route = createFileRoute("/eventos/$categoria/$producto")({
   loader: ({ params }) => {
@@ -38,9 +39,11 @@ type Producto = {
   desc: string;
   emoji: string;
   hero?: string;
+  simplePreview?: boolean;
   sizes: SizeOpt[];
   materials: string[];
   styles?: string[];
+  pageTypes?: string[];
   askText?: { label: string; placeholder: string }[];
 };
 
@@ -149,18 +152,21 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
   },
   "cuaderno-personalizado": {
     title: "Cuaderno con Sticker",
-    desc: "Cuaderno espiral personalizado con sticker temático y nombre.",
+    desc: "Cuaderno personalizado con sticker rotulador — nombre, personaje y colores a tu gusto.",
     emoji: "📓",
+    hero: cuadernoHero.url,
+    simplePreview: true,
     materials: ["Cuaderno espiral 100 hojas", "Cuaderno pasta dura", "Cuaderno kraft eco", "Cuaderno cosido premium"],
     sizes: [
       { label: "Media carta", dim: "14 × 21 cm" },
       { label: "Carta", dim: "21 × 27 cm", note: "El más común" },
       { label: "Mini agenda", dim: "10 × 15 cm" },
     ],
-    styles: ["Personaje favorito", "Espacial / galaxia", "Deportes", "Minimalista con nombre"],
+    pageTypes: ["Rayado", "Cuadriculado", "Blanco", "Punteado"],
     askText: [
       { label: "Nombre del niño/a", placeholder: "Ej: Lucía" },
       { label: "Tema o personaje", placeholder: "Ej: Buzz Lightyear" },
+      { label: "Cantidad", placeholder: "Ej: 3 cuadernos" },
     ],
   },
   "sticker-panita": {
@@ -255,6 +261,7 @@ function ProductoDesigner() {
   const [materialIdx, setMaterialIdx] = useState<number | null>(null);
   const [sizeIdx, setSizeIdx] = useState<number | null>(null);
   const [styleIdx, setStyleIdx] = useState(0);
+  const [pageTypeIdx, setPageTypeIdx] = useState<number | null>(null);
   const [text, setText] = useState<Record<number, string>>({});
   const [file, setFile] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -264,11 +271,13 @@ function ProductoDesigner() {
   const size = sizeIdx !== null ? prod.sizes[sizeIdx] : null;
   const material = materialIdx !== null ? prod.materials[materialIdx] : null;
   const style = prod.styles?.[styleIdx];
+  const pageType = prod.pageTypes && pageTypeIdx !== null ? prod.pageTypes[pageTypeIdx] : null;
 
   const readyToQuote =
     designMode !== null &&
     material !== null &&
     size !== null &&
+    (!prod.pageTypes || pageType !== null) &&
     !!file;
 
   const summary = [
@@ -276,6 +285,7 @@ function ProductoDesigner() {
     `Modo de diseño: ${designMode === "propio" ? "Tengo mi propio diseño (adjunto)" : "Necesito que me hagan el diseño"}`,
     material ? `Material: ${material}` : "",
     size ? `Tamaño: ${size.label} (${size.dim})` : "",
+    pageType ? `Tipo de página: ${pageType}` : "",
     style && prod.styles ? `Estilo: ${style}` : "",
     ...(prod.askText ?? []).map((f, i) => `${f.label}: ${text[i] || "-"}`),
     designMode === "ayuda" && file ? `Referencia visual: adjunta (${fileName})` : "",
@@ -332,32 +342,38 @@ function ProductoDesigner() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           {/* Preview */}
-          <div className="sticky top-24 self-start rounded-3xl border border-border bg-card p-6 shadow-elegant">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Vista previa</p>
-            <div className="relative mt-4 flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100 via-white to-orange-100">
-              {file ? (
-                <img src={file} alt="Diseño" className="max-h-full max-w-full object-contain" />
-              ) : prod.hero ? (
-                <img
-                  src={prod.hero}
-                  alt={prod.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="p-6 text-center">
-                  <div className="text-7xl">{prod.emoji}</div>
-                  <p className="mt-4 text-2xl font-bold">{text[0] || "Tu diseño aquí"}</p>
-                  {text[1] && <p className="mt-2 text-sm text-muted-foreground">{text[1]}</p>}
-                </div>
-              )}
+          {prod.simplePreview && prod.hero ? (
+            <div className="sticky top-24 self-start overflow-hidden rounded-3xl border border-border bg-card shadow-elegant">
+              <img src={prod.hero} alt={prod.title} className="h-full w-full object-contain" />
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-              <PreviewChip label="Material" value={material ?? "—"} />
-              <PreviewChip label="Tamaño" value={size ? `${size.label} · ${size.dim}` : "—"} />
-              {prod.styles && <PreviewChip label="Estilo" value={style ?? "—"} />}
-              <PreviewChip label="Diseño" value={designMode ? (designMode === "propio" ? "Propio" : "Idealo lo hace") : "—"} />
+          ) : (
+            <div className="sticky top-24 self-start rounded-3xl border border-border bg-card p-6 shadow-elegant">
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Vista previa</p>
+              <div className="relative mt-4 flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100 via-white to-orange-100">
+                {file ? (
+                  <img src={file} alt="Diseño" className="max-h-full max-w-full object-contain" />
+                ) : prod.hero ? (
+                  <img
+                    src={prod.hero}
+                    alt={prod.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="p-6 text-center">
+                    <div className="text-7xl">{prod.emoji}</div>
+                    <p className="mt-4 text-2xl font-bold">{text[0] || "Tu diseño aquí"}</p>
+                    {text[1] && <p className="mt-2 text-sm text-muted-foreground">{text[1]}</p>}
+                  </div>
+                )}
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+                <PreviewChip label="Material" value={material ?? "—"} />
+                <PreviewChip label="Tamaño" value={size ? `${size.label} · ${size.dim}` : "—"} />
+                {prod.styles && <PreviewChip label="Estilo" value={style ?? "—"} />}
+                <PreviewChip label="Diseño" value={designMode ? (designMode === "propio" ? "Propio" : "Idealo lo hace") : "—"} />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Controls */}
           <div className="space-y-8">
@@ -446,6 +462,27 @@ function ProductoDesigner() {
               </div>
             </Section>
 
+            {/* Tipo de página (opcional) */}
+            {prod.pageTypes && (
+              <Section icon={<Layers className="h-4 w-4" />} title="4 · Tipo de página">
+                <div className="flex flex-wrap gap-2">
+                  {prod.pageTypes.map((p, i) => (
+                    <button
+                      key={p}
+                      onClick={() => setPageTypeIdx(i)}
+                      className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition ${
+                        i === pageTypeIdx
+                          ? "border-foreground bg-foreground text-background"
+                          : "border-border bg-card hover:border-foreground/40"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </Section>
+            )}
+
             {/* Estilo (opcional, cuando aplica) */}
             {prod.styles && (
               <Section icon={<Palette className="h-4 w-4" />} title="Estilo visual">
@@ -516,11 +553,13 @@ function ProductoDesigner() {
                   ? "Elegí cómo querés el diseño para continuar."
                   : material === null
                     ? "Elegí el material."
-                    : size === null
-                      ? "Elegí el tamaño."
-                      : designMode === "propio"
-                        ? "Subí tu diseño para enviar la cotización."
-                        : "Subí una imagen de referencia para enviar la cotización."}
+                      : size === null
+                        ? "Elegí el tamaño."
+                        : prod.pageTypes && pageType === null
+                          ? "Elegí el tipo de página."
+                          : designMode === "propio"
+                            ? "Subí tu diseño para enviar la cotización."
+                            : "Subí una imagen de referencia para enviar la cotización."}
               </p>
             )}
           </div>
