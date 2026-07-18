@@ -261,6 +261,7 @@ function ProductoDesigner() {
   const [materialIdx, setMaterialIdx] = useState<number | null>(null);
   const [sizeIdx, setSizeIdx] = useState<number | null>(null);
   const [styleIdx, setStyleIdx] = useState(0);
+  const [pageTypeIdx, setPageTypeIdx] = useState<number | null>(null);
   const [text, setText] = useState<Record<number, string>>({});
   const [file, setFile] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -270,11 +271,13 @@ function ProductoDesigner() {
   const size = sizeIdx !== null ? prod.sizes[sizeIdx] : null;
   const material = materialIdx !== null ? prod.materials[materialIdx] : null;
   const style = prod.styles?.[styleIdx];
+  const pageType = prod.pageTypes && pageTypeIdx !== null ? prod.pageTypes[pageTypeIdx] : null;
 
   const readyToQuote =
     designMode !== null &&
     material !== null &&
     size !== null &&
+    (!prod.pageTypes || pageType !== null) &&
     !!file;
 
   const summary = [
@@ -282,6 +285,7 @@ function ProductoDesigner() {
     `Modo de diseño: ${designMode === "propio" ? "Tengo mi propio diseño (adjunto)" : "Necesito que me hagan el diseño"}`,
     material ? `Material: ${material}` : "",
     size ? `Tamaño: ${size.label} (${size.dim})` : "",
+    pageType ? `Tipo de página: ${pageType}` : "",
     style && prod.styles ? `Estilo: ${style}` : "",
     ...(prod.askText ?? []).map((f, i) => `${f.label}: ${text[i] || "-"}`),
     designMode === "ayuda" && file ? `Referencia visual: adjunta (${fileName})` : "",
