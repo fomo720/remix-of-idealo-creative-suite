@@ -29,6 +29,7 @@ import boxersPersonalizados from "@/assets/portfolio-boxers.jpg.asset.json";
 import calsetasPersonalizadas from "@/assets/portfolio-calsetas.jpg.asset.json";
 import retrateras from "@/assets/portfolio-retrateras.jpg.asset.json";
 import rompecabezas from "@/assets/portfolio-rompecabezas.jpg.asset.json";
+import polaroid from "@/assets/portfolio-polaroid.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
