@@ -25,6 +25,7 @@ import botellasPersonalizadas from "@/assets/portfolio-botellas-personalizadas.j
 import etiquetasBotellas from "@/assets/portfolio-etiquetas-botellas.jpg.asset.json";
 import marcosFotos from "@/assets/portfolio-marcos-fotos.jpg.asset.json";
 import cadenasGrabado from "@/assets/portfolio-cadenas-grabado.jpg.asset.json";
+import boxersPersonalizados from "@/assets/portfolio-boxers.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
