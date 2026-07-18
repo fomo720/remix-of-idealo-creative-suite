@@ -18,7 +18,7 @@ import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json
 import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
 import albumMama from "@/assets/portfolio-album-mama.jpg.asset.json";
 
-type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación";
+type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
 type Project = {
   title: string;
