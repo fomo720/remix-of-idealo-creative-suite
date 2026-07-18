@@ -5,6 +5,7 @@ import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
 import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
 import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 import combo1Img from "@/assets/combo-1-emprendedores.jpg.asset.json";
+import combo2Img from "@/assets/combo-2-emprendedores.jpg.asset.json";
 
 export const Route = createFileRoute("/empresas/")({
   head: () => ({
@@ -158,6 +159,42 @@ function EmpresasIndex() {
               >
                 <MessageCircle className="h-4 w-4" /> Pedir Combo #1
               </a>
+            </div>
+
+            <div className="flex flex-col justify-center rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-500 to-purple-600 p-8 text-white sm:p-10 md:order-2">
+              <p className="text-xs font-bold tracking-widest text-white/80">COMBO #2</p>
+              <h3 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Oferta para Emprendedores</h3>
+              <div className="mt-6 space-y-3 text-base">
+                {[
+                  "1 camisa kiana con logo (talla S, M o L)",
+                  "100 stickers de 1.5×1.5 pulgadas",
+                  "1 banner con araña",
+                  "100 tarjetas de presentación",
+                  "100 hojas volantes",
+                  "1 hablador tamaño carta",
+                ].map((i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-white/90" />
+                    <span>{i}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 flex items-baseline gap-3">
+                <span className="text-5xl font-bold">L 1,600</span>
+                <span className="text-sm text-white/80">precio total</span>
+              </div>
+              <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
+              <a
+                href={`https://wa.me/50432316100?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #2 para Emprendedores (L 1,600).")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-indigo-600 transition hover:scale-[1.02]"
+              >
+                <MessageCircle className="h-4 w-4" /> Pedir Combo #2
+              </a>
+            </div>
+            <div className="overflow-hidden rounded-3xl border border-indigo-200 bg-white shadow-elegant md:order-1">
+              <img src={combo2Img.url} alt="Combo #2 para emprendedores" loading="lazy" className="w-full object-cover" />
             </div>
           </div>
         </div>
