@@ -50,7 +50,7 @@ const projects: Project[] = [
   { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5" },
   { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a" },
   
-  { title: "Foto álbum \"MAMÁ\"", tag: "Regalos", type: "Regalos", subtitle: "Álbum rosa con lettering en vinil blanco y rosas · regalo especial para mamá", image: albumMama2.url, bg: "#ec4899" },
+  { title: "Foto Álbum", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con el nombre y diseño que quieras · ideal para regalos, aniversarios y ocasiones especiales", image: albumMama2.url, bg: "#ec4899" },
   { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a" },
 ];
 
