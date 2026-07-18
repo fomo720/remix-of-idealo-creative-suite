@@ -56,6 +56,7 @@ const projects: Project[] = [
   { title: "Foto Álbum", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con el nombre y diseño que quieras · ideal para regalos, aniversarios y ocasiones especiales", image: albumMama2.url, bg: "#ec4899", fit: "contain" },
   { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a", fit: "contain" },
   { title: "Variedad de banners", tag: "Publicidad", type: "Banderines", subtitle: "Banner cruza calle, mini banner de mesa, roll up y banner araña · cualquier tamaño", image: variedadBanners.url, bg: "#ffffff" },
+  { title: "Grabado láser para Papá", tag: "Regalos", type: "Regalos", subtitle: "Billeteras, termos y tablas de cortar con grabado láser personalizado · regalo perfecto para Papá", image: grabadoPapa.url, bg: "#0a0a0a" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
