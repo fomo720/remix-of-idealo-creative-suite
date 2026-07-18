@@ -342,32 +342,38 @@ function ProductoDesigner() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           {/* Preview */}
-          <div className="sticky top-24 self-start rounded-3xl border border-border bg-card p-6 shadow-elegant">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Vista previa</p>
-            <div className="relative mt-4 flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100 via-white to-orange-100">
-              {file ? (
-                <img src={file} alt="Diseño" className="max-h-full max-w-full object-contain" />
-              ) : prod.hero ? (
-                <img
-                  src={prod.hero}
-                  alt={prod.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="p-6 text-center">
-                  <div className="text-7xl">{prod.emoji}</div>
-                  <p className="mt-4 text-2xl font-bold">{text[0] || "Tu diseño aquí"}</p>
-                  {text[1] && <p className="mt-2 text-sm text-muted-foreground">{text[1]}</p>}
-                </div>
-              )}
+          {prod.simplePreview && prod.hero ? (
+            <div className="sticky top-24 self-start overflow-hidden rounded-3xl border border-border bg-card shadow-elegant">
+              <img src={prod.hero} alt={prod.title} className="h-full w-full object-contain" />
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-              <PreviewChip label="Material" value={material ?? "—"} />
-              <PreviewChip label="Tamaño" value={size ? `${size.label} · ${size.dim}` : "—"} />
-              {prod.styles && <PreviewChip label="Estilo" value={style ?? "—"} />}
-              <PreviewChip label="Diseño" value={designMode ? (designMode === "propio" ? "Propio" : "Idealo lo hace") : "—"} />
+          ) : (
+            <div className="sticky top-24 self-start rounded-3xl border border-border bg-card p-6 shadow-elegant">
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Vista previa</p>
+              <div className="relative mt-4 flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100 via-white to-orange-100">
+                {file ? (
+                  <img src={file} alt="Diseño" className="max-h-full max-w-full object-contain" />
+                ) : prod.hero ? (
+                  <img
+                    src={prod.hero}
+                    alt={prod.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="p-6 text-center">
+                    <div className="text-7xl">{prod.emoji}</div>
+                    <p className="mt-4 text-2xl font-bold">{text[0] || "Tu diseño aquí"}</p>
+                    {text[1] && <p className="mt-2 text-sm text-muted-foreground">{text[1]}</p>}
+                  </div>
+                )}
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+                <PreviewChip label="Material" value={material ?? "—"} />
+                <PreviewChip label="Tamaño" value={size ? `${size.label} · ${size.dim}` : "—"} />
+                {prod.styles && <PreviewChip label="Estilo" value={style ?? "—"} />}
+                <PreviewChip label="Diseño" value={designMode ? (designMode === "propio" ? "Propio" : "Idealo lo hace") : "—"} />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Controls */}
           <div className="space-y-8">
