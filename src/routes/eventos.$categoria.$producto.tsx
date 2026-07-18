@@ -8,6 +8,8 @@ import mesaHero from "@/assets/evt-mesa.jpg.asset.json";
 import cajitaHero from "@/assets/evt-cajita.jpg.asset.json";
 import bannerHero from "@/assets/evt-banner.jpg.asset.json";
 import cuadernoHero from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
+import panitaChristianHero from "@/assets/evt-panita-christian.jpg.asset.json";
+import panitaNombresHero from "@/assets/evt-panita-nombres.jpg.asset.json";
 
 export const Route = createFileRoute("/eventos/$categoria/$producto")({
   loader: ({ params }) => {
