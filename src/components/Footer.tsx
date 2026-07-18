@@ -14,9 +14,13 @@ export function Footer() {
             Imprenta profesional y estudio creativo en Honduras.
           </p>
           <div className="mt-6 flex gap-2">
-            {[Instagram, Facebook, MessageCircle].map((I, i) => (
-              <a key={i} href="#" className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-cta hover:text-white">
-                <I className="h-4 w-4" />
+            {[
+              { Icon: Instagram, href: "https://www.instagram.com/idealohn_/", label: "Instagram" },
+              { Icon: Facebook, href: "#", label: "Facebook" },
+              { Icon: MessageCircle, href: "https://wa.me/50432316100", label: "WhatsApp" },
+            ].map(({ Icon, href, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-cta hover:text-white">
+                <Icon className="h-4 w-4" />
               </a>
             ))}
           </div>
