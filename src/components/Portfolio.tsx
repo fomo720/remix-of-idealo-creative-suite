@@ -74,6 +74,7 @@ const projects: Project[] = [
   { title: "Boxers personalizados para San Valentín", tag: "Regalos", type: "Regalos", subtitle: "Sublimación full color · diseños divertidos y románticos · solo mándanos tu foto o idea", image: boxersPersonalizados.url, bg: "#ffffff", fit: "contain" },
   { title: "Calsetas personalizadas con foto", tag: "Regalos", type: "Regalos", subtitle: "Sublimación full color · caras, nombres y corazones · solo mándanos tu foto", image: calsetasPersonalizadas.url, bg: "#ffffff", fit: "contain" },
   { title: "Retrateras con tu foto impresa", tag: "Regalos", type: "Regalos", subtitle: "Marcos de madera, metal y decorativos · impresión fotográfica de alta calidad · solo mándanos tu foto", image: retrateras.url, bg: "#ffffff", fit: "contain" },
+  { title: "Rompecabezas personalizados", tag: "Regalos", type: "Regalos", subtitle: "Puzzle con tu foto favorita · varios tamaños y piezas · solo mándanos tu foto", image: rompecabezas.url, bg: "#ffffff", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
