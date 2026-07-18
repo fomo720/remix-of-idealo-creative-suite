@@ -152,18 +152,21 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
   },
   "cuaderno-personalizado": {
     title: "Cuaderno con Sticker",
-    desc: "Cuaderno espiral personalizado con sticker temático y nombre.",
+    desc: "Cuaderno personalizado con sticker rotulador — nombre, personaje y colores a tu gusto.",
     emoji: "📓",
+    hero: cuadernoHero.url,
+    simplePreview: true,
     materials: ["Cuaderno espiral 100 hojas", "Cuaderno pasta dura", "Cuaderno kraft eco", "Cuaderno cosido premium"],
     sizes: [
       { label: "Media carta", dim: "14 × 21 cm" },
       { label: "Carta", dim: "21 × 27 cm", note: "El más común" },
       { label: "Mini agenda", dim: "10 × 15 cm" },
     ],
-    styles: ["Personaje favorito", "Espacial / galaxia", "Deportes", "Minimalista con nombre"],
+    pageTypes: ["Rayado", "Cuadriculado", "Blanco", "Punteado"],
     askText: [
       { label: "Nombre del niño/a", placeholder: "Ej: Lucía" },
       { label: "Tema o personaje", placeholder: "Ej: Buzz Lightyear" },
+      { label: "Cantidad", placeholder: "Ej: 3 cuadernos" },
     ],
   },
   "sticker-panita": {
