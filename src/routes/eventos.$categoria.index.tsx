@@ -1,8 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft, Notebook, Sticker, Pencil, Frame, Coffee } from "lucide-react";
+import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft, Notebook, Sticker, Pencil, Frame, Coffee, KeyRound, ShoppingBag, ImageIcon, Coffee as Mug, Palette } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import evtCumple from "@/assets/evt-cumple-ejemplo.jpg.asset.json";
 import evtBackToSchool from "@/assets/evt-back-to-school.jpg.asset.json";
+import evtFpHero from "@/assets/evt-fp-hero.jpg.asset.json";
+import evtFpLlaveros from "@/assets/evt-fp-llaveros.jpg.asset.json";
+import evtFpTotes from "@/assets/evt-fp-totes.jpg.asset.json";
+import evtFpCanvas from "@/assets/evt-fp-canvas.jpg.asset.json";
+import evtFpTazas from "@/assets/evt-fp-tazas.jpg.asset.json";
+import evtFpSombreros from "@/assets/evt-fp-sombreros.jpg.asset.json";
 
 
 export const Route = createFileRoute("/eventos/$categoria/")({
@@ -36,6 +42,8 @@ type Producto = {
   icon: LucideIcon;
   desc: string;
   color: string;
+  image?: string;
+  whatsapp?: string;
 };
 
 type Categoria = {
@@ -54,6 +62,18 @@ const PRODUCTOS_CUMPLE: Producto[] = [
   { slug: "cajitas", title: "Cajitas", icon: Package, desc: "Cajas de regalo o dulces temáticas.", color: "var(--brand-blue)" },
   { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
   { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
+];
+
+const WA = "50432316100";
+const wa = (msg: string) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+
+const PRODUCTOS_FP: Producto[] = [
+  { slug: "llaveros", title: "Llaveros", icon: KeyRound, desc: "Llaveros patrióticos con diseño personalizado. También con grabado láser en acero.", color: "var(--brand-blue)", image: evtFpLlaveros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *llaveros patrióticos* para fiestas patrias. ¿Me pueden pasar opciones y precios?") },
+  { slug: "tote-bags", title: "Tote Bags", icon: ShoppingBag, desc: "Bolsas de tela con diseños patrios: baleada, escudo, mapa y más. Personalizables.", color: "var(--brand-orange)", image: evtFpTotes.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *tote bags patrios* para fiestas patrias. ¿Me pueden pasar opciones y precios?") },
+  { slug: "cuadros-canvas", title: "Cuadros en Canvas", icon: ImageIcon, desc: "Cuadros en canvas con arte hondureño: paisajes, guacamayas, mapa y retratos.", color: "var(--brand-violet)", image: evtFpCanvas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *cuadros en canvas* patrios. ¿Me pueden pasar tamaños y precios?") },
+  { slug: "tazas-sublimadas", title: "Tazas Sublimadas", icon: Mug, desc: "Tazas cerámicas con diseño Honduras full color. Sublimación duradera y apta lavavajillas.", color: "var(--brand-pink)", image: evtFpTazas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *tazas sublimadas* patrias. ¿Me pueden pasar opciones y precios?") },
+  { slug: "sombreros-sublimados", title: "Sombreros Sublimados", icon: Palette, desc: "Sombreros de playa sublimados con guacamaya, conchas y motivos hondureños.", color: "var(--brand-indigo)", image: evtFpSombreros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *sombreros sublimados* patrios. ¿Me pueden pasar opciones y precios?") },
+  { slug: "llaveros-grabado-laser", title: "Llaveros con Grabado Láser", icon: Flag, desc: "Llaveros de acero inoxidable con grabado láser 'Honduras' y abridor integrado.", color: "var(--brand-blue)", image: evtFpLlaveros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *llaveros con grabado láser Honduras*. ¿Me pueden pasar opciones y precios?") },
 ];
 
 const PRODUCTOS_BTS: Producto[] = [
@@ -79,6 +99,13 @@ const CATEGORIAS: Record<string, Categoria> = {
     intro: "¡Todo lo que necesitas con el nombre de tu hijo! Cuaderno, libro de aventuras, stickers para panita y lápices, marco de PVC para fotos del primer día y termo con grabado láser. Ideal para colegio y regalo.",
     hero: evtBackToSchool.url,
     productos: PRODUCTOS_BTS,
+  },
+  "fiestas-patrias": {
+    title: "Fiestas Patrias",
+    emoji: "🇭🇳",
+    intro: "¡Celebrá a lo grande las fiestas patrias! Llaveros, tote bags, cuadros canvas, tazas y sombreros sublimados, llaveros con grabado láser y mucho más. Personalizalos con nombre o logo.",
+    hero: evtFpHero.url,
+    productos: PRODUCTOS_FP,
   },
 };
 
@@ -116,26 +143,35 @@ function CategoriaPage() {
         <p className="mt-1 text-sm text-muted-foreground">Elegí uno para personalizar tamaño, estilo y diseño.</p>
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cat.productos.map((p: Producto) => (
-            <Link
-              key={p.slug}
-              to="/eventos/$categoria/$producto"
-              params={{ categoria: slug, producto: p.slug }}
-              className="group relative flex flex-col rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-foreground/30 hover:shadow-elegant"
-            >
-              <div
-                className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl transition group-hover:scale-110"
-                style={{ background: `color-mix(in oklab, ${p.color} 15%, white)`, color: p.color }}
-              >
-                <p.icon className="h-7 w-7" />
-              </div>
-              <h3 className="text-lg font-bold">{p.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
-                Personalizar <span aria-hidden>→</span>
-              </span>
-            </Link>
-          ))}
+          {cat.productos.map((p: Producto) => {
+            const inner = (
+              <>
+                {p.image ? (
+                  <div className="mb-4 overflow-hidden rounded-2xl border border-border bg-white">
+                    <img src={p.image} alt={p.title} className="aspect-[4/3] w-full object-cover transition group-hover:scale-105" />
+                  </div>
+                ) : (
+                  <div
+                    className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl transition group-hover:scale-110"
+                    style={{ background: `color-mix(in oklab, ${p.color} 15%, white)`, color: p.color }}
+                  >
+                    <p.icon className="h-7 w-7" />
+                  </div>
+                )}
+                <h3 className="text-lg font-bold">{p.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+                  {p.whatsapp ? "Cotizar por WhatsApp" : "Personalizar"} <span aria-hidden>→</span>
+                </span>
+              </>
+            );
+            const cls = "group relative flex flex-col rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-foreground/30 hover:shadow-elegant";
+            return p.whatsapp ? (
+              <a key={p.slug} href={p.whatsapp} target="_blank" rel="noreferrer" className={cls}>{inner}</a>
+            ) : (
+              <Link key={p.slug} to="/eventos/$categoria/$producto" params={{ categoria: slug, producto: p.slug }} className={cls}>{inner}</Link>
+            );
+          })}
         </div>
       </div>
     </section>

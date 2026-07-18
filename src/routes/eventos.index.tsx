@@ -23,7 +23,7 @@ const CATEGORIES: EventCat[] = [
   { slug: "back-to-school", title: "Back to School", emoji: "🎒", desc: "Todo personalizado con el nombre del niño: cuaderno, libro, stickers para panita y lápices, marco de fotos y termo con grabado láser.", available: true },
   { slug: "bodas", title: "Bodas", emoji: "💍", desc: "Señalética elegante, menús personalizados, letreros de bienvenida y detalles para invitados." },
   { slug: "baby-shower", title: "Baby Shower", emoji: "👶", desc: "Kit temático completo con banners, invitaciones y stickers." },
-  { slug: "fiestas-patrias", title: "Fiestas Patrias", emoji: "🇭🇳", desc: "Camisetas patrióticas, banderines, cuadro de danza y decoración institucional." },
+  { slug: "fiestas-patrias", title: "Fiestas Patrias", emoji: "🇭🇳", desc: "Llaveros, tote bags, cuadros canvas, tazas y sombreros sublimados, llaveros con grabado láser y mucho más. Personalizados con nombre o logo.", available: true },
   { slug: "san-valentin", title: "San Valentín", emoji: "💖", desc: "Marcos, cadenas grabadas, boxers, retrateras con foto y regalos personalizados." },
   { slug: "navidad", title: "Navidad", emoji: "🎄", desc: "Ornamentos con foto, calendarios corporativos y regalos con tu marca." },
 ];
