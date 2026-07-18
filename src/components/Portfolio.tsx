@@ -20,6 +20,7 @@ import albumMama2 from "@/assets/portfolio-album-mama-2.jpg.asset.json";
 import bannerCruzacalle from "@/assets/portfolio-banner-cruzacalle.jpg.asset.json";
 import variedadBanners from "@/assets/portfolio-variedad-banners.jpg.asset.json";
 import grabadoPapa from "@/assets/portfolio-grabado-papa.jpg.asset.json";
+import camisetasPapa from "@/assets/portfolio-camisetas-papa.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
@@ -57,6 +58,7 @@ const projects: Project[] = [
   { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a", fit: "contain" },
   { title: "Variedad de banners", tag: "Publicidad", type: "Banderines", subtitle: "Banner cruza calle, mini banner de mesa, roll up y banner araña · cualquier tamaño", image: variedadBanners.url, bg: "#ffffff" },
   { title: "Grabado láser para Papá", tag: "Regalos", type: "Regalos", subtitle: "Billeteras, termos y tablas de cortar con grabado láser personalizado · regalo perfecto para Papá", image: grabadoPapa.url, bg: "#0a0a0a" },
+  { title: "Camisetas personalizadas para Papá", tag: "Regalos", type: "Regalos", subtitle: "Camisetas con foto, nombre y diseño 100% personalizado · solo mándanos las fotos de Papá", image: camisetasPapa.url, bg: "#0a0a0a" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
