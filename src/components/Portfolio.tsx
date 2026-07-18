@@ -39,7 +39,7 @@ import etiquetasGuifity from "@/assets/portfolio-etiquetas-guifity.jpg.asset.jso
 import etiquetasCumple from "@/assets/portfolio-etiquetas-cumple.jpg.asset.json";
 import servicio360 from "@/assets/portfolio-360.jpg.asset.json";
 
-type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
+type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos" | "Servicios";
 
 type Project = {
   title: string;
