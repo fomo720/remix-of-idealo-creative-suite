@@ -209,6 +209,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Stickers para Lápices",
     desc: "Stickers para marcar lápices, colores y útiles con el nombre del niño.",
     emoji: "✏️",
+    hero: panitaNombresHero.url,
+    simplePreview: true,
     materials: ["Vinil adhesivo brillante", "Vinil transparente", "Vinil mate"],
     sizes: [
       { label: "Tira delgada", dim: "6 × 1.2 cm", note: "Ideal para lápices" },
