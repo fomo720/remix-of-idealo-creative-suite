@@ -5,6 +5,7 @@ import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
 import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
 import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 import combo1Img from "@/assets/combo-1-emprendedores.jpg.asset.json";
+import combo2Img from "@/assets/combo-2-emprendedores.jpg.asset.json";
 
 export const Route = createFileRoute("/empresas/")({
   head: () => ({
