@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import menus from "@/assets/portfolio-menus.jpg.asset.json";
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
@@ -16,132 +17,49 @@ import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
 import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
 import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
 
+type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación";
+
 type Project = {
   title: string;
   tag: string;
   subtitle: string;
+  type: ProjectType;
   image?: string;
   gradient?: string;
   bg?: string;
 };
 
+// Order matters: last = most recent
 const projects: Project[] = [
-  {
-    title: "Menús para restaurantes",
-    tag: "Restaurantes",
-    subtitle: "Impresión doble lado · espiral de metal · laminado",
-    image: menus.url,
-    bg: "#d9d9d9",
-  },
-  {
-    title: "Stickers de marca",
-    tag: "Emprendedores",
-    subtitle: "Impresión de alta calidad · material impermeable",
-    image: stickersMarca.url,
-    bg: "#1a1410",
-  },
-  {
-    title: "Carpetas corporativas",
-    tag: "Corporativo",
-    subtitle: "Cartón laminado · doble compartimiento",
-    image: carpetas.url,
-    bg: "#ffffff",
-  },
-  {
-    title: "Stickers troquelados",
-    tag: "Personalizados",
-    subtitle: "Cualquier forma, diseño y tamaño",
-    image: troquelados.url,
-    bg: "#fafafa",
-  },
-  {
-    title: "Banners Roll Up",
-    tag: "Publicidad",
-    subtitle: "33.5 × 78.7 pulgadas · incluye araña y estuche",
-    image: banner.url,
-    bg: "#ffffff",
-  },
-  {
-    title: "Microperforado",
-    tag: "Fachadas",
-    subtitle: "Vinil para vidrieras y locales comerciales",
-    image: microperforado.url,
-    bg: "#5b6672",
-  },
-  {
-    title: "Rotulación industrial",
-    tag: "Señalética",
-    subtitle: "Señales de seguridad y rotulación empresarial",
-    image: rotulacion.url,
-    bg: "#1f4a7a",
-  },
-  {
-    title: "Tarjetas de presentación profesionales",
-    tag: "Branding",
-    subtitle: "Papel premium · acabados brillantes o mate",
-    image: tarjetas.url,
-    bg: "#eaf4fb",
-  },
-  {
-    title: "Rótulos de bienvenida escolares",
-    tag: "Escuelas",
-    subtitle: "Diseño personalizado · impresión de alta calidad · cualquier tamaño",
-    image: backToSchool.url,
-    bg: "#0ea5e9",
-  },
-  {
-    title: "Stand para fotos",
-    tag: "Eventos",
-    subtitle: "Backdrop temático en PVC con troquelado y sticker de alta calidad",
-    image: standFotos.url,
-    bg: "#0f172a",
-  },
-  {
-    title: "Espejo con stickers en vinil",
-    tag: "Restaurantes & Bares",
-    subtitle: "Stickers en vinil aplicados sobre espejo para ambientar tu local",
-    image: espejoStickers.url,
-    bg: "#1a0b2e",
-  },
-  {
-    title: "Menús en sticker + PVC",
-    tag: "Restaurantes",
-    subtitle: "Menú rígido resistente al agua · diseño 100% personalizado",
-    image: menuPvc.url,
-    bg: "#111827",
-  },
-  {
-    title: "Figuras de PVC + sticker",
-    tag: "Publicidad",
-    subtitle: "Displays troquelados en PVC ideales para promoción y marca",
-    image: figuraPvc.url,
-    bg: "#1f2937",
-  },
-  {
-    title: "PVC de bienvenida para eventos",
-    tag: "Eventos",
-    subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones",
-    image: pvcGaby.url,
-    bg: "#0a0a0a",
-  },
-  {
-    title: "Figuras troqueladas Sticker + PVC",
-    tag: "Publicidad",
-    subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos",
-    image: figurasMundial.url,
-    bg: "#e5e5e5",
-  },
-  {
-    title: "Banderines publicitarios",
-    tag: "Publicidad",
-    subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso",
-    image: banderines.url,
-    bg: "#0a0a0a",
-  },
+  { title: "Menús para restaurantes", tag: "Restaurantes", type: "Impresos", subtitle: "Impresión doble lado · espiral de metal · laminado", image: menus.url, bg: "#d9d9d9" },
+  { title: "Stickers de marca", tag: "Emprendedores", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable", image: stickersMarca.url, bg: "#1a1410" },
+  { title: "Carpetas corporativas", tag: "Corporativo", type: "Impresos", subtitle: "Cartón laminado · doble compartimiento", image: carpetas.url, bg: "#ffffff" },
+  { title: "Stickers troquelados", tag: "Personalizados", type: "Stickers", subtitle: "Cualquier forma, diseño y tamaño", image: troquelados.url, bg: "#fafafa" },
+  { title: "Banners Roll Up", tag: "Publicidad", type: "Banderines", subtitle: "33.5 × 78.7 pulgadas · incluye araña y estuche", image: banner.url, bg: "#ffffff" },
+  { title: "Microperforado", tag: "Fachadas", type: "Rotulación", subtitle: "Vinil para vidrieras y locales comerciales", image: microperforado.url, bg: "#5b6672" },
+  { title: "Rotulación industrial", tag: "Señalética", type: "Rotulación", subtitle: "Señales de seguridad y rotulación empresarial", image: rotulacion.url, bg: "#1f4a7a" },
+  { title: "Tarjetas de presentación profesionales", tag: "Branding", type: "Impresos", subtitle: "Papel premium · acabados brillantes o mate", image: tarjetas.url, bg: "#eaf4fb" },
+  { title: "Rótulos de bienvenida escolares", tag: "Escuelas", type: "PVC", subtitle: "Diseño personalizado · impresión de alta calidad · cualquier tamaño", image: backToSchool.url, bg: "#0ea5e9" },
+  { title: "Stand para fotos", tag: "Eventos", type: "PVC", subtitle: "Backdrop temático en PVC con troquelado y sticker de alta calidad", image: standFotos.url, bg: "#0f172a" },
+  { title: "Espejo con stickers en vinil", tag: "Restaurantes & Bares", type: "Stickers", subtitle: "Stickers en vinil aplicados sobre espejo para ambientar tu local", image: espejoStickers.url, bg: "#1a0b2e" },
+  { title: "Menús en sticker + PVC", tag: "Restaurantes", type: "PVC", subtitle: "Menú rígido resistente al agua · diseño 100% personalizado", image: menuPvc.url, bg: "#111827" },
+  { title: "Figuras de PVC + sticker", tag: "Publicidad", type: "PVC", subtitle: "Displays troquelados en PVC ideales para promoción y marca", image: figuraPvc.url, bg: "#1f2937" },
+  { title: "PVC de bienvenida para eventos", tag: "Eventos", type: "PVC", subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones", image: pvcGaby.url, bg: "#0a0a0a" },
+  { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5" },
+  { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a" },
 ];
+
+const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación"];
 
 export function Portfolio() {
   const navigate = useNavigate();
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Todos");
+  const [sort, setSort] = useState<"recientes" | "antiguos">("recientes");
+
+  const visible = useMemo(() => {
+    const filtered = filter === "Todos" ? projects : projects.filter((p) => p.type === filter);
+    return sort === "recientes" ? [...filtered].reverse() : filtered;
+  }, [filter, sort]);
 
   return (
     <section id="portafolio" className="py-24">
@@ -158,56 +76,100 @@ export function Portfolio() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p, i) => {
-            const handleClick = () => {
-              navigate({ to: "/cotizar", search: { producto: p.title } as never });
-            };
-            return (
-              <div
-                key={p.title}
-                onClick={handleClick}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleClick();
-                  }
-                }}
-                className="group relative cursor-pointer overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-              >
-                <div
-                  className="relative aspect-[4/5] w-full overflow-hidden"
-                  style={{ background: p.image ? p.bg : p.gradient }}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            {FILTERS.map((f) => {
+              const active = filter === f;
+              const count = f === "Todos" ? projects.length : projects.filter((p) => p.type === f).length;
+              return (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition ${
+                    active
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border bg-card text-foreground hover:border-foreground/40"
+                  }`}
                 >
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : null}
-                  <div className="absolute left-3 top-3">
-                    <div className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur shadow-sm">
-                      #{String(i + 1).padStart(2, "0")} · {p.tag}
-                    </div>
-                  </div>
-                  <div className="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100">
-                    <div className="rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold text-background shadow-sm">
-                      Cotizar →
-                    </div>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3 className="text-lg font-bold">{p.title}</h3>
-                  <p className="mt-1 text-xs text-muted-foreground">{p.subtitle}</p>
-                </div>
-              </div>
-            );
-          })}
+                  {f} <span className="opacity-60">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-muted-foreground">Ordenar:</span>
+            <div className="flex rounded-full border border-border p-0.5">
+              {(["recientes", "antiguos"] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setSort(s)}
+                  className={`rounded-full px-3 py-1 font-semibold capitalize transition ${
+                    sort === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {s === "recientes" ? "Más recientes" : "Más antiguos"}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
+
+        {visible.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-border py-16 text-center text-sm text-muted-foreground">
+            Aún no hay proyectos en esta categoría.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {visible.map((p, i) => {
+              const handleClick = () => {
+                navigate({ to: "/cotizar", search: { producto: p.title } as never });
+              };
+              return (
+                <div
+                  key={p.title}
+                  onClick={handleClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleClick();
+                    }
+                  }}
+                  className="group relative cursor-pointer overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+                >
+                  <div
+                    className="relative aspect-[4/5] w-full overflow-hidden"
+                    style={{ background: p.image ? p.bg : p.gradient }}
+                  >
+                    {p.image ? (
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : null}
+                    <div className="absolute left-3 top-3">
+                      <div className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur shadow-sm">
+                        #{String(i + 1).padStart(2, "0")} · {p.tag}
+                      </div>
+                    </div>
+                    <div className="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100">
+                      <div className="rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold text-background shadow-sm">
+                        Cotizar →
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold">{p.title}</h3>
+                    <p className="mt-1 text-xs text-muted-foreground">{p.subtitle}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
