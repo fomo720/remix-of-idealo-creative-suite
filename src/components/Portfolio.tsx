@@ -78,6 +78,7 @@ const projects: Project[] = [
   { title: "Retrateras con tu foto impresa", tag: "Regalos", type: "Regalos", subtitle: "Marcos de madera, metal y decorativos · impresión fotográfica de alta calidad · solo mándanos tu foto", image: retrateras.url, bg: "#ffffff", fit: "contain" },
   { title: "Rompecabezas personalizados", tag: "Regalos", type: "Regalos", subtitle: "Puzzle con tu foto favorita · varios tamaños y piezas · solo mándanos tu foto", image: rompecabezas.url, bg: "#ffffff", fit: "contain" },
   { title: "Impresión de fotos tipo Polaroid", tag: "Regalos", type: "Impresos", subtitle: "Fotos estilo Polaroid con acabado premium · ideal para regalos, decoración y recuerdos", image: polaroid.url, bg: "#f5f5f5", fit: "contain" },
+  { title: "Rollos para facturación", tag: "Negocios", type: "Impresos", subtitle: "Rollos térmicos y químicos para impresoras de facturación · excelente precio y calidad", image: rollosFacturacion.url, bg: "#ffffff", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
