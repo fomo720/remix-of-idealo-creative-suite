@@ -16,7 +16,7 @@ export function Footer() {
           <div className="mt-6 flex gap-2">
             {[
               { Icon: Instagram, href: "https://www.instagram.com/idealohn_/", label: "Instagram" },
-              { Icon: Facebook, href: "#", label: "Facebook" },
+              { Icon: Facebook, href: "https://www.facebook.com/idealohnd/", label: "Facebook" },
               { Icon: MessageCircle, href: "https://wa.me/50432316100", label: "WhatsApp" },
             ].map(({ Icon, href, label }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-cta hover:text-white">
