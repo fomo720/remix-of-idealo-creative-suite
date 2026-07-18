@@ -32,6 +32,7 @@ import rompecabezas from "@/assets/portfolio-rompecabezas.jpg.asset.json";
 import polaroid from "@/assets/portfolio-polaroid.jpg.asset.json";
 import rollosFacturacion from "@/assets/portfolio-rollos-facturacion.jpg.asset.json";
 import sublimacion from "@/assets/portfolio-sublimacion.jpg.asset.json";
+import empaques from "@/assets/portfolio-empaques.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
@@ -81,6 +82,7 @@ const projects: Project[] = [
   { title: "Impresión de fotos tipo Polaroid", tag: "Regalos", type: "Impresos", subtitle: "Fotos estilo Polaroid con acabado premium · ideal para regalos, decoración y recuerdos", image: polaroid.url, bg: "#f5f5f5", fit: "contain" },
   { title: "Rollos para facturación", tag: "Negocios", type: "Impresos", subtitle: "Rollos térmicos y químicos para impresoras de facturación · excelente precio y calidad", image: rollosFacturacion.url, bg: "#ffffff", fit: "contain" },
   { title: "Sublimación en tazas y termos", tag: "Regalos & Branding", type: "Regalos", subtitle: "Impresión duradera full color · tazas cerámicas, termos y botellas · personaliza con foto, logo o diseño", image: sublimacion.url, bg: "#f5efe7", fit: "contain" },
+  { title: "Personaliza tus empaques", tag: "Empaques & Etiquetas", type: "Impresos", subtitle: "Tarjetas cliente frecuente · etiquetas para ropa y joyería · tarjetas de presentación con tu logo, foto y colores", image: empaques.url, bg: "#ffffff", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
