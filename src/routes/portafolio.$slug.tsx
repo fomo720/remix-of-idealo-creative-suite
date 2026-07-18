@@ -1,0 +1,164 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ArrowLeft, Check, MessageCircle } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { getProjectBySlug, projects } from "@/lib/portfolio-data";
+
+const WHATSAPP = "50432316100";
+
+export const Route = createFileRoute("/portafolio/$slug")({
+  loader: ({ params }) => {
+    const project = getProjectBySlug(params.slug);
+    if (!project) throw notFound();
+    return { project };
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) {
+      return { meta: [{ title: "Proyecto no encontrado — Idealo" }, { name: "robots", content: "noindex" }] };
+    }
+    const { project } = loaderData;
+    const title = `${project.title} — Portafolio Idealo`;
+    const description = project.description ?? project.subtitle;
+    const meta = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ];
+    if (project.image) {
+      meta.push({ property: "og:image", content: project.image });
+      meta.push({ name: "twitter:image", content: project.image });
+    }
+    return { meta };
+  },
+  component: ProjectDetail,
+  notFoundComponent: NotFoundProject,
+});
+
+function NotFoundProject() {
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main className="mx-auto max-w-3xl px-4 py-24 text-center">
+        <h1 className="text-3xl font-bold">Proyecto no encontrado</h1>
+        <p className="mt-3 text-muted-foreground">Ese proyecto no existe o fue movido.</p>
+        <Link to="/" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:underline">
+          <ArrowLeft className="h-4 w-4" /> Volver al inicio
+        </Link>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+function ProjectDetail() {
+  const { project } = Route.useLoaderData();
+  const related = projects.filter((p) => p.type === project.type && p.slug !== project.slug).slice(0, 3);
+  const mensaje = `Hola Idealo 👋 Me interesa *${project.title}*. ¿Me pueden cotizar?`;
+  const waHref = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main className="mx-auto max-w-6xl px-4 py-16">
+        <Link to="/" hash="portafolio" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" /> Volver al portafolio
+        </Link>
+
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
+          <div
+            className="relative overflow-hidden rounded-3xl border border-border"
+            style={{ background: project.bg ?? "#0a0a0a" }}
+          >
+            <div className="relative aspect-square w-full">
+              {project.image && (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className={`absolute inset-0 h-full w-full ${project.fit === "contain" ? "object-contain p-6" : "object-cover"}`}
+                />
+              )}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+              {project.tag} · {project.type}
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{project.title}</h1>
+            <p className="mt-4 text-lg text-muted-foreground">{project.subtitle}</p>
+
+            {project.description && (
+              <p className="mt-6 text-base leading-relaxed text-foreground/90">{project.description}</p>
+            )}
+
+            {project.highlights && project.highlights.length > 0 && (
+              <ul className="mt-8 space-y-3">
+                {project.highlights.map((h) => (
+                  <li key={h} className="flex items-start gap-3 text-sm">
+                    <span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-foreground text-background">
+                      <Check className="h-3 w-3" />
+                    </span>
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:brightness-95"
+              >
+                <MessageCircle className="h-5 w-5" /> Cotizar por WhatsApp
+              </a>
+              <Link
+                to="/cotizar"
+                search={{ producto: project.title } as never}
+                className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-6 py-3 text-sm font-semibold hover:border-foreground/40"
+              >
+                Más opciones de contacto
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {related.length > 0 && (
+          <section className="mt-24">
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <h2 className="text-2xl font-bold">También en {project.type}</h2>
+              <Link to="/" hash="portafolio" className="text-sm text-muted-foreground hover:text-foreground">
+                Ver todo →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {related.map((p) => (
+                <Link
+                  key={p.slug}
+                  to="/portafolio/$slug"
+                  params={{ slug: p.slug }}
+                  className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
+                >
+                  <div className="relative aspect-[4/5] w-full overflow-hidden" style={{ background: p.bg }}>
+                    {p.image && (
+                      <img src={p.image} alt={p.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-sm font-bold">{p.title}</h3>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{p.subtitle}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+      <Footer />
+    </div>
+  );
+}
