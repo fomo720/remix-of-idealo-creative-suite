@@ -42,6 +42,8 @@ type Producto = {
   icon: LucideIcon;
   desc: string;
   color: string;
+  image?: string;
+  whatsapp?: string;
 };
 
 type Categoria = {
@@ -53,6 +55,14 @@ type Categoria = {
 };
 
 const PRODUCTOS_CUMPLE: Producto[] = [
+  { slug: "pvc-bienvenida", title: "PVC de Bienvenida", icon: PartyPopper, desc: "Letrero rígido con el nombre del cumpleañero.", color: "var(--brand-pink)" },
+  { slug: "banner-parador", title: "Banner Parador", icon: Flag, desc: "Backdrop vertical de gran formato.", color: "var(--brand-violet)" },
+  { slug: "cake-topper", title: "Cake Topper", icon: Cookie, desc: "Decoración troquelada para el pastel.", color: "var(--brand-orange)" },
+  { slug: "menu", title: "Menú", icon: BookOpen, desc: "Menú impreso personalizado por invitado.", color: "var(--brand-indigo)" },
+  { slug: "cajitas", title: "Cajitas", icon: Package, desc: "Cajas de regalo o dulces temáticas.", color: "var(--brand-blue)" },
+  { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
+  { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
+];
   { slug: "pvc-bienvenida", title: "PVC de Bienvenida", icon: PartyPopper, desc: "Letrero rígido con el nombre del cumpleañero.", color: "var(--brand-pink)" },
   { slug: "banner-parador", title: "Banner Parador", icon: Flag, desc: "Backdrop vertical de gran formato.", color: "var(--brand-violet)" },
   { slug: "cake-topper", title: "Cake Topper", icon: Cookie, desc: "Decoración troquelada para el pastel.", color: "var(--brand-orange)" },
