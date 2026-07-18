@@ -38,6 +38,7 @@ import etiquetasBebidas from "@/assets/portfolio-etiquetas-bebidas.jpg.asset.jso
 import etiquetasGuifity from "@/assets/portfolio-etiquetas-guifity.jpg.asset.json";
 import etiquetasCumple from "@/assets/portfolio-etiquetas-cumple.jpg.asset.json";
 import servicio360 from "@/assets/portfolio-360.jpg.asset.json";
+import impresionJarra from "@/assets/portfolio-impresion-jarra.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos" | "Servicios";
 
@@ -93,6 +94,7 @@ const projects: Project[] = [
   { title: "Etiquetas para tus productos", tag: "Etiquetas", type: "Stickers", subtitle: "Troqueladas a la forma de tu preferencia · perfectas para salsas, bebidas y productos artesanales", image: etiquetasGuifity.url, bg: "#ffffff", fit: "contain" },
   { title: "Etiquetas para cumpleaños", tag: "Eventos", type: "Stickers", subtitle: "Etiquetas personalizadas para botellas de agua · monograma, nombre o versículo · perfectas para cumpleaños y celebraciones", image: etiquetasCumple.url, bg: "#ffffff", fit: "contain" },
   { title: "Servicio de cámara 360°", tag: "Eventos", type: "Servicios", subtitle: "Cámara 360° con plataforma iluminada · ideal para bodas, cumpleaños y eventos corporativos · videos instantáneos para tus invitados", image: servicio360.url, bg: "#0a0a0a", fit: "contain" },
+  { title: "Impresión en jarra", tag: "Bares & Eventos", type: "Regalos", subtitle: "Jarras personalizadas con tu logo, nombre o foto · también etiquetas para botellas · perfectas para bares, cervezas artesanales y regalos", image: impresionJarra.url, bg: "#ffffff", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos", "Servicios"];
