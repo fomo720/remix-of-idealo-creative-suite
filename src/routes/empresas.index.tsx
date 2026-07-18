@@ -4,6 +4,7 @@ import kitOficinasImg from "@/assets/kit-oficinas-clinicas.jpg.asset.json";
 import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
 import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
 import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
+import combo1Img from "@/assets/combo-1-emprendedores.jpg.asset.json";
 
 export const Route = createFileRoute("/empresas/")({
   head: () => ({
@@ -107,6 +108,58 @@ function EmpresasIndex() {
           {KITS.map((k) => (
             <KitCard key={k.slug} kit={k} />
           ))}
+        </div>
+      </section>
+
+      {/* COMBOS / OFERTAS */}
+      <section id="combos" className="border-t border-border/60 bg-gradient-to-b from-orange-50/60 to-background">
+        <div className="mx-auto max-w-6xl px-4 py-20">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <p className="text-xs font-semibold tracking-widest text-orange-600">OFERTAS ESPECIALES</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Combos para emprendedores</h2>
+              <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
+                Paquetes cerrados a precio fijo — todo lo esencial para arrancar tu marca en un solo pedido.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            <div className="overflow-hidden rounded-3xl border border-orange-200 bg-white shadow-elegant">
+              <img src={combo1Img.url} alt="Combo #1 para emprendedores" loading="lazy" className="w-full object-cover" />
+            </div>
+            <div className="flex flex-col justify-center rounded-3xl border border-orange-200 bg-gradient-to-br from-orange-500 to-red-500 p-8 text-white sm:p-10">
+              <p className="text-xs font-bold tracking-widest text-white/80">COMBO #1</p>
+              <h3 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Oferta para Emprendedores</h3>
+              <div className="mt-6 space-y-3 text-base">
+                {[
+                  "1 camisa kiana con logo (talla S, M o L)",
+                  "100 stickers de 1.5×1.5 pulgadas",
+                  "100 tarjetas de presentación",
+                  "100 hojas volantes",
+                  "1 hablador tamaño carta",
+                ].map((i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-white/90" />
+                    <span>{i}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 flex items-baseline gap-3">
+                <span className="text-5xl font-bold">L 600</span>
+                <span className="text-sm text-white/80">precio total</span>
+              </div>
+              <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
+              <a
+                href={`https://wa.me/50432316100?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #1 para Emprendedores (L 600).")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-orange-600 transition hover:scale-[1.02]"
+              >
+                <MessageCircle className="h-4 w-4" /> Pedir Combo #1
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
