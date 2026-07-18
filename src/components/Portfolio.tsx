@@ -37,6 +37,7 @@ import stickersEmpaques from "@/assets/portfolio-stickers-empaques.jpg.asset.jso
 import etiquetasBebidas from "@/assets/portfolio-etiquetas-bebidas.jpg.asset.json";
 import etiquetasGuifity from "@/assets/portfolio-etiquetas-guifity.jpg.asset.json";
 import etiquetasCumple from "@/assets/portfolio-etiquetas-cumple.jpg.asset.json";
+import servicio360 from "@/assets/portfolio-360.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
