@@ -1,8 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft, Notebook, Sticker, Pencil, Frame, Coffee } from "lucide-react";
+import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft, Notebook, Sticker, Pencil, Frame, Coffee, KeyRound, ShoppingBag, ImageIcon, Coffee as Mug, Palette } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import evtCumple from "@/assets/evt-cumple-ejemplo.jpg.asset.json";
 import evtBackToSchool from "@/assets/evt-back-to-school.jpg.asset.json";
+import evtFpHero from "@/assets/evt-fp-hero.jpg.asset.json";
+import evtFpLlaveros from "@/assets/evt-fp-llaveros.jpg.asset.json";
+import evtFpTotes from "@/assets/evt-fp-totes.jpg.asset.json";
+import evtFpCanvas from "@/assets/evt-fp-canvas.jpg.asset.json";
+import evtFpTazas from "@/assets/evt-fp-tazas.jpg.asset.json";
+import evtFpSombreros from "@/assets/evt-fp-sombreros.jpg.asset.json";
 
 
 export const Route = createFileRoute("/eventos/$categoria/")({
