@@ -33,6 +33,7 @@ import polaroid from "@/assets/portfolio-polaroid.jpg.asset.json";
 import rollosFacturacion from "@/assets/portfolio-rollos-facturacion.jpg.asset.json";
 import sublimacion from "@/assets/portfolio-sublimacion.jpg.asset.json";
 import empaques from "@/assets/portfolio-empaques.jpg.asset.json";
+import stickersEmpaques from "@/assets/portfolio-stickers-empaques.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
