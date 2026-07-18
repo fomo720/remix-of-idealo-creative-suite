@@ -31,6 +31,7 @@ import retrateras from "@/assets/portfolio-retrateras.jpg.asset.json";
 import rompecabezas from "@/assets/portfolio-rompecabezas.jpg.asset.json";
 import polaroid from "@/assets/portfolio-polaroid.jpg.asset.json";
 import rollosFacturacion from "@/assets/portfolio-rollos-facturacion.jpg.asset.json";
+import sublimacion from "@/assets/portfolio-sublimacion.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
