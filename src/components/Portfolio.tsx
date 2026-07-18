@@ -123,6 +123,13 @@ const projects: Project[] = [
     image: pvcGaby.url,
     bg: "#0a0a0a",
   },
+  {
+    title: "Figuras troqueladas Sticker + PVC",
+    tag: "Publicidad",
+    subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos",
+    image: figurasMundial.url,
+    bg: "#e5e5e5",
+  },
 ];
 
 export function Portfolio() {
