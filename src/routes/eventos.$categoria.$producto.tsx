@@ -147,6 +147,102 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     styles: ["Números grandes", "Con nombre del invitado", "Temático", "Elegante"],
     askText: [{ label: "Cantidad de mesas", placeholder: "Ej: 12" }],
   },
+  "cuaderno-personalizado": {
+    title: "Cuaderno con Sticker",
+    desc: "Cuaderno espiral personalizado con sticker temático y nombre.",
+    emoji: "📓",
+    materials: ["Cuaderno espiral 100 hojas", "Cuaderno pasta dura", "Cuaderno kraft eco", "Cuaderno cosido premium"],
+    sizes: [
+      { label: "Media carta", dim: "14 × 21 cm" },
+      { label: "Carta", dim: "21 × 27 cm", note: "El más común" },
+      { label: "Mini agenda", dim: "10 × 15 cm" },
+    ],
+    styles: ["Personaje favorito", "Espacial / galaxia", "Deportes", "Minimalista con nombre"],
+    askText: [
+      { label: "Nombre del niño/a", placeholder: "Ej: Lucía" },
+      { label: "Tema o personaje", placeholder: "Ej: Buzz Lightyear" },
+    ],
+  },
+  "sticker-panita": {
+    title: "Sticker para Panita",
+    desc: "Sticker impermeable resistente para lonchera con nombre.",
+    emoji: "🏷️",
+    materials: ["Vinil impermeable brillante", "Vinil mate premium", "Vinil transparente", "Vinil holográfico"],
+    sizes: [
+      { label: "Chico", dim: "5 × 3 cm" },
+      { label: "Mediano", dim: "8 × 5 cm", note: "El más pedido" },
+      { label: "Grande", dim: "12 × 7 cm" },
+    ],
+    styles: ["Con personaje", "Solo nombre elegante", "Divertido con íconos", "Temático escolar"],
+    askText: [
+      { label: "Nombre del niño/a", placeholder: "Ej: Matías" },
+      { label: "Cantidad", placeholder: "Ej: 6 stickers" },
+    ],
+  },
+  "libro-sticker": {
+    title: "Libro con Sticker",
+    desc: "Libro de aventuras personalizado con el nombre y personaje favorito.",
+    emoji: "📚",
+    materials: ["Libro pasta blanda", "Libro pasta dura", "Libro tipo álbum ilustrado"],
+    sizes: [
+      { label: "A5", dim: "14.8 × 21 cm", note: "El más común" },
+      { label: "Cuadrado", dim: "20 × 20 cm" },
+      { label: "Grande", dim: "21 × 28 cm" },
+    ],
+    styles: ["Aventuras", "Espacial", "Superhéroes", "Princesas"],
+    askText: [
+      { label: "Nombre del protagonista", placeholder: "Ej: Diego" },
+      { label: "Tema o personaje favorito", placeholder: "Ej: Toy Story" },
+    ],
+  },
+  "stickers-lapices": {
+    title: "Stickers para Lápices",
+    desc: "Stickers para marcar lápices, colores y útiles con el nombre del niño.",
+    emoji: "✏️",
+    materials: ["Vinil adhesivo brillante", "Vinil transparente", "Vinil mate"],
+    sizes: [
+      { label: "Tira delgada", dim: "6 × 1.2 cm", note: "Ideal para lápices" },
+      { label: "Mediano", dim: "8 × 1.5 cm" },
+      { label: "Kit completo", dim: "Surtido", note: "Para cuadernos + lápices" },
+    ],
+    styles: ["Colores neón", "Pastel", "Personaje temático", "Solo texto"],
+    askText: [
+      { label: "Nombre del niño/a", placeholder: "Ej: Gabriel" },
+      { label: "Cantidad de tiras", placeholder: "Ej: 24" },
+    ],
+  },
+  "marco-pvc-fotos": {
+    title: "Marco PVC para Fotos",
+    desc: "Marco 'First Day' de PVC con sticker temático para foto del primer día.",
+    emoji: "🖼️",
+    materials: ["PVC 3mm", "PVC 5mm", "Foam board", "Cartón montado"],
+    sizes: [
+      { label: "Chico", dim: "30 × 40 cm" },
+      { label: "Mediano", dim: "40 × 50 cm", note: "El más popular" },
+      { label: "Grande", dim: "50 × 70 cm" },
+    ],
+    styles: ["Back to School clásico", "First Day divertido", "Con personaje", "Temático colegio"],
+    askText: [
+      { label: "Nombre del niño/a", placeholder: "Ej: Sofía" },
+      { label: "Grado / sección", placeholder: "Ej: Preschool" },
+    ],
+  },
+  "termo-grabado": {
+    title: "Termo con Grabado Láser",
+    desc: "Botella metálica con el nombre grabado a láser — resistente y duradero.",
+    emoji: "🥤",
+    materials: ["Termo acero inox 500ml", "Termo acero inox 750ml", "Botella aluminio 600ml"],
+    sizes: [
+      { label: "500 ml", dim: "500 ml", note: "Ideal escolar" },
+      { label: "750 ml", dim: "750 ml" },
+      { label: "1 litro", dim: "1000 ml" },
+    ],
+    styles: ["Nombre grande", "Nombre + ícono", "Nombre + frase corta", "Minimalista"],
+    askText: [
+      { label: "Nombre a grabar", placeholder: "Ej: Isabella" },
+      { label: "Color del termo", placeholder: "Ej: Morado, negro, rosa..." },
+    ],
+  },
 };
 
 type DesignMode = "propio" | "ayuda";

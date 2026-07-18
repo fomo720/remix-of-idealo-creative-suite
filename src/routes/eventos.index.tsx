@@ -20,6 +20,7 @@ type EventCat = {
 
 const CATEGORIES: EventCat[] = [
   { slug: "cumpleanos", title: "Cumpleaños", emoji: "🎂", desc: "PVC bienvenida, banner parador, cake topper, menú, cajitas, etiquetas botellas y número de mesa.", available: true },
+  { slug: "back-to-school", title: "Back to School", emoji: "🎒", desc: "Todo personalizado con el nombre del niño: cuaderno, libro, stickers para panita y lápices, marco de fotos y termo con grabado láser.", available: true },
   { slug: "bodas", title: "Bodas", emoji: "💍", desc: "Señalética elegante, menús personalizados, letreros de bienvenida y detalles para invitados." },
   { slug: "baby-shower", title: "Baby Shower", emoji: "👶", desc: "Kit temático completo con banners, invitaciones y stickers." },
   { slug: "fiestas-patrias", title: "Fiestas Patrias", emoji: "🇭🇳", desc: "Camisetas patrióticas, banderines, cuadro de danza y decoración institucional." },
