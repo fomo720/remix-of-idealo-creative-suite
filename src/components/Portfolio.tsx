@@ -16,8 +16,9 @@ import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
 import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
 import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
+import albumMama from "@/assets/portfolio-album-mama.jpg.asset.json";
 
-type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación";
+type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
 type Project = {
   title: string;
@@ -47,9 +48,10 @@ const projects: Project[] = [
   { title: "PVC de bienvenida para eventos", tag: "Eventos", type: "PVC", subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones", image: pvcGaby.url, bg: "#0a0a0a" },
   { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5" },
   { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a" },
+  { title: "Foto álbum de regalo", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con nombre y diseño · ideal para Día de la Madre, cumpleaños y aniversarios", image: albumMama.url, bg: "#ec4899" },
 ];
 
-const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación"];
+const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
 
 export function Portfolio() {
   const navigate = useNavigate();
