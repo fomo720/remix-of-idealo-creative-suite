@@ -29,6 +29,8 @@ type Project = {
   image?: string;
   gradient?: string;
   bg?: string;
+  /** cover = fills card (may crop); contain = shows entire image with padding. Default cover. */
+  fit?: "cover" | "contain";
 };
 
 // Order matters: last = most recent
@@ -37,21 +39,20 @@ const projects: Project[] = [
   { title: "Stickers de marca", tag: "Emprendedores", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable", image: stickersMarca.url, bg: "#1a1410" },
   { title: "Carpetas corporativas", tag: "Corporativo", type: "Impresos", subtitle: "Cartón laminado · doble compartimiento", image: carpetas.url, bg: "#ffffff" },
   { title: "Stickers troquelados", tag: "Personalizados", type: "Stickers", subtitle: "Cualquier forma, diseño y tamaño", image: troquelados.url, bg: "#fafafa" },
-  { title: "Banners Roll Up", tag: "Publicidad", type: "Banderines", subtitle: "33.5 × 78.7 pulgadas · incluye araña y estuche", image: banner.url, bg: "#ffffff" },
+  { title: "Banners Roll Up", tag: "Publicidad", type: "Banderines", subtitle: "33.5 × 78.7 pulgadas · incluye araña y estuche", image: banner.url, bg: "#ffffff", fit: "contain" },
   { title: "Microperforado", tag: "Fachadas", type: "Rotulación", subtitle: "Vinil para vidrieras y locales comerciales", image: microperforado.url, bg: "#5b6672" },
   { title: "Rotulación industrial", tag: "Señalética", type: "Rotulación", subtitle: "Señales de seguridad y rotulación empresarial", image: rotulacion.url, bg: "#1f4a7a" },
   { title: "Tarjetas de presentación profesionales", tag: "Branding", type: "Impresos", subtitle: "Papel premium · acabados brillantes o mate", image: tarjetas.url, bg: "#eaf4fb" },
-  { title: "Rótulos de bienvenida escolares", tag: "Escuelas", type: "PVC", subtitle: "Diseño personalizado · impresión de alta calidad · cualquier tamaño", image: backToSchool.url, bg: "#0ea5e9" },
-  { title: "Stand para fotos", tag: "Eventos", type: "PVC", subtitle: "Backdrop temático en PVC con troquelado y sticker de alta calidad", image: standFotos.url, bg: "#0f172a" },
+  { title: "Rótulos de bienvenida escolares", tag: "Escuelas", type: "PVC", subtitle: "Diseño personalizado · impresión de alta calidad · cualquier tamaño", image: backToSchool.url, bg: "#0ea5e9", fit: "contain" },
+  { title: "Stand para fotos", tag: "Eventos", type: "PVC", subtitle: "Backdrop temático en PVC con troquelado y sticker de alta calidad", image: standFotos.url, bg: "#0f172a", fit: "contain" },
   { title: "Espejo con stickers en vinil", tag: "Restaurantes & Bares", type: "Stickers", subtitle: "Stickers en vinil aplicados sobre espejo para ambientar tu local", image: espejoStickers.url, bg: "#1a0b2e" },
   { title: "Menús en sticker + PVC", tag: "Restaurantes", type: "PVC", subtitle: "Menú rígido resistente al agua · diseño 100% personalizado", image: menuPvc.url, bg: "#111827" },
-  { title: "Figuras de PVC + sticker", tag: "Publicidad", type: "PVC", subtitle: "Displays troquelados en PVC ideales para promoción y marca", image: figuraPvc.url, bg: "#1f2937" },
-  { title: "PVC de bienvenida para eventos", tag: "Eventos", type: "PVC", subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones", image: pvcGaby.url, bg: "#0a0a0a" },
-  { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5" },
-  { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a" },
-  
-  { title: "Foto Álbum", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con el nombre y diseño que quieras · ideal para regalos, aniversarios y ocasiones especiales", image: albumMama2.url, bg: "#ec4899" },
-  { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a" },
+  { title: "Figuras de PVC + sticker", tag: "Publicidad", type: "PVC", subtitle: "Displays troquelados en PVC ideales para promoción y marca", image: figuraPvc.url, bg: "#1f2937", fit: "contain" },
+  { title: "PVC de bienvenida para eventos", tag: "Eventos", type: "PVC", subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones", image: pvcGaby.url, bg: "#0a0a0a", fit: "contain" },
+  { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5", fit: "contain" },
+  { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a", fit: "contain" },
+  { title: "Foto Álbum", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con el nombre y diseño que quieras · ideal para regalos, aniversarios y ocasiones especiales", image: albumMama2.url, bg: "#ec4899", fit: "contain" },
+  { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
@@ -144,7 +145,7 @@ export function Portfolio() {
                   className="group relative cursor-pointer overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
                 >
                   <div
-                    className="relative aspect-[4/5] w-full overflow-hidden"
+                    className="relative aspect-square w-full overflow-hidden sm:aspect-[4/5]"
                     style={{ background: p.image ? p.bg : p.gradient }}
                   >
                     {p.image ? (
@@ -152,7 +153,9 @@ export function Portfolio() {
                         src={p.image}
                         alt={p.title}
                         loading="lazy"
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className={`absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-105 ${
+                          p.fit === "contain" ? "object-contain p-3 sm:p-4" : "object-cover"
+                        }`}
                       />
                     ) : null}
                     <div className="absolute left-3 top-3">
