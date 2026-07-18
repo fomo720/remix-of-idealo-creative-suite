@@ -13,6 +13,7 @@ import espejoStickers from "@/assets/portfolio-espejo-stickers.jpg.asset.json";
 import menuPvc from "@/assets/portfolio-menu-pvc.jpg.asset.json";
 import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
+import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
 
 type Project = {
   title: string;
