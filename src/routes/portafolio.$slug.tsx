@@ -96,7 +96,7 @@ function ProjectDetail() {
 
             {project.highlights && project.highlights.length > 0 && (
               <ul className="mt-8 space-y-3">
-                {project.highlights.map((h) => (
+                {project.highlights.map((h: string) => (
                   <li key={h} className="flex items-start gap-3 text-sm">
                     <span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-foreground text-background">
                       <Check className="h-3 w-3" />
