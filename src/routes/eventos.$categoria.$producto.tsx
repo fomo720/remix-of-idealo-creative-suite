@@ -8,6 +8,8 @@ import mesaHero from "@/assets/evt-mesa.jpg.asset.json";
 import cajitaHero from "@/assets/evt-cajita.jpg.asset.json";
 import bannerHero from "@/assets/evt-banner.jpg.asset.json";
 import cuadernoHero from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
+import panitaChristianHero from "@/assets/evt-panita-christian.jpg.asset.json";
+import panitaNombresHero from "@/assets/evt-panita-nombres.jpg.asset.json";
 
 export const Route = createFileRoute("/eventos/$categoria/$producto")({
   loader: ({ params }) => {
@@ -173,6 +175,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Sticker para Panita",
     desc: "Sticker impermeable resistente para lonchera con nombre.",
     emoji: "🏷️",
+    hero: panitaChristianHero.url,
+    simplePreview: true,
     materials: ["Vinil impermeable brillante", "Vinil mate premium", "Vinil transparente", "Vinil holográfico"],
     sizes: [
       { label: "Chico", dim: "5 × 3 cm" },
@@ -205,6 +209,8 @@ const PRODUCT_CONFIG: Record<string, Producto> = {
     title: "Stickers para Lápices",
     desc: "Stickers para marcar lápices, colores y útiles con el nombre del niño.",
     emoji: "✏️",
+    hero: panitaNombresHero.url,
+    simplePreview: true,
     materials: ["Vinil adhesivo brillante", "Vinil transparente", "Vinil mate"],
     sizes: [
       { label: "Tira delgada", dim: "6 × 1.2 cm", note: "Ideal para lápices" },
