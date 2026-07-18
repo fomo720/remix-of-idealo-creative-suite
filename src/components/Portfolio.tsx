@@ -8,6 +8,10 @@ import microperforado from "@/assets/portfolio-microperforado.jpg.asset.json";
 import rotulacion from "@/assets/portfolio-rotulacion.jpg.asset.json";
 import tarjetas from "@/assets/portfolio-tarjetas.jpg.asset.json";
 import backToSchool from "@/assets/portfolio-back-to-school.jpg.asset.json";
+import standFotos from "@/assets/portfolio-stand-fotos.jpg.asset.json";
+import espejoStickers from "@/assets/portfolio-espejo-stickers.jpg.asset.json";
+import menuPvc from "@/assets/portfolio-menu-pvc.jpg.asset.json";
+import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 
 type Project = {
   title: string;
@@ -81,6 +85,34 @@ const projects: Project[] = [
     subtitle: "Diseño personalizado · impresión de alta calidad · cualquier tamaño",
     image: backToSchool.url,
     bg: "#0ea5e9",
+  },
+  {
+    title: "Stand para fotos",
+    tag: "Eventos",
+    subtitle: "Backdrop temático en PVC con troquelado y sticker de alta calidad",
+    image: standFotos.url,
+    bg: "#0f172a",
+  },
+  {
+    title: "Espejo con stickers en vinil",
+    tag: "Restaurantes & Bares",
+    subtitle: "Stickers en vinil aplicados sobre espejo para ambientar tu local",
+    image: espejoStickers.url,
+    bg: "#1a0b2e",
+  },
+  {
+    title: "Menús en sticker + PVC",
+    tag: "Restaurantes",
+    subtitle: "Menú rígido resistente al agua · diseño 100% personalizado",
+    image: menuPvc.url,
+    bg: "#111827",
+  },
+  {
+    title: "Figuras de PVC + sticker",
+    tag: "Publicidad",
+    subtitle: "Displays troquelados en PVC ideales para promoción y marca",
+    image: figuraPvc.url,
+    bg: "#1f2937",
   },
 ];
 
