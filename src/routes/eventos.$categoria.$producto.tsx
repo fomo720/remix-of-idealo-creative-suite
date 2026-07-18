@@ -553,11 +553,13 @@ function ProductoDesigner() {
                   ? "Elegí cómo querés el diseño para continuar."
                   : material === null
                     ? "Elegí el material."
-                    : size === null
-                      ? "Elegí el tamaño."
-                      : designMode === "propio"
-                        ? "Subí tu diseño para enviar la cotización."
-                        : "Subí una imagen de referencia para enviar la cotización."}
+                      : size === null
+                        ? "Elegí el tamaño."
+                        : prod.pageTypes && pageType === null
+                          ? "Elegí el tipo de página."
+                          : designMode === "propio"
+                            ? "Subí tu diseño para enviar la cotización."
+                            : "Subí una imagen de referencia para enviar la cotización."}
               </p>
             )}
           </div>
