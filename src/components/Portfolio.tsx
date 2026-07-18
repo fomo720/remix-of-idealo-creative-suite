@@ -12,6 +12,7 @@ import standFotos from "@/assets/portfolio-stand-fotos.jpg.asset.json";
 import espejoStickers from "@/assets/portfolio-espejo-stickers.jpg.asset.json";
 import menuPvc from "@/assets/portfolio-menu-pvc.jpg.asset.json";
 import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
+import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
 
 type Project = {
   title: string;
@@ -113,6 +114,13 @@ const projects: Project[] = [
     subtitle: "Displays troquelados en PVC ideales para promoción y marca",
     image: figuraPvc.url,
     bg: "#1f2937",
+  },
+  {
+    title: "PVC de bienvenida para eventos",
+    tag: "Eventos",
+    subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones",
+    image: pvcGaby.url,
+    bg: "#0a0a0a",
   },
 ];
 
