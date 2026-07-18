@@ -38,6 +38,7 @@ import etiquetasCumple from "@/assets/portfolio-etiquetas-cumple.jpg.asset.json"
 import servicio360 from "@/assets/portfolio-360.jpg.asset.json";
 import impresionJarra from "@/assets/portfolio-impresion-jarra.jpg.asset.json";
 import regalosCorporativos from "@/assets/portfolio-regalos-corporativos.png.asset.json";
+import tazasSublimadas from "@/assets/portfolio-tazas-sublimadas.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
