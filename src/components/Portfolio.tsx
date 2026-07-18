@@ -62,6 +62,7 @@ const projects: Project[] = [
   { title: "Grabado láser para Papá", tag: "Regalos", type: "Regalos", subtitle: "Billeteras, termos y tablas de cortar con grabado láser personalizado · regalo perfecto para Papá", image: grabadoPapa.url, bg: "#0a0a0a" },
   { title: "Camisetas personalizadas para Papá", tag: "Regalos", type: "Regalos", subtitle: "Camisetas con foto, nombre y diseño 100% personalizado · solo mándanos las fotos de Papá", image: camisetasPapa.url, bg: "#0a0a0a" },
   { title: "Botellas personalizadas", tag: "Regalos", type: "Regalos", subtitle: "Botellas con nombre o foto · etiquetas premium · ideal para regalos y ocasiones especiales", image: botellasPersonalizadas.url, bg: "#0a0a0a", fit: "contain" },
+  { title: "Etiquetas para botellas en vinil", tag: "Regalos", type: "Stickers", subtitle: "Etiqueta completa en sticker vinil · personaliza cerveza o bebidas con nombre y diseño", image: etiquetasBotellas.url, bg: "#f5f5f5", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
