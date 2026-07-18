@@ -63,13 +63,17 @@ const PRODUCTOS_CUMPLE: Producto[] = [
   { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
   { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
 ];
-  { slug: "pvc-bienvenida", title: "PVC de Bienvenida", icon: PartyPopper, desc: "Letrero rígido con el nombre del cumpleañero.", color: "var(--brand-pink)" },
-  { slug: "banner-parador", title: "Banner Parador", icon: Flag, desc: "Backdrop vertical de gran formato.", color: "var(--brand-violet)" },
-  { slug: "cake-topper", title: "Cake Topper", icon: Cookie, desc: "Decoración troquelada para el pastel.", color: "var(--brand-orange)" },
-  { slug: "menu", title: "Menú", icon: BookOpen, desc: "Menú impreso personalizado por invitado.", color: "var(--brand-indigo)" },
-  { slug: "cajitas", title: "Cajitas", icon: Package, desc: "Cajas de regalo o dulces temáticas.", color: "var(--brand-blue)" },
-  { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
-  { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
+
+const WA = "50432316100";
+const wa = (msg: string) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+
+const PRODUCTOS_FP: Producto[] = [
+  { slug: "llaveros", title: "Llaveros", icon: KeyRound, desc: "Llaveros patrióticos con diseño personalizado. También con grabado láser en acero.", color: "var(--brand-blue)", image: evtFpLlaveros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *llaveros patrióticos* para fiestas patrias. ¿Me pueden pasar opciones y precios?") },
+  { slug: "tote-bags", title: "Tote Bags", icon: ShoppingBag, desc: "Bolsas de tela con diseños patrios: baleada, escudo, mapa y más. Personalizables.", color: "var(--brand-orange)", image: evtFpTotes.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *tote bags patrios* para fiestas patrias. ¿Me pueden pasar opciones y precios?") },
+  { slug: "cuadros-canvas", title: "Cuadros en Canvas", icon: ImageIcon, desc: "Cuadros en canvas con arte hondureño: paisajes, guacamayas, mapa y retratos.", color: "var(--brand-violet)", image: evtFpCanvas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *cuadros en canvas* patrios. ¿Me pueden pasar tamaños y precios?") },
+  { slug: "tazas-sublimadas", title: "Tazas Sublimadas", icon: Mug, desc: "Tazas cerámicas con diseño Honduras full color. Sublimación duradera y apta lavavajillas.", color: "var(--brand-pink)", image: evtFpTazas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *tazas sublimadas* patrias. ¿Me pueden pasar opciones y precios?") },
+  { slug: "sombreros-sublimados", title: "Sombreros Sublimados", icon: Palette, desc: "Sombreros de playa sublimados con guacamaya, conchas y motivos hondureños.", color: "var(--brand-indigo)", image: evtFpSombreros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *sombreros sublimados* patrios. ¿Me pueden pasar opciones y precios?") },
+  { slug: "llaveros-grabado-laser", title: "Llaveros con Grabado Láser", icon: Sparkles, desc: "Llaveros de acero inoxidable con grabado láser 'Honduras' y abridor integrado.", color: "var(--brand-blue)", image: evtFpLlaveros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *llaveros con grabado láser Honduras*. ¿Me pueden pasar opciones y precios?") },
 ];
 
 const PRODUCTOS_BTS: Producto[] = [
