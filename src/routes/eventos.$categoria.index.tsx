@@ -100,6 +100,13 @@ const CATEGORIAS: Record<string, Categoria> = {
     hero: evtBackToSchool.url,
     productos: PRODUCTOS_BTS,
   },
+  "fiestas-patrias": {
+    title: "Fiestas Patrias",
+    emoji: "🇭🇳",
+    intro: "¡Celebrá a lo grande las fiestas patrias! Llaveros, tote bags, cuadros canvas, tazas y sombreros sublimados, llaveros con grabado láser y mucho más. Personalizalos con nombre o logo.",
+    hero: evtFpHero.url,
+    productos: PRODUCTOS_FP,
+  },
 };
 
 function CategoriaPage() {
@@ -136,26 +143,35 @@ function CategoriaPage() {
         <p className="mt-1 text-sm text-muted-foreground">Elegí uno para personalizar tamaño, estilo y diseño.</p>
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cat.productos.map((p: Producto) => (
-            <Link
-              key={p.slug}
-              to="/eventos/$categoria/$producto"
-              params={{ categoria: slug, producto: p.slug }}
-              className="group relative flex flex-col rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-foreground/30 hover:shadow-elegant"
-            >
-              <div
-                className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl transition group-hover:scale-110"
-                style={{ background: `color-mix(in oklab, ${p.color} 15%, white)`, color: p.color }}
-              >
-                <p.icon className="h-7 w-7" />
-              </div>
-              <h3 className="text-lg font-bold">{p.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
-                Personalizar <span aria-hidden>→</span>
-              </span>
-            </Link>
-          ))}
+          {cat.productos.map((p: Producto) => {
+            const inner = (
+              <>
+                {p.image ? (
+                  <div className="mb-4 overflow-hidden rounded-2xl border border-border bg-white">
+                    <img src={p.image} alt={p.title} className="aspect-[4/3] w-full object-cover transition group-hover:scale-105" />
+                  </div>
+                ) : (
+                  <div
+                    className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl transition group-hover:scale-110"
+                    style={{ background: `color-mix(in oklab, ${p.color} 15%, white)`, color: p.color }}
+                  >
+                    <p.icon className="h-7 w-7" />
+                  </div>
+                )}
+                <h3 className="text-lg font-bold">{p.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+                  {p.whatsapp ? "Cotizar por WhatsApp" : "Personalizar"} <span aria-hidden>→</span>
+                </span>
+              </>
+            );
+            const cls = "group relative flex flex-col rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-foreground/30 hover:shadow-elegant";
+            return p.whatsapp ? (
+              <a key={p.slug} href={p.whatsapp} target="_blank" rel="noreferrer" className={cls}>{inner}</a>
+            ) : (
+              <Link key={p.slug} to="/eventos/$categoria/$producto" params={{ categoria: slug, producto: p.slug }} className={cls}>{inner}</Link>
+            );
+          })}
         </div>
       </div>
     </section>
