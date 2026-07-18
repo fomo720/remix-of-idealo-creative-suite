@@ -35,6 +35,7 @@ import sublimacion from "@/assets/portfolio-sublimacion.jpg.asset.json";
 import empaques from "@/assets/portfolio-empaques.jpg.asset.json";
 import stickersEmpaques from "@/assets/portfolio-stickers-empaques.jpg.asset.json";
 import etiquetasBebidas from "@/assets/portfolio-etiquetas-bebidas.jpg.asset.json";
+import etiquetasGuifity from "@/assets/portfolio-etiquetas-guifity.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
@@ -87,6 +88,7 @@ const projects: Project[] = [
   { title: "Personaliza tus empaques", tag: "Empaques & Etiquetas", type: "Impresos", subtitle: "Tarjetas cliente frecuente · etiquetas para ropa y joyería · tarjetas de presentación con tu logo, foto y colores", image: empaques.url, bg: "#ffffff", fit: "contain" },
   { title: "Stickers para empaques", tag: "Empaques & Branding", type: "Stickers", subtitle: "Stickers troquelados para bolsas, vasos, cajas y contenedores kraft · cualquier forma, diseño y tamaño", image: stickersEmpaques.url, bg: "#ffffff", fit: "contain" },
   { title: "Etiquetas para bebidas", tag: "Etiquetas", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable · cualquier tamaño de botella · personalízalas con tu logo, foto y colores", image: etiquetasBebidas.url, bg: "#ffffff", fit: "contain" },
+  { title: "Etiquetas para tus productos", tag: "Etiquetas", type: "Stickers", subtitle: "Troqueladas a la forma de tu preferencia · perfectas para salsas, bebidas y productos artesanales", image: etiquetasGuifity.url, bg: "#ffffff", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
