@@ -16,7 +16,6 @@ import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
 import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
 import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
-import albumMama from "@/assets/portfolio-album-mama.jpg.asset.json";
 import albumMama2 from "@/assets/portfolio-album-mama-2.jpg.asset.json";
 import bannerCruzacalle from "@/assets/portfolio-banner-cruzacalle.jpg.asset.json";
 
@@ -50,7 +49,7 @@ const projects: Project[] = [
   { title: "PVC de bienvenida para eventos", tag: "Eventos", type: "PVC", subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones", image: pvcGaby.url, bg: "#0a0a0a" },
   { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5" },
   { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a" },
-  { title: "Foto álbum de regalo", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con nombre y diseño · ideal para Día de la Madre, cumpleaños y aniversarios", image: albumMama.url, bg: "#ec4899" },
+  
   { title: "Foto álbum \"MAMÁ\"", tag: "Regalos", type: "Regalos", subtitle: "Álbum rosa con lettering en vinil blanco y rosas · regalo especial para mamá", image: albumMama2.url, bg: "#ec4899" },
   { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a" },
 ];
