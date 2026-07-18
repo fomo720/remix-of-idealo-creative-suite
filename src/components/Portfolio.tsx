@@ -16,6 +16,7 @@ import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
 import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
 import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
+import albumMama from "@/assets/portfolio-album-mama.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación";
 
