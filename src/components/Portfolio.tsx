@@ -92,9 +92,10 @@ const projects: Project[] = [
   { title: "Etiquetas para bebidas", tag: "Etiquetas", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable · cualquier tamaño de botella · personalízalas con tu logo, foto y colores", image: etiquetasBebidas.url, bg: "#ffffff", fit: "contain" },
   { title: "Etiquetas para tus productos", tag: "Etiquetas", type: "Stickers", subtitle: "Troqueladas a la forma de tu preferencia · perfectas para salsas, bebidas y productos artesanales", image: etiquetasGuifity.url, bg: "#ffffff", fit: "contain" },
   { title: "Etiquetas para cumpleaños", tag: "Eventos", type: "Stickers", subtitle: "Etiquetas personalizadas para botellas de agua · monograma, nombre o versículo · perfectas para cumpleaños y celebraciones", image: etiquetasCumple.url, bg: "#ffffff", fit: "contain" },
+  { title: "Servicio de cámara 360°", tag: "Eventos", type: "Servicios", subtitle: "Cámara 360° con plataforma iluminada · ideal para bodas, cumpleaños y eventos corporativos · videos instantáneos para tus invitados", image: servicio360.url, bg: "#0a0a0a", fit: "contain" },
 ];
 
-const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
+const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos", "Servicios"];
 
 export function Portfolio() {
   const navigate = useNavigate();
