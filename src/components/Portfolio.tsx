@@ -115,6 +115,13 @@ const projects: Project[] = [
     image: figuraPvc.url,
     bg: "#1f2937",
   },
+  {
+    title: "PVC de bienvenida para eventos",
+    tag: "Eventos",
+    subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones",
+    image: pvcGaby.url,
+    bg: "#0a0a0a",
+  },
 ];
 
 export function Portfolio() {
