@@ -14,6 +14,7 @@ import menuPvc from "@/assets/portfolio-menu-pvc.jpg.asset.json";
 import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
 import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
+import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
 
 type Project = {
   title: string;
@@ -129,6 +130,13 @@ const projects: Project[] = [
     subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos",
     image: figurasMundial.url,
     bg: "#e5e5e5",
+  },
+  {
+    title: "Banderines publicitarios",
+    tag: "Publicidad",
+    subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso",
+    image: banderines.url,
+    bg: "#0a0a0a",
   },
 ];
 
