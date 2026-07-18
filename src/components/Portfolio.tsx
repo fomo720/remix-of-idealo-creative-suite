@@ -25,6 +25,7 @@ import botellasPersonalizadas from "@/assets/portfolio-botellas-personalizadas.j
 import etiquetasBotellas from "@/assets/portfolio-etiquetas-botellas.jpg.asset.json";
 import marcosFotos from "@/assets/portfolio-marcos-fotos.jpg.asset.json";
 import cadenasGrabado from "@/assets/portfolio-cadenas-grabado.jpg.asset.json";
+import boxersPersonalizados from "@/assets/portfolio-boxers.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
@@ -67,6 +68,7 @@ const projects: Project[] = [
   { title: "Etiquetas para botellas en vinil", tag: "Regalos", type: "Stickers", subtitle: "Etiqueta completa en sticker vinil · personaliza cerveza o bebidas con nombre y diseño", image: etiquetasBotellas.url, bg: "#f5f5f5", fit: "contain" },
   { title: "Marcos con fotos impresas", tag: "Regalos", type: "Regalos", subtitle: "Set de marcos con tus fotos impresas · solo mándanos las fotos · regalo perfecto para toda ocasión", image: marcosFotos.url, bg: "#e5e5e5", fit: "contain" },
   { title: "Cadenas con grabado láser", tag: "Regalos", type: "Regalos", subtitle: "Dijes personalizados con foto o nombre · grabado láser en acero · solo mándanos tu foto", image: cadenasGrabado.url, bg: "#ffffff", fit: "contain" },
+  { title: "Boxers personalizados para San Valentín", tag: "Regalos", type: "Regalos", subtitle: "Sublimación full color · diseños divertidos y románticos · solo mándanos tu foto o idea", image: boxersPersonalizados.url, bg: "#ffffff", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
