@@ -131,6 +131,13 @@ const projects: Project[] = [
     image: figurasMundial.url,
     bg: "#e5e5e5",
   },
+  {
+    title: "Banderines publicitarios",
+    tag: "Publicidad",
+    subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso",
+    image: banderines.url,
+    bg: "#0a0a0a",
+  },
 ];
 
 export function Portfolio() {
