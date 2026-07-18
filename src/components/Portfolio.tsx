@@ -23,6 +23,7 @@ import grabadoPapa from "@/assets/portfolio-grabado-papa.jpg.asset.json";
 import camisetasPapa from "@/assets/portfolio-camisetas-papa.jpg.asset.json";
 import botellasPersonalizadas from "@/assets/portfolio-botellas-personalizadas.jpg.asset.json";
 import etiquetasBotellas from "@/assets/portfolio-etiquetas-botellas.jpg.asset.json";
+import marcosFotos from "@/assets/portfolio-marcos-fotos.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
