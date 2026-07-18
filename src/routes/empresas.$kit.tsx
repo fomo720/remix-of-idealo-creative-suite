@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle2, MessageCircle, Sparkles } from "lucide-react";
 import kitOficinasImg from "@/assets/kit-oficinas-clinicas.jpg.asset.json";
 import kitRestaurantesImg from "@/assets/kit-restaurantes.jpg.asset.json";
 import kitEmprendedoresImg from "@/assets/kit-emprendedores.jpg.asset.json";
+import kitEmprendimientoCompletoImg from "@/assets/kit-emprendimiento-completo.jpg.asset.json";
 import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 import serviciosClinicaImg from "@/assets/servicios-clinica.jpg.asset.json";
 import serviciosRestauranteImg from "@/assets/servicios-restaurante.jpg.asset.json";
@@ -68,6 +69,8 @@ const KITS: Record<string, KitDetail> = {
     ],
     ideal: ["Marcas nuevas", "Freelancers y consultores", "Tiendas online", "Pequeños productores"],
     image: kitEmprendedoresImg.url,
+    showcaseImage: kitEmprendimientoCompletoImg.url,
+    showcaseCaption: "Todo para tu emprendimiento: banners, menús, stickers, rótulos, uniformes y más",
   },
   "flota-logistica": {
     slug: "flota-logistica",
