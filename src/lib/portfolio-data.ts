@@ -1,0 +1,120 @@
+import menus from "@/assets/portfolio-menus.jpg.asset.json";
+import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
+import carpetas from "@/assets/portfolio-carpetas.jpg.asset.json";
+import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
+import banner from "@/assets/portfolio-banner.jpg.asset.json";
+import microperforado from "@/assets/portfolio-microperforado.jpg.asset.json";
+import rotulacion from "@/assets/portfolio-rotulacion.jpg.asset.json";
+import tarjetas from "@/assets/portfolio-tarjetas.jpg.asset.json";
+import backToSchool from "@/assets/portfolio-back-to-school.jpg.asset.json";
+import standFotos from "@/assets/portfolio-stand-fotos.jpg.asset.json";
+import espejoStickers from "@/assets/portfolio-espejo-stickers.jpg.asset.json";
+import menuPvc from "@/assets/portfolio-menu-pvc.jpg.asset.json";
+import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
+import pvcGaby from "@/assets/portfolio-pvc-gaby.jpg.asset.json";
+import figurasMundial from "@/assets/portfolio-figuras-mundial-hd.jpg.asset.json";
+import banderines from "@/assets/portfolio-banderines-hd.jpg.asset.json";
+import albumMama2 from "@/assets/portfolio-album-mama-2.jpg.asset.json";
+import bannerCruzacalle from "@/assets/portfolio-banner-cruzacalle.jpg.asset.json";
+import variedadBanners from "@/assets/portfolio-variedad-banners.jpg.asset.json";
+import grabadoPapa from "@/assets/portfolio-grabado-papa.jpg.asset.json";
+import camisetasPapa from "@/assets/portfolio-camisetas-papa.jpg.asset.json";
+import botellasPersonalizadas from "@/assets/portfolio-botellas-personalizadas.jpg.asset.json";
+import etiquetasBotellas from "@/assets/portfolio-etiquetas-botellas.jpg.asset.json";
+import marcosFotos from "@/assets/portfolio-marcos-fotos.jpg.asset.json";
+import cadenasGrabado from "@/assets/portfolio-cadenas-grabado.jpg.asset.json";
+import boxersPersonalizados from "@/assets/portfolio-boxers.jpg.asset.json";
+import calsetasPersonalizadas from "@/assets/portfolio-calsetas.jpg.asset.json";
+import retrateras from "@/assets/portfolio-retrateras.jpg.asset.json";
+import rompecabezas from "@/assets/portfolio-rompecabezas.jpg.asset.json";
+import polaroid from "@/assets/portfolio-polaroid.jpg.asset.json";
+import rollosFacturacion from "@/assets/portfolio-rollos-facturacion.jpg.asset.json";
+import sublimacion from "@/assets/portfolio-sublimacion.jpg.asset.json";
+import empaques from "@/assets/portfolio-empaques.jpg.asset.json";
+import stickersEmpaques from "@/assets/portfolio-stickers-empaques.jpg.asset.json";
+import etiquetasBebidas from "@/assets/portfolio-etiquetas-bebidas.jpg.asset.json";
+import etiquetasGuifity from "@/assets/portfolio-etiquetas-guifity.jpg.asset.json";
+import etiquetasCumple from "@/assets/portfolio-etiquetas-cumple.jpg.asset.json";
+import servicio360 from "@/assets/portfolio-360.jpg.asset.json";
+import impresionJarra from "@/assets/portfolio-impresion-jarra.jpg.asset.json";
+
+export type ProjectType =
+  | "Stickers"
+  | "Banderines"
+  | "Iron-ons"
+  | "PVC"
+  | "Impresos"
+  | "Rotulación"
+  | "Regalos"
+  | "Servicios";
+
+export type Project = {
+  slug: string;
+  title: string;
+  tag: string;
+  subtitle: string;
+  type: ProjectType;
+  image?: string;
+  gradient?: string;
+  bg?: string;
+  fit?: "cover" | "contain";
+  /** Long-form description shown on the detail page. */
+  description?: string;
+  /** Bullet highlights shown on the detail page. */
+  highlights?: string[];
+};
+
+export const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+const raw: Omit<Project, "slug">[] = [
+  { title: "Menús para restaurantes", tag: "Restaurantes", type: "Impresos", subtitle: "Impresión doble lado · espiral de metal · laminado", image: menus.url, bg: "#d9d9d9", description: "Menús diseñados y producidos para durar todo el servicio. Impresión doble lado en papel grueso, laminado brillante o mate y encuadernado con espiral metálica. Ideales para restaurantes, cafeterías y bares que renuevan carta constantemente.", highlights: ["Impresión doble lado full color", "Laminado brillante o mate", "Espiral metálica resistente", "Cualquier tamaño y cantidad"] },
+  { title: "Stickers de marca", tag: "Emprendedores", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable", image: stickersMarca.url, bg: "#1a1410", description: "Stickers para empaques, empaques kraft, cajas o bolsas. Material vinil impermeable con colores vivos y adhesivo permanente que aguanta manipulación y clima.", highlights: ["Vinil impermeable", "Colores vivos full color", "Corte por contorno", "Cualquier forma y tamaño"] },
+  { title: "Carpetas corporativas", tag: "Corporativo", type: "Impresos", subtitle: "Cartón laminado · doble compartimiento", image: carpetas.url, bg: "#ffffff", description: "Carpetas presentadoras en cartón laminado con doble compartimiento interno para propuestas, contratos y material corporativo. Personalizadas con tu logo, colores y branding completo.", highlights: ["Cartón grueso laminado", "Doble compartimiento", "Troquelado profesional", "Diseño 100% personalizado"] },
+  { title: "Stickers troquelados", tag: "Personalizados", type: "Stickers", subtitle: "Cualquier forma, diseño y tamaño", image: troquelados.url, bg: "#fafafa", description: "Stickers troquelados a la forma exacta de tu diseño. Perfectos para branding, packaging, merchandising y regalos. Producción en cantidades pequeñas y grandes.", highlights: ["Troquelado kiss-cut o die-cut", "Vinil premium impermeable", "Colores full HD", "Desde 1 unidad"] },
+  { title: "Banners Roll Up", tag: "Publicidad", type: "Banderines", subtitle: "33.5 × 78.7 pulgadas · incluye araña y estuche", image: banner.url, bg: "#ffffff", fit: "contain", description: "Roll up publicitario listo para usar en ferias, stands y eventos corporativos. Incluye estructura araña, base con contrapeso y estuche para transporte.", highlights: ["33.5 × 78.7 pulgadas", "Estructura araña incluida", "Estuche de transporte", "Fácil armado en 60 segundos"] },
+  { title: "Microperforado", tag: "Fachadas", type: "Rotulación", subtitle: "Vinil para vidrieras y locales comerciales", image: microperforado.url, bg: "#5b6672", description: "Vinil microperforado ideal para vidrieras, ventanas de locales y vehículos. Se ve tu diseño por fuera y mantiene la visibilidad desde adentro.", highlights: ["Visibilidad desde el interior", "Impresión full color exterior", "Instalación profesional", "Resistente a la intemperie"] },
+  { title: "Rotulación industrial", tag: "Señalética", type: "Rotulación", subtitle: "Señales de seguridad y rotulación empresarial", image: rotulacion.url, bg: "#1f4a7a", description: "Señales de seguridad, informativas y rotulación empresarial para plantas industriales, oficinas y espacios comerciales. Cumplimos con normativas locales.", highlights: ["Materiales industriales", "Cumple normativa", "Instalación incluida", "Cualquier tamaño"] },
+  { title: "Tarjetas de presentación profesionales", tag: "Branding", type: "Impresos", subtitle: "Papel premium · acabados brillantes o mate", image: tarjetas.url, bg: "#eaf4fb", description: "Tarjetas de presentación en papel premium con acabados brillante, mate o soft touch. Desde 100 hasta 5,000 unidades con tu diseño personalizado.", highlights: ["Papel 300g premium", "Acabado brillante / mate / soft touch", "Doble lado full color", "Diseño incluido"] },
+  { title: "Rótulos de bienvenida escolares", tag: "Escuelas", type: "PVC", subtitle: "Diseño personalizado · impresión de alta calidad · cualquier tamaño", image: backToSchool.url, bg: "#0ea5e9", fit: "contain", description: "Rótulos de bienvenida en PVC para el regreso a clases. Diseño personalizado con el nombre del alumno o de la escuela, impresión de alta calidad y cualquier tamaño.", highlights: ["PVC de 3, 5 y 10 mm", "Impresión full color HD", "Cualquier tamaño y forma", "Diseño 100% personalizado"] },
+  { title: "Stand para fotos", tag: "Eventos", type: "PVC", subtitle: "Backdrop temático en PVC con troquelado y sticker de alta calidad", image: standFotos.url, bg: "#0f172a", fit: "contain", description: "Backdrops temáticos para fotos en eventos, cumpleaños y activaciones de marca. PVC troquelado con sticker de alta calidad para un acabado premium.", highlights: ["PVC rígido troquelado", "Sticker HD aplicado", "Cualquier tema o personaje", "Fácil instalación"] },
+  { title: "Espejo con stickers en vinil", tag: "Restaurantes & Bares", type: "Stickers", subtitle: "Stickers en vinil aplicados sobre espejo para ambientar tu local", image: espejoStickers.url, bg: "#1a0b2e", description: "Stickers en vinil aplicados sobre espejo para bares, restaurantes y locales que quieren un toque decorativo con impacto visual.", highlights: ["Vinil premium", "Instalación profesional", "Cualquier diseño y tamaño", "Removible sin dañar"] },
+  { title: "Menús en sticker + PVC", tag: "Restaurantes", type: "PVC", subtitle: "Menú rígido resistente al agua · diseño 100% personalizado", image: menuPvc.url, bg: "#111827", description: "Menús rígidos hechos con sticker sobre PVC. Resistentes al agua, aceite y manipulación diaria. Diseño 100% personalizado.", highlights: ["PVC rígido resistente", "Sticker HD aplicado", "Resistente al agua y aceite", "Cualquier tamaño"] },
+  { title: "Figuras de PVC + sticker", tag: "Publicidad", type: "PVC", subtitle: "Displays troquelados en PVC ideales para promoción y marca", image: figuraPvc.url, bg: "#1f2937", fit: "contain", description: "Displays troquelados en PVC con sticker aplicado. Ideales para promociones, punto de venta y activaciones de marca.", highlights: ["Troquelado a la forma", "PVC de 3 o 5 mm", "Sticker HD", "Cualquier tamaño"] },
+  { title: "PVC de bienvenida para eventos", tag: "Eventos", type: "PVC", subtitle: "Cartel personalizado con nombre · diseño premium para cumpleaños y celebraciones", image: pvcGaby.url, bg: "#0a0a0a", fit: "contain", description: "Carteles de bienvenida en PVC personalizados con el nombre del festejado. Diseño premium para cumpleaños, bodas, baby showers y toda clase de celebraciones.", highlights: ["Diseño 100% personalizado", "PVC de 5 o 10 mm", "Troquelado profesional", "Cualquier tamaño"] },
+  { title: "Figuras troqueladas Sticker + PVC", tag: "Publicidad", type: "PVC", subtitle: "Disponibles en cualquier tamaño y personajes · ideal para promociones y eventos", image: figurasMundial.url, bg: "#e5e5e5", fit: "contain", description: "Figuras troqueladas de personajes, mascotas o productos hechas con sticker + PVC. Ideales para promociones, eventos y punto de venta.", highlights: ["Cualquier tamaño", "Cualquier personaje", "PVC rígido troquelado", "Base opcional para exhibición"] },
+  { title: "Banderines publicitarios", tag: "Publicidad", type: "Banderines", subtitle: "Disponibles de 3 y 5 metros · material impermeable · incluye base y contrapeso", image: banderines.url, bg: "#0a0a0a", fit: "contain", description: "Banderines tipo pluma para exteriores. Material impermeable resistente al sol y la lluvia. Incluye asta, base y contrapeso.", highlights: ["3 y 5 metros de alto", "Material impermeable", "Incluye base con contrapeso", "Fácil transporte"] },
+  { title: "Foto Álbum", tag: "Regalos", type: "Regalos", subtitle: "Álbum personalizado con el nombre y diseño que quieras · ideal para regalos, aniversarios y ocasiones especiales", image: albumMama2.url, bg: "#ec4899", fit: "contain", description: "Foto álbumes personalizados con nombre, portada temática y las fotos que quieras. Perfectos para regalos, aniversarios, día de la madre, cumpleaños y ocasiones especiales.", highlights: ["Portada personalizada", "Impresión fotográfica HD", "Varios tamaños y páginas", "Solo mándanos tus fotos"] },
+  { title: "Banner cruza calle", tag: "Publicidad", type: "Banderines", subtitle: "540 × 58 pulgadas · impresión de alta calidad · material resistente · incluye instalación", image: bannerCruzacalle.url, bg: "#0a0a0a", fit: "contain", description: "Banners cruza calle de gran formato para publicidad masiva. Material resistente para exteriores e instalación incluida.", highlights: ["540 × 58 pulgadas", "Material resistente a la intemperie", "Impresión HD full color", "Instalación incluida"] },
+  { title: "Variedad de banners", tag: "Publicidad", type: "Banderines", subtitle: "Banner cruza calle, mini banner de mesa, roll up y banner araña · cualquier tamaño", image: variedadBanners.url, bg: "#ffffff", description: "Todos los tipos de banners bajo un mismo techo: cruza calle, mini banner de mesa, roll up, araña y banderines tipo pluma. Cualquier tamaño y cantidad.", highlights: ["Roll up, araña y cruza calle", "Mini banner de mesa", "Cualquier tamaño", "Producción rápida"] },
+  { title: "Grabado láser para Papá", tag: "Regalos", type: "Regalos", subtitle: "Billeteras, termos y tablas de cortar con grabado láser personalizado · regalo perfecto para Papá", image: grabadoPapa.url, bg: "#0a0a0a", description: "Regalos para Papá con grabado láser: billeteras de cuero, termos metálicos y tablas de cortar personalizadas con nombre, foto o dedicatoria.", highlights: ["Grabado láser permanente", "Cuero, metal y madera", "Foto, texto o logo", "Regalo listo para entregar"] },
+  { title: "Camisetas personalizadas para Papá", tag: "Regalos", type: "Regalos", subtitle: "Camisetas con foto, nombre y diseño 100% personalizado · solo mándanos las fotos de Papá", image: camisetasPapa.url, bg: "#0a0a0a", description: "Camisetas full color con foto, nombre y diseño 100% personalizado. Solo mándanos las fotos de Papá y nosotros hacemos el diseño.", highlights: ["Sublimación full color", "Diseño incluido", "Todas las tallas", "Solo mándanos la foto"] },
+  { title: "Botellas personalizadas", tag: "Regalos", type: "Regalos", subtitle: "Botellas con nombre o foto · etiquetas premium · ideal para regalos y ocasiones especiales", image: botellasPersonalizadas.url, bg: "#0a0a0a", fit: "contain", description: "Botellas de vidrio o metal personalizadas con nombre, foto o etiqueta premium. Ideales para regalos, brindis y ocasiones especiales.", highlights: ["Etiqueta premium en vinil", "Vidrio o metal", "Cualquier diseño", "Perfecto para regalar"] },
+  { title: "Etiquetas para botellas en vinil", tag: "Regalos", type: "Stickers", subtitle: "Etiqueta completa en sticker vinil · personaliza cerveza o bebidas con nombre y diseño", image: etiquetasBotellas.url, bg: "#f5f5f5", fit: "contain", description: "Etiquetas completas en sticker vinil impermeable para personalizar cervezas, vinos y bebidas artesanales. Diseño 100% personalizado.", highlights: ["Vinil impermeable", "Cualquier tamaño de botella", "Corte por contorno", "Full color HD"] },
+  { title: "Marcos con fotos impresas", tag: "Regalos", type: "Regalos", subtitle: "Set de marcos con tus fotos impresas · solo mándanos las fotos · regalo perfecto para toda ocasión", image: marcosFotos.url, bg: "#e5e5e5", fit: "contain", description: "Sets de marcos con fotos impresas de alta calidad. Perfectos para regalar en cualquier ocasión: cumpleaños, aniversarios, día de la madre o del padre.", highlights: ["Impresión fotográfica HD", "Marcos incluidos", "Solo mándanos tus fotos", "Cualquier cantidad"] },
+  { title: "Cadenas con grabado láser", tag: "Regalos", type: "Regalos", subtitle: "Dijes personalizados con foto o nombre · grabado láser en acero · solo mándanos tu foto", image: cadenasGrabado.url, bg: "#ffffff", fit: "contain", description: "Dijes y cadenas de acero con grabado láser de foto, nombre o texto. Grabado permanente que no se borra. Regalo ideal para parejas, mamás y amigos.", highlights: ["Grabado láser permanente", "Acero inoxidable", "Foto o texto", "Estuche incluido"] },
+  { title: "Boxers personalizados para San Valentín", tag: "Regalos", type: "Regalos", subtitle: "Sublimación full color · diseños divertidos y románticos · solo mándanos tu foto o idea", image: boxersPersonalizados.url, bg: "#ffffff", fit: "contain", description: "Boxers personalizados con sublimación full color. Diseños divertidos y románticos para San Valentín, aniversarios o solo para reír.", highlights: ["Sublimación full color", "Todas las tallas", "Solo mándanos la idea", "Empaque de regalo"] },
+  { title: "Calsetas personalizadas con foto", tag: "Regalos", type: "Regalos", subtitle: "Sublimación full color · caras, nombres y corazones · solo mándanos tu foto", image: calsetasPersonalizadas.url, bg: "#ffffff", fit: "contain", description: "Calcetas con foto, nombre o diseño personalizado. Sublimación full color que no se despinta. Regalo original para parejas, amigos y familia.", highlights: ["Sublimación full color", "Todas las tallas", "Solo mándanos la foto", "Diseño incluido"] },
+  { title: "Retrateras con tu foto impresa", tag: "Regalos", type: "Regalos", subtitle: "Marcos de madera, metal y decorativos · impresión fotográfica de alta calidad · solo mándanos tu foto", image: retrateras.url, bg: "#ffffff", fit: "contain", description: "Retrateras con tu foto impresa en alta calidad. Marcos de madera, metal y decorativos para regalar o decorar tu espacio.", highlights: ["Impresión fotográfica HD", "Marcos de madera o metal", "Varios tamaños", "Solo mándanos la foto"] },
+  { title: "Rompecabezas personalizados", tag: "Regalos", type: "Regalos", subtitle: "Puzzle con tu foto favorita · varios tamaños y piezas · solo mándanos tu foto", image: rompecabezas.url, bg: "#ffffff", fit: "contain", description: "Rompecabezas personalizados con tu foto favorita. Varios tamaños y cantidades de piezas. Incluye caja de regalo.", highlights: ["Foto full HD", "Varios tamaños y piezas", "Caja de regalo incluida", "Solo mándanos la foto"] },
+  { title: "Impresión de fotos tipo Polaroid", tag: "Regalos", type: "Impresos", subtitle: "Fotos estilo Polaroid con acabado premium · ideal para regalos, decoración y recuerdos", image: polaroid.url, bg: "#f5f5f5", fit: "contain", description: "Impresión de fotos estilo Polaroid con acabado premium. Perfectas para regalar, decorar tu cuarto o armar álbumes de recuerdos.", highlights: ["Acabado premium", "Cualquier cantidad", "Papel fotográfico", "Solo mándanos las fotos"] },
+  { title: "Rollos para facturación", tag: "Negocios", type: "Impresos", subtitle: "Rollos térmicos y químicos para impresoras de facturación · excelente precio y calidad", image: rollosFacturacion.url, bg: "#ffffff", fit: "contain", description: "Rollos térmicos y químicos para impresoras de facturación. Compatible con las principales marcas. Excelente precio para negocios que facturan mucho.", highlights: ["Térmico y químico", "Todos los tamaños", "Compatible con toda impresora", "Descuentos por cantidad"] },
+  { title: "Sublimación en tazas y termos", tag: "Regalos & Branding", type: "Regalos", subtitle: "Impresión duradera full color · tazas cerámicas, termos y botellas · personaliza con foto, logo o diseño", image: sublimacion.url, bg: "#f5efe7", fit: "contain", description: "Sublimación full color en tazas cerámicas, termos metálicos y botellas. Impresión duradera que resiste el lavavajillas. Perfecto para regalos y branding corporativo.", highlights: ["Impresión duradera", "Full color HD", "Foto, logo o diseño", "Apta para lavavajillas"] },
+  { title: "Personaliza tus empaques", tag: "Empaques & Etiquetas", type: "Impresos", subtitle: "Tarjetas cliente frecuente · etiquetas para ropa y joyería · tarjetas de presentación con tu logo, foto y colores", image: empaques.url, bg: "#ffffff", fit: "contain", description: "Kit completo para personalizar tus empaques: tarjetas de cliente frecuente, hang tags para ropa y joyería, tarjetas de presentación y etiquetas con tu logo, foto y colores.", highlights: ["Tarjetas cliente frecuente", "Hang tags para ropa y joyería", "Tarjetas de presentación", "Diseño incluido"] },
+  { title: "Stickers para empaques", tag: "Empaques & Branding", type: "Stickers", subtitle: "Stickers troquelados para bolsas, vasos, cajas y contenedores kraft · cualquier forma, diseño y tamaño", image: stickersEmpaques.url, bg: "#ffffff", fit: "contain", description: "Stickers troquelados para bolsas kraft, vasos, cajas y contenedores. Perfectos para marcar empaques de comida, delivery y ecommerce.", highlights: ["Vinil impermeable", "Troquelado a la forma", "Cualquier tamaño", "Descuentos por cantidad"] },
+  { title: "Etiquetas para bebidas", tag: "Etiquetas", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable · cualquier tamaño de botella · personalízalas con tu logo, foto y colores", image: etiquetasBebidas.url, bg: "#ffffff", fit: "contain", description: "Etiquetas impermeables para botellas de bebidas: cerveza artesanal, vinos, jugos, kombucha y más. Impresión HD full color con tu logo y branding.", highlights: ["Vinil impermeable", "Cualquier tamaño de botella", "Corte por contorno", "Impresión HD"] },
+  { title: "Etiquetas para tus productos", tag: "Etiquetas", type: "Stickers", subtitle: "Troqueladas a la forma de tu preferencia · perfectas para salsas, bebidas y productos artesanales", image: etiquetasGuifity.url, bg: "#ffffff", fit: "contain", description: "Etiquetas troqueladas a la forma que quieras para salsas, mermeladas, cosméticos y productos artesanales. Perfectas para emprendedores.", highlights: ["Troquelado personalizado", "Vinil impermeable", "Cualquier diseño", "Desde cantidades pequeñas"] },
+  { title: "Etiquetas para cumpleaños", tag: "Eventos", type: "Stickers", subtitle: "Etiquetas personalizadas para botellas de agua · monograma, nombre o versículo · perfectas para cumpleaños y celebraciones", image: etiquetasCumple.url, bg: "#ffffff", fit: "contain", description: "Etiquetas personalizadas para botellas de agua en cumpleaños, baby showers, bodas y celebraciones. Monograma, nombre del festejado o versículo bíblico.", highlights: ["Cualquier tamaño de botella", "Monograma o nombre", "Vinil impermeable", "Desde 50 unidades"] },
+  { title: "Servicio de cámara 360°", tag: "Eventos", type: "Servicios", subtitle: "Cámara 360° con plataforma iluminada · ideal para bodas, cumpleaños y eventos corporativos · videos instantáneos para tus invitados", image: servicio360.url, bg: "#0a0a0a", fit: "contain", description: "Servicio de cámara 360° con plataforma iluminada para eventos. Tus invitados suben, la cámara gira y reciben un video instantáneo por WhatsApp con la música y branding que elijas.", highlights: ["Plataforma iluminada con luces LED", "Videos instantáneos por WhatsApp", "Música y overlays personalizados", "Operador incluido"] },
+  { title: "Impresión en jarra", tag: "Bares & Eventos", type: "Regalos", subtitle: "Jarras personalizadas con tu logo, nombre o foto · también etiquetas para botellas · perfectas para bares, cervezas artesanales y regalos", image: impresionJarra.url, bg: "#ffffff", fit: "contain", description: "Jarras de cerveza personalizadas con tu logo, nombre o foto. Impresión full color duradera. Perfectas para bares, cervezas artesanales, souvenirs y regalos originales.", highlights: ["Impresión full color duradera", "Cualquier logo o foto", "También etiquetas de botella", "Descuentos por cantidad"] },
+];
+
+export const projects: Project[] = raw.map((p) => ({ ...p, slug: slugify(p.title) }));
+
+export const getProjectBySlug = (slug: string): Project | undefined =>
+  projects.find((p) => p.slug === slug);

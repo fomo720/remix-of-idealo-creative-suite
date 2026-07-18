@@ -15,6 +15,7 @@ import { Route as CotizarRouteImport } from './routes/cotizar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos.index'
 import { Route as EmpresasIndexRouteImport } from './routes/empresas.index'
+import { Route as PortafolioSlugRouteImport } from './routes/portafolio.$slug'
 import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
 import { Route as EmpresasKitRouteImport } from './routes/empresas.$kit'
 import { Route as EventosCategoriaIndexRouteImport } from './routes/eventos.$categoria.index'
@@ -50,6 +51,11 @@ const EmpresasIndexRoute = EmpresasIndexRouteImport.update({
   path: '/',
   getParentRoute: () => EmpresasRoute,
 } as any)
+const PortafolioSlugRoute = PortafolioSlugRouteImport.update({
+  id: '/portafolio/$slug',
+  path: '/portafolio/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventosCategoriaRoute = EventosCategoriaRouteImport.update({
   id: '/$categoria',
   path: '/$categoria',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/eventos': typeof EventosRouteWithChildren
   '/empresas/$kit': typeof EmpresasKitRoute
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/portafolio/$slug': typeof PortafolioSlugRoute
   '/empresas/': typeof EmpresasIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cotizar': typeof CotizarRoute
   '/empresas/$kit': typeof EmpresasKitRoute
+  '/portafolio/$slug': typeof PortafolioSlugRoute
   '/empresas': typeof EmpresasIndexRoute
   '/eventos': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/eventos': typeof EventosRouteWithChildren
   '/empresas/$kit': typeof EmpresasKitRoute
   '/eventos/$categoria': typeof EventosCategoriaRouteWithChildren
+  '/portafolio/$slug': typeof PortafolioSlugRoute
   '/empresas/': typeof EmpresasIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$categoria/$producto': typeof EventosCategoriaProductoRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/empresas/$kit'
     | '/eventos/$categoria'
+    | '/portafolio/$slug'
     | '/empresas/'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cotizar'
     | '/empresas/$kit'
+    | '/portafolio/$slug'
     | '/empresas'
     | '/eventos'
     | '/eventos/$categoria/$producto'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/empresas/$kit'
     | '/eventos/$categoria'
+    | '/portafolio/$slug'
     | '/empresas/'
     | '/eventos/'
     | '/eventos/$categoria/$producto'
@@ -147,6 +159,7 @@ export interface RootRouteChildren {
   CotizarRoute: typeof CotizarRoute
   EmpresasRoute: typeof EmpresasRouteWithChildren
   EventosRoute: typeof EventosRouteWithChildren
+  PortafolioSlugRoute: typeof PortafolioSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/empresas/'
       preLoaderRoute: typeof EmpresasIndexRouteImport
       parentRoute: typeof EmpresasRoute
+    }
+    '/portafolio/$slug': {
+      id: '/portafolio/$slug'
+      path: '/portafolio/$slug'
+      fullPath: '/portafolio/$slug'
+      preLoaderRoute: typeof PortafolioSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/eventos/$categoria': {
       id: '/eventos/$categoria'
@@ -269,6 +289,7 @@ const rootRouteChildren: RootRouteChildren = {
   CotizarRoute: CotizarRoute,
   EmpresasRoute: EmpresasRouteWithChildren,
   EventosRoute: EventosRouteWithChildren,
+  PortafolioSlugRoute: PortafolioSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
