@@ -29,6 +29,7 @@ import boxersPersonalizados from "@/assets/portfolio-boxers.jpg.asset.json";
 import calsetasPersonalizadas from "@/assets/portfolio-calsetas.jpg.asset.json";
 import retrateras from "@/assets/portfolio-retrateras.jpg.asset.json";
 import rompecabezas from "@/assets/portfolio-rompecabezas.jpg.asset.json";
+import polaroid from "@/assets/portfolio-polaroid.jpg.asset.json";
 
 type ProjectType = "Stickers" | "Banderines" | "Iron-ons" | "PVC" | "Impresos" | "Rotulación" | "Regalos";
 
@@ -75,6 +76,7 @@ const projects: Project[] = [
   { title: "Calsetas personalizadas con foto", tag: "Regalos", type: "Regalos", subtitle: "Sublimación full color · caras, nombres y corazones · solo mándanos tu foto", image: calsetasPersonalizadas.url, bg: "#ffffff", fit: "contain" },
   { title: "Retrateras con tu foto impresa", tag: "Regalos", type: "Regalos", subtitle: "Marcos de madera, metal y decorativos · impresión fotográfica de alta calidad · solo mándanos tu foto", image: retrateras.url, bg: "#ffffff", fit: "contain" },
   { title: "Rompecabezas personalizados", tag: "Regalos", type: "Regalos", subtitle: "Puzzle con tu foto favorita · varios tamaños y piezas · solo mándanos tu foto", image: rompecabezas.url, bg: "#ffffff", fit: "contain" },
+  { title: "Impresión de fotos tipo Polaroid", tag: "Regalos", type: "Impresos", subtitle: "Fotos estilo Polaroid con acabado premium · ideal para regalos, decoración y recuerdos", image: polaroid.url, bg: "#f5f5f5", fit: "contain" },
 ];
 
 const FILTERS: Array<"Todos" | ProjectType> = ["Todos", "Stickers", "Banderines", "Iron-ons", "PVC", "Impresos", "Rotulación", "Regalos"];
