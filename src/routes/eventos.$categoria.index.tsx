@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft } from "lucide-react";
+import { PartyPopper, Flag, Cookie, BookOpen, Package, Tags, Hash, ArrowLeft, Notebook, Sticker, Pencil, Frame, Coffee } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import evtCumple from "@/assets/evt-cumple-ejemplo.jpg.asset.json";
+import evtBackToSchool from "@/assets/evt-back-to-school.jpg.asset.json";
 
 
 export const Route = createFileRoute("/eventos/$categoria/")({
@@ -53,8 +54,15 @@ const PRODUCTOS_CUMPLE: Producto[] = [
   { slug: "cajitas", title: "Cajitas", icon: Package, desc: "Cajas de regalo o dulces temáticas.", color: "var(--brand-blue)" },
   { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
   { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
+];
 
-
+const PRODUCTOS_BTS: Producto[] = [
+  { slug: "cuaderno-personalizado", title: "Cuaderno con Sticker", icon: Notebook, desc: "Cuaderno espiral con sticker temático y nombre del niño.", color: "var(--brand-violet)" },
+  { slug: "sticker-panita", title: "Sticker para Panita", icon: Sticker, desc: "Sticker resistente para lonchera con nombre.", color: "var(--brand-pink)" },
+  { slug: "libro-sticker", title: "Libro con Sticker", icon: BookOpen, desc: "Libro de aventuras personalizado con el nombre y personaje favorito.", color: "var(--brand-orange)" },
+  { slug: "stickers-lapices", title: "Stickers para Lápices", icon: Pencil, desc: "Stickers para marcar lápices, colores y útiles.", color: "var(--brand-indigo)" },
+  { slug: "marco-pvc-fotos", title: "Marco PVC para Fotos", icon: Frame, desc: "Marco 'First Day' de PVC con sticker temático para foto del primer día.", color: "var(--brand-blue)" },
+  { slug: "termo-grabado", title: "Termo con Grabado Láser", icon: Coffee, desc: "Botella metálica con el nombre grabado a láser.", color: "var(--brand-pink)" },
 ];
 
 const CATEGORIAS: Record<string, Categoria> = {
@@ -64,6 +72,13 @@ const CATEGORIAS: Record<string, Categoria> = {
     intro: "Todo lo que necesitás para un cumpleaños memorable: PVC de bienvenida, banner parador, cake topper, menú, cajitas, etiquetas para botellas y números de mesa.",
     hero: evtCumple.url,
     productos: PRODUCTOS_CUMPLE,
+  },
+  "back-to-school": {
+    title: "Back to School",
+    emoji: "🎒",
+    intro: "¡Todo lo que necesitas con el nombre de tu hijo! Cuaderno, libro de aventuras, stickers para panita y lápices, marco de PVC para fotos del primer día y termo con grabado láser. Ideal para colegio y regalo.",
+    hero: evtBackToSchool.url,
+    productos: PRODUCTOS_BTS,
   },
 };
 
