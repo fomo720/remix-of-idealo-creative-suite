@@ -42,6 +42,9 @@ import llaveroDavid from "@/assets/llavero-cuero-madera.jpg.asset.json";
 import llaveroMadera from "@/assets/llavero-madera-cali.jpg.asset.json";
 import vasoAves from "@/assets/vaso-aves.jpg.asset.json";
 import tablaSalmo from "@/assets/tabla-teller.jpg.asset.json";
+import ironOnCover from "@/assets/portfolio-camisetas-estampadas.png.asset.json";
+import libretasCover from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
+import imprentaCover from "@/assets/portfolio-tarjetas.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
