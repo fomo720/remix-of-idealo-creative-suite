@@ -103,7 +103,7 @@ export function Hero() {
             <span style={{ color: "var(--brand-magenta)" }}>●</span> Entrega nacional
           </div>
           <div className="absolute -bottom-2 left-6 rounded-2xl border border-black/5 bg-white/95 px-3 py-2 text-xs font-semibold shadow-xl backdrop-blur">
-            <span style={{ color: "var(--brand-cyan)" }}>●</span> Diseño incluido
+            <span style={{ color: "var(--brand-cyan)" }}>●</span> Asesoría personalizada
           </div>
         </div>
       </div>
