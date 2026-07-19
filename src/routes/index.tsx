@@ -22,6 +22,7 @@ function Index() {
         <Hero />
         <HowItWorks />
         <Configurator />
+        <FeaturedProducts />
         <Portfolio />
         <Testimonials />
         <MissionVision />
