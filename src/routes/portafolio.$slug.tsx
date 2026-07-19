@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getProjectBySlug, projects } from "@/lib/portfolio-data";
 
-const WHATSAPP = "50432316100";
+const WHATSAPP = "50433635666";
 
 export const Route = createFileRoute("/portafolio/$slug")({
   loader: ({ params }) => {

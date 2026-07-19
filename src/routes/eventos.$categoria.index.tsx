@@ -66,7 +66,7 @@ const PRODUCTOS_CUMPLE: Producto[] = [
   { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
 ];
 
-const WA = "50432316100";
+const WA = "50433635666";
 const wa = (msg: string) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 
 const PRODUCTOS_FP: Producto[] = [
