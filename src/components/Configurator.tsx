@@ -22,6 +22,7 @@ import kissCutSample from "@/assets/kiss-cut-sample.png.asset.json";
 import rollsSample from "@/assets/rolls-sample.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
+import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
 import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
 import ecoSticker from "@/assets/eco-sticker.png.asset.json";
