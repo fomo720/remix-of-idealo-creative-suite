@@ -47,6 +47,7 @@ import fiestasPatriasCuadro from "@/assets/portfolio-fiestas-patrias-cuadro.png.
 import fiestasPatriasProceres from "@/assets/portfolio-fiestas-patrias-proceres.png.asset.json";
 import stickerTroqueladoCafe from "@/assets/portfolio-sticker-troquelado-cafe.png.asset.json";
 import stickerTroqueladoAvion from "@/assets/portfolio-sticker-troquelado-avion.png.asset.json";
+import camisetasEstampadas from "@/assets/portfolio-camisetas-estampadas.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
