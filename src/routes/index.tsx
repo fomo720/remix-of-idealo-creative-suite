@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Configurator } from "@/components/Configurator";
+import { FeaturedProducts } from "@/components/FeaturedProducts";
 import { MissionVision } from "@/components/MissionVision";
 import { Portfolio } from "@/components/Portfolio";
 import { Testimonials } from "@/components/Testimonials";
