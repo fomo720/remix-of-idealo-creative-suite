@@ -54,6 +54,7 @@ import grabadoLaserCoco from "@/assets/portfolio-grabado-laser-coco.png.asset.js
 import impresionCartoncillo from "@/assets/portfolio-impresion-cartoncillo.png.asset.json";
 import abanicoLaser from "@/assets/portfolio-abanico-laser.png.asset.json";
 import cajitasCandySticker from "@/assets/portfolio-cajitas-candy-sticker.png.asset.json";
+import audioGuestbook from "@/assets/portfolio-audio-guestbook.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
