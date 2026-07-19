@@ -59,6 +59,12 @@ import etiquetasGuifitiBotellas from "@/assets/portfolio-etiquetas-guifiti-botel
 import pvcBienvenidaJessie from "@/assets/portfolio-pvc-bienvenida-jessie.png.asset.json";
 import cuadrosCanvas from "@/assets/portfolio-cuadros-canvas.png.asset.json";
 import stickersTamanos from "@/assets/portfolio-stickers-tamanos.png.asset.json";
+import fotosPersonalizadas from "@/assets/portfolio-fotos-personalizadas.png.asset.json";
+import marcosPersonalizados from "@/assets/portfolio-marcos-personalizados.png.asset.json";
+import esferasNavidenas from "@/assets/portfolio-esferas-navidenas.png.asset.json";
+import termoStanley from "@/assets/portfolio-termo-stanley.png.asset.json";
+import bolsosMama from "@/assets/portfolio-bolsos-mama.png.asset.json";
+import bolsosSublimados from "@/assets/portfolio-bolsos-sublimados.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
