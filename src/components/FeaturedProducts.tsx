@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+// full-page navigation via <a href> so it works from any state
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
 import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
