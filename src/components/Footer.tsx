@@ -3,15 +3,15 @@ import logo from "@/assets/idealo-logo.png.asset.json";
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-border bg-card">
-      <div className="h-1.5 w-full bg-gradient-rainbow" />
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-4">
+    <footer className="relative overflow-hidden text-slate-200" style={{ background: "#37474f" }}>
+      <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, var(--brand-magenta), var(--brand-cyan))" }} />
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
-          <img src={logo.url} alt="Idealo" className="h-14 w-auto" />
-
-          <p className="mt-4 max-w-md text-sm text-muted-foreground">
-            Si puedes imaginarlo, Idealo lo hace realidad. Sin límites para tu marca.
-            Imprenta profesional y estudio creativo en Honduras.
+          <div className="inline-flex items-center gap-3 rounded-2xl bg-white/95 px-4 py-2">
+            <img src={logo.url} alt="Idealo" className="h-10 w-auto" />
+          </div>
+          <p className="mt-5 max-w-md text-sm text-slate-300">
+            Producción gráfica profesional en Honduras. Stickers, banners, papelería y regalos personalizados — tu idea, hecha realidad.
           </p>
           <div className="mt-6 flex gap-2">
             {[
@@ -19,7 +19,17 @@ export function Footer() {
               { Icon: Facebook, href: "https://www.facebook.com/idealohnd/", label: "Facebook" },
               { Icon: MessageCircle, href: "https://wa.me/50432316100", label: "WhatsApp" },
             ].map(({ Icon, href, label }) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-cta hover:text-white">
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-slate-200 transition hover:border-transparent hover:text-white"
+                style={{ transitionProperty: "background,color,border-color" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--brand-magenta)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+              >
                 <Icon className="h-4 w-4" />
               </a>
             ))}
@@ -27,26 +37,35 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 text-sm font-bold uppercase tracking-widest">Contacto</h4>
-          <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--brand-pink)" }} /> La Ceiba, Honduras · Plaza Almina</li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 shrink-0" style={{ color: "var(--brand-orange)" }} /> +504 0000-0000</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4 shrink-0" style={{ color: "var(--brand-blue)" }} /> hola@idealo.hn</li>
+          <h4 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">Explorar</h4>
+          <ul className="space-y-2 text-sm text-slate-300">
+            <li><a href="/" className="hover:text-white">Inicio</a></li>
+            <li><a href="/#personalizar" className="hover:text-white">Personalizar</a></li>
+            <li><a href="/empresas" className="hover:text-white">Empresas</a></li>
+            <li><a href="/eventos" className="hover:text-white">Eventos</a></li>
+            <li><a href="/#portafolio" className="hover:text-white">Portafolio</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="mb-4 text-sm font-bold uppercase tracking-widest">Explorar</h4>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href="/#personalizar" className="hover:text-foreground">Personalizar</a></li>
-            <li><a href="/empresas" className="hover:text-foreground">Empresas</a></li>
-            <li><a href="/eventos" className="hover:text-foreground">Eventos</a></li>
-            <li><a href="/#portafolio" className="hover:text-foreground">Portafolio</a></li>
-            <li><a href="https://wa.me/50432316100" className="hover:text-foreground">WhatsApp</a></li>
+          <h4 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">Contacto</h4>
+          <ul className="space-y-3 text-sm text-slate-300">
+            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--brand-magenta)" }} /> La Ceiba, Honduras · Plaza Almina</li>
+            <li className="flex items-center gap-2"><Phone className="h-4 w-4 shrink-0" style={{ color: "var(--brand-cyan)" }} /> +504 3231-6100</li>
+            <li className="flex items-center gap-2"><Mail className="h-4 w-4 shrink-0" style={{ color: "var(--brand-cyan)" }} /> hola@idealo.hn</li>
           </ul>
+          <a
+            href="https://wa.me/50432316100"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
+            style={{ background: "#25D366" }}
+          >
+            <MessageCircle className="h-4 w-4" /> WhatsApp directo
+          </a>
         </div>
       </div>
-      <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
+      <div className="border-t border-white/10 py-5 text-center text-xs text-slate-400">
         © {new Date().getFullYear()} Idealo · Producción gráfica profesional · Hecho en Honduras 🇭🇳
       </div>
     </footer>
