@@ -21,6 +21,7 @@ import rollIcon from "@/assets/roll-icon.png.asset.json";
 import kissCutSample from "@/assets/kiss-cut-sample.png.asset.json";
 import rollsSample from "@/assets/rolls-sample.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
+import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
 import ecoSticker from "@/assets/eco-sticker.png.asset.json";
@@ -764,7 +765,7 @@ export function Configurator() {
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
                 accent="var(--brand-magenta)"
                 icon={<Layers className="h-7 w-7" />}
-                image={fireSticker.url}
+                image={stickersHandCover.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
               />
