@@ -4,9 +4,9 @@ import { Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
 const TESTIMONIALS = [
   {
     quote: "¡La calidad de impresión es increíble y súper rápido! Nuestros stickers quedaron perfectos y el equipo siempre atento.",
-    name: "María Fernanda López",
-    role: "Fundadora · Dulces Marifer",
-    initials: "MF",
+    name: "Enrique García",
+    role: "Fundador · Puyazo",
+    initials: "EG",
   },
   {
     quote: "Pedimos banners y menús PVC para todos nuestros locales. Cumplen los plazos y el color es exactamente como lo aprobamos.",
