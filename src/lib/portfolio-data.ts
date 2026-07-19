@@ -57,6 +57,7 @@ import cajitasCandySticker from "@/assets/portfolio-cajitas-candy-sticker.png.as
 import audioGuestbook from "@/assets/portfolio-audio-guestbook.png.asset.json";
 import etiquetasGuifitiBotellas from "@/assets/portfolio-etiquetas-guifiti-botellas.png.asset.json";
 import pvcBienvenidaJessie from "@/assets/portfolio-pvc-bienvenida-jessie.png.asset.json";
+import cuadrosCanvas from "@/assets/portfolio-cuadros-canvas.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
