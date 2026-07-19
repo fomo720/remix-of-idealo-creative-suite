@@ -58,6 +58,7 @@ import audioGuestbook from "@/assets/portfolio-audio-guestbook.png.asset.json";
 import etiquetasGuifitiBotellas from "@/assets/portfolio-etiquetas-guifiti-botellas.png.asset.json";
 import pvcBienvenidaJessie from "@/assets/portfolio-pvc-bienvenida-jessie.png.asset.json";
 import cuadrosCanvas from "@/assets/portfolio-cuadros-canvas.png.asset.json";
+import stickersTamanos from "@/assets/portfolio-stickers-tamanos.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
