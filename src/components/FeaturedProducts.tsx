@@ -9,7 +9,7 @@ import tarjetas from "@/assets/portfolio-tarjetas.jpg.asset.json";
 import menus from "@/assets/portfolio-menus.jpg.asset.json";
 import microperforado from "@/assets/portfolio-microperforado.jpg.asset.json";
 
-const WA = "50432316100";
+const WA = "50433635666";
 
 const products = [
   { title: "Stickers troquelados", subtitle: "Cualquier forma y tamaño", image: troquelados.url },

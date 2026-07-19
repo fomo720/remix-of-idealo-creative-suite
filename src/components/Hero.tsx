@@ -52,7 +52,7 @@ export function Hero() {
               Comenzar a Crear <ArrowRight className="h-4 w-4" />
             </a>
             <a
-              href="https://wa.me/50432316100"
+              href="https://wa.me/50433635666"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-sm font-semibold transition hover:bg-[color-mix(in_oklab,var(--brand-cyan)_10%,white)]"

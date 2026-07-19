@@ -82,7 +82,7 @@ function EmpresasIndex() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href={`https://wa.me/50432316100?text=${encodeURIComponent("Hola Idealo, quiero cotizar un proyecto corporativo. Les cuento un poco de mi negocio:")}`}
+              href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar un proyecto corporativo. Les cuento un poco de mi negocio:")}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-elegant transition hover:scale-[1.02]"
@@ -152,7 +152,7 @@ function EmpresasIndex() {
               </div>
               <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
               <a
-                href={`https://wa.me/50432316100?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #1 para Emprendedores (L 600).")}`}
+                href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #1 para Emprendedores (L 600).")}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-orange-600 transition hover:scale-[1.02]"
@@ -185,7 +185,7 @@ function EmpresasIndex() {
               </div>
               <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
               <a
-                href={`https://wa.me/50432316100?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #2 para Emprendedores (L 1,600).")}`}
+                href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #2 para Emprendedores (L 1,600).")}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-indigo-600 transition hover:scale-[1.02]"
@@ -233,14 +233,14 @@ function EmpresasIndex() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href={`https://wa.me/50432316100?text=${encodeURIComponent("Hola Idealo, quiero cotizar un proyecto corporativo.")}`}
+              href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar un proyecto corporativo.")}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-background px-6 py-3 text-sm font-semibold text-foreground transition hover:scale-[1.02]"
             >
               <MessageCircle className="h-4 w-4" /> Cotizar por WhatsApp
             </a>
-            <a href="tel:+50432316100" className="inline-flex items-center gap-2 rounded-full border border-background/30 px-6 py-3 text-sm font-semibold text-background hover:bg-background/10">
+            <a href="tel:+50433635666" className="inline-flex items-center gap-2 rounded-full border border-background/30 px-6 py-3 text-sm font-semibold text-background hover:bg-background/10">
               Llamar ahora
             </a>
           </div>
@@ -287,7 +287,7 @@ function KitCard({ kit }: { kit: Kit }) {
         <span className="text-sm font-semibold">Ver kit completo</span>
         <span className="ml-auto text-xs text-muted-foreground" onClick={(e) => e.preventDefault()}>
           <a
-            href={`https://wa.me/50432316100?text=${encodeURIComponent(waMsg)}`}
+            href={`https://wa.me/50433635666?text=${encodeURIComponent(waMsg)}`}
             target="_blank"
             rel="noreferrer"
             className="rounded-full border border-border bg-background px-3 py-1.5 font-semibold hover:bg-foreground hover:text-background"

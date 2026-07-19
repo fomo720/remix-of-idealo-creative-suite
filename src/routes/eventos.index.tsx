@@ -51,7 +51,7 @@ function EventosIndex() {
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <a
-            href="https://wa.me/50432316100"
+            href="https://wa.me/50433635666"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-gradient-cta animate-rainbow-shimmer px-6 py-3 text-sm font-semibold text-white shadow-elegant transition hover:scale-105"

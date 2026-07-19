@@ -17,7 +17,7 @@ export function Footer() {
             {[
               { Icon: Instagram, href: "https://www.instagram.com/idealohn_/", label: "Instagram" },
               { Icon: Facebook, href: "https://www.facebook.com/idealohnd/", label: "Facebook" },
-              { Icon: MessageCircle, href: "https://wa.me/50432316100", label: "WhatsApp" },
+              { Icon: MessageCircle, href: "https://wa.me/50433635666", label: "WhatsApp" },
             ].map(({ Icon, href, label }) => (
               <a
                 key={label}
@@ -51,11 +51,11 @@ export function Footer() {
           <h4 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">Contacto</h4>
           <ul className="space-y-3 text-sm text-slate-300">
             <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--brand-magenta)" }} /> La Ceiba, Honduras · Plaza Almina</li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 shrink-0" style={{ color: "var(--brand-cyan)" }} /> +504 3231-6100</li>
+            <li className="flex items-center gap-2"><Phone className="h-4 w-4 shrink-0" style={{ color: "var(--brand-cyan)" }} /> +504 3363-5666</li>
             <li className="flex items-center gap-2"><Mail className="h-4 w-4 shrink-0" style={{ color: "var(--brand-cyan)" }} /> hola@idealo.hn</li>
           </ul>
           <a
-            href="https://wa.me/50432316100"
+            href="https://wa.me/50433635666"
             target="_blank"
             rel="noreferrer"
             className="mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
