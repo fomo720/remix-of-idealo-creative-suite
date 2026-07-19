@@ -143,6 +143,38 @@ function CategoriaPage() {
           )}
         </div>
 
+        {slug === "back-to-school" && (
+          <a
+            href={wa("Hola Idealo 👋 Me interesa la *OFERTA ESPECIAL COMBO Back to School* — Paquete de Rotuladores personalizados (15 viñetas 3x4, 30 viñetas 1x4, 20 stickers 2x2 redondo, 10 stickers 3x3 redondo). ¿Me pasan precio y tiempos?")}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-14 group relative block overflow-hidden rounded-3xl border-2 border-[color:var(--brand-blue)]/30 bg-white shadow-elegant transition hover:-translate-y-1 hover:shadow-xl"
+          >
+            <div className="absolute left-4 top-4 z-10 rounded-full bg-[color:var(--brand-pink)] px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow">
+              ⭐ Oferta especial · Combo
+            </div>
+            <div className="grid gap-0 md:grid-cols-[1.1fr_1fr]">
+              <div className="bg-gradient-to-br from-sky-50 to-pink-50 p-4">
+                <img src={evtBtsCombo.url} alt="Paquete de Rotuladores Back to School" className="mx-auto h-auto w-full max-w-md object-contain" />
+              </div>
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <h3 className="text-2xl font-bold text-[color:var(--brand-blue)] md:text-3xl">Paquete de Rotuladores</h3>
+                <p className="text-lg font-semibold text-sky-500">Back to School</p>
+                <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
+                  <li>• 15 viñetas de <strong>3x4 pulgadas</strong> (cuadernos/libros)</li>
+                  <li>• 30 viñetas de <strong>1x4 pulgadas</strong> (plumas/lápices)</li>
+                  <li>• 20 stickers de <strong>2x2 pulgadas</strong> redondos</li>
+                  <li>• 10 stickers de <strong>3x3 pulgadas</strong> redondos</li>
+                </ul>
+                <p className="mt-4 text-xs text-muted-foreground">Completamente personalizados con el personaje, tamaño y cantidad que desees.</p>
+                <span className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-[color:var(--brand-blue)] px-5 py-2.5 text-sm font-bold text-white transition group-hover:bg-[color:var(--brand-pink)]">
+                  Cotizar combo por WhatsApp →
+                </span>
+              </div>
+            </div>
+          </a>
+        )}
+
         <h2 className="mt-16 text-2xl font-bold">Productos disponibles</h2>
         <p className="mt-1 text-sm text-muted-foreground">Elegí uno para personalizar tamaño, estilo y diseño.</p>
 
