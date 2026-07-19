@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+// full-page navigation via <a href> so it works from any state
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
 import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
@@ -84,14 +84,14 @@ export function FeaturedProducts() {
         </div>
 
         <div className="mt-16 flex justify-center">
-          <Link
-            to="/portafolio/"
-            className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-base font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:shadow-2xl sm:text-lg"
+          <a
+            href="/portafolio"
+            className="group inline-flex cursor-pointer items-center gap-3 rounded-full px-8 py-4 text-base font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:shadow-2xl sm:text-lg"
             style={{ background: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan))" }}
           >
             Explorar portafolio completo
             <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
+          </a>
         </div>
       </div>
     </section>
