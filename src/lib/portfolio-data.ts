@@ -49,6 +49,7 @@ import stickerTroqueladoCafe from "@/assets/portfolio-sticker-troquelado-cafe.pn
 
 import camisetasEstampadas from "@/assets/portfolio-camisetas-estampadas.png.asset.json";
 import rotulosPrevencion from "@/assets/portfolio-rotulos-prevencion.png.asset.json";
+import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
