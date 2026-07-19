@@ -2052,29 +2052,65 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 }
 
 function CategoryCard({
-  title, desc, icon, active, onClick, accent,
-}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string }) {
+  title, desc, icon, active, onClick, accent, image,
+}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string }) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 p-8 text-left transition-all rainbow-splash",
-        active ? "rainbow-border-active" : "border-border hover:-translate-y-1 hover:shadow-elegant",
+        "group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 text-left transition-all",
+        active
+          ? "shadow-[0_20px_50px_-15px_color-mix(in_oklab,var(--brand-magenta)_45%,transparent)]"
+          : "border-border hover:-translate-y-1 hover:shadow-elegant",
       )}
+      style={{
+        borderColor: active ? "var(--brand-magenta)" : undefined,
+        background: "var(--card)",
+      }}
     >
-      <div
-        className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
-        style={{ background: accent }}
-      />
-      <div className="relative flex h-full flex-col">
-        <div className="mb-4 grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white" style={{ background: accent }}>
+      {/* Photo header */}
+      <div className="relative h-36 w-full overflow-hidden bg-muted">
+        {image ? (
+          <img
+            src={image}
+            alt=""
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="h-full w-full" style={{ background: accent }} />
+        )}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, transparent 40%, color-mix(in oklab, ${accent} 55%, transparent) 100%)`,
+          }}
+        />
+        <div
+          className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-xl text-white shadow-lg backdrop-blur"
+          style={{ background: accent }}
+        >
           {icon}
         </div>
-        <h4 className="text-lg font-bold leading-tight break-words xl:text-base 2xl:text-lg">{title}</h4>
-        <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium">
-          Comenzar <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-        </div>
+      </div>
+
+      <div className="relative flex flex-1 flex-col p-5">
+        <h4 className="text-base font-bold leading-tight">{title}</h4>
+        <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
+        <span
+          className={cn(
+            "mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
+            active ? "text-white" : "text-white group-hover:brightness-110",
+          )}
+          style={{
+            background: active
+              ? "var(--brand-magenta)"
+              : "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan-deep))",
+          }}
+        >
+          {active ? "Seleccionado" : "Empezar personalización"}
+          <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+        </span>
       </div>
     </button>
   );
