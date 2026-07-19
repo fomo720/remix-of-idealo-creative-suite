@@ -720,16 +720,23 @@ export function Configurator() {
     <section id="personalizar" className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-10 text-center">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--brand-violet)" }} />
-            Configurador interactivo
+          <div
+            className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+            style={{
+              color: "var(--brand-magenta)",
+              background: "color-mix(in oklab, var(--brand-magenta) 10%, white)",
+              border: "1px solid color-mix(in oklab, var(--brand-magenta) 25%, transparent)",
+            }}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Configurador guiado
           </div>
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Diseña tu producto en{" "}
-            <span className="text-gradient-rainbow">4 pasos</span>
+            Diseña tu producto,{" "}
+            <span style={{ color: "var(--brand-cyan-deep)" }}>paso a paso</span>
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-            Elige categoría, material y sube tu arte. Verás un mockup en vivo con precio en Lempiras.
+          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
+            Sube tu logo y mira cómo queda en vivo. Sin compromiso.
           </p>
         </div>
 
@@ -755,40 +762,45 @@ export function Configurator() {
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
-                accent="var(--brand-pink)"
-                icon={<Layers className="h-8 w-8" />}
+                accent="var(--brand-magenta)"
+                icon={<Layers className="h-7 w-7" />}
+                image={fireSticker.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
               />
               <CategoryCard
                 title="Iron-ons (Textiles)"
                 desc="Estampados sublimados y transfer para uniformes y merch."
-                accent="var(--brand-blue)"
-                icon={<Package className="h-8 w-8" />}
+                accent="var(--brand-cyan-deep)"
+                icon={<Package className="h-7 w-7" />}
+                image={ironOnCover.url}
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
               />
               <CategoryCard
                 title="Libretas Personalizadas"
-                desc="Portadas impresas en cartulina premium. Hojas blancas, rayadas, cuadriculadas o punteadas."
-                accent="var(--brand-violet)"
-                icon={<BookOpen className="h-8 w-8" />}
+                desc="Portadas premium con hojas blancas, rayadas, cuadriculadas o punteadas."
+                accent="var(--brand-magenta)"
+                icon={<BookOpen className="h-7 w-7" />}
+                image={libretasCover.url}
                 active={category === "libretas"}
                 onClick={() => setCategory("libretas")}
               />
               <CategoryCard
                 title="Grabado Láser"
-                desc="Tablas, botellas metálicas, carteras, llaveros, vasos y hasta cocos. Grabado permanente y elegante."
-                accent="var(--brand-orange)"
-                icon={<Flame className="h-8 w-8" />}
+                desc="Tablas, botellas, carteras, llaveros y más. Grabado permanente y elegante."
+                accent="var(--brand-cyan-deep)"
+                icon={<Flame className="h-7 w-7" />}
+                image={yetiMoto.url}
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
               />
               <CategoryCard
                 title="Imprenta & Papelería"
-                desc="Tarjetas, menús, carpetas y brochures. Papel premium con acabado profesional."
-                accent="var(--brand-indigo)"
-                icon={<Printer className="h-8 w-8" />}
+                desc="Tarjetas, menús, carpetas y brochures con acabado profesional."
+                accent="var(--brand-magenta)"
+                icon={<Printer className="h-7 w-7" />}
+                image={imprentaCover.url}
                 active={category === "imprenta"}
                 onClick={() => setCategory("imprenta")}
               />
@@ -797,6 +809,7 @@ export function Configurator() {
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
+
 
           {step === 2 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
