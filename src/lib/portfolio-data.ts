@@ -44,6 +44,7 @@ import combosCorporativos from "@/assets/portfolio-combos-corporativos.jpg.asset
 import camisetasHonduras from "@/assets/portfolio-camisetas-honduras.png.asset.json";
 import camisetasHonduras2 from "@/assets/portfolio-camisetas-honduras-2.png.asset.json";
 import fiestasPatriasCuadro from "@/assets/portfolio-fiestas-patrias-cuadro.png.asset.json";
+import fiestasPatriasProceres from "@/assets/portfolio-fiestas-patrias-proceres.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
