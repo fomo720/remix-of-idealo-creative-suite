@@ -77,7 +77,6 @@ const PRODUCTOS_FP: Producto[] = [
   { slug: "sombreros-sublimados", title: "Sombreros Sublimados", icon: Palette, desc: "Sombreros de playa sublimados con guacamaya, conchas y motivos hondureños.", color: "var(--brand-indigo)", image: evtFpSombreros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *sombreros sublimados* patrios. ¿Me pueden pasar opciones y precios?") },
   { slug: "llaveros-grabado-laser", title: "Llaveros con Grabado Láser", icon: Flag, desc: "Llaveros de acero inoxidable con grabado láser 'Honduras' y abridor integrado.", color: "var(--brand-blue)", image: evtFpLlaveros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *llaveros con grabado láser Honduras*. ¿Me pueden pasar opciones y precios?") },
   { slug: "camisetas-patrioticas", title: "Camisetas Patrióticas", icon: ShoppingBag, desc: "Camisetas blancas desde L 200 y negras desde L 280. Diseños #VosSoloSosPaja y más.", color: "var(--brand-blue)", image: evtFpCamisetas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *camisetas patrióticas*. ¿Me pueden pasar opciones, tallas y precios?") },
-  { slug: "gorras-patrioticas", title: "Gorras Patrióticas", icon: Palette, desc: "Gorras bordadas o estampadas desde L 200. Diseños #PoneteVivo y personalizados.", color: "var(--brand-orange)", image: evtFpCamisetas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *gorras patrióticas*. ¿Me pueden pasar opciones y precios?") },
 ];
 
 const PRODUCTOS_BTS: Producto[] = [
