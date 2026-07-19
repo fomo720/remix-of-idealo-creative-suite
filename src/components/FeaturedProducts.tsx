@@ -85,7 +85,7 @@ export function FeaturedProducts() {
 
         <div className="mt-16 flex justify-center">
           <Link
-            to="/portafolio"
+            to="/portafolio/"
             className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-base font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:shadow-2xl sm:text-lg"
             style={{ background: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan))" }}
           >
