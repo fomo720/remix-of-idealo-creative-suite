@@ -793,7 +793,7 @@ export function Configurator() {
                 desc="Tablas, botellas, carteras, llaveros y más. Grabado permanente y elegante."
                 accent="var(--brand-cyan-deep)"
                 icon={<Flame className="h-7 w-7" />}
-                image={yetiMoto.url}
+                image={laserStanleyCover.url}
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
               />
