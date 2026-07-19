@@ -41,6 +41,7 @@ import regalosCorporativos from "@/assets/portfolio-regalos-corporativos.png.ass
 import tazasSublimadas from "@/assets/portfolio-tazas-sublimadas.png.asset.json";
 import calendariosCorporativos from "@/assets/portfolio-calendarios-corporativos.jpg.asset.json";
 import combosCorporativos from "@/assets/portfolio-combos-corporativos.jpg.asset.json";
+import camisetasHonduras from "@/assets/portfolio-camisetas-honduras.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
