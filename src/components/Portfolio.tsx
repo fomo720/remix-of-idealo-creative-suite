@@ -14,17 +14,15 @@ export function Portfolio() {
   }, [filter, sort]);
 
   return (
-    <section id="portafolio" className="py-24">
+    <section id="portafolio" className="bg-white py-24">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Portafolio</div>
-            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Proyectos que <span className="text-gradient-rainbow">mueven marcas</span>.
-            </h2>
-          </div>
-          <p className="max-w-md text-sm text-muted-foreground">
-            Desde emprendimientos locales hasta cadenas de restaurantes: producción impecable, plazos cumplidos.
+        <div className="mb-12 text-center">
+          <div className="mb-3 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>Portafolio</div>
+          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            Nuestros productos <span style={{ color: "var(--brand-cyan)" }}>destacados</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
+            Desde emprendimientos locales hasta cadenas: producción impecable, plazos cumplidos.
           </p>
         </div>
 
@@ -37,11 +35,12 @@ export function Portfolio() {
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition ${
+                  className="rounded-full border px-4 py-1.5 text-xs font-semibold transition hover:-translate-y-0.5"
+                  style={
                     active
-                      ? "border-foreground bg-foreground text-background"
-                      : "border-border bg-card text-foreground hover:border-foreground/40"
-                  }`}
+                      ? { background: "var(--brand-magenta)", borderColor: "var(--brand-magenta)", color: "white", boxShadow: "0 8px 20px -8px rgba(233,67,126,0.5)" }
+                      : { background: "white", borderColor: "rgba(0,0,0,0.1)", color: "var(--foreground)" }
+                  }
                 >
                   {f} <span className="opacity-60">({count})</span>
                 </button>
