@@ -1505,7 +1505,7 @@ export function Configurator() {
                     "",
                     "Solicito una cotización, gracias 🙌",
                   ].filter(Boolean).join("\n");
-                  const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`)}`;
+                  const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`)}`;
                   return (
                     <a
                       href={waHref}
@@ -3030,7 +3030,7 @@ function NotebookDesigner({
             "",
             "Solicito una cotización, gracias 🙌",
           ].filter(Boolean).join("\n");
-          const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar una libreta:\n\n${summary}`)}`;
+          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar una libreta:\n\n${summary}`)}`;
           return (
             <a
               href={waHref}
@@ -3757,7 +3757,7 @@ function LaserDesigner({
             "",
             "Solicito una cotización, gracias 🙌",
           ].filter(Boolean).join("\n");
-          const waHref = `https://wa.me/50432316100?text=${encodeURIComponent(`Hola Idealo, quiero cotizar grabado láser:\n\n${summary}`)}`;
+          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar grabado láser:\n\n${summary}`)}`;
           return (
             <a
               href={waHref}
@@ -4032,7 +4032,7 @@ function ImprentaFinal({
         </div>
 
         <a
-          href={`https://wa.me/50432316100?text=${waMsg}`}
+          href={`https://wa.me/50433635666?text=${waMsg}`}
           target="_blank"
           rel="noreferrer"
           aria-disabled={!allSpecsChosen || (needsUpload && !file)}

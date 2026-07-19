@@ -37,7 +37,7 @@ export function Navbar() {
           })}
         </nav>
         <a
-          href="https://wa.me/50432316100"
+          href="https://wa.me/50433635666"
           target="_blank"
           rel="noreferrer"
           className="hidden items-center gap-2 rounded-full bg-gradient-cta px-4 py-2 text-sm font-semibold text-white shadow-elegant transition hover:scale-105 md:inline-flex"
@@ -56,7 +56,7 @@ export function Navbar() {
                 {l.label}
               </a>
             ))}
-            <a href="https://wa.me/50432316100" className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-4 py-2 text-sm font-semibold text-white">
+            <a href="https://wa.me/50433635666" className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-4 py-2 text-sm font-semibold text-white">
               <MessageCircle className="h-4 w-4" /> Contacto WhatsApp
             </a>
           </div>

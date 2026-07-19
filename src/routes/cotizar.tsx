@@ -13,7 +13,7 @@ export const Route = createFileRoute("/cotizar")({
   }),
 });
 
-const WHATSAPP = "50432316100";
+const WHATSAPP = "50433635666";
 
 function CotizarPage() {
   const producto = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("producto") : null;
@@ -55,7 +55,7 @@ function CotizarPage() {
 
           <div className="mt-6 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
             <a href={`tel:+${WHATSAPP}`} className="flex items-center gap-2 hover:text-foreground">
-              <Phone className="h-4 w-4" /> +504 3231-6100
+              <Phone className="h-4 w-4" /> +504 3363-5666
             </a>
             <a href="mailto:idealo.hn@gmail.com" className="flex items-center gap-2 hover:text-foreground">
               <Mail className="h-4 w-4" /> idealo.hn@gmail.com
