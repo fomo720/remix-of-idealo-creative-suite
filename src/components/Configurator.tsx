@@ -42,6 +42,9 @@ import llaveroDavid from "@/assets/llavero-cuero-madera.jpg.asset.json";
 import llaveroMadera from "@/assets/llavero-madera-cali.jpg.asset.json";
 import vasoAves from "@/assets/vaso-aves.jpg.asset.json";
 import tablaSalmo from "@/assets/tabla-teller.jpg.asset.json";
+import ironOnCover from "@/assets/portfolio-camisetas-estampadas.png.asset.json";
+import libretasCover from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
+import imprentaCover from "@/assets/portfolio-tarjetas.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -717,16 +720,23 @@ export function Configurator() {
     <section id="personalizar" className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-10 text-center">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--brand-violet)" }} />
-            Configurador interactivo
+          <div
+            className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+            style={{
+              color: "var(--brand-magenta)",
+              background: "color-mix(in oklab, var(--brand-magenta) 10%, white)",
+              border: "1px solid color-mix(in oklab, var(--brand-magenta) 25%, transparent)",
+            }}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Configurador guiado
           </div>
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Diseña tu producto en{" "}
-            <span className="text-gradient-rainbow">4 pasos</span>
+            Diseña tu producto,{" "}
+            <span style={{ color: "var(--brand-cyan-deep)" }}>paso a paso</span>
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-            Elige categoría, material y sube tu arte. Verás un mockup en vivo con precio en Lempiras.
+          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
+            Sube tu logo y mira cómo queda en vivo. Sin compromiso.
           </p>
         </div>
 
@@ -752,40 +762,45 @@ export function Configurator() {
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
-                accent="var(--brand-pink)"
-                icon={<Layers className="h-8 w-8" />}
+                accent="var(--brand-magenta)"
+                icon={<Layers className="h-7 w-7" />}
+                image={fireSticker.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
               />
               <CategoryCard
                 title="Iron-ons (Textiles)"
                 desc="Estampados sublimados y transfer para uniformes y merch."
-                accent="var(--brand-blue)"
-                icon={<Package className="h-8 w-8" />}
+                accent="var(--brand-cyan-deep)"
+                icon={<Package className="h-7 w-7" />}
+                image={ironOnCover.url}
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
               />
               <CategoryCard
                 title="Libretas Personalizadas"
-                desc="Portadas impresas en cartulina premium. Hojas blancas, rayadas, cuadriculadas o punteadas."
-                accent="var(--brand-violet)"
-                icon={<BookOpen className="h-8 w-8" />}
+                desc="Portadas premium con hojas blancas, rayadas, cuadriculadas o punteadas."
+                accent="var(--brand-magenta)"
+                icon={<BookOpen className="h-7 w-7" />}
+                image={libretasCover.url}
                 active={category === "libretas"}
                 onClick={() => setCategory("libretas")}
               />
               <CategoryCard
                 title="Grabado Láser"
-                desc="Tablas, botellas metálicas, carteras, llaveros, vasos y hasta cocos. Grabado permanente y elegante."
-                accent="var(--brand-orange)"
-                icon={<Flame className="h-8 w-8" />}
+                desc="Tablas, botellas, carteras, llaveros y más. Grabado permanente y elegante."
+                accent="var(--brand-cyan-deep)"
+                icon={<Flame className="h-7 w-7" />}
+                image={yetiMoto.url}
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
               />
               <CategoryCard
                 title="Imprenta & Papelería"
-                desc="Tarjetas, menús, carpetas y brochures. Papel premium con acabado profesional."
-                accent="var(--brand-indigo)"
-                icon={<Printer className="h-8 w-8" />}
+                desc="Tarjetas, menús, carpetas y brochures con acabado profesional."
+                accent="var(--brand-magenta)"
+                icon={<Printer className="h-7 w-7" />}
+                image={imprentaCover.url}
                 active={category === "imprenta"}
                 onClick={() => setCategory("imprenta")}
               />
@@ -794,6 +809,7 @@ export function Configurator() {
           {step === 1 && (
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
+
 
           {step === 2 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
@@ -2036,29 +2052,65 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 }
 
 function CategoryCard({
-  title, desc, icon, active, onClick, accent,
-}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string }) {
+  title, desc, icon, active, onClick, accent, image,
+}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string }) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 p-8 text-left transition-all rainbow-splash",
-        active ? "rainbow-border-active" : "border-border hover:-translate-y-1 hover:shadow-elegant",
+        "group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 text-left transition-all",
+        active
+          ? "shadow-[0_20px_50px_-15px_color-mix(in_oklab,var(--brand-magenta)_45%,transparent)]"
+          : "border-border hover:-translate-y-1 hover:shadow-elegant",
       )}
+      style={{
+        borderColor: active ? "var(--brand-magenta)" : undefined,
+        background: "var(--card)",
+      }}
     >
-      <div
-        className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
-        style={{ background: accent }}
-      />
-      <div className="relative flex h-full flex-col">
-        <div className="mb-4 grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white" style={{ background: accent }}>
+      {/* Photo header */}
+      <div className="relative h-36 w-full overflow-hidden bg-muted">
+        {image ? (
+          <img
+            src={image}
+            alt=""
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="h-full w-full" style={{ background: accent }} />
+        )}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, transparent 40%, color-mix(in oklab, ${accent} 55%, transparent) 100%)`,
+          }}
+        />
+        <div
+          className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-xl text-white shadow-lg backdrop-blur"
+          style={{ background: accent }}
+        >
           {icon}
         </div>
-        <h4 className="text-lg font-bold leading-tight break-words xl:text-base 2xl:text-lg">{title}</h4>
-        <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium">
-          Comenzar <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-        </div>
+      </div>
+
+      <div className="relative flex flex-1 flex-col p-5">
+        <h4 className="text-base font-bold leading-tight">{title}</h4>
+        <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
+        <span
+          className={cn(
+            "mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
+            active ? "text-white" : "text-white group-hover:brightness-110",
+          )}
+          style={{
+            background: active
+              ? "var(--brand-magenta)"
+              : "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan-deep))",
+          }}
+        >
+          {active ? "Seleccionado" : "Empezar personalización"}
+          <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+        </span>
       </div>
     </button>
   );
