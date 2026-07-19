@@ -53,6 +53,7 @@ import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
 import grabadoLaserCoco from "@/assets/portfolio-grabado-laser-coco.png.asset.json";
 import impresionCartoncillo from "@/assets/portfolio-impresion-cartoncillo.png.asset.json";
 import abanicoLaser from "@/assets/portfolio-abanico-laser.png.asset.json";
+import cajitasCandySticker from "@/assets/portfolio-cajitas-candy-sticker.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -89,6 +90,7 @@ export const slugify = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 const raw: Omit<Project, "slug">[] = [
+  { title: "Cajitas de candy con sticker personalizado", tag: "Eventos & Detalles", type: "Stickers", subtitle: "Cajitas acrílicas con sticker personalizado · ideal para recuerdos de eventos y bodas", image: cajitasCandySticker.url, bg: "#f5f0e8", fit: "contain", description: "Cajitas acrílicas rellenas de candy con sticker personalizado en la tapa. Se realizan de la forma, diseño y tamaño que desees. Perfectas como recuerdos de bodas, cumpleaños, baby showers y eventos corporativos.", highlights: ["Sticker 100% personalizado", "Cualquier forma y tamaño", "Detalle listo para regalar", "Ideal para eventos y bodas"] },
   { title: "Abanicos de madera con grabado láser", tag: "Eventos & Bodas", type: "Regalos", subtitle: "Abanicos personalizados para invitados con grabado láser · ideal para bodas y cumpleaños", image: abanicoLaser.url, bg: "#f0eae4", fit: "contain", description: "Abanicos de madera personalizados con grabado láser, perfectos como detalle para invitados en bodas, quinceaños y cumpleaños. Grabado permanente con el nombre, fecha o mensaje del evento.", highlights: ["Grabado láser permanente", "Nombre o fecha personalizada", "Ideal para bodas y eventos", "Detalle elegante para invitados"] },
   { title: "Impresión en cartoncillo láser", tag: "Impresos Personalizados", type: "Impresos", subtitle: "Se pueden realizar de la figura, diseño y tamaño que desees · ideal para envoltorios y detalles", image: impresionCartoncillo.url, bg: "#0a0a0a", fit: "contain", description: "Impresión láser en cartoncillo para envoltorios personalizados, etiquetas decorativas y detalles únicos. Cualquier figura, diseño y tamaño. Ideal para bebidas, regalos y eventos temáticos.", highlights: ["Cualquier figura y tamaño", "Impresión láser de alta calidad", "Diseño 100% personalizado", "Ideal para envoltorios y detalles"] },
   { title: "Grabado láser en coco", tag: "Eventos & Regalos", type: "Regalos", subtitle: "Grabado láser de alta calidad en superficies planas · perfecto para cumpleaños y eventos tropicales", image: grabadoLaserCoco.url, bg: "#0a0a0a", fit: "contain", description: "Grabado láser de alta calidad en cocos y otras superficies planas. Ideal para cumpleaños, bodas tropicales, hoteles y eventos que buscan un detalle único con el nombre del festejado o mensaje personalizado.", highlights: ["Grabado láser permanente", "Superficies planas de todo tipo", "Nombre o mensaje personalizado", "Perfecto para eventos"] },
