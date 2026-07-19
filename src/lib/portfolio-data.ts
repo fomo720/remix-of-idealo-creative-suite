@@ -50,6 +50,7 @@ import stickerTroqueladoCafe from "@/assets/portfolio-sticker-troquelado-cafe.pn
 import camisetasEstampadas from "@/assets/portfolio-camisetas-estampadas.png.asset.json";
 import rotulosPrevencion from "@/assets/portfolio-rotulos-prevencion.png.asset.json";
 import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
+import grabadoLaserCoco from "@/assets/portfolio-grabado-laser-coco.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -86,6 +87,7 @@ export const slugify = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 const raw: Omit<Project, "slug">[] = [
+  { title: "Grabado láser en coco", tag: "Eventos & Regalos", type: "Regalos", subtitle: "Grabado láser de alta calidad en superficies planas · perfecto para cumpleaños y eventos tropicales", image: grabadoLaserCoco.url, bg: "#0a0a0a", fit: "contain", description: "Grabado láser de alta calidad en cocos y otras superficies planas. Ideal para cumpleaños, bodas tropicales, hoteles y eventos que buscan un detalle único con el nombre del festejado o mensaje personalizado.", highlights: ["Grabado láser permanente", "Superficies planas de todo tipo", "Nombre o mensaje personalizado", "Perfecto para eventos"] },
   { title: "Etiquetas con foil metálico", tag: "Etiquetas Premium", type: "Stickers", subtitle: "Etiquetas con foil dorado, plateado o holográfico · ideal para joyería, tarjetas y productos premium", image: etiquetasFoil.url, bg: "#f5f5f5", fit: "contain", description: "Etiquetas premium con foil metálico dorado, plateado o holográfico. Acabado de lujo ideal para joyería, tarjetas de marca, cosméticos y productos artesanales que quieren destacar.", highlights: ["Foil dorado, plateado u holográfico", "Acabado premium", "Cualquier forma y tamaño", "Ideal para joyería y branding"] },
   { title: "Menús para restaurantes", tag: "Restaurantes", type: "Impresos", subtitle: "Impresión doble lado · espiral de metal · laminado", image: menus.url, bg: "#d9d9d9", description: "Menús diseñados y producidos para durar todo el servicio. Impresión doble lado en papel grueso, laminado brillante o mate y encuadernado con espiral metálica. Ideales para restaurantes, cafeterías y bares que renuevan carta constantemente.", highlights: ["Impresión doble lado full color", "Laminado brillante o mate", "Espiral metálica resistente", "Cualquier tamaño y cantidad"] },
   { title: "Stickers de marca", tag: "Emprendedores", type: "Stickers", subtitle: "Impresión de alta calidad · material impermeable", image: stickersMarca.url, bg: "#1a1410", description: "Stickers para empaques, empaques kraft, cajas o bolsas. Material vinil impermeable con colores vivos y adhesivo permanente que aguanta manipulación y clima.", highlights: ["Vinil impermeable", "Colores vivos full color", "Corte por contorno", "Cualquier forma y tamaño"] },
