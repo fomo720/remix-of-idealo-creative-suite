@@ -67,6 +67,7 @@ import bolsosMama from "@/assets/portfolio-bolsos-mama.png.asset.json";
 import bolsosSublimados from "@/assets/portfolio-bolsos-sublimados.png.asset.json";
 import impresionLaserCapy from "@/assets/portfolio-impresion-laser-capy.jpg.asset.json";
 import stickerTroqueladoBrioche from "@/assets/portfolio-sticker-troquelado-brioche.jpg.asset.json";
+import snacksPersonalizados from "@/assets/portfolio-snacks-personalizados.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
