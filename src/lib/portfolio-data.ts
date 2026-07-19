@@ -51,6 +51,7 @@ import camisetasEstampadas from "@/assets/portfolio-camisetas-estampadas.png.ass
 import rotulosPrevencion from "@/assets/portfolio-rotulos-prevencion.png.asset.json";
 import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
 import grabadoLaserCoco from "@/assets/portfolio-grabado-laser-coco.png.asset.json";
+import impresionCartoncillo from "@/assets/portfolio-impresion-cartoncillo.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
