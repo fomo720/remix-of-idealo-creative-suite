@@ -56,6 +56,7 @@ import abanicoLaser from "@/assets/portfolio-abanico-laser.png.asset.json";
 import cajitasCandySticker from "@/assets/portfolio-cajitas-candy-sticker.png.asset.json";
 import audioGuestbook from "@/assets/portfolio-audio-guestbook.png.asset.json";
 import etiquetasGuifitiBotellas from "@/assets/portfolio-etiquetas-guifiti-botellas.png.asset.json";
+import pvcBienvenidaJessie from "@/assets/portfolio-pvc-bienvenida-jessie.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
