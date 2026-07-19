@@ -58,6 +58,7 @@ import audioGuestbook from "@/assets/portfolio-audio-guestbook.png.asset.json";
 import etiquetasGuifitiBotellas from "@/assets/portfolio-etiquetas-guifiti-botellas.png.asset.json";
 import pvcBienvenidaJessie from "@/assets/portfolio-pvc-bienvenida-jessie.png.asset.json";
 import cuadrosCanvas from "@/assets/portfolio-cuadros-canvas.png.asset.json";
+import stickersTamanos from "@/assets/portfolio-stickers-tamanos.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -94,6 +95,7 @@ export const slugify = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 const raw: Omit<Project, "slug">[] = [
+  { title: "Stickers troquelados en varios tamaños", tag: "Personalizados", type: "Stickers", subtitle: "Desde 1×1 hasta 3.5×3.5 pulgadas · cualquier forma, diseño y tamaño que desees", image: stickersTamanos.url, bg: "#ffffff", fit: "contain", description: "Stickers troquelados disponibles en múltiples tamaños: 1×1, 2×2, 2.5×2.5, 3×3 y 3.5×3.5 pulgadas. Se pueden realizar de la forma, diseño y tamaño que desees. Ideales para branding, empaques, eventos y regalos.", highlights: ["Tamaños desde 1×1 hasta 3.5×3.5 pulgadas", "Cualquier forma y diseño", "Vinil premium impermeable", "Impresión full color HD"] },
   { title: "Audio Guestbook", tag: "Eventos & Bodas", type: "Regalos", subtitle: "Teléfono vintage para grabar mensajes de voz de tus invitados · recuerdo único", image: audioGuestbook.url, bg: "#1e6fa8", fit: "contain", description: "Servicio de Audio Guestbook: un teléfono vintage donde tus invitados dejan un mensaje de voz especial para el festejado. Incluye rótulo personalizado con nombre y fecha. Recibí todos los audios recopilados después del evento como un recuerdo inolvidable.", highlights: ["Teléfono vintage funcional", "Rótulo personalizado incluido", "Audios entregados después del evento", "Ideal para bodas, cumpleaños y XV"] },
   { title: "Etiquetas para botellas de guifiti", tag: "Eventos & Bebidas", type: "Stickers", subtitle: "Stickers personalizados para botellas de guifiti · cualquier forma, diseño y tamaño", image: etiquetasGuifitiBotellas.url, bg: "#0f2b4a", fit: "contain", description: "Etiquetas adhesivas personalizadas para botellas de guifiti, licores artesanales y bebidas típicas. Se pueden realizar de la forma, diseño y tamaño que desees, con acabado resistente a la humedad ideal para presentación de producto y regalos.", highlights: ["Forma, diseño y tamaño a medida", "Acabado resistente a la humedad", "Ideal para guifiti y licores artesanales", "Presentación premium para tu marca"] },
   { title: "PVC de bienvenida para cumpleaños", tag: "Eventos & Cumpleaños", type: "PVC", subtitle: "Sticker + PVC de bienvenida personalizado con el nombre y diseño del festejado", image: pvcBienvenidaJessie.url, bg: "#2a2350", fit: "contain", description: "PVC de bienvenida con sticker impreso personalizado para recibir a tus invitados. Se puede personalizar con el diseño, colores, frases y tamaño que desees. Perfecto para cumpleaños, XV años, bodas y todo tipo de eventos.", highlights: ["Diseño 100% personalizado", "Tamaño a medida", "Impresión en alta calidad sobre PVC", "Ideal para entrada de eventos"] },
