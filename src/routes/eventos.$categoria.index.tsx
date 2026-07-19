@@ -9,6 +9,7 @@ import evtFpTotes from "@/assets/evt-fp-totes.jpg.asset.json";
 import evtFpCanvas from "@/assets/evt-fp-canvas.jpg.asset.json";
 import evtFpTazas from "@/assets/evt-fp-tazas.jpg.asset.json";
 import evtFpSombreros from "@/assets/evt-fp-sombreros.jpg.asset.json";
+import evtFpCamisetas from "@/assets/evt-fp-camisetas.png.asset.json";
 
 
 export const Route = createFileRoute("/eventos/$categoria/")({
