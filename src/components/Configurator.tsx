@@ -765,7 +765,7 @@ export function Configurator() {
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
                 accent="var(--brand-magenta)"
                 icon={<Layers className="h-7 w-7" />}
-                image={fireSticker.url}
+                image={stickersHandCover.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
               />
