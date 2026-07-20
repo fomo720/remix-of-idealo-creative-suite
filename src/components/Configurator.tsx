@@ -4623,13 +4623,15 @@ function TextilesSizeQtyStep({
 }
 
 function TextilesDesignStep({
-  fabricData, sleeve, color, onColorChange, size, qty,
+  fabricData, sleeve, color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
-  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void; size: TxSize; qty: number;
+  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void;
+  size: TxSize | null; onSizeChange: (s: TxSize) => void;
+  qty: number; onQtyChange: (n: number) => void;
   uploaded: string | null;
   onUpload: (f: File | null) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
