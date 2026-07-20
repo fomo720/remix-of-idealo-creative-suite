@@ -955,29 +955,21 @@ export function Configurator() {
             />
           )}
           {isTextiles && step === 4 && (
-            <TextilesColorStep
-              fabricData={txFabricData}
-              color={txColor}
-              onPick={setTxColor}
-              onBack={() => goTo(3)}
-              onNext={txColor ? () => goTo(5) : undefined}
-            />
-          )}
-          {isTextiles && step === 5 && (
             <TextilesSizeQtyStep
               size={txSize}
               qty={txQty}
               onSize={setTxSize}
               onQty={setTxQty}
-              onBack={() => goTo(4)}
-              onNext={txSize && txQty >= TX_MIN_QTY ? () => goTo(6) : undefined}
+              onBack={() => goTo(3)}
+              onNext={txSize && txQty >= TX_MIN_QTY ? () => goTo(5) : undefined}
             />
           )}
-          {isTextiles && step === 6 && (
+          {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
-              color={txColor!}
+              color={txColor ?? (txFabricData?.colorLock ?? "Blanco")}
+              onColorChange={setTxColor}
               size={txSize!}
               qty={txQty}
               uploaded={uploaded}
@@ -991,7 +983,7 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
-              onBack={() => goTo(5)}
+              onBack={() => goTo(4)}
               onSubmitted={(payload) => setWaModal(payload)}
             />
           )}
