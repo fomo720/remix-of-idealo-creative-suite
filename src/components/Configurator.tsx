@@ -184,11 +184,15 @@ const shapes: ShapeItem[] = [
 ];
 
 const sizePresets = [
-  { w: 2, h: 2, label: '2" x 2"', hint: "Logos pequeños en empaques" },
-  { w: 3, h: 3, label: '3" x 3"', hint: "Estándar laptops y termos" },
-  { w: 4, h: 4, label: '4" x 4"', hint: "Branding visible y ventanas" },
-  { w: 5, h: 5, label: '5" x 5"', hint: "Tamaño grande exteriores" },
+  { w: 1, h: 1, label: '1" x 1"', hint: "Detalles y sellos pequeños" },
+  { w: 1.5, h: 1.5, label: '1.5" x 1.5"', hint: "Empaques y productos pequeños" },
+  { w: 2, h: 2, label: '2" x 2"', hint: "Logos en empaques" },
+  { w: 2.5, h: 2.5, label: '2.5" x 2.5"', hint: "Uso versátil" },
+  { w: 3.5, h: 3.5, label: '3.5" x 3.5"', hint: "Branding visible y termos" },
 ];
+const SIZE_MIN = 1;
+const SIZE_MAX = 5;
+const MIN_QTY = 25;
 
 /* ---------- Libretas ---------- */
 const notebookStyles: {
