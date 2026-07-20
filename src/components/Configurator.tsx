@@ -4871,16 +4871,16 @@ function TextilesDesignStep({
         <button
           type="button"
           onClick={onSubmit}
-          disabled={!uploaded}
+          disabled={!uploaded || !size}
           className={cn(
             "mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
-            uploaded
+            uploaded && size
               ? "bg-gradient-cta animate-rainbow-shimmer hover:scale-[1.01]"
               : "cursor-not-allowed bg-muted-foreground/40",
           )}
         >
           <MessageCircle className="h-5 w-5" />
-          {uploaded ? "Solicitar Cotización por WhatsApp" : "Sube tu diseño para continuar"}
+          {!size ? "Elige una talla" : !uploaded ? "Sube tu diseño para continuar" : "Solicitar Cotización por WhatsApp"}
         </button>
         <p className="mt-2 text-center text-[11px] text-muted-foreground">
           Se abre WhatsApp con todos los detalles listos. Solo adjunta tu diseño en el chat.
