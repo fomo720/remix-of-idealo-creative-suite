@@ -70,6 +70,16 @@ import stickerTroqueladoBrioche from "@/assets/portfolio-sticker-troquelado-brio
 import snacksPersonalizados from "@/assets/portfolio-snacks-personalizados.png.asset.json";
 import fotosCristal from "@/assets/portfolio-fotos-cristal.jpg.asset.json";
 import termoMamaMariposas from "@/assets/portfolio-termo-mama-mariposas.jpg.asset.json";
+import libretaCorazones from "@/assets/libreta-175.jpg.asset.json";
+import libretaPlanner from "@/assets/libreta-177.jpg.asset.json";
+import libretaFuerza from "@/assets/libreta-178.jpg.asset.json";
+import libretaSalmo from "@/assets/libreta-179.jpg.asset.json";
+import libretaFe from "@/assets/libreta-180.jpg.asset.json";
+import libretaFuturo from "@/assets/libreta-181.jpg.asset.json";
+import libretaDreams from "@/assets/libreta-182.jpg.asset.json";
+import libretaEcoCover from "@/assets/libreta-183.jpg.asset.json";
+import libretaEcoOpen from "@/assets/libreta-184.jpg.asset.json";
+import idealoLogoColor from "@/assets/idealo-logo-color.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
