@@ -63,9 +63,9 @@ function ProjectDetail() {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="mx-auto max-w-6xl px-4 py-16">
-        <Link to="/" hash="portafolio" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+        <a href={`/portafolio?tipo=${encodeURIComponent(project.type)}`} className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Volver al portafolio
-        </Link>
+        </a>
 
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
           <div
@@ -131,9 +131,9 @@ function ProjectDetail() {
           <section className="mt-24">
             <div className="mb-6 flex items-end justify-between gap-4">
               <h2 className="text-2xl font-bold">También en {project.type}</h2>
-              <Link to="/" hash="portafolio" className="text-sm text-muted-foreground hover:text-foreground">
+              <a href={`/portafolio?tipo=${encodeURIComponent(project.type)}`} className="text-sm text-muted-foreground hover:text-foreground">
                 Ver todo →
-              </Link>
+              </a>
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               {related.map((p) => (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { projects, type ProjectType } from "@/lib/portfolio-data";
 
@@ -15,8 +15,21 @@ const FILTERS: Filter[] = [
   "Servicios",
 ];
 
+function readInitialFilter(): Filter {
+  if (typeof window === "undefined") return "Todos";
+  const p = new URLSearchParams(window.location.search).get("tipo");
+  const found = FILTERS.find((f) => f.toLowerCase() === (p ?? "").toLowerCase());
+  return (found as Filter) ?? "Todos";
+}
+
 export function Portfolio() {
-  const [filter, setFilter] = useState<Filter>("Todos");
+  const [filter, setFilter] = useState<Filter>(readInitialFilter);
+
+  useEffect(() => {
+    const onPop = () => setFilter(readInitialFilter());
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   const visible = useMemo(
     () => (filter === "Todos" ? projects : projects.filter((p) => p.type === filter)),
