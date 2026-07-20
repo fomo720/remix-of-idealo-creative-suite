@@ -2094,6 +2094,12 @@ function CategoryCard({
         >
           {icon}
         </div>
+        {bestseller && (
+          <div className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-white shadow-lg ring-2 ring-white/70 animate-pulse">
+            <span className="text-sm leading-none">★</span>
+            <span>Más vendido</span>
+          </div>
+        )}
       </div>
 
       <div className="relative flex flex-1 flex-col p-5">
