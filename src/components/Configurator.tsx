@@ -963,7 +963,10 @@ export function Configurator() {
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
-              color={txColor ?? (txFabricData?.colorLock ?? "Blanco")}
+              technique={txTechnique ?? "sublimacion"}
+              onTechniqueChange={setTxTechnique}
+              colorLock={txColorLock}
+              color={txColor ?? "Blanco"}
               onColorChange={setTxColor}
               size={txSize}
               onSizeChange={setTxSize}
