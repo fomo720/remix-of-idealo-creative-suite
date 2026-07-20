@@ -2488,8 +2488,8 @@ function CutIllustration({ id }: { id: CutShape }) {
 
 
 function CutCard({
-  id, title, desc, active, onClick, accent,
-}: { id: CutShape; title: string; desc: string; active: boolean; onClick: () => void; accent: string }) {
+  id, title, desc, active, onClick, accent, bestseller,
+}: { id: CutShape; title: string; desc: string; active: boolean; onClick: () => void; accent: string; bestseller?: boolean }) {
   return (
     <button
       onClick={onClick}
@@ -2502,6 +2502,12 @@ function CutCard({
         <div className="absolute inset-0 flex items-center justify-center p-4">
           <CutIllustration id={id} />
         </div>
+        {bestseller && (
+          <div className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-white shadow-lg ring-2 ring-white/70 animate-pulse">
+            <span className="text-sm leading-none">★</span>
+            <span>Más vendido</span>
+          </div>
+        )}
       </div>
       <div className="flex flex-1 items-start justify-between gap-2 p-5">
         <div>
