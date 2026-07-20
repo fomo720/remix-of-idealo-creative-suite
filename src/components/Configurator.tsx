@@ -1821,22 +1821,36 @@ function InteractiveCanvas({
 
             {selected && (
               <>
+                {/* Soft brand-colored selection frame */}
                 <div
-                  className="pointer-events-none absolute -inset-1 rounded-[4px]"
-                  style={{ outline: "2px solid var(--brand-violet)", outlineOffset: "0" }}
+                  className="pointer-events-none absolute -inset-1.5 rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan)) border-box",
+                    padding: "1.5px",
+                    WebkitMask:
+                      "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
+                    boxShadow:
+                      "0 6px 20px -8px color-mix(in oklab, var(--brand-magenta) 40%, transparent)",
+                  }}
                 />
                 {(["tl", "tr", "bl", "br"] as const).map((c) => (
                   <span
                     key={c}
                     onPointerDown={onPointerDownHandle(c)}
-                    className="absolute z-40 h-3.5 w-3.5 rounded-full border-2 border-[var(--brand-violet)] bg-white shadow"
+                    className="absolute z-40 h-3 w-3 rounded-md bg-white transition-transform hover:scale-110"
                     style={{
-                      top: c.startsWith("t") ? "-8px" : "auto",
-                      bottom: c.startsWith("b") ? "-8px" : "auto",
-                      left: c.endsWith("l") ? "-8px" : "auto",
-                      right: c.endsWith("r") ? "-8px" : "auto",
+                      top: c.startsWith("t") ? "-6px" : "auto",
+                      bottom: c.startsWith("b") ? "-6px" : "auto",
+                      left: c.endsWith("l") ? "-6px" : "auto",
+                      right: c.endsWith("r") ? "-6px" : "auto",
                       cursor: c === "tl" || c === "br" ? "nwse-resize" : "nesw-resize",
                       touchAction: "none",
+                      border: "1.5px solid var(--brand-magenta)",
+                      boxShadow:
+                        "0 2px 6px -1px color-mix(in oklab, var(--brand-cyan) 55%, transparent), 0 0 0 2px rgba(255,255,255,0.9) inset",
                     }}
                   />
                 ))}
@@ -1886,14 +1900,21 @@ function InteractiveCanvas({
       <div className="pointer-events-none absolute -bottom-3 left-1/2 z-10 flex -translate-x-1/2 translate-y-full items-center gap-3 whitespace-nowrap rounded-full border border-border bg-card/95 px-2.5 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
         <span className="inline-flex items-center gap-1">
           <span className="inline-block h-2 w-4 rounded-sm" style={{ background: "#22c55e" }} />
-          Corte
+          Línea de Corte
         </span>
         <span className="inline-flex items-center gap-1">
           <span
             className="inline-block h-2 w-4 rounded-sm"
             style={{ backgroundImage: "repeating-linear-gradient(90deg, #f59e0b 0 3px, transparent 3px 6px)" }}
           />
-          Zona segura
+          Zona Segura
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span
+            className="inline-block h-2 w-4 rounded-sm"
+            style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(0,0,0,0.25) 0 3px, transparent 3px 6px)" }}
+          />
+          Área de Sangrado
         </span>
       </div>
     </div>
