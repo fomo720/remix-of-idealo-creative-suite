@@ -776,7 +776,7 @@ export function Configurator() {
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
-                accent="var(--brand-magenta)"
+                accent="#FFD93D"
                 icon={<Layers className="h-7 w-7" />}
                 image={stickersHandCover.url}
                 active={category === "stickers"}
@@ -786,7 +786,7 @@ export function Configurator() {
               <CategoryCard
                 title="Iron-ons (Textiles)"
                 desc="Estampados sublimados y transfer para uniformes y merch."
-                accent="var(--brand-cyan-deep)"
+                accent="#F58BB4"
                 icon={<Package className="h-7 w-7" />}
                 image={ironOnCover.url}
                 active={category === "iron-ons"}
@@ -796,7 +796,7 @@ export function Configurator() {
               <CategoryCard
                 title="Libretas Personalizadas"
                 desc="Portadas premium con hojas blancas, rayadas, cuadriculadas o punteadas."
-                accent="var(--brand-magenta)"
+                accent="#FF6A3D"
                 icon={<BookOpen className="h-7 w-7" />}
                 image={libretasCover.url}
                 active={category === "libretas"}
@@ -806,7 +806,7 @@ export function Configurator() {
               <CategoryCard
                 title="Grabado Láser"
                 desc="Tablas, botellas, carteras, llaveros y más. Grabado permanente y elegante."
-                accent="var(--brand-cyan-deep)"
+                accent="#A855F7"
                 icon={<Flame className="h-7 w-7" />}
                 image={laserStanleyCover.url}
                 active={category === "laser"}
@@ -816,13 +816,14 @@ export function Configurator() {
               <CategoryCard
                 title="Imprenta & Papelería"
                 desc="Tarjetas, menús, carpetas y brochures con acabado profesional."
-                accent="var(--brand-magenta)"
+                accent="#1E3A8A"
                 icon={<Printer className="h-7 w-7" />}
                 image={imprentaCover.url}
                 active={category === "imprenta"}
                 onClick={() => setCategory("imprenta")}
                 variant={4}
               />
+
             </div>
           )}
           {step === 1 && (
