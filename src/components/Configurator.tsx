@@ -1900,14 +1900,21 @@ function InteractiveCanvas({
       <div className="pointer-events-none absolute -bottom-3 left-1/2 z-10 flex -translate-x-1/2 translate-y-full items-center gap-3 whitespace-nowrap rounded-full border border-border bg-card/95 px-2.5 py-1 text-[10px] font-medium text-muted-foreground shadow-card-soft backdrop-blur">
         <span className="inline-flex items-center gap-1">
           <span className="inline-block h-2 w-4 rounded-sm" style={{ background: "#22c55e" }} />
-          Corte
+          Línea de Corte
         </span>
         <span className="inline-flex items-center gap-1">
           <span
             className="inline-block h-2 w-4 rounded-sm"
             style={{ backgroundImage: "repeating-linear-gradient(90deg, #f59e0b 0 3px, transparent 3px 6px)" }}
           />
-          Zona segura
+          Zona Segura
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span
+            className="inline-block h-2 w-4 rounded-sm"
+            style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(0,0,0,0.25) 0 3px, transparent 3px 6px)" }}
+          />
+          Área de Sangrado
         </span>
       </div>
     </div>
