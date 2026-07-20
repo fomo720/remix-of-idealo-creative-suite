@@ -146,7 +146,8 @@ const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
 ];
 
 const TX_SIZES: TxSize[] = ["S", "M", "L", "XL", "XXL"];
-const TX_MIN_QTY = 5;
+const TX_MIN_QTY = 1;
+const TX_QTY_PRESETS = [1, 5, 10, 50];
 type NotebookStyle = "cover-only" | "cover-pages";
 type NotebookMaterial = "cover-cartoncillo" | "cover-carton";
 type PageType = "blank" | "ruled" | "grid" | "dotted" | "calendar";
