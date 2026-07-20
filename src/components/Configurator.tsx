@@ -1685,24 +1685,24 @@ export function Configurator() {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Diseño listo para cotizar!</span>
+            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Mensaje enviado a WhatsApp!</span>
           </DialogTitle>
           <DialogDescription>
-            Tu imagen se descargó y los detalles se copiaron al portapapeles.
+            Ya abrimos WhatsApp con todos los detalles de tu cotización. Solo falta adjuntar tu diseño.
           </DialogDescription>
         </DialogHeader>
         <ol className="mt-2 space-y-3 text-sm">
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">1</span>
-            <span className="flex items-center gap-2"><Download className="h-4 w-4 text-[color:var(--brand-magenta)]" /> Imagen PNG descargada en tu dispositivo.</span>
+            <span>Envía el mensaje que ya tienes escrito en WhatsApp.</span>
           </li>
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">2</span>
-            <span className="flex items-center gap-2"><Copy className="h-4 w-4 text-[color:var(--brand-cyan-deep)]" /> Detalles copiados al portapapeles.</span>
+            <span>En el mismo chat, toca el <b>clip 📎</b> (o arrastra el archivo) y adjunta tu diseño (PNG, JPG, PDF o AI).</span>
           </li>
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">3</span>
-            <span>Abre WhatsApp con el botón de abajo y <b>pega la imagen</b> (Ctrl/Cmd + V, o mantén presionado en tu celular) junto con el mensaje.</span>
+            <span>¡Listo! Nosotros nos encargamos del resto y te respondemos con tu cotización.</span>
           </li>
         </ol>
         <a
@@ -1712,7 +1712,7 @@ export function Configurator() {
           onClick={() => setTimeout(() => setWaModal(null), 300)}
           className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
         >
-          <WA className="h-5 w-5" /> Abrir WhatsApp
+          <WA className="h-5 w-5" /> Abrir WhatsApp de nuevo
         </a>
         <button
           type="button"
