@@ -96,6 +96,16 @@ import libretaMemorias from "@/assets/libreta-memorias.jpg.asset.json";
 import libretaMemoriasDemo from "@/assets/libreta-memorias-demo.mp4.asset.json";
 import libretaVivimosFeDemo from "@/assets/libreta-vivimos-fe-demo.mp4.asset.json";
 import libretaDreamsDemo from "@/assets/libreta-dreams-demo.mp4.asset.json";
+import imantadosPersonalizados from "@/assets/portfolio-imantados-personalizados.jpg.asset.json";
+import polaroidTendedero from "@/assets/portfolio-polaroid-tendedero.jpg.asset.json";
+import puzzleLove from "@/assets/portfolio-puzzle-love.jpg.asset.json";
+import puzzleLluvia from "@/assets/portfolio-puzzle-lluvia.jpg.asset.json";
+import stickerTroqueladoEmpaques from "@/assets/portfolio-sticker-troquelado-empaques.jpg.asset.json";
+import calcetasPersonalizadasV2 from "@/assets/portfolio-calcetas-personalizadas.jpg.asset.json";
+import bioseguridadEmpaques from "@/assets/portfolio-bioseguridad-empaques.jpg.asset.json";
+import cojinesGrinch from "@/assets/portfolio-cojines-grinch.jpg.asset.json";
+import gorrasPersonalizadas from "@/assets/portfolio-gorras-personalizadas.jpg.asset.json";
+import bannerOjales from "@/assets/portfolio-banner-ojales.jpg.asset.json";
 import idealoLogoColor from "@/assets/idealo-logo-color.png.asset.json";
 
 export type ProjectType =
