@@ -8,7 +8,8 @@ import {
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
   FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper,
-  Palette, PencilRuler, MessageCircle,
+  Palette, PencilRuler, MessageCircle, Download,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,10 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { toPng } from "html-to-image";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { MessageCircle as WA } from "lucide-react";
+
+
 
 import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
 import promoGifts from "@/assets/promo-gifts-idealo.png.asset.json";
@@ -604,7 +609,9 @@ export function Configurator() {
   const imprentaFileRef = useRef<HTMLInputElement>(null);
 
   // image toolbox
+  const [waModal, setWaModal] = useState<{ href: string; text: string } | null>(null);
   const [scale, setScale] = useState(100);       // 30-250%
+
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
   const [offsetY, setOffsetY] = useState(0);
   const [contrast, setContrast] = useState(100); // %
@@ -721,7 +728,9 @@ export function Configurator() {
   const hasArt = !!(uploaded || preset);
 
   return (
+    <>
     <section id="personalizar" className="relative py-20 sm:py-28">
+
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-10 text-center">
           <div
@@ -1548,9 +1557,16 @@ export function Configurator() {
                     } catch (err) {
                       console.error("[configurator] preview capture failed", err);
                     }
-                    // 2) Open WhatsApp
-                    window.open(waHref, "_blank", "noopener,noreferrer");
+                    // 2) Copy text to clipboard
+                    try {
+                      await navigator.clipboard?.writeText(lines);
+                    } catch (err) {
+                      console.error("[configurator] clipboard failed", err);
+                    }
+                    // 3) Show guide modal
+                    setWaModal({ href: waHref, text: lines });
                   };
+
 
                   return (
                     <button
@@ -1577,8 +1593,52 @@ export function Configurator() {
         </div>
       </div>
     </section>
+    <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">
+            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Diseño listo para cotizar!</span>
+          </DialogTitle>
+          <DialogDescription>
+            Tu imagen se descargó y los detalles se copiaron al portapapeles.
+          </DialogDescription>
+        </DialogHeader>
+        <ol className="mt-2 space-y-3 text-sm">
+          <li className="flex gap-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">1</span>
+            <span className="flex items-center gap-2"><Download className="h-4 w-4 text-[color:var(--brand-magenta)]" /> Imagen PNG descargada en tu dispositivo.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">2</span>
+            <span className="flex items-center gap-2"><Copy className="h-4 w-4 text-[color:var(--brand-cyan-deep)]" /> Detalles copiados al portapapeles.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">3</span>
+            <span>Abre WhatsApp con el botón de abajo y <b>pega la imagen</b> (Ctrl/Cmd + V, o mantén presionado en tu celular) junto con el mensaje.</span>
+          </li>
+        </ol>
+        <a
+          href={waModal?.href ?? "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setTimeout(() => setWaModal(null), 300)}
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+        >
+          <WA className="h-5 w-5" /> Abrir WhatsApp
+        </a>
+        <button
+          type="button"
+          onClick={() => setWaModal(null)}
+          className="mt-1 text-center text-xs text-muted-foreground hover:text-foreground"
+        >
+          Cerrar
+        </button>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
+
 
 /* ---------- Interactive Canvas ---------- */
 type ShapeDef = ShapeItem;
