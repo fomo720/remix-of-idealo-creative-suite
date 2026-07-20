@@ -2247,14 +2247,6 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 function CategoryCard({
   title, desc, icon, active, onClick, accent, image, bestseller, variant = 0,
 }: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string; bestseller?: boolean; variant?: number }) {
-  const shimmerVariants = [
-    { gradient: "linear-gradient(90deg, #FFD93D, #F58BB4, #FF6A3D, #A855F7, #4F46E5, #48C9C8, #FFD93D)", duration: "5s", delay: "0s", direction: "normal", timing: "linear" },
-    { gradient: "linear-gradient(120deg, #48C9C8, #4F46E5, #A855F7, #F58BB4, #FF6A3D, #FFD93D, #48C9C8)", duration: "7s", delay: "-1.4s", direction: "reverse", timing: "ease-in-out" },
-    { gradient: "linear-gradient(75deg, #A855F7, #FF6A3D, #FFD93D, #48C9C8, #4F46E5, #F58BB4, #A855F7)", duration: "9s", delay: "-3s", direction: "normal", timing: "ease-out" },
-    { gradient: "linear-gradient(100deg, #F58BB4, #FFD93D, #48C9C8, #4F46E5, #A855F7, #FF6A3D, #F58BB4)", duration: "6.5s", delay: "-2.2s", direction: "alternate", timing: "ease-in-out" },
-    { gradient: "linear-gradient(60deg, #FF6A3D, #A855F7, #F58BB4, #FFD93D, #48C9C8, #4F46E5, #FF6A3D)", duration: "8s", delay: "-4.1s", direction: "reverse", timing: "linear" },
-  ];
-  const v = shimmerVariants[variant % shimmerVariants.length];
   return (
     <button
       onClick={onClick}
