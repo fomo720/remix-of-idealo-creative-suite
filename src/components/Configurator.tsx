@@ -55,6 +55,56 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={stickerTagIcon.url} alt="" className={className} />
 );
 
+/**
+ * SmartImage: image with shimmer skeleton placeholder that fades out on load.
+ * Must be used inside a parent with `position: relative` and a fixed height/aspect.
+ */
+function SmartImage({
+  src,
+  alt = "",
+  className = "",
+  fit = "cover",
+  loading = "lazy",
+}: {
+  src: string;
+  alt?: string;
+  className?: string;
+  fit?: "cover" | "contain";
+  loading?: "lazy" | "eager";
+}) {
+  const [loaded, setLoaded] = React.useState(false);
+  return (
+    <>
+      {!loaded && (
+        <div
+          aria-hidden
+          className="absolute inset-0 animate-pulse"
+          style={{
+            background:
+              "linear-gradient(110deg, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.09) 40%, rgba(0,0,0,0.04) 60%)",
+          }}
+        />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
+        className={cn(
+          "absolute inset-0 h-full w-full transition-opacity duration-300",
+          fit === "contain" ? "object-contain" : "object-cover",
+          loaded ? "opacity-100" : "opacity-0",
+          className,
+        )}
+      />
+    </>
+  );
+}
+
+
+
 
 
 type Category = "stickers" | "iron-ons" | "libretas" | "laser" | "imprenta";
