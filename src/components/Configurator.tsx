@@ -61,13 +61,10 @@ type ImprentaStyleId = "plantilla" | "personalizado" | "propio";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
   | "llavero-madera" | "vaso" | "coco" | "cadena";
-type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
+type CutShape = "die-cut" | "kiss-cut" | "sheets";
 type Material =
   | "white-vinyl-removable"
-  | "clear-vinyl-removable"
-  | "eco-pet-matte"
-  | "white-vinyl-permanent"
-  | "hang-tag-removable";
+  | "clear-vinyl-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 type NotebookStyle = "cover-only" | "cover-pages";
 type NotebookMaterial = "cover-matte" | "cover-glossy";
