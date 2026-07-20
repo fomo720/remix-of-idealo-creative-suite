@@ -2854,12 +2854,12 @@ function NotebookMaterialCard({
         <div
           className="relative h-40 w-32 rounded-md shadow-elegant"
           style={{
-            background: m.id === "cover-glossy"
+            background: m.id === "cover-carton"
               ? "linear-gradient(135deg,#1e293b,#334155)"
               : "linear-gradient(135deg,#3f3f46,#52525b)",
           }}
         >
-          {m.id === "cover-glossy" && (
+          {m.id === "cover-carton" && (
             <div className="absolute inset-0 rounded-md" style={{ background: "linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%)" }} />
           )}
           <div className="absolute left-0 top-4 flex flex-col gap-2">
@@ -3217,7 +3217,7 @@ function NotebookPreview({
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
-    material.id === "cover-glossy"
+    material.id === "cover-carton"
       ? "linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#334155 100%)"
       : "linear-gradient(135deg,#3f3f46 0%,#52525b 100%)";
   const pageArtOpacityPct = (pageArtOpacity ?? 35) / 100;
@@ -3279,7 +3279,7 @@ function NotebookPreview({
           }}
         >
           {/* Glossy sheen */}
-          {material.id === "cover-glossy" && (
+          {material.id === "cover-carton" && (
             <div
               className="pointer-events-none absolute inset-0"
               style={{
