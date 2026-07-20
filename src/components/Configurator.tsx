@@ -1728,7 +1728,7 @@ export function Configurator() {
                 </div>
 
                 {(() => {
-                  const catName = category === "iron-ons" ? "Iron-on / Estampado textil" : "Sticker";
+                  const catName = "Sticker";
                   const isTransparent = /transparente|clear/i.test(materialData?.name ?? "");
                   const lines = [
                     "Hola! Quiero cotizar:",
