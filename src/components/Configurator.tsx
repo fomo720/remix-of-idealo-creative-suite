@@ -2056,8 +2056,8 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 }
 
 function CategoryCard({
-  title, desc, icon, active, onClick, accent, image,
-}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string }) {
+  title, desc, icon, active, onClick, accent, image, bestseller,
+}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string; bestseller?: boolean }) {
   return (
     <button
       onClick={onClick}
