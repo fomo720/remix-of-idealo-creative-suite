@@ -563,6 +563,7 @@ function currency(n: number) {
 
 export function Configurator() {
   const [step, setStep] = useState(1);
+  const [gateMsg, setGateMsg] = useState<string | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const [cut, setCut] = useState<CutShape | null>(null);
   const [material, setMaterial] = useState<Material | null>(null);
