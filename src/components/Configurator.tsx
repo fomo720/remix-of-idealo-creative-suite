@@ -1823,39 +1823,45 @@ function InteractiveCanvas({
               <>
                 {/* Soft brand-colored selection frame */}
                 <div
-                  className="pointer-events-none absolute -inset-1.5 rounded-xl"
+                  className="pointer-events-none absolute -inset-2 rounded-2xl"
                   style={{
                     background:
                       "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan)) border-box",
-                    padding: "1.5px",
+                    padding: "1.25px",
                     WebkitMask:
                       "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
                     WebkitMaskComposite: "xor",
                     maskComposite: "exclude",
+                    opacity: 0.75,
                     boxShadow:
-                      "0 6px 20px -8px color-mix(in oklab, var(--brand-magenta) 40%, transparent)",
+                      "0 8px 24px -10px color-mix(in oklab, var(--brand-magenta) 35%, transparent)",
                   }}
                 />
                 {(["tl", "tr", "bl", "br"] as const).map((c) => (
                   <span
                     key={c}
                     onPointerDown={onPointerDownHandle(c)}
-                    className="absolute z-40 h-3 w-3 rounded-md bg-white transition-transform hover:scale-110"
+                    className="absolute z-40 h-3.5 w-3.5 rounded-full transition-transform hover:scale-125"
                     style={{
-                      top: c.startsWith("t") ? "-6px" : "auto",
-                      bottom: c.startsWith("b") ? "-6px" : "auto",
-                      left: c.endsWith("l") ? "-6px" : "auto",
-                      right: c.endsWith("r") ? "-6px" : "auto",
+                      top: c.startsWith("t") ? "-7px" : "auto",
+                      bottom: c.startsWith("b") ? "-7px" : "auto",
+                      left: c.endsWith("l") ? "-7px" : "auto",
+                      right: c.endsWith("r") ? "-7px" : "auto",
                       cursor: c === "tl" || c === "br" ? "nwse-resize" : "nesw-resize",
                       touchAction: "none",
-                      border: "1.5px solid var(--brand-magenta)",
+                      background:
+                        c === "tl" || c === "br"
+                          ? "var(--brand-magenta)"
+                          : "var(--brand-cyan)",
+                      border: "2px solid #fff",
                       boxShadow:
-                        "0 2px 6px -1px color-mix(in oklab, var(--brand-cyan) 55%, transparent), 0 0 0 2px rgba(255,255,255,0.9) inset",
+                        "0 2px 8px -1px color-mix(in oklab, var(--brand-magenta) 40%, transparent), 0 0 0 1px color-mix(in oklab, var(--brand-cyan) 30%, transparent)",
                     }}
                   />
                 ))}
               </>
             )}
+
           </div>
         )}
       </div>
