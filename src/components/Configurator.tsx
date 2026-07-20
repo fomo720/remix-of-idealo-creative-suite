@@ -816,7 +816,7 @@ export function Configurator() {
               <CategoryCard
                 title="Imprenta & Papelería"
                 desc="Tarjetas, menús, carpetas y brochures con acabado profesional."
-                accent="#1E3A8A"
+                accent="#48C9C8"
                 icon={<Printer className="h-7 w-7" />}
                 image={imprentaCover.url}
                 active={category === "imprenta"}
