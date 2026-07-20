@@ -4636,13 +4636,13 @@ function TextilesSizeQtyStep({
 }
 
 function TextilesDesignStep({
-  fabricData, sleeve, color, size, qty,
+  fabricData, sleeve, color, onColorChange, size, qty,
   uploaded, onUpload, fileRef,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
-  sleeve: TxSleeve; color: string; size: TxSize; qty: number;
+  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void; size: TxSize; qty: number;
   uploaded: string | null;
   onUpload: (f: File | null) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
@@ -4654,6 +4654,7 @@ function TextilesDesignStep({
   onSubmitted: (m: TxWaModal) => void;
 }) {
   const technique = fabricData?.technique ?? "dtf";
+  const colorLock = fabricData?.colorLock ?? null;
   const colorHex = TX_COLORS.find((c) => c.name === color)?.hex ?? "#ffffff";
   const isLight = ["Blanco", "Amarillo"].includes(color);
   const strokeColor = isLight ? "#111827" : "#ffffff";
