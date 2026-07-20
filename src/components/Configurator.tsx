@@ -119,8 +119,9 @@ type Material =
   | "clear-vinyl-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 type NotebookStyle = "cover-only" | "cover-pages";
-type NotebookMaterial = "cover-matte" | "cover-glossy";
-type PageType = "blank" | "ruled" | "grid" | "dotted";
+type NotebookMaterial = "cover-cartoncillo" | "cover-carton";
+type PageType = "blank" | "ruled" | "grid" | "dotted" | "calendar";
+type NotebookExtra = "planificador" | "sticker-agenda" | "fotografia";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   {
