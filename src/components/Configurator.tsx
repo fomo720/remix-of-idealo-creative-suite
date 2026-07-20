@@ -824,8 +824,8 @@ export function Configurator() {
                 variant={0}
               />
               <CategoryCard
-                title="Iron-ons (Textiles)"
-                desc="Estampados sublimados y transfer para uniformes y merch."
+                title="Textiles Personalizados"
+                desc="Estampados sublimados y transfer para camisetas, uniformes y merch."
                 accent="#F58BB4"
                 icon={<Package className="h-7 w-7" />}
                 image={ironOnCover.url}
