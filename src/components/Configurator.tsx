@@ -2806,23 +2806,6 @@ function NotebookDesigner({
               {pageArtUploaded ? "Cambiar diseño de página" : "Subir diseño de página"}
             </button>
 
-            <div className="mt-3">
-              <Label className="mb-2 block text-xs text-muted-foreground">O elige un ícono prediseñado</Label>
-              <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
-                {presetArts.map((a) => (
-                  <button
-                    key={a}
-                    onClick={() => onPageArtPreset(a)}
-                    className={cn(
-                      "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
-                      pageArtPreset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                    )}
-                  >
-                    {a}
-                  </button>
-                ))}
-              </div>
-            </div>
 
             {hasPageArt && (
               <>
