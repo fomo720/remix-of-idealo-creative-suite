@@ -126,12 +126,11 @@ type TxTechnique = "sublimacion" | "dtf";
 type TxSize = "S" | "M" | "L" | "XL" | "XXL";
 
 const TX_FABRICS: {
-  id: TxFabric; name: string; desc: string; technique: TxTechnique; sleeves: TxSleeve[];
-  colorLock?: string;
+  id: TxFabric; name: string; desc: string; techniques: TxTechnique[]; sleeves: TxSleeve[];
 }[] = [
-  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Impresión DTF de alta definición sobre cualquier color.", technique: "dtf", sleeves: ["corta", "larga"] },
-  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Ideal para sublimación de tacto cero.", technique: "sublimacion", sleeves: ["corta"] },
-  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Solo en color blanco (sublimación integrada a la tela).", technique: "sublimacion", sleeves: ["corta", "larga"], colorLock: "Blanco" },
+  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
+  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Solo sublimación (tacto cero).", techniques: ["sublimacion"], sleeves: ["corta"] },
+  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
 ];
 
 const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
