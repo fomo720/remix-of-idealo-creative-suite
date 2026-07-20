@@ -828,6 +828,7 @@ export function Configurator() {
                     accent={c.accent}
                     active={cut === c.id}
                     onClick={() => setCut(c.id)}
+                    bestseller={c.id === "die-cut"}
                   />
                 ))}
               </div>
