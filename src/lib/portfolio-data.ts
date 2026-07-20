@@ -114,6 +114,10 @@ export type Project = {
   fit?: "cover" | "contain";
   /** Optional watermark/logo overlaid on the card image (top-left). */
   watermark?: string;
+  /** Optional secondary image (e.g. interior view of a notebook). */
+  extraImages?: string[];
+  /** Optional demo video (muted, autoplays on click on the detail page). */
+  video?: string;
   /** Long-form description shown on the detail page. */
   description?: string;
   /** Bullet highlights shown on the detail page. */
