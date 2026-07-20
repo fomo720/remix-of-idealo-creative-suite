@@ -4066,7 +4066,7 @@ function PromoBanner() {
         />
         <div>
           <div className="text-xs font-black uppercase tracking-widest text-white/90">Oferta por tiempo limitado</div>
-          <div className="text-xl font-black leading-tight sm:text-2xl">¡5 stickers GRATIS!</div>
+          <div className="text-xl font-black leading-tight sm:text-2xl">¡10 stickers GRATIS!</div>
           <div className="text-sm font-medium text-white/90">Solo pagás el envío. Probá nuestra calidad sin compromiso.</div>
         </div>
       </div>
