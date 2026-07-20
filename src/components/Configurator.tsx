@@ -17,7 +17,9 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import appleIcon from "@/assets/apple-icon.png.asset.json";
-import kissCutSample from "@/assets/kiss-cut-sample.png.asset.json";
+import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
+import dieCutSample from "@/assets/cut-die-hand.png.asset.json";
+import sheetsSample from "@/assets/cut-sheets-names.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
@@ -2410,66 +2412,16 @@ function MaterialCard({
 }
 
 function CutIllustration({ id }: { id: CutShape }) {
-  // Cloud/blob shape used as the "sticker" in every illustration
-  const blob = "M40 55 C15 55 10 30 32 25 C28 8 55 3 65 18 C82 3 115 15 112 35 C135 35 135 65 108 65 C100 82 65 82 60 68 C50 80 25 75 40 55 Z";
-  const fill = "#5BB8D9";
-  const stroke = "#ffffff";
-
-  if (id === "die-cut") {
-    return (
-      <svg viewBox="0 0 160 100" className="h-full w-full">
-        {/* soft shadow */}
-        <ellipse cx="80" cy="88" rx="55" ry="5" fill="#000" opacity="0.08" />
-        <g transform="translate(15,10)">
-          <path d={blob} fill={stroke} stroke="#e5e7eb" strokeWidth="1.5" transform="translate(4,4)" opacity="0.9" />
-          <path d={blob} fill={fill} stroke={stroke} strokeWidth="4" strokeLinejoin="round" />
-        </g>
-      </svg>
-    );
-  }
-  // Centered apple sticker image
-  const appleImg = (size: number, x: number, y: number) => (
-    <image href={appleIcon.url} x={x} y={y} width={size} height={size} preserveAspectRatio="xMidYMid meet" />
-  );
-
-  if (id === "kiss-cut") {
-    return (
-      <img
-        src={kissCutSample.url}
-        alt="Ejemplo de corte de beso"
-        className="h-full w-full object-contain"
-      />
-    );
-  }
-  if (id === "sheets") {
-    const cloudsOn = (offsetX: number, offsetY: number) => (
-      <g transform={`translate(${offsetX},${offsetY})`}>
-        {[0,1,2].map((row) =>
-          [0,1].map((col) => (
-            <g key={`${row}-${col}`} transform={`translate(${8 + col*36},${6 + row*26}) scale(0.22)`}>
-              <path d={blob} fill={fill} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
-            </g>
-          ))
-        )}
-      </g>
-    );
-    return (
-      <svg viewBox="0 0 160 100" className="h-full w-full">
-        <ellipse cx="80" cy="92" rx="55" ry="4" fill="#000" opacity="0.08" />
-        {/* back sheet (rotated) with same cloud pattern */}
-        <g transform="translate(45,8) rotate(8 40 45)">
-          <rect x="0" y="0" width="80" height="85" rx="3" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-          {cloudsOn(0, 0)}
-        </g>
-        {/* front sheet */}
-        <g transform="translate(15,12)">
-          <rect x="0" y="0" width="80" height="85" rx="3" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1.5" />
-          {cloudsOn(0, 0)}
-        </g>
-      </svg>
-    );
-  }
-  return null;
+  const src =
+    id === "die-cut" ? dieCutSample.url :
+    id === "kiss-cut" ? kissCutSample.url :
+    id === "sheets" ? sheetsSample.url : null;
+  if (!src) return null;
+  const alt =
+    id === "die-cut" ? "Ejemplo de sticker troquelado" :
+    id === "kiss-cut" ? "Ejemplo de corte de beso" :
+    "Ejemplo de hoja con diseño único";
+  return <img src={src} alt={alt} className="h-full w-full object-contain" />;
 }
 
 
