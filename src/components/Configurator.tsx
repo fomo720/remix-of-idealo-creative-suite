@@ -780,6 +780,7 @@ export function Configurator() {
                 image={stickersHandCover.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
+                variant={0}
               />
               <CategoryCard
                 title="Iron-ons (Textiles)"
@@ -789,6 +790,7 @@ export function Configurator() {
                 image={ironOnCover.url}
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
+                variant={1}
               />
               <CategoryCard
                 title="Libretas Personalizadas"
@@ -798,6 +800,7 @@ export function Configurator() {
                 image={libretasCover.url}
                 active={category === "libretas"}
                 onClick={() => setCategory("libretas")}
+                variant={2}
               />
               <CategoryCard
                 title="Grabado Láser"
@@ -807,6 +810,7 @@ export function Configurator() {
                 image={laserStanleyCover.url}
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
+                variant={3}
               />
               <CategoryCard
                 title="Imprenta & Papelería"
@@ -816,6 +820,7 @@ export function Configurator() {
                 image={imprentaCover.url}
                 active={category === "imprenta"}
                 onClick={() => setCategory("imprenta")}
+                variant={4}
               />
             </div>
           )}
@@ -2184,8 +2189,16 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 }
 
 function CategoryCard({
-  title, desc, icon, active, onClick, accent, image, bestseller,
-}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string; bestseller?: boolean }) {
+  title, desc, icon, active, onClick, accent, image, bestseller, variant = 0,
+}: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string; bestseller?: boolean; variant?: number }) {
+  const shimmerVariants = [
+    { gradient: "linear-gradient(90deg, #FFD93D, #F58BB4, #FF6A3D, #A855F7, #4F46E5, #48C9C8, #FFD93D)", duration: "5s", delay: "0s", direction: "normal", timing: "linear" },
+    { gradient: "linear-gradient(120deg, #48C9C8, #4F46E5, #A855F7, #F58BB4, #FF6A3D, #FFD93D, #48C9C8)", duration: "7s", delay: "-1.4s", direction: "reverse", timing: "ease-in-out" },
+    { gradient: "linear-gradient(75deg, #A855F7, #FF6A3D, #FFD93D, #48C9C8, #4F46E5, #F58BB4, #A855F7)", duration: "9s", delay: "-3s", direction: "normal", timing: "ease-out" },
+    { gradient: "linear-gradient(100deg, #F58BB4, #FFD93D, #48C9C8, #4F46E5, #A855F7, #FF6A3D, #F58BB4)", duration: "6.5s", delay: "-2.2s", direction: "alternate", timing: "ease-in-out" },
+    { gradient: "linear-gradient(60deg, #FF6A3D, #A855F7, #F58BB4, #FFD93D, #48C9C8, #4F46E5, #FF6A3D)", duration: "8s", delay: "-4.1s", direction: "reverse", timing: "linear" },
+  ];
+  const v = shimmerVariants[variant % shimmerVariants.length];
   return (
     <button
       onClick={onClick}
@@ -2239,9 +2252,12 @@ function CategoryCard({
             !active && "group-hover:brightness-110 group-hover:shadow-lg",
           )}
           style={{
-            backgroundImage:
-              "linear-gradient(90deg, #FFD93D, #F58BB4, #FF6A3D, #A855F7, #4F46E5, #48C9C8, #FFD93D)",
-            backgroundSize: "200% 200%",
+            backgroundImage: v.gradient,
+            backgroundSize: "300% 300%",
+            animationDuration: v.duration,
+            animationDelay: v.delay,
+            animationDirection: v.direction as any,
+            animationTimingFunction: v.timing,
           }}
         >
           {active ? "Seleccionado" : "Empezar personalización"}
