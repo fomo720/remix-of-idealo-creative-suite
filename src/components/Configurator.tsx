@@ -8,7 +8,8 @@ import {
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
   FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper,
-  Palette, PencilRuler, MessageCircle,
+  Palette, PencilRuler, MessageCircle, Download,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
