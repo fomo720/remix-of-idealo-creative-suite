@@ -65,7 +65,7 @@ function SmartImage({
   alt = "",
   className = "",
   fit = "cover",
-  loading = "lazy",
+  loading = "eager",
   fetchPriority = "auto",
   sizes,
 }: {
@@ -77,37 +77,21 @@ function SmartImage({
   fetchPriority?: "auto" | "high" | "low";
   sizes?: string;
 }) {
-  const [loaded, setLoaded] = useState(false);
   return (
-    <>
-      {!loaded && (
-        <div
-          aria-hidden
-          className="absolute inset-0 animate-pulse"
-          style={{
-            background:
-              "linear-gradient(110deg, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.09) 40%, rgba(0,0,0,0.04) 60%)",
-          }}
-        />
+    <img
+      src={src}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      // @ts-expect-error - fetchpriority is a valid HTML attribute
+      fetchpriority={fetchPriority}
+      sizes={sizes}
+      className={cn(
+        "absolute inset-0 h-full w-full",
+        fit === "contain" ? "object-contain" : "object-cover",
+        className,
       )}
-      <img
-        src={src}
-        alt={alt}
-        loading={loading}
-        decoding="async"
-        // @ts-expect-error - fetchpriority is a valid HTML attribute
-        fetchpriority={fetchPriority}
-        sizes={sizes}
-        onLoad={() => setLoaded(true)}
-        onError={() => setLoaded(true)}
-        className={cn(
-          "absolute inset-0 h-full w-full transition-opacity duration-300",
-          fit === "contain" ? "object-contain" : "object-cover",
-          loaded ? "opacity-100" : "opacity-0",
-          className,
-        )}
-      />
-    </>
+    />
   );
 }
 
