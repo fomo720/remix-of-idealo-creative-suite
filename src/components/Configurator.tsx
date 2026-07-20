@@ -3747,19 +3747,19 @@ function StickersQuickInfo() {
       icon: FileCheck2,
       title: "APROBÁ TU PRUEBA",
       desc: "Recibí una prueba digital en 1 a 3 días. Si sos de La Ceiba, podés ver la prueba física.",
-      bg: "#f5c518",
+      bg: "var(--brand-pink)",
     },
     {
       icon: Printer,
       title: "PROCESO DE IMPRESIÓN",
       desc: "Una vez aprobada la prueba, la mayoría de órdenes se envían en 24 horas.",
-      bg: "#a855f7",
+      bg: "var(--brand-violet)",
     },
     {
       icon: Truck,
       title: "¡EN CAMINO!",
       desc: "Listo para recoger en tienda dentro de La Ceiba. Si sos de fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
-      bg: "#f5c518",
+      bg: "var(--brand-blue)",
     },
   ];
 
