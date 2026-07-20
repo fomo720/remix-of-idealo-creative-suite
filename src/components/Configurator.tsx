@@ -2247,9 +2247,12 @@ function CategoryCard({
             !active && "group-hover:brightness-110 group-hover:shadow-lg",
           )}
           style={{
-            backgroundImage:
-              "linear-gradient(90deg, #FFD93D, #F58BB4, #FF6A3D, #A855F7, #4F46E5, #48C9C8, #FFD93D)",
-            backgroundSize: "200% 200%",
+            backgroundImage: v.gradient,
+            backgroundSize: "300% 300%",
+            animationDuration: v.duration,
+            animationDelay: v.delay,
+            animationDirection: v.direction as any,
+            animationTimingFunction: v.timing,
           }}
         >
           {active ? "Seleccionado" : "Empezar personalización"}
