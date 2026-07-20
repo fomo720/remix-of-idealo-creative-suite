@@ -4614,8 +4614,8 @@ function TextilesSizeQtyStep({
         value={qty}
         onChange={(e) => onQty(Math.max(TX_MIN_QTY, +e.target.value || TX_MIN_QTY))}
       />
-      <div className="mt-2 grid grid-cols-5 gap-2">
-        {[5, 10, 25, 50, 100].map((n) => (
+      <div className="mt-2 grid grid-cols-4 gap-2">
+        {TX_QTY_PRESETS.map((n) => (
           <button
             key={n}
             onClick={() => onQty(n)}
@@ -4628,7 +4628,7 @@ function TextilesSizeQtyStep({
           </button>
         ))}
       </div>
-      <p className="mt-2 text-[11px] text-muted-foreground">Cantidad mínima: {TX_MIN_QTY} camisetas.</p>
+      <p className="mt-2 text-[11px] text-muted-foreground">Cantidad mínima: {TX_MIN_QTY} camiseta. Para más de 50, escribe la cantidad manualmente.</p>
 
       <NavRow onBack={onBack} onNext={onNext} />
     </div>
