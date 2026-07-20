@@ -130,7 +130,7 @@ function ProjectDetail() {
             </div>
             {project.extraImages && project.extraImages.length > 0 && (
               <div className="grid grid-cols-2 gap-2 border-t border-border/60 p-2">
-                {project.extraImages.map((src, i) => (
+                {project.extraImages.map((src: string, i: number) => (
                   <div key={i} className="relative aspect-square overflow-hidden rounded-xl bg-white/60">
                     <img src={src} alt={`${project.title} — vista ${i + 2}`} className="absolute inset-0 h-full w-full object-cover" />
                   </div>
