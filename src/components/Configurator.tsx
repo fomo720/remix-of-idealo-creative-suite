@@ -4462,14 +4462,13 @@ function TextilesFabricStep({
                 <div className="text-lg font-bold">{f.name}</div>
               </div>
               <p className="text-xs leading-snug text-muted-foreground">{f.desc}</p>
-              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                {f.technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+              <div className="mt-3 flex flex-wrap gap-1">
+                {f.techniques.map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t === "sublimacion" ? "Sublimación (blanco)" : "Estampado DTF (cualquier color)"}
+                  </span>
+                ))}
               </div>
-              {f.colorLock && (
-                <div className="mt-2 text-[10px] font-medium text-[color:var(--brand-magenta)]">
-                  Solo disponible en {f.colorLock}
-                </div>
-              )}
             </button>
           );
         })}
