@@ -1,5 +1,6 @@
+import { useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Check, MessageCircle } from "lucide-react";
+import { ArrowLeft, Check, MessageCircle, Play } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getProjectBySlug, projects } from "@/lib/portfolio-data";
