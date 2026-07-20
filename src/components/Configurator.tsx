@@ -766,7 +766,7 @@ export function Configurator() {
           {step === 2 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {cuts.map((c) => (
                   <CutCard
                     key={c.id}
