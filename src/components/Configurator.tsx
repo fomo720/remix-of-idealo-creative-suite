@@ -1322,9 +1322,37 @@ export function Configurator() {
                       />
                     </div>
 
-                    <p className="mt-3 text-[10px] text-muted-foreground">
-                      Posición: X {offsetX >= 0 ? "+" : ""}{Math.round(offsetX)}% · Y {offsetY >= 0 ? "+" : ""}{Math.round(offsetY)}%
-                    </p>
+                    <div className="mt-3">
+                      <button
+                        type="button"
+                        onClick={() => setShowPosInputs((v) => !v)}
+                        className="text-[11px] font-medium text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                      >
+                        Posición {showPosInputs ? "▲" : "▼"}
+                      </button>
+                      {showPosInputs && (
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          <label className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                            X%
+                            <input
+                              type="number"
+                              value={Math.round(offsetX)}
+                              onChange={(e) => setOffsetX(clamp(Number(e.target.value) || 0, -120, 120))}
+                              className="w-full rounded-md border border-border bg-background px-2 py-1 text-xs"
+                            />
+                          </label>
+                          <label className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                            Y%
+                            <input
+                              type="number"
+                              value={Math.round(offsetY)}
+                              onChange={(e) => setOffsetY(clamp(Number(e.target.value) || 0, -120, 120))}
+                              className="w-full rounded-md border border-border bg-background px-2 py-1 text-xs"
+                            />
+                          </label>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
