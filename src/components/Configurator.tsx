@@ -1299,19 +1299,8 @@ export function Configurator() {
                         onChange={setScale}
                         suffix="%"
                       />
-                      <ToolSlider
-                        icon={<Sun className="h-3.5 w-3.5" />}
-                        label="Brillo"
-                        value={brightness} min={50} max={200} step={1}
-                        onChange={setBrightness} suffix="%"
-                      />
-                      <ToolSlider
-                        icon={<Contrast className="h-3.5 w-3.5" />}
-                        label="Contraste"
-                        value={contrast} min={50} max={200} step={1}
-                        onChange={setContrast} suffix="%"
-                      />
                     </div>
+
                   </div>
                 )}
 
