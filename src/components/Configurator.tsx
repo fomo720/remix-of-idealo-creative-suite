@@ -1555,9 +1555,16 @@ export function Configurator() {
                     } catch (err) {
                       console.error("[configurator] preview capture failed", err);
                     }
-                    // 2) Open WhatsApp
-                    window.open(waHref, "_blank", "noopener,noreferrer");
+                    // 2) Copy text to clipboard
+                    try {
+                      await navigator.clipboard?.writeText(lines);
+                    } catch (err) {
+                      console.error("[configurator] clipboard failed", err);
+                    }
+                    // 3) Show guide modal
+                    setWaModal({ href: waHref, text: lines });
                   };
+
 
                   return (
                     <button
