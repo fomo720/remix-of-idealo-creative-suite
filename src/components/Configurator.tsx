@@ -146,7 +146,8 @@ const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
 ];
 
 const TX_SIZES: TxSize[] = ["S", "M", "L", "XL", "XXL"];
-const TX_MIN_QTY = 5;
+const TX_MIN_QTY = 1;
+const TX_QTY_PRESETS = [1, 5, 10, 50];
 type NotebookStyle = "cover-only" | "cover-pages";
 type NotebookMaterial = "cover-cartoncillo" | "cover-carton";
 type PageType = "blank" | "ruled" | "grid" | "dotted" | "calendar";
@@ -750,7 +751,7 @@ export function Configurator() {
         return;
       }
     }
-    // Gating for textiles: Material → Manga → Color → Talla+Cantidad → Diseño
+    // Gating for textiles: Material → Manga → Talla+Cantidad → Diseño (color en diseño)
     if (isTextiles) {
       if (s >= 3 && !txFabric) {
         setGateMsg("Primero elige el material de la camisa en el paso 2.");
@@ -762,14 +763,9 @@ export function Configurator() {
         setStep(3);
         return;
       }
-      if (s >= 5 && !txColor) {
-        setGateMsg("Primero elige el color de la camisa en el paso 4.");
+      if (s >= 5 && (!txSize || !txQty)) {
+        setGateMsg("Primero elige talla y cantidad en el paso 4.");
         setStep(4);
-        return;
-      }
-      if (s >= 6 && (!txSize || !txQty)) {
-        setGateMsg("Primero elige talla y cantidad en el paso 5.");
-        setStep(5);
         return;
       }
     }
@@ -869,7 +865,7 @@ export function Configurator() {
               : isImprenta
               ? ["Categoría", "Producto", "Estilo de diseño", "Especificaciones + Envío"]
               : isTextiles
-              ? ["Categoría", "Material", "Manga", "Color", "Talla + Cantidad", "Diseño"]
+              ? ["Categoría", "Material", "Manga", "Talla + Cantidad", "Diseño"]
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
@@ -959,29 +955,21 @@ export function Configurator() {
             />
           )}
           {isTextiles && step === 4 && (
-            <TextilesColorStep
-              fabricData={txFabricData}
-              color={txColor}
-              onPick={setTxColor}
-              onBack={() => goTo(3)}
-              onNext={txColor ? () => goTo(5) : undefined}
-            />
-          )}
-          {isTextiles && step === 5 && (
             <TextilesSizeQtyStep
               size={txSize}
               qty={txQty}
               onSize={setTxSize}
               onQty={setTxQty}
-              onBack={() => goTo(4)}
-              onNext={txSize && txQty >= TX_MIN_QTY ? () => goTo(6) : undefined}
+              onBack={() => goTo(3)}
+              onNext={txSize && txQty >= TX_MIN_QTY ? () => goTo(5) : undefined}
             />
           )}
-          {isTextiles && step === 6 && (
+          {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
-              color={txColor!}
+              color={txColor ?? (txFabricData?.colorLock ?? "Blanco")}
+              onColorChange={setTxColor}
               size={txSize!}
               qty={txQty}
               uploaded={uploaded}
@@ -995,7 +983,7 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
-              onBack={() => goTo(5)}
+              onBack={() => goTo(4)}
               onSubmitted={(payload) => setWaModal(payload)}
             />
           )}
@@ -4626,8 +4614,8 @@ function TextilesSizeQtyStep({
         value={qty}
         onChange={(e) => onQty(Math.max(TX_MIN_QTY, +e.target.value || TX_MIN_QTY))}
       />
-      <div className="mt-2 grid grid-cols-5 gap-2">
-        {[5, 10, 25, 50, 100].map((n) => (
+      <div className="mt-2 grid grid-cols-4 gap-2">
+        {TX_QTY_PRESETS.map((n) => (
           <button
             key={n}
             onClick={() => onQty(n)}
@@ -4640,7 +4628,7 @@ function TextilesSizeQtyStep({
           </button>
         ))}
       </div>
-      <p className="mt-2 text-[11px] text-muted-foreground">Cantidad mínima: {TX_MIN_QTY} camisetas.</p>
+      <p className="mt-2 text-[11px] text-muted-foreground">Cantidad mínima: {TX_MIN_QTY} camiseta. Para más de 50, escribe la cantidad manualmente.</p>
 
       <NavRow onBack={onBack} onNext={onNext} />
     </div>
@@ -4648,13 +4636,13 @@ function TextilesSizeQtyStep({
 }
 
 function TextilesDesignStep({
-  fabricData, sleeve, color, size, qty,
+  fabricData, sleeve, color, onColorChange, size, qty,
   uploaded, onUpload, fileRef,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
-  sleeve: TxSleeve; color: string; size: TxSize; qty: number;
+  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void; size: TxSize; qty: number;
   uploaded: string | null;
   onUpload: (f: File | null) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
@@ -4666,6 +4654,7 @@ function TextilesDesignStep({
   onSubmitted: (m: TxWaModal) => void;
 }) {
   const technique = fabricData?.technique ?? "dtf";
+  const colorLock = fabricData?.colorLock ?? null;
   const colorHex = TX_COLORS.find((c) => c.name === color)?.hex ?? "#ffffff";
   const isLight = ["Blanco", "Amarillo"].includes(color);
   const strokeColor = isLight ? "#111827" : "#ffffff";
@@ -4760,6 +4749,44 @@ function TextilesDesignStep({
             <span>Vista previa en vivo</span>
             <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color} · {size}</span>
           </div>
+
+          {/* Color picker inline */}
+          <div className="mb-4 rounded-2xl border border-border bg-background/70 p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
+              {colorLock && (
+                <div className="text-[10px] font-medium text-[color:var(--brand-magenta)]">Bloqueado en {colorLock}</div>
+              )}
+            </div>
+            <div className="grid grid-cols-8 gap-2">
+              {TX_COLORS.map((c) => {
+                const disabled = colorLock !== null && c.name !== colorLock;
+                const active = color === c.name;
+                return (
+                  <button
+                    key={c.name}
+                    disabled={disabled}
+                    onClick={() => onColorChange(c.name)}
+                    title={c.name}
+                    className={cn(
+                      "flex flex-col items-center gap-1 transition",
+                      disabled && "opacity-30 cursor-not-allowed",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-8 w-8 rounded-full border-2 transition",
+                        active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border hover:scale-110",
+                        c.border && "border-neutral-300",
+                      )}
+                      style={{ backgroundColor: c.hex }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
 
           <div className="relative mx-auto aspect-square w-full max-w-md">
             {/* T-shirt SVG maquette */}
