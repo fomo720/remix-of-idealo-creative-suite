@@ -1428,7 +1428,7 @@ export function Configurator() {
                   <Textarea
                     id="notes"
                     rows={3}
-                    placeholder="Colores Pantone, tipo de laminado, entrega, empaque, etc."
+                    placeholder="Ej: bordes de la imagen (troquelado o kiss-cut), tipo de laminado, entrega, empaque, etc."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                   />
