@@ -1,5 +1,6 @@
+import { useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Check, MessageCircle } from "lucide-react";
+import { ArrowLeft, Check, MessageCircle, Play } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getProjectBySlug, projects } from "@/lib/portfolio-data";
@@ -58,6 +59,19 @@ function ProjectDetail() {
   const related = projects.filter((p) => p.type === project.type && p.slug !== project.slug).slice(0, 3);
   const mensaje = `Hola Idealo 👋 Me interesa *${project.title}*. ¿Me pueden cotizar?`;
   const waHref = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+  const [playingVideo, setPlayingVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const handlePlay = () => {
+    setPlayingVideo(true);
+    setTimeout(() => {
+      const v = videoRef.current;
+      if (v) {
+        v.muted = true;
+        v.play().catch(() => {});
+      }
+    }, 20);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -73,20 +87,58 @@ function ProjectDetail() {
             style={{ background: project.bg ?? "#0a0a0a" }}
           >
             <div className="relative aspect-square w-full">
-              {project.image && (
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className={`absolute inset-0 h-full w-full ${project.fit === "contain" ? "object-contain p-6" : "object-cover"}`}
+              {project.video && playingVideo ? (
+                <video
+                  ref={videoRef}
+                  src={project.video}
+                  poster={project.image}
+                  muted
+                  playsInline
+                  controls
+                  autoPlay
+                  loop
+                  className="absolute inset-0 h-full w-full object-contain bg-black"
                 />
+              ) : (
+                <>
+                  {project.image && (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className={`absolute inset-0 h-full w-full ${project.fit === "contain" ? "object-contain p-6" : "object-cover"}`}
+                    />
+                  )}
+                  {project.video && (
+                    <button
+                      type="button"
+                      onClick={handlePlay}
+                      className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 transition hover:bg-black/20"
+                      aria-label="Reproducir video"
+                    >
+                      <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/90 shadow-xl ring-4 ring-white/40 transition group-hover:scale-105">
+                        <Play className="h-9 w-9 translate-x-0.5 text-black" fill="currentColor" />
+                      </span>
+                    </button>
+                  )}
+                </>
               )}
-              {project.watermark && (
+              {project.watermark && !playingVideo && (
                 <div className="absolute left-4 top-4 z-10 rounded-xl bg-white/90 px-3 py-1.5 shadow-lg backdrop-blur">
                   <img src={project.watermark} alt="Idealo" className="h-7 w-auto sm:h-8" />
                 </div>
               )}
             </div>
+            {project.extraImages && project.extraImages.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 border-t border-border/60 p-2">
+                {project.extraImages.map((src: string, i: number) => (
+                  <div key={i} className="relative aspect-square overflow-hidden rounded-xl bg-white/60">
+                    <img src={src} alt={`${project.title} — vista ${i + 2}`} className="absolute inset-0 h-full w-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+
 
           <div>
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
