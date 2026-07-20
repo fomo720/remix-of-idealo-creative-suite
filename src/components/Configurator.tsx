@@ -3905,8 +3905,8 @@ function StickersQuickInfo() {
       bg: "var(--brand-violet)",
     },
     {
-      icon: Truck,
-      title: "¡EN CAMINO!",
+      icon: ShoppingBag,
+      title: "¡TU PEDIDO YA ESTÁ LISTO!",
       desc: "Listo para recoger en tienda dentro de La Ceiba. Si sos de fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
       bg: "var(--brand-blue)",
     },
