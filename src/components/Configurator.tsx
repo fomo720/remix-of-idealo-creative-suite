@@ -563,6 +563,7 @@ function currency(n: number) {
 
 export function Configurator() {
   const [step, setStep] = useState(1);
+  const [gateMsg, setGateMsg] = useState<string | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const [cut, setCut] = useState<CutShape | null>(null);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -673,7 +674,23 @@ export function Configurator() {
     return Math.round(base * area * factor * bulkFactor * qty);
   }, [isLaser, laserProductData, laserVariantData, laserByob, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
-  const goTo = (s: number) => setStep(s);
+  const goTo = (s: number) => {
+    // Gating: only for stickers/iron-ons flow (not laser/notebook/imprenta)
+    if (!isLaser && !isNotebook && !isImprenta) {
+      if (s >= 3 && !cut) {
+        setGateMsg("Primero elige la forma de corte en el paso 2.");
+        setStep(2);
+        return;
+      }
+      if (s >= 4 && !material) {
+        setGateMsg("Primero elige el material en el paso 3.");
+        setStep(3);
+        return;
+      }
+    }
+    setGateMsg(null);
+    setStep(s);
+  };
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -769,6 +786,12 @@ export function Configurator() {
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
+
+        {gateMsg && (
+          <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-[color:var(--brand-magenta)]/30 bg-[color:var(--brand-magenta)]/10 px-4 py-3 text-center text-sm font-medium text-[color:var(--brand-magenta)]">
+            {gateMsg}
+          </div>
+        )}
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
