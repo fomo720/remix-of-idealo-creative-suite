@@ -1543,34 +1543,60 @@ export function Configurator() {
                   ].filter(Boolean).join("\n");
                   const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
 
-                  const onSubmit = async () => {
-                    // 1) Capture preview to PNG and trigger download
+                  const downloadDataUrl = (dataUrl: string) => {
+                    const a = document.createElement("a");
+                    a.href = dataUrl;
+                    a.download = `idealo-diseno-${Date.now()}.png`;
+                    a.rel = "noopener";
+                    a.target = "_self";
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => a.remove(), 100);
+                  };
+
+                  const capturePreview = async (): Promise<string | null> => {
+                    if (!previewRef.current) return null;
+                    const opts = {
+                      pixelRatio: 2,
+                      cacheBust: true,
+                      backgroundColor: "#ffffff",
+                      skipFonts: true,
+                    } as const;
+                    // Try blob first (better for large images), fall back to dataURL
                     try {
-                      if (previewRef.current) {
-                        const dataUrl = await toPng(previewRef.current, {
-                          pixelRatio: 2,
-                          cacheBust: true,
-                          backgroundColor: "#ffffff",
-                        });
-                        const a = document.createElement("a");
-                        a.href = dataUrl;
-                        a.download = `idealo-diseño-${Date.now()}.png`;
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
-                      }
+                      const blob = await toBlob(previewRef.current, opts);
+                      if (blob) return URL.createObjectURL(blob);
                     } catch (err) {
-                      console.error("[configurator] preview capture failed", err);
+                      console.warn("[configurator] toBlob failed, trying toPng", err);
                     }
-                    // 2) Copy text to clipboard
+                    try {
+                      return await toPng(previewRef.current, opts);
+                    } catch (err) {
+                      console.error("[configurator] toPng failed", err);
+                      return null;
+                    }
+                  };
+
+                  const onSubmit = async () => {
+                    // Copy text first (sync-ish, works even if capture fails)
                     try {
                       await navigator.clipboard?.writeText(lines);
                     } catch (err) {
                       console.error("[configurator] clipboard failed", err);
                     }
-                    // 3) Show guide modal
+                    // Capture + download
+                    const url = await capturePreview();
+                    if (url) {
+                      downloadDataUrl(url);
+                    } else {
+                      alert(
+                        "No pudimos generar la imagen automáticamente. Toma una captura de pantalla del diseño y adjúntala en WhatsApp."
+                      );
+                    }
                     setWaModal({ href: waHref, text: lines });
                   };
+
+
 
 
                   return (
