@@ -45,6 +45,7 @@ export function Portfolio() {
       "Iron-ons": 0,
       PVC: 0,
       Impresos: 0,
+      Libretas: 0,
       Rotulación: 0,
       Regalos: 0,
       Servicios: 0,
