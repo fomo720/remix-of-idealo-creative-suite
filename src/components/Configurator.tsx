@@ -1667,7 +1667,7 @@ export function Configurator() {
                   );
                 })()}
                 <p className="mt-2 text-center text-[11px] text-muted-foreground">
-                  Al enviar, se descarga automáticamente una imagen PNG con tu diseño, el troquel y la zona segura, y se abre WhatsApp con los detalles listos.
+                  Se abre WhatsApp con todos los detalles listos. Solo adjunta tu diseño en el chat y nosotros nos encargamos del resto.
                 </p>
 
                 <NavRow onBack={() => goTo(3)} />
