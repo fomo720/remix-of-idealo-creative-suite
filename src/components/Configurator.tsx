@@ -565,13 +565,13 @@ export function Configurator() {
   const [uploaded, setUploaded] = useState<string | null>(null);
 
   // size
-  const [width, setWidth] = useState("3");
-  const [height, setHeight] = useState("3");
+  const [width, setWidth] = useState("2");
+  const [height, setHeight] = useState("2");
   const [unit, setUnit] = useState<"in" | "cm">("in");
   const [sizeMode, setSizeMode] = useState<"preset" | "custom">("preset");
-  const [activePreset, setActivePreset] = useState<number>(1); // index into sizePresets
+  const [activePreset, setActivePreset] = useState<number>(2); // 2x2
 
-  const [qty, setQty] = useState(100);
+  const [qty, setQty] = useState(MIN_QTY);
   const [notes, setNotes] = useState("");
 
   // notebook state
