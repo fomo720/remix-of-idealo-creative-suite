@@ -70,6 +70,16 @@ import stickerTroqueladoBrioche from "@/assets/portfolio-sticker-troquelado-brio
 import snacksPersonalizados from "@/assets/portfolio-snacks-personalizados.png.asset.json";
 import fotosCristal from "@/assets/portfolio-fotos-cristal.jpg.asset.json";
 import termoMamaMariposas from "@/assets/portfolio-termo-mama-mariposas.jpg.asset.json";
+import libretaCorazones from "@/assets/libreta-175.jpg.asset.json";
+import libretaPlanner from "@/assets/libreta-177.jpg.asset.json";
+import libretaFuerza from "@/assets/libreta-178.jpg.asset.json";
+import libretaSalmo from "@/assets/libreta-179.jpg.asset.json";
+import libretaFe from "@/assets/libreta-180.jpg.asset.json";
+import libretaFuturo from "@/assets/libreta-181.jpg.asset.json";
+import libretaDreams from "@/assets/libreta-182.jpg.asset.json";
+import libretaEcoCover from "@/assets/libreta-183.jpg.asset.json";
+import libretaEcoOpen from "@/assets/libreta-184.jpg.asset.json";
+import idealoLogoColor from "@/assets/idealo-logo-color.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -77,6 +87,7 @@ export type ProjectType =
   | "Iron-ons"
   | "PVC"
   | "Impresos"
+  | "Libretas"
   | "Rotulación"
   | "Regalos"
   | "Servicios";
@@ -91,6 +102,8 @@ export type Project = {
   gradient?: string;
   bg?: string;
   fit?: "cover" | "contain";
+  /** Optional watermark/logo overlaid on the card image (top-left). */
+  watermark?: string;
   /** Long-form description shown on the detail page. */
   description?: string;
   /** Bullet highlights shown on the detail page. */
@@ -178,6 +191,17 @@ const raw: Omit<Project, "slug">[] = [
   
   { title: "Camisetas Estampadas Personalizadas", tag: "Camisetas & Textil", type: "Iron-ons", subtitle: "Disponible con estampado o sublimación · algodón, kiana, durazno, manga corta y manga larga · colores negro, blanco, rojo, naranja, rosado, amarillo, verde y azul", image: camisetasEstampadas.url, bg: "#ececec", fit: "contain", description: "Camisetas estampadas y sublimadas totalmente personalizadas con tu diseño, nombre, foto o logo. Ideales para cumpleaños, eventos, empresas, equipos y regalos. Amplia variedad de tipos de tela y colores disponibles.", highlights: ["Tipos: algodón, kiana, durazno, manga corta y manga larga", "Colores: negro, blanco, rojo, naranja, rosado, amarillo, verde y azul", "Estampado o sublimación full color", "Diseños personalizados con nombre, foto o logo"] },
   { title: "Rótulos de Medidas de Prevención", tag: "Señalética & Seguridad", type: "Rotulación", subtitle: "Rótulos en PVC y para pisos · medidas estándar y personalizados con tu logo · protección de alto tráfico para pisos", image: rotulosPrevencion.url, bg: "#ececec", fit: "contain", description: "Rótulos de medidas de prevención y señalética para negocios, oficinas, clínicas y espacios públicos. Rótulos en PVC en medidas estándar o personalizados con tu logo, y rótulos para pisos con protección de alto tráfico anti-deslizante.", highlights: ["Rótulos en PVC estándar o personalizados", "Rótulos para pisos con protección anti-tráfico", "Personalización con tu logo y marca", "Ideales para negocios, oficinas y clínicas"] },
+
+  /* ---------- Libretas & Cuadernos ---------- */
+  { title: "Libreta Amor · Corazones Rosa", tag: "Libretas & Planners", type: "Libretas", subtitle: "Portada rosa con corazones · interior a elección · espiral metálico premium", image: libretaCorazones.url, watermark: idealoLogoColor.url, bg: "#fce7f3", fit: "cover", description: "Libreta personalizada con portada full color y espiral metálico. Diseño 'Tú eres el proyecto más importante de tu vida'. Interior configurable (blanco, rayado, cuadriculado o punteado) y cantidad de páginas a elegir (50, 80, 100, 150 o 200).", highlights: ["Portada cartoncillo o cartón grueso", "Interior blanco, rayado, cuadriculado o punteado", "De 50 hasta 200 páginas", "Tamaños: Carta, A4, Legal, 12×18 y 11×18"] },
+  { title: "Planner 2026 · Cerezas", tag: "Libretas & Planners", type: "Libretas", subtitle: "Planificador anual full color · portada cartón grueso · con calendario integrado", image: libretaPlanner.url, watermark: idealoLogoColor.url, bg: "#dcfce7", fit: "cover", description: "Planificador anual 2026 con calendario integrado, secciones para metas, hábitos y notas semanales. Portada full color con cartón grueso resistente. Personalizá con tu marca, colores y frases favoritas.", highlights: ["Calendario 2026 integrado", "Portada cartón grueso premium", "Diseño 100% personalizable", "Ideal como regalo corporativo"] },
+  { title: "Libreta 'Fuerza y Dignidad' · Proverbios 31:25", tag: "Libretas & Frases", type: "Libretas", subtitle: "Portada amarilla con frase bíblica · texto rosa magenta · impresión full color", image: libretaFuerza.url, watermark: idealoLogoColor.url, bg: "#fef08a", fit: "cover", description: "Libreta con frase bíblica motivacional Proverbios 31:25. Portada amarilla vibrante con texto rosa magenta. Personalizala con tu versículo, frase o mensaje favorito.", highlights: ["Frase o versículo personalizable", "Impresión full color", "Espiral metálico resistente", "Ideal como regalo espiritual"] },
+  { title: "Libreta 'El Señor es mi Fuerza' · Salmos 28:7", tag: "Libretas & Frases", type: "Libretas", subtitle: "Portada morada con texto blanco · cuadrícula punteada · formato cuadrado", image: libretaSalmo.url, watermark: idealoLogoColor.url, bg: "#e9d5ff", fit: "cover", description: "Libreta cuadrada con frase bíblica Salmos 28:7. Portada morada elegante con texto blanco y cuadrícula punteada de fondo. Cualquier versículo o mensaje personalizado disponible.", highlights: ["Frase o versículo a tu elección", "Formato cuadrado premium", "Papel interior a elegir", "Regalo espiritual perfecto"] },
+  { title: "Libreta 'Vivimos por Fe' · 2 Corintios 5:7", tag: "Libretas & Frases", type: "Libretas", subtitle: "Portada celeste con texto morado · cuadrícula punteada · acabado premium", image: libretaFe.url, watermark: idealoLogoColor.url, bg: "#bae6fd", fit: "cover", description: "Libreta con frase bíblica 2 Corintios 5:7. Portada celeste con texto morado vibrante. Perfecta como regalo espiritual, para devocionales o journaling.", highlights: ["Diseño y frase personalizable", "Portada cartoncillo premium", "Papel interior a elección", "Ideal para journaling y devocionales"] },
+  { title: "Libreta 'Tu Futuro es Brillante' · Fe y Motivación", tag: "Libretas & Frases", type: "Libretas", subtitle: "Portada roja con corazones · frase motivacional · impresión full color", image: libretaFuturo.url, watermark: idealoLogoColor.url, bg: "#fecaca", fit: "cover", description: "Libreta motivacional con portada roja y corazones. Diseño 'Tu futuro es tan brillante como tu fe'. Perfecta como regalo, agenda personal o journal.", highlights: ["Frase motivacional personalizable", "Espiral metálico dorado", "Portada cartón grueso", "Ideal para regalos y agendas"] },
+  { title: "Libreta 'Make Your Dreams Happen'", tag: "Libretas & Frases", type: "Libretas", subtitle: "Estilo minimalista · portada blanca con puntos rosa y naranja · espiral superior", image: libretaDreams.url, watermark: idealoLogoColor.url, bg: "#fef3f2", fit: "cover", description: "Libreta minimalista tipo notepad con espiral superior. Diseño 'Make Your Dreams Happen Today' con puntos decorativos. Ideal para listas, notas rápidas y planning diario.", highlights: ["Espiral superior tipo notepad", "Diseño minimalista personalizable", "Papel bond o cuadriculado", "Perfecta para escritorio"] },
+  { title: "Libreta Corporativa · EcoGaz / Enagasa / EcoAuto", tag: "Libretas Corporativas", type: "Libretas", subtitle: "Libreta corporativa personalizada con logos e identidad de marca · impresión full color", image: libretaEcoCover.url, watermark: idealoLogoColor.url, bg: "#86efac", fit: "cover", description: "Libreta corporativa personalizada con múltiples logos e identidad de marca. Portada full color y espiral resistente. Ideal para regalos a colaboradores, clientes y aliados estratégicos.", highlights: ["Múltiples logos en portada", "Impresión full color", "Cantidades desde 25 unidades", "Ideal para regalos corporativos"] },
+  { title: "Libreta Corporativa · Interior Personalizado", tag: "Libretas Corporativas", type: "Libretas", subtitle: "Interior con encabezado corporativo, fecha y campo de tema · líneas guía", image: libretaEcoOpen.url, watermark: idealoLogoColor.url, bg: "#bbf7d0", fit: "cover", description: "Libreta corporativa con interior 100% personalizado: encabezado con logos, campo de tema, fecha y líneas guía. Perfecta para reuniones, capacitaciones y trabajo diario.", highlights: ["Interior personalizado con tu marca", "Encabezado, tema y fecha impresos", "Papel bond blanco de alta calidad", "Espiral doble resistente"] },
 ];
 
 export const projects: Project[] = raw.map((p) => ({ ...p, slug: slugify(p.title) }));

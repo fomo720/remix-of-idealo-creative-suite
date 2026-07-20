@@ -10,6 +10,7 @@ const FILTERS: Filter[] = [
   "Iron-ons",
   "PVC",
   "Impresos",
+  "Libretas",
   "Rotulación",
   "Regalos",
   "Servicios",
@@ -44,6 +45,7 @@ export function Portfolio() {
       "Iron-ons": 0,
       PVC: 0,
       Impresos: 0,
+      Libretas: 0,
       Rotulación: 0,
       Regalos: 0,
       Servicios: 0,
@@ -115,6 +117,11 @@ export function Portfolio() {
                       loading="lazy"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                  ) : null}
+                  {p.watermark ? (
+                    <div className="absolute left-3 top-3 z-10 rounded-lg bg-white/85 px-2 py-1 shadow-md backdrop-blur-sm">
+                      <img src={p.watermark} alt="Idealo" className="h-5 w-auto sm:h-6" />
+                    </div>
                   ) : null}
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-6">

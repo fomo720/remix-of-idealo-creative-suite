@@ -119,8 +119,9 @@ type Material =
   | "clear-vinyl-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 type NotebookStyle = "cover-only" | "cover-pages";
-type NotebookMaterial = "cover-matte" | "cover-glossy";
-type PageType = "blank" | "ruled" | "grid" | "dotted";
+type NotebookMaterial = "cover-cartoncillo" | "cover-carton";
+type PageType = "blank" | "ruled" | "grid" | "dotted" | "calendar";
+type NotebookExtra = "planificador" | "sticker-agenda" | "fotografia";
 
 const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
   {
@@ -225,47 +226,57 @@ const notebookMaterials: {
   priceFactor: number; advantages: { icon: React.ReactNode; text: string }[]; useCase: string;
 }[] = [
   {
-    id: "cover-matte",
-    name: "Cartulina Mate 300gsm",
-    desc: "Textura suave, elegante y sin reflejos.",
-    finish: "Mate",
+    id: "cover-cartoncillo",
+    name: "Cartoncillo 300gsm",
+    desc: "Ligero, flexible y económico. Ideal para libretas escolares y planners.",
+    finish: "Mate premium",
     swatch: "#efeae4",
     priceFactor: 1,
     advantages: [
-      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Look premium sin brillo" },
+      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Acabado mate elegante" },
       { icon: <ShieldCheck className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Resistente al roce" },
-      { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores sobrios y naturales" },
+      { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores full color" },
     ],
     useCase: "Ideal para libretas ejecutivas, planners y regalos corporativos.",
   },
   {
-    id: "cover-glossy",
-    name: "Cartulina Brillante 300gsm",
-    desc: "Acabado brillante con protección UV.",
-    finish: "Brillante UV",
+    id: "cover-carton",
+    name: "Portada de Cartón Grueso",
+    desc: "Cartón 400gsm rígido con laminado brillante. Máxima durabilidad.",
+    finish: "Brillante UV · rígido",
     swatch: "linear-gradient(135deg,#f5f7fa,#e4e9f2)",
-    priceFactor: 1.15,
+    priceFactor: 1.25,
     advantages: [
-      { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores vibrantes" },
+      { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Rígido y premium" },
       { icon: <WaterDropBlackIcon />, text: "Repele humedad y manchas" },
-      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Portada más durable" },
+      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Máxima durabilidad" },
     ],
-    useCase: "Ideal para fotografía, catálogos y libretas escolares.",
+    useCase: "Ideal para agendas, planners anuales y libretas de uso intensivo.",
   },
 ];
 
 const notebookSizes = [
-  { id: "a6", label: "A6", cm: "10.5 × 14.8 cm", w: 10.5, h: 14.8, hint: "Bolsillo · ideas rápidas" },
-  { id: "a5", label: "A5", cm: "14.8 × 21 cm", w: 14.8, h: 21, hint: "Estándar · más común" },
-  { id: "b5", label: "B5", cm: "17.6 × 25 cm", w: 17.6, h: 25, hint: "Mediana · notas amplias" },
-  { id: "a4", label: "A4", cm: "21 × 29.7 cm", w: 21, h: 29.7, hint: "Grande · oficina" },
+  { id: "carta", label: "Carta", cm: "21.6 × 27.9 cm", w: 21.6, h: 27.9, hint: "8.5 × 11 in · estándar" },
+  { id: "a4", label: "A4", cm: "21 × 29.7 cm", w: 21, h: 29.7, hint: "Formato internacional" },
+  { id: "legal", label: "Legal", cm: "21.6 × 35.6 cm", w: 21.6, h: 35.6, hint: "8.5 × 14 in · largo" },
+  { id: "12x18", label: "12 × 18", cm: "30.5 × 45.7 cm", w: 30.5, h: 45.7, hint: "Formato grande" },
+  { id: "11x18", label: "11 × 18", cm: "27.9 × 45.7 cm", w: 27.9, h: 45.7, hint: "Panorámico" },
 ];
+
+const pageCounts = [50, 80, 100, 150, 200] as const;
 
 const pageTypes: { id: PageType; name: string; desc: string; icon: React.ReactNode }[] = [
   { id: "blank", name: "Blanco", desc: "Hojas lisas sin guías", icon: <StickyNote className="h-4 w-4" /> },
   { id: "ruled", name: "Rayado", desc: "Líneas horizontales", icon: <AlignJustify className="h-4 w-4" /> },
   { id: "grid", name: "Cuadriculado", desc: "Cuadrícula 5mm", icon: <Grid3x3 className="h-4 w-4" /> },
   { id: "dotted", name: "Punteado", desc: "Puntos guía discretos", icon: <Dot className="h-4 w-4" /> },
+  { id: "calendar", name: "Calendario", desc: "Con calendario 2026 integrado", icon: <BookOpen className="h-4 w-4" /> },
+];
+
+const notebookExtras: { id: NotebookExtra; name: string; desc: string }[] = [
+  { id: "planificador", name: "Convertir en Planificador", desc: "Agrega secciones semanales, metas y hábitos" },
+  { id: "sticker-agenda", name: "Sticker Agenda Incluido", desc: "Set de stickers decorativos para agenda" },
+  { id: "fotografia", name: "Libreta de Fotografía", desc: "Hojas photo brillantes para imprimir fotos" },
 ];
 
 function pageBackground(type: PageType): React.CSSProperties {
@@ -284,6 +295,12 @@ function pageBackground(type: PageType): React.CSSProperties {
       return {
         backgroundImage: "radial-gradient(circle, rgba(100,116,139,0.55) 1px, transparent 1.4px)",
         backgroundSize: "16px 16px",
+      };
+    case "calendar":
+      return {
+        backgroundImage:
+          "linear-gradient(to right, rgba(148,163,184,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.5) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
       };
     default:
       return {};
@@ -2843,12 +2860,12 @@ function NotebookMaterialCard({
         <div
           className="relative h-40 w-32 rounded-md shadow-elegant"
           style={{
-            background: m.id === "cover-glossy"
+            background: m.id === "cover-carton"
               ? "linear-gradient(135deg,#1e293b,#334155)"
               : "linear-gradient(135deg,#3f3f46,#52525b)",
           }}
         >
-          {m.id === "cover-glossy" && (
+          {m.id === "cover-carton" && (
             <div className="absolute inset-0 rounded-md" style={{ background: "linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%)" }} />
           )}
           <div className="absolute left-0 top-4 flex flex-col gap-2">
@@ -2922,8 +2939,12 @@ function NotebookDesigner({
   const size = notebookSizes[sizeIdx];
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
-  const showPageArt = showPages && size.id === "a5";
+  const showPageArt = showPages;
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
+  const [pageCount, setPageCount] = useState<number>(80);
+  const [extras, setExtras] = useState<NotebookExtra[]>([]);
+  const toggleExtra = (id: NotebookExtra) =>
+    setExtras((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
 
 
@@ -3081,9 +3102,52 @@ function NotebookDesigner({
           )}
         </div>
 
+        {/* Page count */}
+        <div>
+          <Label className="mb-2 block text-sm font-semibold">Cantidad de páginas</Label>
+          <div className="grid grid-cols-5 gap-2">
+            {pageCounts.map((n) => (
+              <button
+                key={n}
+                onClick={() => setPageCount(n)}
+                className={cn(
+                  "rounded-xl border-2 py-2 text-sm font-bold transition",
+                  pageCount === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] text-muted-foreground">Mínimo 50 páginas.</p>
+        </div>
+
+        {/* Extras */}
+        <div>
+          <Label className="mb-2 block text-sm font-semibold">Extras opcionales</Label>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {notebookExtras.map((ex) => {
+              const active = extras.includes(ex.id);
+              return (
+                <button
+                  key={ex.id}
+                  onClick={() => toggleExtra(ex.id)}
+                  className={cn(
+                    "rounded-xl border-2 p-3 text-left transition",
+                    active ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                  )}
+                >
+                  <div className="text-xs font-bold leading-tight">{ex.name}</div>
+                  <div className="mt-1 text-[10px] leading-tight text-muted-foreground">{ex.desc}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Quantity */}
         <div>
-          <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+          <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad de libretas</Label>
           <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
           <div className="mt-2 grid grid-cols-4 gap-2">
             {[10, 25, 50, 100].map((n) => (
@@ -3099,9 +3163,6 @@ function NotebookDesigner({
               </button>
             ))}
           </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">
-            Descuentos por volumen se aplican automáticamente al superar 25, 50 y 100 unidades.
-          </p>
         </div>
 
         {/* Notes */}
@@ -3153,14 +3214,17 @@ function NotebookDesigner({
         </div>
 
         {(() => {
+          const extraLabels = extras.map((id) => notebookExtras.find((x) => x.id === id)?.name).filter(Boolean);
           const summary = [
             `Producto: Libreta Personalizada`,
-            `Material: ${material.name}`,
+            `Material portada: ${material.name}`,
             `Tamaño: ${size.label} (${size.cm})`,
             `Estilo: ${styleId === "cover-only" ? "Solo portada" : "Portada + páginas"}`,
-            showPages ? `Interior: ${pageType}` : "",
+            showPages ? `Interior: ${pageTypes.find((p) => p.id === pageType)?.name}` : "",
+            `Páginas: ${pageCount}`,
+            extraLabels.length ? `Extras: ${extraLabels.join(", ")}` : "",
             hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
-            `Cantidad: ${qty}`,
+            `Cantidad de libretas: ${qty}`,
             notes ? `Notas: ${notes}` : "",
             uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
             "",
@@ -3206,7 +3270,7 @@ function NotebookPreview({
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
-    material.id === "cover-glossy"
+    material.id === "cover-carton"
       ? "linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#334155 100%)"
       : "linear-gradient(135deg,#3f3f46 0%,#52525b 100%)";
   const pageArtOpacityPct = (pageArtOpacity ?? 35) / 100;
@@ -3268,7 +3332,7 @@ function NotebookPreview({
           }}
         >
           {/* Glossy sheen */}
-          {material.id === "cover-glossy" && (
+          {material.id === "cover-carton" && (
             <div
               className="pointer-events-none absolute inset-0"
               style={{
