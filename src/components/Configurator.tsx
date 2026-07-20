@@ -4077,7 +4077,7 @@ function PromoBanner() {
           <span>{expired ? "00:00:00" : `${hh}:${mm}:${ss}`}</span>
         </div>
         <a
-          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%205%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
+          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%2010%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(
