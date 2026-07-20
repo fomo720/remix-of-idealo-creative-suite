@@ -226,47 +226,57 @@ const notebookMaterials: {
   priceFactor: number; advantages: { icon: React.ReactNode; text: string }[]; useCase: string;
 }[] = [
   {
-    id: "cover-matte",
-    name: "Cartulina Mate 300gsm",
-    desc: "Textura suave, elegante y sin reflejos.",
-    finish: "Mate",
+    id: "cover-cartoncillo",
+    name: "Cartoncillo 300gsm",
+    desc: "Ligero, flexible y económico. Ideal para libretas escolares y planners.",
+    finish: "Mate premium",
     swatch: "#efeae4",
     priceFactor: 1,
     advantages: [
-      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Look premium sin brillo" },
+      { icon: <Sparkles className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Acabado mate elegante" },
       { icon: <ShieldCheck className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Resistente al roce" },
-      { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores sobrios y naturales" },
+      { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores full color" },
     ],
     useCase: "Ideal para libretas ejecutivas, planners y regalos corporativos.",
   },
   {
-    id: "cover-glossy",
-    name: "Cartulina Brillante 300gsm",
-    desc: "Acabado brillante con protección UV.",
-    finish: "Brillante UV",
+    id: "cover-carton",
+    name: "Portada de Cartón Grueso",
+    desc: "Cartón 400gsm rígido con laminado brillante. Máxima durabilidad.",
+    finish: "Brillante UV · rígido",
     swatch: "linear-gradient(135deg,#f5f7fa,#e4e9f2)",
-    priceFactor: 1.15,
+    priceFactor: 1.25,
     advantages: [
-      { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Colores vibrantes" },
+      { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Rígido y premium" },
       { icon: <WaterDropBlackIcon />, text: "Repele humedad y manchas" },
-      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Portada más durable" },
+      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Máxima durabilidad" },
     ],
-    useCase: "Ideal para fotografía, catálogos y libretas escolares.",
+    useCase: "Ideal para agendas, planners anuales y libretas de uso intensivo.",
   },
 ];
 
 const notebookSizes = [
-  { id: "a6", label: "A6", cm: "10.5 × 14.8 cm", w: 10.5, h: 14.8, hint: "Bolsillo · ideas rápidas" },
-  { id: "a5", label: "A5", cm: "14.8 × 21 cm", w: 14.8, h: 21, hint: "Estándar · más común" },
-  { id: "b5", label: "B5", cm: "17.6 × 25 cm", w: 17.6, h: 25, hint: "Mediana · notas amplias" },
-  { id: "a4", label: "A4", cm: "21 × 29.7 cm", w: 21, h: 29.7, hint: "Grande · oficina" },
+  { id: "carta", label: "Carta", cm: "21.6 × 27.9 cm", w: 21.6, h: 27.9, hint: "8.5 × 11 in · estándar" },
+  { id: "a4", label: "A4", cm: "21 × 29.7 cm", w: 21, h: 29.7, hint: "Formato internacional" },
+  { id: "legal", label: "Legal", cm: "21.6 × 35.6 cm", w: 21.6, h: 35.6, hint: "8.5 × 14 in · largo" },
+  { id: "12x18", label: "12 × 18", cm: "30.5 × 45.7 cm", w: 30.5, h: 45.7, hint: "Formato grande" },
+  { id: "11x18", label: "11 × 18", cm: "27.9 × 45.7 cm", w: 27.9, h: 45.7, hint: "Panorámico" },
 ];
+
+const pageCounts = [50, 80, 100, 150, 200] as const;
 
 const pageTypes: { id: PageType; name: string; desc: string; icon: React.ReactNode }[] = [
   { id: "blank", name: "Blanco", desc: "Hojas lisas sin guías", icon: <StickyNote className="h-4 w-4" /> },
   { id: "ruled", name: "Rayado", desc: "Líneas horizontales", icon: <AlignJustify className="h-4 w-4" /> },
   { id: "grid", name: "Cuadriculado", desc: "Cuadrícula 5mm", icon: <Grid3x3 className="h-4 w-4" /> },
   { id: "dotted", name: "Punteado", desc: "Puntos guía discretos", icon: <Dot className="h-4 w-4" /> },
+  { id: "calendar", name: "Calendario", desc: "Con calendario 2026 integrado", icon: <BookOpen className="h-4 w-4" /> },
+];
+
+const notebookExtras: { id: NotebookExtra; name: string; desc: string }[] = [
+  { id: "planificador", name: "Convertir en Planificador", desc: "Agrega secciones semanales, metas y hábitos" },
+  { id: "sticker-agenda", name: "Sticker Agenda Incluido", desc: "Set de stickers decorativos para agenda" },
+  { id: "fotografia", name: "Libreta de Fotografía", desc: "Hojas photo brillantes para imprimir fotos" },
 ];
 
 function pageBackground(type: PageType): React.CSSProperties {
