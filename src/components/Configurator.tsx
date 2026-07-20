@@ -3466,24 +3466,6 @@ function LaserDesigner({
           </p>
         </div>
 
-        {/* Presets */}
-        <div>
-          <Label className="mb-2 block text-sm">O elige un arte prediseñado</Label>
-          <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
-            {presetArts.map((a) => (
-              <button
-                key={a}
-                onClick={() => onPreset(a)}
-                className={cn(
-                  "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
-                  preset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                )}
-              >
-                {a}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* Engrave toolbox */}
         {hasArt && (
