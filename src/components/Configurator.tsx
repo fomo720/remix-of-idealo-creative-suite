@@ -4725,6 +4725,49 @@ function TextilesDesignStep({
           </div>
         )}
 
+        {/* Talla + Cantidad */}
+        <div className="rounded-2xl border border-border bg-background p-4">
+          <Label className="mb-2 block text-sm font-semibold">Talla</Label>
+          <div className="grid grid-cols-5 gap-2">
+            {TX_SIZES.map((s) => (
+              <button
+                key={s}
+                onClick={() => onSizeChange(s)}
+                className={cn(
+                  "rounded-xl border-2 py-2.5 text-center text-sm font-bold transition",
+                  size === s ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <Label htmlFor="txqty" className="mb-2 mt-4 block text-sm font-semibold">Cantidad</Label>
+          <Input
+            id="txqty"
+            type="number"
+            min={TX_MIN_QTY}
+            value={qty}
+            onChange={(e) => onQtyChange(Math.max(TX_MIN_QTY, +e.target.value || TX_MIN_QTY))}
+          />
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {TX_QTY_PRESETS.map((n) => (
+              <button
+                key={n}
+                onClick={() => onQtyChange(n)}
+                className={cn(
+                  "rounded-xl border-2 py-2 text-center text-sm font-bold transition",
+                  qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] text-muted-foreground">Mínimo 1. Para más de 50, escribe la cantidad manualmente.</p>
+        </div>
+
         <div>
           <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Notas adicionales</Label>
           <Textarea id="txnotes" rows={3} placeholder="Ej: colores específicos, ubicación del logo, referencia visual..." value={notes} onChange={(e) => setNotes(e.target.value)} />
