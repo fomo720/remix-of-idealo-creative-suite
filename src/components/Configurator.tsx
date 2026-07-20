@@ -2075,11 +2075,9 @@ function CategoryCard({
       {/* Photo header */}
       <div className="relative h-36 w-full overflow-hidden bg-muted">
         {image ? (
-          <img
+          <SmartImage
             src={image}
-            alt=""
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="h-full w-full" style={{ background: accent }} />
