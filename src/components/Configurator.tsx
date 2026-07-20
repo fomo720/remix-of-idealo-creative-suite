@@ -65,13 +65,17 @@ function SmartImage({
   alt = "",
   className = "",
   fit = "cover",
-  loading = "eager",
+  loading = "lazy",
+  fetchPriority = "auto",
+  sizes,
 }: {
   src: string;
   alt?: string;
   className?: string;
   fit?: "cover" | "contain";
   loading?: "lazy" | "eager";
+  fetchPriority?: "auto" | "high" | "low";
+  sizes?: string;
 }) {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -91,6 +95,9 @@ function SmartImage({
         alt={alt}
         loading={loading}
         decoding="async"
+        // @ts-expect-error - fetchpriority is a valid HTML attribute
+        fetchpriority={fetchPriority}
+        sizes={sizes}
         onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}
         className={cn(
