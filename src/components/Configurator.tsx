@@ -2469,7 +2469,7 @@ function CutIllustration({ id }: { id: CutShape }) {
     id === "die-cut" ? "Ejemplo de sticker troquelado" :
     id === "kiss-cut" ? "Ejemplo de corte de beso" :
     "Ejemplo de hoja con diseño único";
-  return <SmartImage src={src} alt={alt} fit="contain" />;
+  return <SmartImage src={src} alt={alt} fit="cover" />;
 }
 
 
