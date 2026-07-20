@@ -77,6 +77,7 @@ export type ProjectType =
   | "Iron-ons"
   | "PVC"
   | "Impresos"
+  | "Libretas"
   | "Rotulación"
   | "Regalos"
   | "Servicios";
@@ -91,6 +92,8 @@ export type Project = {
   gradient?: string;
   bg?: string;
   fit?: "cover" | "contain";
+  /** Optional watermark/logo overlaid on the card image (top-left). */
+  watermark?: string;
   /** Long-form description shown on the detail page. */
   description?: string;
   /** Bullet highlights shown on the detail page. */
