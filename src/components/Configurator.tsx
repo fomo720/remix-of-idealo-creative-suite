@@ -1647,22 +1647,9 @@ export function Configurator() {
                     }
                   };
 
-                  const onSubmit = async () => {
-                    // Copy text first (sync-ish, works even if capture fails)
-                    try {
-                      await navigator.clipboard?.writeText(lines);
-                    } catch (err) {
-                      console.error("[configurator] clipboard failed", err);
-                    }
-                    // Capture + download
-                    const url = await capturePreview();
-                    if (url) {
-                      downloadDataUrl(url);
-                    } else {
-                      alert(
-                        "No pudimos generar la imagen automáticamente. Toma una captura de pantalla del diseño y adjúntala en WhatsApp."
-                      );
-                    }
+                  const onSubmit = () => {
+                    // Abrimos WhatsApp con el mensaje listo. El usuario adjunta la imagen desde el chat.
+                    window.open(waHref, "_blank", "noopener,noreferrer");
                     setWaModal({ href: waHref, text: lines });
                   };
 
