@@ -2933,8 +2933,12 @@ function NotebookDesigner({
   const size = notebookSizes[sizeIdx];
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
-  const showPageArt = showPages && size.id === "a5";
+  const showPageArt = showPages;
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
+  const [pageCount, setPageCount] = React.useState<number>(80);
+  const [extras, setExtras] = React.useState<NotebookExtra[]>([]);
+  const toggleExtra = (id: NotebookExtra) =>
+    setExtras((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
 
 
