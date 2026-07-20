@@ -941,7 +941,7 @@ export function Configurator() {
           )}
 
 
-          {step === 2 && !isNotebook && !isLaser && !isImprenta && (
+          {step === 2 && !isTextiles && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
               <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -1172,7 +1172,7 @@ export function Configurator() {
             />
           )}
 
-          {step === 3 && !isNotebook && !isLaser && !isImprenta && (
+          {step === 3 && !isTextiles && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
@@ -1323,7 +1323,7 @@ export function Configurator() {
             />
           )}
 
-          {step === 4 && !isNotebook && !isLaser && !isImprenta && (
+          {step === 4 && !isTextiles && !isNotebook && !isLaser && !isImprenta && (
             <>
             <div className="animate-step-in grid gap-8 lg:grid-cols-2">
               {/* LEFT: Configurator */}
