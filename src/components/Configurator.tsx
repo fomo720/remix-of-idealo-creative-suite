@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { toPng } from "html-to-image";
 
 import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
 import promoGifts from "@/assets/promo-gifts-idealo.png.asset.json";
