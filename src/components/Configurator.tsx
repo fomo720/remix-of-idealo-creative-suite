@@ -1327,20 +1327,18 @@ export function Configurator() {
                           className={cn(
                             "relative rounded-2xl border-2 p-4 text-left transition",
                             isActive
-                              ? "scale-[1.02] border-transparent shadow-[0_12px_30px_-10px_rgba(233,67,126,0.55)]"
+                              ? "scale-[1.02] bg-orange-50/60 shadow-[0_12px_30px_-10px_rgba(249,115,22,0.45)]"
                               : "border-border hover:border-foreground/20 hover:shadow-sm",
                           )}
-                          style={isActive ? {
-                            borderImage: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan)) 1",
-                            outline: "2px solid var(--brand-magenta)",
-                            outlineOffset: "-2px",
-                            background: "color-mix(in oklab, var(--brand-magenta) 6%, white)",
-                          } : undefined}
+                          style={isActive ? { borderColor: "#f97316" } : undefined}
                         >
                           {isActive && (
                             <span
-                              className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow"
-                              style={{ background: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan))" }}
+                              className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow animate-rainbow-shimmer"
+                              style={{
+                                backgroundImage:
+                                  "linear-gradient(90deg, #ff5470, #ffb347, #ffd93d, #4fd1c5, #38bdf8, #a78bfa, #ff5470)",
+                              }}
                             >
                               Seleccionado
                             </span>
@@ -1348,6 +1346,7 @@ export function Configurator() {
                           <div className="text-lg font-bold sm:text-xl">{p.label}</div>
                           <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
                         </button>
+
                       );
                     })}
                   </div>
