@@ -2051,10 +2051,11 @@ function CategoryCard({
         <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
         <span
           className={cn(
-            "mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
+            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all pt-2.5",
             active ? "text-white" : "text-white group-hover:brightness-110",
           )}
           style={{
+            marginTop: "auto",
             background: active
               ? "var(--brand-magenta)"
               : "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan-deep))",
