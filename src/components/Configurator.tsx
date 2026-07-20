@@ -7,7 +7,7 @@ import {
   HandCoins, Eye, PaintBucket, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
-  FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper,
+  FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper, ShoppingBag,
   Palette, PencilRuler, MessageCircle, Download,
 
 } from "lucide-react";
