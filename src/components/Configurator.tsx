@@ -780,6 +780,7 @@ export function Configurator() {
                 image={stickersHandCover.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
+                variant={0}
               />
               <CategoryCard
                 title="Iron-ons (Textiles)"
@@ -789,6 +790,7 @@ export function Configurator() {
                 image={ironOnCover.url}
                 active={category === "iron-ons"}
                 onClick={() => setCategory("iron-ons")}
+                variant={1}
               />
               <CategoryCard
                 title="Libretas Personalizadas"
@@ -798,6 +800,7 @@ export function Configurator() {
                 image={libretasCover.url}
                 active={category === "libretas"}
                 onClick={() => setCategory("libretas")}
+                variant={2}
               />
               <CategoryCard
                 title="Grabado Láser"
@@ -807,6 +810,7 @@ export function Configurator() {
                 image={laserStanleyCover.url}
                 active={category === "laser"}
                 onClick={() => setCategory("laser")}
+                variant={3}
               />
               <CategoryCard
                 title="Imprenta & Papelería"
@@ -816,6 +820,7 @@ export function Configurator() {
                 image={imprentaCover.url}
                 active={category === "imprenta"}
                 onClick={() => setCategory("imprenta")}
+                variant={4}
               />
             </div>
           )}
