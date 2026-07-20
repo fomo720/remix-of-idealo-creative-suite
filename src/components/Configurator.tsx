@@ -1515,38 +1515,57 @@ export function Configurator() {
                 {(() => {
                   const catName = category === "iron-ons" ? "Iron-on / Estampado textil" : "Sticker";
                   const isTransparent = /transparente|clear/i.test(materialData?.name ?? "");
-                  const summary = [
-                    `Producto: ${catName}`,
-                    `Forma / corte: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
-                    materialData ? `Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
-                    `Tamaño: ${width} × ${height} ${unit}`,
-                    `Cantidad: ${qty}`,
-                    `Escala: ${scale}%`,
-                    `Contraste: ${contrast}%`,
-                    `Brillo / opacidad: ${brightness}%`,
-                    duplicated ? "Duplicado: sí" : "",
-                    notes ? `Notas: ${notes}` : "",
-                    uploaded ? "Diseño: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño: preset "${preset}"` : "Diseño: pendiente de enviar",
+                  const lines = [
+                    "Hola! Quiero cotizar:",
+                    `- Producto: ${catName}`,
+                    `- Forma: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
+                    materialData ? `- Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
+                    `- Tamaño: ${width} x ${height} ${unit}`,
+                    `- Cantidad: ${qty}`,
+                    `- Escala de zoom: ${scale}% y posición en coordenadas (X: ${Math.round(offsetX)}%, Y: ${Math.round(offsetY)}%)`,
+                    duplicated ? "- Diseño duplicado en patrón" : "",
+                    notes ? `- Instrucciones especiales: ${notes}` : "",
                     "",
-                    "Solicito una cotización, gracias 🙌",
+                    "Adjunto el diseño con la previsualización del troquel y zona segura.",
                   ].filter(Boolean).join("\n");
-                  const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`)}`;
+                  const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
+
+                  const onSubmit = async () => {
+                    // 1) Capture preview to PNG and trigger download
+                    try {
+                      if (previewRef.current) {
+                        const dataUrl = await toPng(previewRef.current, {
+                          pixelRatio: 2,
+                          cacheBust: true,
+                          backgroundColor: "#ffffff",
+                        });
+                        const a = document.createElement("a");
+                        a.href = dataUrl;
+                        a.download = `idealo-diseño-${Date.now()}.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                      }
+                    } catch (err) {
+                      console.error("[configurator] preview capture failed", err);
+                    }
+                    // 2) Open WhatsApp
+                    window.open(waHref, "_blank", "noopener,noreferrer");
+                  };
+
                   return (
-                    <a
-                      href={waHref}
-                      target="_blank"
-                      rel="noreferrer"
+                    <button
+                      type="button"
+                      onClick={onSubmit}
                       className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
                     >
                       <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
-                    </a>
+                    </button>
                   );
                 })()}
-                {uploaded && (
-                  <p className="mt-2 text-center text-[11px] text-muted-foreground">
-                    📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
-                  </p>
-                )}
+                <p className="mt-2 text-center text-[11px] text-muted-foreground">
+                  Al enviar, se descarga automáticamente una imagen PNG con tu diseño, el troquel y la zona segura, y se abre WhatsApp con los detalles listos.
+                </p>
 
                 <NavRow onBack={() => goTo(3)} />
 
