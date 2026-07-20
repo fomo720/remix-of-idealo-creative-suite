@@ -1591,8 +1591,52 @@ export function Configurator() {
         </div>
       </div>
     </section>
+    <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">
+            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Diseño listo para cotizar!</span>
+          </DialogTitle>
+          <DialogDescription>
+            Tu imagen se descargó y los detalles se copiaron al portapapeles.
+          </DialogDescription>
+        </DialogHeader>
+        <ol className="mt-2 space-y-3 text-sm">
+          <li className="flex gap-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">1</span>
+            <span className="flex items-center gap-2"><Download className="h-4 w-4 text-[color:var(--brand-magenta)]" /> Imagen PNG descargada en tu dispositivo.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">2</span>
+            <span className="flex items-center gap-2"><Copy className="h-4 w-4 text-[color:var(--brand-cyan-deep)]" /> Detalles copiados al portapapeles.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">3</span>
+            <span>Abre WhatsApp con el botón de abajo y <b>pega la imagen</b> (Ctrl/Cmd + V, o mantén presionado en tu celular) junto con el mensaje.</span>
+          </li>
+        </ol>
+        <a
+          href={waModal?.href ?? "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setTimeout(() => setWaModal(null), 300)}
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+        >
+          <WA className="h-5 w-5" /> Abrir WhatsApp
+        </a>
+        <button
+          type="button"
+          onClick={() => setWaModal(null)}
+          className="mt-1 text-center text-xs text-muted-foreground hover:text-foreground"
+        >
+          Cerrar
+        </button>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
+
 
 /* ---------- Interactive Canvas ---------- */
 type ShapeDef = ShapeItem;
