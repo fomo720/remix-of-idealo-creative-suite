@@ -22,6 +22,8 @@ import promoGifts from "@/assets/promo-gifts-idealo.png.asset.json";
 import dieCutSample from "@/assets/cut-die-hand.png.asset.json";
 import sheetsSample from "@/assets/cut-sheets-names.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
+import materialVinilBlanco from "@/assets/material-vinil-blanco-brioche.jpg.asset.json";
+import materialVinilTransparente from "@/assets/material-vinil-transparente-corozal.jpg.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
@@ -144,7 +146,7 @@ const materials: {
     id: "white-vinyl-removable", name: "Stickers de Vinil Blanco Removible Semi-Brillante",
     desc: "El más económico · Impermeable · Removible", priceFactor: 1.05, swatch: "#ffffff",
     finish: "Semi-Brillante (Laminado)",
-    sampleImage: dinoSticker.url,
+    sampleImage: materialVinilBlanco.url,
     advantages: [
       { icon: <CoinHandIcon />, text: "El más económico" },
       { icon: <WaterDropBlackIcon />, text: "Impermeable" },
@@ -156,7 +158,7 @@ const materials: {
     id: "clear-vinyl-removable", name: "Stickers de Vinil Transparente Removible Semi-Brillante",
     desc: "Transparente · Impreso con tinta blanca", priceFactor: 1.3, swatch: "linear-gradient(135deg,#f0f9ff,#fdf4ff)",
     finish: "Semi-Brillante",
-    sampleImage: clearSticker.url,
+    sampleImage: materialVinilTransparente.url,
     advantages: [
       { icon: <Eye className="h-4 w-4" style={{ color: "var(--brand-blue)" }} />, text: "Material transparente" },
       { icon: <PaintBucket className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />, text: "Impreso con tinta blanca" },
