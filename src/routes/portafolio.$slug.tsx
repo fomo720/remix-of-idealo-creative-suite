@@ -93,10 +93,13 @@ function ProjectDetail() {
                   src={project.video}
                   poster={project.image}
                   muted
+                  defaultMuted
                   playsInline
-                  controls
                   autoPlay
                   loop
+                  controls={false}
+                  onVolumeChange={(e) => { (e.currentTarget as HTMLVideoElement).muted = true; }}
+                  onLoadedMetadata={(e) => { (e.currentTarget as HTMLVideoElement).muted = true; (e.currentTarget as HTMLVideoElement).volume = 0; }}
                   className="absolute inset-0 h-full w-full object-contain bg-black"
                 />
               ) : (
