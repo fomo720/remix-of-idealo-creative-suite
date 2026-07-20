@@ -55,6 +55,56 @@ const StickerTagIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={stickerTagIcon.url} alt="" className={className} />
 );
 
+/**
+ * SmartImage: image with shimmer skeleton placeholder that fades out on load.
+ * Must be used inside a parent with `position: relative` and a fixed height/aspect.
+ */
+function SmartImage({
+  src,
+  alt = "",
+  className = "",
+  fit = "cover",
+  loading = "lazy",
+}: {
+  src: string;
+  alt?: string;
+  className?: string;
+  fit?: "cover" | "contain";
+  loading?: "lazy" | "eager";
+}) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      {!loaded && (
+        <div
+          aria-hidden
+          className="absolute inset-0 animate-pulse"
+          style={{
+            background:
+              "linear-gradient(110deg, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.09) 40%, rgba(0,0,0,0.04) 60%)",
+          }}
+        />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
+        className={cn(
+          "absolute inset-0 h-full w-full transition-opacity duration-300",
+          fit === "contain" ? "object-contain" : "object-cover",
+          loaded ? "opacity-100" : "opacity-0",
+          className,
+        )}
+      />
+    </>
+  );
+}
+
+
+
 
 
 type Category = "stickers" | "iron-ons" | "libretas" | "laser" | "imprenta";
@@ -2025,11 +2075,9 @@ function CategoryCard({
       {/* Photo header */}
       <div className="relative h-36 w-full overflow-hidden bg-muted">
         {image ? (
-          <img
+          <SmartImage
             src={image}
-            alt=""
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="h-full w-full" style={{ background: accent }} />
@@ -2188,7 +2236,7 @@ function ImprentaTemplateEditor({
                 onClick={() => setTplId(t.id)}
                 className="group relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-border bg-muted transition hover:-translate-y-0.5 hover:border-foreground/40"
               >
-                <img src={t.url} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <SmartImage src={t.url} className="transition-transform duration-500 group-hover:scale-105" />
                 <div className="absolute inset-x-2 bottom-2 rounded-full bg-black/60 py-1 text-center text-[10px] font-semibold text-white opacity-0 transition group-hover:opacity-100">
                   Usar esta
                 </div>
@@ -2366,7 +2414,7 @@ function MaterialCard({
       {/* Sample image / preview */}
       <div className="relative h-64 w-full overflow-hidden bg-muted/30" style={{ background: m.sampleImage ? "#f5f1ea" : m.swatch }}>
         {m.sampleImage ? (
-          <img src={m.sampleImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <SmartImage src={m.sampleImage} alt={m.name} />
         ) : (
           <div className="grid h-full w-full place-items-center text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             {m.finish}
@@ -2421,7 +2469,7 @@ function CutIllustration({ id }: { id: CutShape }) {
     id === "die-cut" ? "Ejemplo de sticker troquelado" :
     id === "kiss-cut" ? "Ejemplo de corte de beso" :
     "Ejemplo de hoja con diseño único";
-  return <img src={src} alt={alt} className="h-full w-full object-contain" />;
+  return <SmartImage src={src} alt={alt} fit="contain" />;
 }
 
 
