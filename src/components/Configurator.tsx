@@ -2235,13 +2235,13 @@ function CategoryCard({
         <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
         <span
           className={cn(
-            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
-            active ? "text-white" : "text-white group-hover:brightness-110",
+            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all animate-rainbow-shimmer",
+            !active && "group-hover:brightness-110 group-hover:shadow-lg",
           )}
           style={{
-            background: active
-              ? "var(--brand-magenta)"
-              : "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan-deep))",
+            backgroundImage:
+              "linear-gradient(90deg, #FFD93D, #F58BB4, #FF6A3D, #A855F7, #4F46E5, #48C9C8, #FFD93D)",
+            backgroundSize: "200% 200%",
           }}
         >
           {active ? "Seleccionado" : "Empezar personalización"}
