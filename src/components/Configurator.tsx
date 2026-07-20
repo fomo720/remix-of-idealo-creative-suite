@@ -940,6 +940,68 @@ export function Configurator() {
             <NavRow onNext={category ? () => goTo(2) : undefined} />
           )}
 
+          {/* ============ TEXTILES FLOW ============ */}
+          {isTextiles && step === 2 && (
+            <TextilesFabricStep
+              fabric={txFabric}
+              onPick={setTxFabric}
+              onBack={() => goTo(1)}
+              onNext={txFabric ? () => goTo(3) : undefined}
+            />
+          )}
+          {isTextiles && step === 3 && (
+            <TextilesSleeveStep
+              fabricData={txFabricData}
+              sleeve={txSleeve}
+              onPick={setTxSleeve}
+              onBack={() => goTo(2)}
+              onNext={txSleeve ? () => goTo(4) : undefined}
+            />
+          )}
+          {isTextiles && step === 4 && (
+            <TextilesColorStep
+              fabricData={txFabricData}
+              color={txColor}
+              onPick={setTxColor}
+              onBack={() => goTo(3)}
+              onNext={txColor ? () => goTo(5) : undefined}
+            />
+          )}
+          {isTextiles && step === 5 && (
+            <TextilesSizeQtyStep
+              size={txSize}
+              qty={txQty}
+              onSize={setTxSize}
+              onQty={setTxQty}
+              onBack={() => goTo(4)}
+              onNext={txSize && txQty >= TX_MIN_QTY ? () => goTo(6) : undefined}
+            />
+          )}
+          {isTextiles && step === 6 && (
+            <TextilesDesignStep
+              fabricData={txFabricData}
+              sleeve={txSleeve!}
+              color={txColor!}
+              size={txSize!}
+              qty={txQty}
+              uploaded={uploaded}
+              onUpload={handleFile}
+              fileRef={fileRef}
+              scale={scale}
+              setScale={setScale}
+              offsetX={offsetX}
+              setOffsetX={setOffsetX}
+              offsetY={offsetY}
+              setOffsetY={setOffsetY}
+              notes={notes}
+              setNotes={setNotes}
+              onBack={() => goTo(5)}
+              onSubmitted={(payload) => setWaModal(payload)}
+            />
+          )}
+
+
+
 
           {step === 2 && !isTextiles && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
