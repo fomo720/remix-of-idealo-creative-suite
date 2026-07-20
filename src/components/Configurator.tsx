@@ -2469,14 +2469,7 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls
-  return (
-    <img
-      src={rollsSample.url}
-      alt="Ejemplo de rollo de stickers"
-      className="h-full w-full object-contain"
-    />
-  );
+  return null;
 }
 
 
