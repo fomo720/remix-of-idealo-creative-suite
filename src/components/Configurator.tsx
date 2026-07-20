@@ -3208,14 +3208,17 @@ function NotebookDesigner({
         </div>
 
         {(() => {
+          const extraLabels = extras.map((id) => notebookExtras.find((x) => x.id === id)?.name).filter(Boolean);
           const summary = [
             `Producto: Libreta Personalizada`,
-            `Material: ${material.name}`,
+            `Material portada: ${material.name}`,
             `Tamaño: ${size.label} (${size.cm})`,
             `Estilo: ${styleId === "cover-only" ? "Solo portada" : "Portada + páginas"}`,
-            showPages ? `Interior: ${pageType}` : "",
+            showPages ? `Interior: ${pageTypes.find((p) => p.id === pageType)?.name}` : "",
+            `Páginas: ${pageCount}`,
+            extraLabels.length ? `Extras: ${extraLabels.join(", ")}` : "",
             hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
-            `Cantidad: ${qty}`,
+            `Cantidad de libretas: ${qty}`,
             notes ? `Notas: ${notes}` : "",
             uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
             "",
