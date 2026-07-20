@@ -4433,3 +4433,401 @@ function PromoBanner() {
   );
 }
 
+
+
+/* ================= TEXTILES (Iron-ons) STEPS ================= */
+
+type TxWaModal = { href: string; text: string };
+
+const TX_SLEEVES: { id: TxSleeve; name: string; desc: string }[] = [
+  { id: "corta", name: "Manga Corta", desc: "Estilo clásico, ideal para clima cálido y uso diario." },
+  { id: "larga", name: "Manga Larga", desc: "Mayor cobertura y protección, look más formal o deportivo." },
+];
+
+function TextilesFabricStep({
+  fabric, onPick, onBack, onNext,
+}: {
+  fabric: TxFabric | null;
+  onPick: (f: TxFabric) => void;
+  onBack: () => void;
+  onNext?: () => void;
+}) {
+  return (
+    <div className="animate-step-in">
+      <SectionTitle icon={<Layers className="h-5 w-5" />} title="Elige el material de la camisa" />
+      <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
+        {TX_FABRICS.map((f) => {
+          const active = fabric === f.id;
+          return (
+            <button
+              key={f.id}
+              onClick={() => onPick(f.id)}
+              className={cn(
+                "group relative overflow-hidden rounded-2xl border-2 p-5 text-left transition",
+                active ? "rainbow-border-active shadow-elegant" : "border-border hover:border-foreground/20 hover:shadow-sm",
+              )}
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <div className="grid h-9 w-9 place-items-center rounded-lg bg-[color:var(--brand-pink)]/10 text-[color:var(--brand-pink)]">
+                  <Package className="h-5 w-5" />
+                </div>
+                <div className="text-lg font-bold">{f.name}</div>
+              </div>
+              <p className="text-xs leading-snug text-muted-foreground">{f.desc}</p>
+              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {f.technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+              </div>
+              {f.colorLock && (
+                <div className="mt-2 text-[10px] font-medium text-[color:var(--brand-magenta)]">
+                  Solo disponible en {f.colorLock}
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <NavRow onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
+function TextilesSleeveStep({
+  fabricData, sleeve, onPick, onBack, onNext,
+}: {
+  fabricData: (typeof TX_FABRICS)[number] | null;
+  sleeve: TxSleeve | null;
+  onPick: (s: TxSleeve) => void;
+  onBack: () => void;
+  onNext?: () => void;
+}) {
+  const available = fabricData?.sleeves ?? [];
+  return (
+    <div className="animate-step-in">
+      <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige el tipo de manga" />
+      <div className="mx-auto grid max-w-3xl gap-5 sm:grid-cols-2">
+        {TX_SLEEVES.map((s) => {
+          const disabled = !available.includes(s.id);
+          const active = sleeve === s.id;
+          return (
+            <button
+              key={s.id}
+              disabled={disabled}
+              onClick={() => onPick(s.id)}
+              className={cn(
+                "relative rounded-2xl border-2 p-5 text-left transition",
+                disabled && "opacity-40 cursor-not-allowed",
+                !disabled && active && "rainbow-border-active",
+                !disabled && !active && "border-border hover:border-foreground/20 hover:shadow-sm",
+              )}
+            >
+              <div className="text-lg font-bold">{s.name}</div>
+              <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
+              {disabled && (
+                <div className="mt-2 text-[10px] font-medium text-muted-foreground">
+                  No disponible con {fabricData?.name}
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <NavRow onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
+function TextilesColorStep({
+  fabricData, color, onPick, onBack, onNext,
+}: {
+  fabricData: (typeof TX_FABRICS)[number] | null;
+  color: string | null;
+  onPick: (c: string) => void;
+  onBack: () => void;
+  onNext?: () => void;
+}) {
+  const locked = fabricData?.colorLock ?? null;
+  return (
+    <div className="animate-step-in">
+      <SectionTitle icon={<Palette className="h-5 w-5" />} title="Elige el color de la camisa" />
+      {locked && (
+        <div className="mx-auto mt-2 max-w-xl rounded-xl border border-[color:var(--brand-magenta)]/30 bg-[color:var(--brand-magenta)]/5 px-4 py-2 text-center text-xs font-medium text-[color:var(--brand-magenta)]">
+          Con {fabricData?.name} la sublimación requiere tela blanca. Otros colores estarán deshabilitados.
+        </div>
+      )}
+      <div className="mx-auto mt-6 grid max-w-3xl grid-cols-4 gap-4 sm:grid-cols-8">
+        {TX_COLORS.map((c) => {
+          const disabled = locked !== null && c.name !== locked;
+          const active = color === c.name;
+          return (
+            <button
+              key={c.name}
+              disabled={disabled}
+              onClick={() => onPick(c.name)}
+              className={cn(
+                "group flex flex-col items-center gap-1.5 transition",
+                disabled && "opacity-30 cursor-not-allowed",
+              )}
+              title={c.name}
+            >
+              <span
+                className={cn(
+                  "h-12 w-12 rounded-full border-2 transition",
+                  active ? "ring-4 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border group-hover:scale-105",
+                  c.border && "border-neutral-300",
+                )}
+                style={{ backgroundColor: c.hex }}
+              />
+              <span className={cn("text-[11px] font-medium", active ? "text-foreground" : "text-muted-foreground")}>
+                {c.name}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <NavRow onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
+function TextilesSizeQtyStep({
+  size, qty, onSize, onQty, onBack, onNext,
+}: {
+  size: TxSize | null;
+  qty: number;
+  onSize: (s: TxSize) => void;
+  onQty: (n: number) => void;
+  onBack: () => void;
+  onNext?: () => void;
+}) {
+  return (
+    <div className="animate-step-in mx-auto max-w-3xl">
+      <SectionTitle icon={<Tag className="h-5 w-5" />} title="Elige talla y cantidad" />
+      <Label className="mb-3 mt-4 block text-sm font-semibold">Talla</Label>
+      <div className="grid grid-cols-5 gap-3">
+        {TX_SIZES.map((s) => (
+          <button
+            key={s}
+            onClick={() => onSize(s)}
+            className={cn(
+              "rounded-2xl border-2 py-4 text-center text-base font-bold transition",
+              size === s ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+            )}
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
+      <Label htmlFor="txqty" className="mb-2 mt-6 block text-sm font-semibold">Cantidad</Label>
+      <Input
+        id="txqty"
+        type="number"
+        min={TX_MIN_QTY}
+        value={qty}
+        onChange={(e) => onQty(Math.max(TX_MIN_QTY, +e.target.value || TX_MIN_QTY))}
+      />
+      <div className="mt-2 grid grid-cols-5 gap-2">
+        {[5, 10, 25, 50, 100].map((n) => (
+          <button
+            key={n}
+            onClick={() => onQty(n)}
+            className={cn(
+              "rounded-xl border-2 py-2 text-center text-sm font-bold transition",
+              qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+            )}
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      <p className="mt-2 text-[11px] text-muted-foreground">Cantidad mínima: {TX_MIN_QTY} camisetas.</p>
+
+      <NavRow onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
+function TextilesDesignStep({
+  fabricData, sleeve, color, size, qty,
+  uploaded, onUpload, fileRef,
+  scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
+  notes, setNotes, onBack, onSubmitted,
+}: {
+  fabricData: (typeof TX_FABRICS)[number] | null;
+  sleeve: TxSleeve; color: string; size: TxSize; qty: number;
+  uploaded: string | null;
+  onUpload: (f: File | null) => void;
+  fileRef: React.RefObject<HTMLInputElement>;
+  scale: number; setScale: (n: number) => void;
+  offsetX: number; setOffsetX: (n: number) => void;
+  offsetY: number; setOffsetY: (n: number) => void;
+  notes: string; setNotes: (v: string) => void;
+  onBack: () => void;
+  onSubmitted: (m: TxWaModal) => void;
+}) {
+  const technique = fabricData?.technique ?? "dtf";
+  const colorHex = TX_COLORS.find((c) => c.name === color)?.hex ?? "#ffffff";
+  const isLight = ["Blanco", "Amarillo"].includes(color);
+  const strokeColor = isLight ? "#111827" : "#ffffff";
+
+  const onSubmit = () => {
+    if (!uploaded) return;
+    const lines = [
+      "Hola! Quiero cotizar una Camiseta Personalizada:",
+      `- Material: ${fabricData?.name ?? "-"}`,
+      `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
+      `- Color: ${color}`,
+      `- Talla: ${size}`,
+      `- Cantidad: ${qty}`,
+      `- Técnica: ${technique === "sublimacion" ? "Sublimación (integrada en la tela)" : "Estampado DTF (alta definición)"}`,
+      `- Posición del arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%`,
+      notes ? `- Notas: ${notes}` : "",
+      "",
+      "Adjunto el diseño en el chat.",
+    ].filter(Boolean).join("\n");
+    const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
+    window.open(href, "_blank", "noopener,noreferrer");
+    onSubmitted({ href, text: lines });
+  };
+
+  return (
+    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
+      {/* LEFT */}
+      <div className="space-y-6">
+        {/* Technique info panel */}
+        <div className="rounded-2xl border border-border bg-gradient-soft p-5">
+          <div className="mb-2 flex items-center gap-2">
+            <div className="grid h-8 w-8 place-items-center rounded-lg bg-background text-[color:var(--brand-pink)]">
+              <Info className="h-4 w-4" />
+            </div>
+            <div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Técnica recomendada</div>
+              <div className="font-bold leading-tight">
+                {technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+              </div>
+            </div>
+          </div>
+          <p className="text-xs leading-snug text-muted-foreground">
+            {technique === "sublimacion"
+              ? "El diseño se integra directamente en las fibras de la tela. Tacto cero y máxima durabilidad — ideal para Kiana y Durazno blanco."
+              : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela. Perfecto para algodón."}
+          </p>
+          <details className="mt-3 text-xs">
+            <summary className="cursor-pointer font-medium text-foreground">¿Cuál es la diferencia?</summary>
+            <div className="mt-2 grid gap-2 text-muted-foreground">
+              <div><b className="text-foreground">Sublimación:</b> integrada en la tela, tacto cero, requiere poliéster claro.</div>
+              <div><b className="text-foreground">DTF:</b> capa impresa sobre la tela, gran definición, funciona en cualquier color.</div>
+            </div>
+          </details>
+        </div>
+
+        {/* Upload */}
+        <div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onUpload(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+          >
+            <Upload className="h-5 w-5" style={{ color: "var(--brand-pink)" }} />
+            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
+          </button>
+        </div>
+
+        {uploaded && (
+          <div className="space-y-4 rounded-2xl border border-border bg-background p-4">
+            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala (Zoom)" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
+            <ToolSlider icon={<Move className="h-3.5 w-3.5" />} label="Posición X" value={offsetX} min={-40} max={40} step={1} onChange={setOffsetX} suffix="%" />
+            <ToolSlider icon={<Move className="h-3.5 w-3.5" />} label="Posición Y" value={offsetY} min={-40} max={40} step={1} onChange={setOffsetY} suffix="%" />
+          </div>
+        )}
+
+        <div>
+          <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Notas adicionales</Label>
+          <Textarea id="txnotes" rows={3} placeholder="Ej: colores específicos, ubicación del logo, referencia visual..." value={notes} onChange={(e) => setNotes(e.target.value)} />
+        </div>
+      </div>
+
+      {/* RIGHT: preview */}
+      <div className="lg:sticky lg:top-6 lg:self-start">
+        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
+          <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <span>Vista previa en vivo</span>
+            <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color} · {size}</span>
+          </div>
+
+          <div className="relative mx-auto aspect-square w-full max-w-md">
+            {/* T-shirt SVG maquette */}
+            <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
+              <path
+                d="M80 90 L150 60 Q175 95 200 95 Q225 95 250 60 L320 90 L360 150 L300 175 L300 340 Q300 355 285 355 L115 355 Q100 355 100 340 L100 175 L40 150 Z"
+                fill={colorHex}
+                stroke={strokeColor}
+                strokeWidth="2"
+                opacity="0.98"
+              />
+              {sleeve === "larga" && (
+                <>
+                  <path d="M40 150 L20 300 L75 315 L100 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
+                  <path d="M360 150 L380 300 L325 315 L300 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
+                </>
+              )}
+            </svg>
+
+            {/* Print area with uploaded art */}
+            <div
+              className="absolute"
+              style={{
+                left: `${30 + offsetX * 0.4}%`,
+                top: `${28 + offsetY * 0.4}%`,
+                width: `${40 * (scale / 100)}%`,
+                height: `${40 * (scale / 100)}%`,
+                transform: "translate(0, 0)",
+              }}
+            >
+              {uploaded ? (
+                <img src={uploaded} alt="Diseño" className="h-full w-full object-contain" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed border-white/60 bg-black/10 p-2 text-center text-[10px] font-medium text-white/80" style={{ color: strokeColor, borderColor: strokeColor }}>
+                  Área de impresión<br />Sube tu diseño
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="mx-auto mt-6 flex max-w-xs items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
+            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
+            <span>
+              Vista previa referencial. Ajustá zoom y posición para simular cómo quedará el arte sobre la camisa.
+            </span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onSubmit}
+          disabled={!uploaded}
+          className={cn(
+            "mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
+            uploaded
+              ? "bg-gradient-cta animate-rainbow-shimmer hover:scale-[1.01]"
+              : "cursor-not-allowed bg-muted-foreground/40",
+          )}
+        >
+          <MessageCircle className="h-5 w-5" />
+          {uploaded ? "Solicitar Cotización por WhatsApp" : "Sube tu diseño para continuar"}
+        </button>
+        <p className="mt-2 text-center text-[11px] text-muted-foreground">
+          Se abre WhatsApp con todos los detalles listos. Solo adjunta tu diseño en el chat.
+        </p>
+
+        <NavRow onBack={onBack} />
+      </div>
+    </div>
+  );
+}
