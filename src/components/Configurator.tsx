@@ -2856,23 +2856,6 @@ function NotebookDesigner({
             {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
           </button>
 
-          <div className="mt-3">
-            <Label className="mb-2 block text-xs text-muted-foreground">O elige un arte prediseñado</Label>
-            <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
-              {presetArts.map((a) => (
-                <button
-                  key={a}
-                  onClick={() => onPreset(a)}
-                  className={cn(
-                    "flex aspect-square items-center justify-center rounded-xl border-2 text-2xl transition",
-                    preset === a ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                  )}
-                >
-                  {a}
-                </button>
-              ))}
-            </div>
-          </div>
           {hasArt && (
             <button onClick={onClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
               <Trash2 className="h-3.5 w-3.5" /> Quitar arte
