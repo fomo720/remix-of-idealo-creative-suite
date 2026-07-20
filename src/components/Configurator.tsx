@@ -1317,29 +1317,53 @@ export function Configurator() {
                 <div>
                   <Label className="mb-3 block text-sm font-semibold">Tamaño del sticker</Label>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {sizePresets.map((p, i) => (
-                      <button
-                        key={p.label}
-                        onClick={() => applyPreset(i)}
-                        className={cn(
-                          "rounded-2xl border-2 p-4 text-left transition",
-                          sizeMode === "preset" && activePreset === i
-                            ? "rainbow-border-active"
-                            : "border-border hover:border-foreground/20",
-                        )}
-                      >
-                        <div className="text-lg font-bold sm:text-xl">{p.label}</div>
-                        <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
-                      </button>
-                    ))}
+                    {sizePresets.map((p, i) => {
+                      const isActive = sizeMode === "preset" && activePreset === i;
+                      return (
+                        <button
+                          key={p.label}
+                          onClick={() => applyPreset(i)}
+                          className={cn(
+                            "relative rounded-2xl border-2 p-4 text-left transition",
+                            isActive
+                              ? "scale-[1.02] border-transparent shadow-[0_12px_30px_-10px_rgba(233,67,126,0.55)]"
+                              : "border-border hover:border-foreground/20 hover:shadow-sm",
+                          )}
+                          style={isActive ? {
+                            borderImage: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan)) 1",
+                            outline: "2px solid var(--brand-magenta)",
+                            outlineOffset: "-2px",
+                            background: "color-mix(in oklab, var(--brand-magenta) 6%, white)",
+                          } : undefined}
+                        >
+                          {isActive && (
+                            <span
+                              className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow"
+                              style={{ background: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan))" }}
+                            >
+                              Seleccionado
+                            </span>
+                          )}
+                          <div className="text-lg font-bold sm:text-xl">{p.label}</div>
+                          <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <button
                     onClick={() => setSizeMode("custom")}
                     className={cn(
                       "mt-2 w-full rounded-xl border-2 p-3 text-left text-sm font-medium transition",
-                      sizeMode === "custom" ? "rainbow-border-active" : "border-dashed border-border hover:border-foreground/20",
+                      sizeMode === "custom"
+                        ? "border-transparent text-foreground shadow-[0_8px_20px_-8px_rgba(72,201,200,0.5)]"
+                        : "border-dashed border-border hover:border-foreground/20",
                     )}
+                    style={sizeMode === "custom" ? {
+                      outline: "2px solid var(--brand-cyan)",
+                      outlineOffset: "-2px",
+                      background: "color-mix(in oklab, var(--brand-cyan) 6%, white)",
+                    } : undefined}
                   >
                     Tamaño Personalizado (mín. 1" — máx. 5")
                   </button>
