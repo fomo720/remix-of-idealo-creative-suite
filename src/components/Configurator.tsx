@@ -1318,20 +1318,20 @@ export function Configurator() {
                 {/* Size presets */}
                 <div>
                   <Label className="mb-3 block text-sm font-semibold">Tamaño del sticker</Label>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-2">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {sizePresets.map((p, i) => (
                       <button
                         key={p.label}
                         onClick={() => applyPreset(i)}
                         className={cn(
-                          "rounded-2xl border-2 p-5 text-left transition",
+                          "rounded-2xl border-2 p-4 text-left transition",
                           sizeMode === "preset" && activePreset === i
                             ? "rainbow-border-active"
                             : "border-border hover:border-foreground/20",
                         )}
                       >
-                        <div className="text-xl font-bold sm:text-2xl">{p.label}</div>
-                        <div className="mt-1 text-sm leading-snug text-muted-foreground">{p.hint}</div>
+                        <div className="text-lg font-bold sm:text-xl">{p.label}</div>
+                        <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
                       </button>
                     ))}
                   </div>
@@ -1343,74 +1343,83 @@ export function Configurator() {
                       sizeMode === "custom" ? "rainbow-border-active" : "border-dashed border-border hover:border-foreground/20",
                     )}
                   >
-                    Tamaño Personalizado
+                    Tamaño Personalizado (mín. 1" — máx. 5")
                   </button>
 
                   {sizeMode === "custom" && (
-                    <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
-                      <div>
-                        <Label htmlFor="w" className="mb-1 block text-[11px] text-muted-foreground">Ancho</Label>
-                        <Input id="w" value={width} onChange={(e) => setWidth(e.target.value)} inputMode="decimal" />
-                      </div>
-                      <div>
-                        <Label htmlFor="h" className="mb-1 block text-[11px] text-muted-foreground">Alto</Label>
-                        <Input id="h" value={height} onChange={(e) => setHeight(e.target.value)} inputMode="decimal" />
-                      </div>
-                      <div>
-                        <Label className="mb-1 block text-[11px] text-muted-foreground">Unidad</Label>
-                        <div className="flex h-9 rounded-md border border-border p-1 text-xs">
-                          {(["in", "cm"] as const).map((u) => (
-                            <button
-                              key={u}
-                              onClick={() => setUnit(u)}
-                              className={cn(
-                                "rounded px-2 font-medium transition",
-                                unit === u ? "bg-foreground text-background" : "text-muted-foreground",
-                              )}
-                            >
-                              {u}
-                            </button>
-                          ))}
+                    <>
+                      <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
+                        <div>
+                          <Label htmlFor="w" className="mb-1 block text-[11px] text-muted-foreground">Ancho</Label>
+                          <Input
+                            id="w"
+                            value={width}
+                            onChange={(e) => setWidth(e.target.value)}
+                            onBlur={() => setWidth(String(Math.min(SIZE_MAX, Math.max(SIZE_MIN, parseFloat(width) || SIZE_MIN))))}
+                            inputMode="decimal"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="h" className="mb-1 block text-[11px] text-muted-foreground">Alto</Label>
+                          <Input
+                            id="h"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                            onBlur={() => setHeight(String(Math.min(SIZE_MAX, Math.max(SIZE_MIN, parseFloat(height) || SIZE_MIN))))}
+                            inputMode="decimal"
+                          />
+                        </div>
+                        <div>
+                          <Label className="mb-1 block text-[11px] text-muted-foreground">Unidad</Label>
+                          <div className="flex h-9 rounded-md border border-border p-1 text-xs">
+                            {(["in", "cm"] as const).map((u) => (
+                              <button
+                                key={u}
+                                onClick={() => setUnit(u)}
+                                className={cn(
+                                  "rounded px-2 font-medium transition",
+                                  unit === u ? "bg-foreground text-background" : "text-muted-foreground",
+                                )}
+                              >
+                                {u}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                      <p className="mt-2 text-[11px] text-muted-foreground">
+                        Rango permitido: 1" a 5" por lado.
+                      </p>
+                    </>
                   )}
                 </div>
 
                 {/* Quantity */}
                 <div>
-                  <div className="mb-2 flex items-center justify-between">
-                    <Label htmlFor="qty" className="text-sm font-semibold">Cantidad</Label>
-                    {bulkFactor < 1 && (
-                      <span className="rounded-full bg-gradient-cta px-2.5 py-0.5 text-[10px] font-bold text-white">
-                        -{Math.round((1 - bulkFactor) * 100)}% aplicado
-                      </span>
-                    )}
-                  </div>
-                  <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
+                  <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+                  <Input
+                    id="qty"
+                    type="number"
+                    min={MIN_QTY}
+                    value={qty}
+                    onChange={(e) => setQty(Math.max(MIN_QTY, +e.target.value || MIN_QTY))}
+                  />
                   <div className="mt-2 grid grid-cols-5 gap-2">
-                    {[
-                      { n: 25, off: 37 },
-                      { n: 50, off: 70 },
-                      { n: 100, off: 75 },
-                      { n: 250, off: 80 },
-                      { n: 500, off: 84 },
-                    ].map(({ n, off }) => (
+                    {[25, 50, 100, 250, 500].map((n) => (
                       <button
                         key={n}
                         onClick={() => setQty(n)}
                         className={cn(
-                          "group relative rounded-xl border-2 px-2 py-2 text-center transition",
+                          "rounded-xl border-2 py-2 text-center text-sm font-bold transition",
                           qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
                         )}
                       >
-                        <div className="text-sm font-bold leading-tight">{n}</div>
-                        <div className="text-[9px] font-semibold leading-tight text-gradient-rainbow">-{off}%</div>
+                        {n}
                       </button>
                     ))}
                   </div>
                   <p className="mt-2 text-[11px] text-muted-foreground">
-                    Escribe manualmente cualquier cantidad. El descuento se aplica automáticamente al superar cada tramo.
+                    Cantidad mínima: {MIN_QTY} stickers. Podés escribir cualquier cantidad manualmente arriba de {MIN_QTY}.
                   </p>
                 </div>
 
