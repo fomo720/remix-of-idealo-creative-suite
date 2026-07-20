@@ -120,42 +120,6 @@ const materials: {
     ],
     useCase: "Ideal para vidrio, escaparates y branding con efecto cristal.",
   },
-  {
-    id: "eco-pet-matte", name: "Stickers Eco-Safe de PET Removible Mate",
-    desc: "Eco-seguro · Apto microondas · Sin PVC", priceFactor: 1.35, swatch: "#efeae4",
-    finish: "Mate",
-    advantages: [
-      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
-      { icon: <Microwave className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Apto para microondas" },
-      { icon: <Leaf className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Sin PVC ni ftalatos" },
-    ],
-    useCase: "Ideal para empaques de alimentos y marcas eco-conscientes.",
-    sampleImage: ecoSticker.url,
-  },
-  {
-    id: "white-vinyl-permanent", name: "Stickers de Vinil Blanco Permanente Semi-Brillante",
-    desc: "Adhesivo fuerte y duradero", priceFactor: 1.2, swatch: "#fafafa",
-    finish: "Semi-Brillante (Laminado)",
-    sampleImage: fireSticker.url,
-    advantages: [
-      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Adhesivo fuerte y duradero" },
-      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
-      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
-    ],
-    useCase: "Ideal para exteriores, industrial y aplicaciones de larga duración.",
-  },
-  {
-    id: "hang-tag-removable", name: "Stickers Etiqueta Colgante Removible",
-    desc: "Con pestaña para colgar", priceFactor: 1.4, swatch: "#fdfdfd",
-    finish: "Semi-Brillante (Laminado)",
-    advantages: [
-      { icon: <Tag className="h-4 w-4" style={{ color: "var(--brand-pink)" }} />, text: "Pestaña personalizada para colgar" },
-      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
-      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
-    ],
-    useCase: "Ideal para etiquetas colgantes en botellas y productos retail.",
-    sampleImage: hangtagSticker.url,
-  },
 ];
 
 type ShapeItem = {
