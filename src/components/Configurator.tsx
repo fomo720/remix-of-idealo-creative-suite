@@ -18,6 +18,7 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
+import promoGifts from "@/assets/promo-gifts-idealo.png.asset.json";
 import dieCutSample from "@/assets/cut-die-hand.png.asset.json";
 import sheetsSample from "@/assets/cut-sheets-names.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
@@ -3813,26 +3814,8 @@ function StickersQuickInfo() {
         ))}
       </div>
 
-      <div
-        className="mt-10 flex flex-col items-center gap-3 rounded-2xl border-[3px] border-foreground p-6 text-center shadow-[6px_6px_0_0_hsl(var(--foreground)/0.9)] sm:flex-row sm:justify-between sm:text-left"
-        style={{ background: "linear-gradient(135deg, var(--brand-orange), var(--brand-pink))" }}
-      >
-        <div className="flex items-center gap-4 text-white">
-          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-white/20 text-2xl">🎁</div>
-          <div>
-            <div className="text-lg font-black leading-tight sm:text-xl">¡5 stickers GRATIS!</div>
-            <div className="text-sm font-medium text-white/90">Solo pagás el envío. Probá nuestra calidad sin compromiso.</div>
-          </div>
-        </div>
-        <a
-          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%205%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-white bg-white px-5 py-2.5 text-sm font-black text-foreground transition hover:-translate-y-0.5 hover:shadow-lg"
-        >
-          Reclamar promo →
-        </a>
-      </div>
+      <PromoBanner />
+
       </div>
     </div>
   );
@@ -4037,3 +4020,75 @@ function ImprentaFinal({
     </div>
   );
 }
+
+/* ---------- Promo Banner with Countdown ---------- */
+function PromoBanner() {
+  const DURATION_MS = 60 * 60 * 1000; // 1 hora
+  const STORAGE_KEY = "idealo_promo_deadline_v1";
+  const [remaining, setRemaining] = useState<number>(DURATION_MS);
+
+  useEffect(() => {
+    let deadline: number;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const parsed = stored ? parseInt(stored, 10) : NaN;
+      if (!isNaN(parsed) && parsed > Date.now()) {
+        deadline = parsed;
+      } else {
+        deadline = Date.now() + DURATION_MS;
+        localStorage.setItem(STORAGE_KEY, String(deadline));
+      }
+    } catch {
+      deadline = Date.now() + DURATION_MS;
+    }
+    const tick = () => setRemaining(Math.max(0, deadline - Date.now()));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const totalSec = Math.floor(remaining / 1000);
+  const hh = String(Math.floor(totalSec / 3600)).padStart(2, "0");
+  const mm = String(Math.floor((totalSec % 3600) / 60)).padStart(2, "0");
+  const ss = String(totalSec % 60).padStart(2, "0");
+  const expired = remaining <= 0;
+
+  return (
+    <div
+      className="mt-10 flex flex-col items-center gap-5 rounded-2xl border-[3px] border-foreground p-6 text-center shadow-[6px_6px_0_0_hsl(var(--foreground)/0.9)] sm:flex-row sm:justify-between sm:text-left"
+      style={{ background: "linear-gradient(135deg, var(--brand-pink), var(--brand-teal, #48c9c8))" }}
+    >
+      <div className="flex items-center gap-4 text-white">
+        <img
+          src={promoGifts.url}
+          alt="Regalos"
+          className="h-24 w-24 shrink-0 object-contain drop-shadow-lg sm:h-28 sm:w-28"
+        />
+        <div>
+          <div className="text-xs font-black uppercase tracking-widest text-white/90">Oferta por tiempo limitado</div>
+          <div className="text-xl font-black leading-tight sm:text-2xl">¡5 stickers GRATIS!</div>
+          <div className="text-sm font-medium text-white/90">Solo pagás el envío. Probá nuestra calidad sin compromiso.</div>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex items-center gap-1.5 rounded-full bg-black/30 px-4 py-2 font-mono text-lg font-black tabular-nums text-white sm:text-xl">
+          <span aria-hidden>⏱️</span>
+          <span>{expired ? "00:00:00" : `${hh}:${mm}:${ss}`}</span>
+        </div>
+        <a
+          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%205%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-white bg-white px-6 py-2.5 text-sm font-black text-foreground transition hover:-translate-y-0.5 hover:shadow-lg",
+            expired && "pointer-events-none opacity-60",
+          )}
+        >
+          {expired ? "Promo expirada" : "Reclamar promo →"}
+        </a>
+      </div>
+    </div>
+  );
+}
+
