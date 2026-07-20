@@ -65,13 +65,17 @@ function SmartImage({
   alt = "",
   className = "",
   fit = "cover",
-  loading = "eager",
+  loading = "lazy",
+  fetchPriority = "auto",
+  sizes,
 }: {
   src: string;
   alt?: string;
   className?: string;
   fit?: "cover" | "contain";
   loading?: "lazy" | "eager";
+  fetchPriority?: "auto" | "high" | "low";
+  sizes?: string;
 }) {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -91,6 +95,9 @@ function SmartImage({
         alt={alt}
         loading={loading}
         decoding="async"
+        // @ts-expect-error - fetchpriority is a valid HTML attribute
+        fetchpriority={fetchPriority}
+        sizes={sizes}
         onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}
         className={cn(
@@ -4066,7 +4073,7 @@ function PromoBanner() {
         />
         <div>
           <div className="text-xs font-black uppercase tracking-widest text-white/90">Oferta por tiempo limitado</div>
-          <div className="text-xl font-black leading-tight sm:text-2xl">¡5 stickers GRATIS!</div>
+          <div className="text-xl font-black leading-tight sm:text-2xl">¡10 stickers GRATIS!</div>
           <div className="text-sm font-medium text-white/90">Solo pagás el envío. Probá nuestra calidad sin compromiso.</div>
         </div>
       </div>
@@ -4077,7 +4084,7 @@ function PromoBanner() {
           <span>{expired ? "00:00:00" : `${hh}:${mm}:${ss}`}</span>
         </div>
         <a
-          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%205%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
+          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%2010%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(
