@@ -4779,8 +4779,7 @@ function TextilesDesignStep({
         <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
           <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
             <span>Vista previa en vivo</span>
-            <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color} · {size}</span>
-          </div>
+            <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
 
           {/* Color picker inline */}
           <div className="mb-4 rounded-2xl border border-border bg-background/70 p-3">
