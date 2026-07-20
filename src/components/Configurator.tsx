@@ -4172,8 +4172,8 @@ function ImprentaFinal({
 
 /* ---------- Promo Banner with Countdown ---------- */
 function PromoBanner() {
-  const DURATION_MS = 60 * 60 * 1000; // 1 hora
-  const STORAGE_KEY = "idealo_promo_deadline_v1";
+  const DURATION_MS = 15 * 60 * 1000; // 15 minutos
+  const STORAGE_KEY = "idealo_promo_deadline_v2";
   const [remaining, setRemaining] = useState<number>(DURATION_MS);
 
   useEffect(() => {
