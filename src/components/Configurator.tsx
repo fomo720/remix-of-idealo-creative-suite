@@ -2236,7 +2236,7 @@ function ImprentaTemplateEditor({
                 onClick={() => setTplId(t.id)}
                 className="group relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-border bg-muted transition hover:-translate-y-0.5 hover:border-foreground/40"
               >
-                <img src={t.url} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <SmartImage src={t.url} className="transition-transform duration-500 group-hover:scale-105" />
                 <div className="absolute inset-x-2 bottom-2 rounded-full bg-black/60 py-1 text-center text-[10px] font-semibold text-white opacity-0 transition group-hover:opacity-100">
                   Usar esta
                 </div>
