@@ -4223,7 +4223,7 @@ function PromoBanner() {
       <div className="flex flex-col items-center gap-3">
         <div className="flex items-center gap-1.5 rounded-full bg-black/30 px-4 py-2 font-mono text-lg font-black tabular-nums text-white sm:text-xl">
           <span aria-hidden>⏱️</span>
-          <span>{expired ? "00:00:00" : `${hh}:${mm}:${ss}`}</span>
+          <span>{expired ? "00:00" : `${mm}:${ss}`}</span>
         </div>
         <a
           href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%2010%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
