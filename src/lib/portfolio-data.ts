@@ -69,6 +69,7 @@ import impresionLaserCapy from "@/assets/portfolio-impresion-laser-capy.jpg.asse
 import stickerTroqueladoBrioche from "@/assets/portfolio-sticker-troquelado-brioche.jpg.asset.json";
 import snacksPersonalizados from "@/assets/portfolio-snacks-personalizados.png.asset.json";
 import fotosCristal from "@/assets/portfolio-fotos-cristal.jpg.asset.json";
+import termoMamaMariposas from "@/assets/portfolio-termo-mama-mariposas.jpg.asset.json";
 
 export type ProjectType =
   | "Stickers"
