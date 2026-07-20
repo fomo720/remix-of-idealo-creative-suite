@@ -2304,17 +2304,10 @@ function CategoryCard({
         <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
         <span
           className={cn(
-            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all animate-rainbow-shimmer",
+            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all",
             !active && "group-hover:brightness-110 group-hover:shadow-lg",
           )}
-          style={{
-            backgroundImage: v.gradient,
-            backgroundSize: "300% 300%",
-            animationDuration: v.duration,
-            animationDelay: v.delay,
-            animationDirection: v.direction as any,
-            animationTimingFunction: v.timing,
-          }}
+          style={{ background: accent }}
         >
           {active ? "Seleccionado" : "Empezar personalización"}
           <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
