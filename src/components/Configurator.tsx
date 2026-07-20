@@ -614,6 +614,7 @@ export function Configurator() {
 
   const fileRef = useRef<HTMLInputElement>(null);
   const pageFileRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const isNotebook = category === "libretas";
   const isLaser = category === "laser";
   const isImprenta = category === "imprenta";
