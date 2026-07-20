@@ -126,12 +126,11 @@ type TxTechnique = "sublimacion" | "dtf";
 type TxSize = "S" | "M" | "L" | "XL" | "XXL";
 
 const TX_FABRICS: {
-  id: TxFabric; name: string; desc: string; technique: TxTechnique; sleeves: TxSleeve[];
-  colorLock?: string;
+  id: TxFabric; name: string; desc: string; techniques: TxTechnique[]; sleeves: TxSleeve[];
 }[] = [
-  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Impresión DTF de alta definición sobre cualquier color.", technique: "dtf", sleeves: ["corta", "larga"] },
-  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Ideal para sublimación de tacto cero.", technique: "sublimacion", sleeves: ["corta"] },
-  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Solo en color blanco (sublimación integrada a la tela).", technique: "sublimacion", sleeves: ["corta", "larga"], colorLock: "Blanco" },
+  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
+  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Solo sublimación (tacto cero).", techniques: ["sublimacion"], sleeves: ["corta"] },
+  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
 ];
 
 const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
@@ -686,18 +685,29 @@ export function Configurator() {
   // textiles state
   const [txFabric, setTxFabric] = useState<TxFabric | null>(null);
   const [txSleeve, setTxSleeve] = useState<TxSleeve | null>(null);
+  const [txTechnique, setTxTechnique] = useState<TxTechnique | null>(null);
   const [txColor, setTxColor] = useState<string | null>(null);
   const [txSize, setTxSize] = useState<TxSize | null>(null);
   const [txQty, setTxQty] = useState<number>(TX_MIN_QTY);
   const isTextiles = category === "iron-ons";
   const txFabricData = TX_FABRICS.find((f) => f.id === txFabric) ?? null;
+  const txColorLock = txTechnique === "sublimacion" ? "Blanco" : null;
 
-  // Auto-lock color when Durazno is picked; clear invalid sleeve on fabric change
+  // On fabric change: reset technique to default, clear invalid sleeve
   useEffect(() => {
     if (!txFabricData) return;
-    if (txFabricData.colorLock) setTxColor(txFabricData.colorLock);
+    if (!txTechnique || !txFabricData.techniques.includes(txTechnique)) {
+      setTxTechnique(txFabricData.techniques[0]);
+    }
     if (txSleeve && !txFabricData.sleeves.includes(txSleeve)) setTxSleeve(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txFabric]);
+
+  // Auto-lock color to Blanco when technique is sublimación
+  useEffect(() => {
+    if (txTechnique === "sublimacion") setTxColor("Blanco");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txTechnique]);
 
   const shapeData = shapes.find((s) => s.id === shape)!;
 
@@ -953,7 +963,10 @@ export function Configurator() {
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
-              color={txColor ?? (txFabricData?.colorLock ?? "Blanco")}
+              technique={txTechnique ?? "sublimacion"}
+              onTechniqueChange={setTxTechnique}
+              colorLock={txColorLock}
+              color={txColor ?? "Blanco"}
               onColorChange={setTxColor}
               size={txSize}
               onSizeChange={setTxSize}
@@ -4449,14 +4462,13 @@ function TextilesFabricStep({
                 <div className="text-lg font-bold">{f.name}</div>
               </div>
               <p className="text-xs leading-snug text-muted-foreground">{f.desc}</p>
-              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                {f.technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+              <div className="mt-3 flex flex-wrap gap-1">
+                {f.techniques.map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t === "sublimacion" ? "Sublimación (blanco)" : "Estampado DTF (cualquier color)"}
+                  </span>
+                ))}
               </div>
-              {f.colorLock && (
-                <div className="mt-2 text-[10px] font-medium text-[color:var(--brand-magenta)]">
-                  Solo disponible en {f.colorLock}
-                </div>
-              )}
             </button>
           );
         })}
@@ -4520,7 +4532,7 @@ function TextilesColorStep({
   onBack: () => void;
   onNext?: () => void;
 }) {
-  const locked = fabricData?.colorLock ?? null;
+  const locked: string | null = null;
   return (
     <div className="animate-step-in">
       <SectionTitle icon={<Palette className="h-5 w-5" />} title="Elige el color de la camisa" />
@@ -4623,13 +4635,18 @@ function TextilesSizeQtyStep({
 }
 
 function TextilesDesignStep({
-  fabricData, sleeve, color, onColorChange, size, onSizeChange, qty, onQtyChange,
+  fabricData, sleeve, technique, onTechniqueChange, colorLock,
+  color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
-  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void;
+  sleeve: TxSleeve;
+  technique: TxTechnique;
+  onTechniqueChange: (t: TxTechnique) => void;
+  colorLock: string | null;
+  color: string; onColorChange: (c: string) => void;
   size: TxSize | null; onSizeChange: (s: TxSize) => void;
   qty: number; onQtyChange: (n: number) => void;
   uploaded: string | null;
@@ -4642,8 +4659,7 @@ function TextilesDesignStep({
   onBack: () => void;
   onSubmitted: (m: TxWaModal) => void;
 }) {
-  const technique = fabricData?.technique ?? "dtf";
-  const colorLock = fabricData?.colorLock ?? null;
+  const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const colorHex = TX_COLORS.find((c) => c.name === color)?.hex ?? "#ffffff";
   const isLight = ["Blanco", "Amarillo"].includes(color);
   const strokeColor = isLight ? "#111827" : "#ffffff";
@@ -4654,10 +4670,10 @@ function TextilesDesignStep({
       "Hola! Quiero cotizar una Camiseta Personalizada:",
       `- Material: ${fabricData?.name ?? "-"}`,
       `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
+      `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
       `- Color: ${color}`,
       `- Talla: ${size}`,
       `- Cantidad: ${qty}`,
-      `- Técnica: ${technique === "sublimacion" ? "Sublimación (integrada en la tela)" : "Estampado DTF (alta definición)"}`,
       `- Posición del arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%`,
       notes ? `- Notas: ${notes}` : "",
       "",
@@ -4672,32 +4688,61 @@ function TextilesDesignStep({
     <div className="animate-step-in grid gap-8 lg:grid-cols-2">
       {/* LEFT */}
       <div className="space-y-6">
-        {/* Technique info panel */}
+        {/* Technique selector */}
         <div className="rounded-2xl border border-border bg-gradient-soft p-5">
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-3 flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-background text-[color:var(--brand-pink)]">
               <Info className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Técnica recomendada</div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Técnica de impresión</div>
               <div className="font-bold leading-tight">
                 {technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
               </div>
             </div>
           </div>
+          {availableTechniques.length > 1 ? (
+            <div className="mb-3 grid grid-cols-2 gap-2">
+              {availableTechniques.map((t) => {
+                const active = technique === t;
+                return (
+                  <button
+                    key={t}
+                    onClick={() => onTechniqueChange(t)}
+                    className={cn(
+                      "rounded-xl border-2 px-3 py-2 text-left text-xs transition",
+                      active ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                    )}
+                  >
+                    <div className="text-sm font-bold">
+                      {t === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground">
+                      {t === "sublimacion" ? "Solo tela blanca" : "Cualquier color"}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mb-3 text-[11px] font-medium text-muted-foreground">
+              Con {fabricData?.name} solo está disponible {technique === "sublimacion" ? "sublimación" : "estampado DTF"}.
+            </div>
+          )}
           <p className="text-xs leading-snug text-muted-foreground">
             {technique === "sublimacion"
-              ? "El diseño se integra directamente en las fibras de la tela. Tacto cero y máxima durabilidad — ideal para Kiana y Durazno blanco."
-              : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela. Perfecto para algodón."}
+              ? "El diseño se integra en las fibras de la tela. Tacto cero y máxima durabilidad — requiere tela blanca."
+              : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela."}
           </p>
           <details className="mt-3 text-xs">
             <summary className="cursor-pointer font-medium text-foreground">¿Cuál es la diferencia?</summary>
             <div className="mt-2 grid gap-2 text-muted-foreground">
-              <div><b className="text-foreground">Sublimación:</b> integrada en la tela, tacto cero, requiere poliéster claro.</div>
+              <div><b className="text-foreground">Sublimación:</b> integrada en la tela, tacto cero, requiere tela blanca.</div>
               <div><b className="text-foreground">DTF:</b> capa impresa sobre la tela, gran definición, funciona en cualquier color.</div>
             </div>
           </details>
         </div>
+
 
         {/* Upload */}
         <div>
