@@ -80,6 +80,11 @@ function ProjectDetail() {
                   className={`absolute inset-0 h-full w-full ${project.fit === "contain" ? "object-contain p-6" : "object-cover"}`}
                 />
               )}
+              {project.watermark && (
+                <div className="absolute left-4 top-4 z-10 rounded-xl bg-white/90 px-3 py-1.5 shadow-lg backdrop-blur">
+                  <img src={project.watermark} alt="Idealo" className="h-7 w-auto sm:h-8" />
+                </div>
+              )}
             </div>
           </div>
 
