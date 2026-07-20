@@ -1045,15 +1045,13 @@ export function Configurator() {
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
                 {materials.map((m, idx) => (
-                  <div key={m.id} className={cn(m.id === "clear-vinyl-removable" && "sm:col-span-2")}>
-                    <MaterialCard
-                      material={m}
-                      active={material === m.id}
-                      isBestSeller={idx === 0}
-                      wideImage={m.id === "clear-vinyl-removable"}
-                      onClick={() => setMaterial(m.id)}
-                    />
-                  </div>
+                  <MaterialCard
+                    key={m.id}
+                    material={m}
+                    active={material === m.id}
+                    isBestSeller={idx === 0}
+                    onClick={() => setMaterial(m.id)}
+                  />
                 ))}
               </div>
               <NavRow onBack={() => goTo(2)} onNext={material ? () => goTo(4) : undefined} />
