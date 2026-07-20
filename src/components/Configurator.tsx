@@ -4,7 +4,7 @@ import {
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
-  HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
+  HandCoins, Eye, PaintBucket, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
   FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper,
