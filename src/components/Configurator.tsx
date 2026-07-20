@@ -771,6 +771,7 @@ export function Configurator() {
                 image={stickersHandCover.url}
                 active={category === "stickers"}
                 onClick={() => setCategory("stickers")}
+                bestseller
               />
               <CategoryCard
                 title="Iron-ons (Textiles)"
