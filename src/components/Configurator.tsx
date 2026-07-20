@@ -751,7 +751,7 @@ export function Configurator() {
         return;
       }
     }
-    // Gating for textiles: Material → Manga → Talla+Cantidad → Diseño (color en diseño)
+    // Gating for textiles: Material → Manga → Diseño (color/talla/cantidad dentro)
     if (isTextiles) {
       if (s >= 3 && !txFabric) {
         setGateMsg("Primero elige el material de la camisa en el paso 2.");
@@ -761,11 +761,6 @@ export function Configurator() {
       if (s >= 4 && !txSleeve) {
         setGateMsg("Primero elige el tipo de manga en el paso 3.");
         setStep(3);
-        return;
-      }
-      if (s >= 5 && (!txSize || !txQty)) {
-        setGateMsg("Primero elige talla y cantidad en el paso 4.");
-        setStep(4);
         return;
       }
     }
@@ -865,7 +860,7 @@ export function Configurator() {
               : isImprenta
               ? ["Categoría", "Producto", "Estilo de diseño", "Especificaciones + Envío"]
               : isTextiles
-              ? ["Categoría", "Material", "Manga", "Talla + Cantidad", "Diseño"]
+              ? ["Categoría", "Material", "Manga", "Diseño"]
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
@@ -955,23 +950,15 @@ export function Configurator() {
             />
           )}
           {isTextiles && step === 4 && (
-            <TextilesSizeQtyStep
-              size={txSize}
-              qty={txQty}
-              onSize={setTxSize}
-              onQty={setTxQty}
-              onBack={() => goTo(3)}
-              onNext={txSize && txQty >= TX_MIN_QTY ? () => goTo(5) : undefined}
-            />
-          )}
-          {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
               color={txColor ?? (txFabricData?.colorLock ?? "Blanco")}
               onColorChange={setTxColor}
-              size={txSize!}
+              size={txSize}
+              onSizeChange={setTxSize}
               qty={txQty}
+              onQtyChange={setTxQty}
               uploaded={uploaded}
               onUpload={handleFile}
               fileRef={fileRef}
@@ -983,7 +970,7 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
-              onBack={() => goTo(4)}
+              onBack={() => goTo(3)}
               onSubmitted={(payload) => setWaModal(payload)}
             />
           )}
@@ -4636,13 +4623,15 @@ function TextilesSizeQtyStep({
 }
 
 function TextilesDesignStep({
-  fabricData, sleeve, color, onColorChange, size, qty,
+  fabricData, sleeve, color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
-  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void; size: TxSize; qty: number;
+  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void;
+  size: TxSize | null; onSizeChange: (s: TxSize) => void;
+  qty: number; onQtyChange: (n: number) => void;
   uploaded: string | null;
   onUpload: (f: File | null) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
@@ -4660,7 +4649,7 @@ function TextilesDesignStep({
   const strokeColor = isLight ? "#111827" : "#ffffff";
 
   const onSubmit = () => {
-    if (!uploaded) return;
+    if (!uploaded || !size) return;
     const lines = [
       "Hola! Quiero cotizar una Camiseta Personalizada:",
       `- Material: ${fabricData?.name ?? "-"}`,
@@ -4736,6 +4725,49 @@ function TextilesDesignStep({
           </div>
         )}
 
+        {/* Talla + Cantidad */}
+        <div className="rounded-2xl border border-border bg-background p-4">
+          <Label className="mb-2 block text-sm font-semibold">Talla</Label>
+          <div className="grid grid-cols-5 gap-2">
+            {TX_SIZES.map((s) => (
+              <button
+                key={s}
+                onClick={() => onSizeChange(s)}
+                className={cn(
+                  "rounded-xl border-2 py-2.5 text-center text-sm font-bold transition",
+                  size === s ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <Label htmlFor="txqty" className="mb-2 mt-4 block text-sm font-semibold">Cantidad</Label>
+          <Input
+            id="txqty"
+            type="number"
+            min={TX_MIN_QTY}
+            value={qty}
+            onChange={(e) => onQtyChange(Math.max(TX_MIN_QTY, +e.target.value || TX_MIN_QTY))}
+          />
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {TX_QTY_PRESETS.map((n) => (
+              <button
+                key={n}
+                onClick={() => onQtyChange(n)}
+                className={cn(
+                  "rounded-xl border-2 py-2 text-center text-sm font-bold transition",
+                  qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] text-muted-foreground">Mínimo 1. Para más de 50, escribe la cantidad manualmente.</p>
+        </div>
+
         <div>
           <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Notas adicionales</Label>
           <Textarea id="txnotes" rows={3} placeholder="Ej: colores específicos, ubicación del logo, referencia visual..." value={notes} onChange={(e) => setNotes(e.target.value)} />
@@ -4747,8 +4779,9 @@ function TextilesDesignStep({
         <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
           <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
             <span>Vista previa en vivo</span>
-            <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color} · {size}</span>
+            <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
           </div>
+
 
           {/* Color picker inline */}
           <div className="mb-4 rounded-2xl border border-border bg-background/70 p-3">
@@ -4838,16 +4871,16 @@ function TextilesDesignStep({
         <button
           type="button"
           onClick={onSubmit}
-          disabled={!uploaded}
+          disabled={!uploaded || !size}
           className={cn(
             "mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
-            uploaded
+            uploaded && size
               ? "bg-gradient-cta animate-rainbow-shimmer hover:scale-[1.01]"
               : "cursor-not-allowed bg-muted-foreground/40",
           )}
         >
           <MessageCircle className="h-5 w-5" />
-          {uploaded ? "Solicitar Cotización por WhatsApp" : "Sube tu diseño para continuar"}
+          {!size ? "Elige una talla" : !uploaded ? "Sube tu diseño para continuar" : "Solicitar Cotización por WhatsApp"}
         </button>
         <p className="mt-2 text-center text-[11px] text-muted-foreground">
           Se abre WhatsApp con todos los detalles listos. Solo adjunta tu diseño en el chat.
