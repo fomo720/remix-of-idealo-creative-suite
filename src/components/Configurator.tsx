@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { toPng } from "html-to-image";
 
 import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
 import promoGifts from "@/assets/promo-gifts-idealo.png.asset.json";
@@ -613,6 +614,7 @@ export function Configurator() {
 
   const fileRef = useRef<HTMLInputElement>(null);
   const pageFileRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const isNotebook = category === "libretas";
   const isLaser = category === "laser";
   const isImprenta = category === "imprenta";
@@ -1283,11 +1285,16 @@ export function Configurator() {
                 {/* Image Toolbox - only sliders */}
                 {hasArt && (
                   <div className="rounded-2xl border border-border bg-background p-4">
-                    <div className="mb-3 flex items-center justify-between">
+                    <div className="mb-3 flex items-center justify-between gap-2">
                       <Label className="text-sm font-semibold">Ajustes de imagen</Label>
-                      <span className="hidden items-center gap-1 text-[10px] text-muted-foreground sm:inline-flex">
-                        <MousePointer2 className="h-3 w-3" /> Toca la imagen en la vista previa para editarla
-                      </span>
+                      <button
+                        type="button"
+                        onClick={resetImageTools}
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition hover:border-foreground/30 hover:text-foreground"
+                        title="Volver a la vista original"
+                      >
+                        <RotateCcw className="h-3 w-3" /> Restablecer
+                      </button>
                     </div>
 
                     <div className="space-y-4">
@@ -1301,6 +1308,9 @@ export function Configurator() {
                       />
                     </div>
 
+                    <p className="mt-3 text-[10px] text-muted-foreground">
+                      Posición: X {offsetX >= 0 ? "+" : ""}{Math.round(offsetX)}% · Y {offsetY >= 0 ? "+" : ""}{Math.round(offsetY)}%
+                    </p>
                   </div>
                 )}
 
@@ -1308,29 +1318,53 @@ export function Configurator() {
                 <div>
                   <Label className="mb-3 block text-sm font-semibold">Tamaño del sticker</Label>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {sizePresets.map((p, i) => (
-                      <button
-                        key={p.label}
-                        onClick={() => applyPreset(i)}
-                        className={cn(
-                          "rounded-2xl border-2 p-4 text-left transition",
-                          sizeMode === "preset" && activePreset === i
-                            ? "rainbow-border-active"
-                            : "border-border hover:border-foreground/20",
-                        )}
-                      >
-                        <div className="text-lg font-bold sm:text-xl">{p.label}</div>
-                        <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
-                      </button>
-                    ))}
+                    {sizePresets.map((p, i) => {
+                      const isActive = sizeMode === "preset" && activePreset === i;
+                      return (
+                        <button
+                          key={p.label}
+                          onClick={() => applyPreset(i)}
+                          className={cn(
+                            "relative rounded-2xl border-2 p-4 text-left transition",
+                            isActive
+                              ? "scale-[1.02] border-transparent shadow-[0_12px_30px_-10px_rgba(233,67,126,0.55)]"
+                              : "border-border hover:border-foreground/20 hover:shadow-sm",
+                          )}
+                          style={isActive ? {
+                            borderImage: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan)) 1",
+                            outline: "2px solid var(--brand-magenta)",
+                            outlineOffset: "-2px",
+                            background: "color-mix(in oklab, var(--brand-magenta) 6%, white)",
+                          } : undefined}
+                        >
+                          {isActive && (
+                            <span
+                              className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow"
+                              style={{ background: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan))" }}
+                            >
+                              Seleccionado
+                            </span>
+                          )}
+                          <div className="text-lg font-bold sm:text-xl">{p.label}</div>
+                          <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <button
                     onClick={() => setSizeMode("custom")}
                     className={cn(
                       "mt-2 w-full rounded-xl border-2 p-3 text-left text-sm font-medium transition",
-                      sizeMode === "custom" ? "rainbow-border-active" : "border-dashed border-border hover:border-foreground/20",
+                      sizeMode === "custom"
+                        ? "border-transparent text-foreground shadow-[0_8px_20px_-8px_rgba(72,201,200,0.5)]"
+                        : "border-dashed border-border hover:border-foreground/20",
                     )}
+                    style={sizeMode === "custom" ? {
+                      outline: "2px solid var(--brand-cyan)",
+                      outlineOffset: "-2px",
+                      background: "color-mix(in oklab, var(--brand-cyan) 6%, white)",
+                    } : undefined}
                   >
                     Tamaño Personalizado (mín. 1" — máx. 5")
                   </button>
@@ -1432,30 +1466,40 @@ export function Configurator() {
                     <span className="rounded-full bg-background px-2 py-0.5">{shapeData.name}</span>
                   </div>
 
-                  <InteractiveCanvas
-                    shapeData={shapeData}
-                    materialSwatch={materialData?.swatch ?? "#fff"}
-                    isDieCut={cut === "die-cut"}
-                    hasArt={hasArt}
-                    uploaded={uploaded}
-                    preset={preset}
-                    scale={scale}
-                    setScale={setScale}
-                    offsetX={offsetX}
-                    setOffsetX={setOffsetX}
-                    offsetY={offsetY}
-                    setOffsetY={setOffsetY}
-                    contrast={contrast}
-                    brightness={brightness}
-                    duplicated={duplicated}
-                    setDuplicated={setDuplicated}
-                    selected={selected}
-                    setSelected={setSelected}
-                    onClear={clearImage}
-                  />
+                  <div ref={previewRef} className="rounded-2xl bg-transparent p-1">
+                    <InteractiveCanvas
+                      shapeData={shapeData}
+                      materialSwatch={materialData?.swatch ?? "#fff"}
+                      isDieCut={cut === "die-cut"}
+                      hasArt={hasArt}
+                      uploaded={uploaded}
+                      preset={preset}
+                      scale={scale}
+                      setScale={setScale}
+                      offsetX={offsetX}
+                      setOffsetX={setOffsetX}
+                      offsetY={offsetY}
+                      setOffsetY={setOffsetY}
+                      contrast={contrast}
+                      brightness={brightness}
+                      duplicated={duplicated}
+                      setDuplicated={setDuplicated}
+                      selected={selected}
+                      setSelected={setSelected}
+                      onClear={clearImage}
+                    />
+                  </div>
 
+                  <div
+                    className="mx-auto mt-8 flex max-w-xs items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur"
+                  >
+                    <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
+                    <span>
+                      Todo lo que esté <strong className="text-foreground">dentro de la línea punteada</strong> es lo que se imprimirá y troquelará.
+                    </span>
+                  </div>
 
-                  <div className="mt-10 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+                  <div className="mt-4 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
                     <Stat label="Precio estimado" value={currency(price)} highlight />
@@ -1471,38 +1515,57 @@ export function Configurator() {
                 {(() => {
                   const catName = category === "iron-ons" ? "Iron-on / Estampado textil" : "Sticker";
                   const isTransparent = /transparente|clear/i.test(materialData?.name ?? "");
-                  const summary = [
-                    `Producto: ${catName}`,
-                    `Forma / corte: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
-                    materialData ? `Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
-                    `Tamaño: ${width} × ${height} ${unit}`,
-                    `Cantidad: ${qty}`,
-                    `Escala: ${scale}%`,
-                    `Contraste: ${contrast}%`,
-                    `Brillo / opacidad: ${brightness}%`,
-                    duplicated ? "Duplicado: sí" : "",
-                    notes ? `Notas: ${notes}` : "",
-                    uploaded ? "Diseño: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño: preset "${preset}"` : "Diseño: pendiente de enviar",
+                  const lines = [
+                    "Hola! Quiero cotizar:",
+                    `- Producto: ${catName}`,
+                    `- Forma: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
+                    materialData ? `- Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
+                    `- Tamaño: ${width} x ${height} ${unit}`,
+                    `- Cantidad: ${qty}`,
+                    `- Escala de zoom: ${scale}% y posición en coordenadas (X: ${Math.round(offsetX)}%, Y: ${Math.round(offsetY)}%)`,
+                    duplicated ? "- Diseño duplicado en patrón" : "",
+                    notes ? `- Instrucciones especiales: ${notes}` : "",
                     "",
-                    "Solicito una cotización, gracias 🙌",
+                    "Adjunto el diseño con la previsualización del troquel y zona segura.",
                   ].filter(Boolean).join("\n");
-                  const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar:\n\n${summary}`)}`;
+                  const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
+
+                  const onSubmit = async () => {
+                    // 1) Capture preview to PNG and trigger download
+                    try {
+                      if (previewRef.current) {
+                        const dataUrl = await toPng(previewRef.current, {
+                          pixelRatio: 2,
+                          cacheBust: true,
+                          backgroundColor: "#ffffff",
+                        });
+                        const a = document.createElement("a");
+                        a.href = dataUrl;
+                        a.download = `idealo-diseño-${Date.now()}.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                      }
+                    } catch (err) {
+                      console.error("[configurator] preview capture failed", err);
+                    }
+                    // 2) Open WhatsApp
+                    window.open(waHref, "_blank", "noopener,noreferrer");
+                  };
+
                   return (
-                    <a
-                      href={waHref}
-                      target="_blank"
-                      rel="noreferrer"
+                    <button
+                      type="button"
+                      onClick={onSubmit}
                       className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
                     >
                       <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
-                    </a>
+                    </button>
                   );
                 })()}
-                {uploaded && (
-                  <p className="mt-2 text-center text-[11px] text-muted-foreground">
-                    📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
-                  </p>
-                )}
+                <p className="mt-2 text-center text-[11px] text-muted-foreground">
+                  Al enviar, se descarga automáticamente una imagen PNG con tu diseño, el troquel y la zona segura, y se abre WhatsApp con los detalles listos.
+                </p>
 
                 <NavRow onBack={() => goTo(3)} />
 
