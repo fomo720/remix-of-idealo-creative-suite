@@ -4750,6 +4750,44 @@ function TextilesDesignStep({
             <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color} · {size}</span>
           </div>
 
+          {/* Color picker inline */}
+          <div className="mb-4 rounded-2xl border border-border bg-background/70 p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
+              {colorLock && (
+                <div className="text-[10px] font-medium text-[color:var(--brand-magenta)]">Bloqueado en {colorLock}</div>
+              )}
+            </div>
+            <div className="grid grid-cols-8 gap-2">
+              {TX_COLORS.map((c) => {
+                const disabled = colorLock !== null && c.name !== colorLock;
+                const active = color === c.name;
+                return (
+                  <button
+                    key={c.name}
+                    disabled={disabled}
+                    onClick={() => onColorChange(c.name)}
+                    title={c.name}
+                    className={cn(
+                      "flex flex-col items-center gap-1 transition",
+                      disabled && "opacity-30 cursor-not-allowed",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-8 w-8 rounded-full border-2 transition",
+                        active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border hover:scale-110",
+                        c.border && "border-neutral-300",
+                      )}
+                      style={{ backgroundColor: c.hex }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+
           <div className="relative mx-auto aspect-square w-full max-w-md">
             {/* T-shirt SVG maquette */}
             <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
