@@ -3096,9 +3096,52 @@ function NotebookDesigner({
           )}
         </div>
 
+        {/* Page count */}
+        <div>
+          <Label className="mb-2 block text-sm font-semibold">Cantidad de páginas</Label>
+          <div className="grid grid-cols-5 gap-2">
+            {pageCounts.map((n) => (
+              <button
+                key={n}
+                onClick={() => setPageCount(n)}
+                className={cn(
+                  "rounded-xl border-2 py-2 text-sm font-bold transition",
+                  pageCount === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] text-muted-foreground">Mínimo 50 páginas.</p>
+        </div>
+
+        {/* Extras */}
+        <div>
+          <Label className="mb-2 block text-sm font-semibold">Extras opcionales</Label>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {notebookExtras.map((ex) => {
+              const active = extras.includes(ex.id);
+              return (
+                <button
+                  key={ex.id}
+                  onClick={() => toggleExtra(ex.id)}
+                  className={cn(
+                    "rounded-xl border-2 p-3 text-left transition",
+                    active ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                  )}
+                >
+                  <div className="text-xs font-bold leading-tight">{ex.name}</div>
+                  <div className="mt-1 text-[10px] leading-tight text-muted-foreground">{ex.desc}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Quantity */}
         <div>
-          <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+          <Label htmlFor="qty" className="mb-2 block text-sm font-semibold">Cantidad de libretas</Label>
           <Input id="qty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
           <div className="mt-2 grid grid-cols-4 gap-2">
             {[10, 25, 50, 100].map((n) => (
@@ -3114,9 +3157,6 @@ function NotebookDesigner({
               </button>
             ))}
           </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">
-            Descuentos por volumen se aplican automáticamente al superar 25, 50 y 100 unidades.
-          </p>
         </div>
 
         {/* Notes */}
