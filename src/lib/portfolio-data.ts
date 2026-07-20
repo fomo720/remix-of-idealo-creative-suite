@@ -89,6 +89,13 @@ import calendario2026Portada from "@/assets/calendario-2026-portada.jpg.asset.js
 import calendario2026Enero from "@/assets/calendario-2026-enero.jpg.asset.json";
 import libretaOhanaStitch from "@/assets/libreta-ohana-stitch.jpg.asset.json";
 import libretaVideoDemo from "@/assets/libreta-video-demo.mp4.asset.json";
+import libretaGrandesPlanes from "@/assets/libreta-grandes-planes.jpg.asset.json";
+import libretaMomentos from "@/assets/libreta-momentos.jpg.asset.json";
+import libretaMomentosDemo from "@/assets/libreta-momentos-demo.mp4.asset.json";
+import libretaMemorias from "@/assets/libreta-memorias.jpg.asset.json";
+import libretaMemoriasDemo from "@/assets/libreta-memorias-demo.mp4.asset.json";
+import libretaVivimosFeDemo from "@/assets/libreta-vivimos-fe-demo.mp4.asset.json";
+import libretaDreamsDemo from "@/assets/libreta-dreams-demo.mp4.asset.json";
 import idealoLogoColor from "@/assets/idealo-logo-color.png.asset.json";
 
 export type ProjectType =
