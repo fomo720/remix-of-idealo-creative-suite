@@ -3744,7 +3744,7 @@ function StickersQuickInfo() {
     {
       icon: Truck,
       title: "¡EN CAMINO!",
-      desc: "Envío gratis dentro de La Ceiba. Fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
+      desc: "Listo para recoger en tienda dentro de La Ceiba. Si sos de fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
       bg: "var(--brand-blue)",
     },
   ];
