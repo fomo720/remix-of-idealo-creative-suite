@@ -131,9 +131,9 @@ function ProjectDetail() {
           <section className="mt-24">
             <div className="mb-6 flex items-end justify-between gap-4">
               <h2 className="text-2xl font-bold">También en {project.type}</h2>
-              <Link to="/" hash="portafolio" className="text-sm text-muted-foreground hover:text-foreground">
+              <a href={`/portafolio?tipo=${encodeURIComponent(project.type)}`} className="text-sm text-muted-foreground hover:text-foreground">
                 Ver todo →
-              </Link>
+              </a>
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               {related.map((p) => (
