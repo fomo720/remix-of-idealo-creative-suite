@@ -118,6 +118,35 @@ type Material =
   | "white-vinyl-removable"
   | "clear-vinyl-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
+
+// ---------- Textiles (iron-ons) types & data ----------
+type TxFabric = "algodon" | "kiana" | "durazno";
+type TxSleeve = "corta" | "larga";
+type TxTechnique = "sublimacion" | "dtf";
+type TxSize = "S" | "M" | "L" | "XL" | "XXL";
+
+const TX_FABRICS: {
+  id: TxFabric; name: string; desc: string; technique: TxTechnique; sleeves: TxSleeve[];
+  colorLock?: string;
+}[] = [
+  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Impresión DTF de alta definición sobre cualquier color.", technique: "dtf", sleeves: ["corta", "larga"] },
+  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Ideal para sublimación de tacto cero.", technique: "sublimacion", sleeves: ["corta"] },
+  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Solo en color blanco (sublimación integrada a la tela).", technique: "sublimacion", sleeves: ["corta", "larga"], colorLock: "Blanco" },
+];
+
+const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
+  { name: "Negro",    hex: "#111111" },
+  { name: "Blanco",   hex: "#ffffff", border: true },
+  { name: "Rojo",     hex: "#dc2626" },
+  { name: "Naranja",  hex: "#f97316" },
+  { name: "Rosado",   hex: "#ec4899" },
+  { name: "Amarillo", hex: "#facc15" },
+  { name: "Verde",    hex: "#16a34a" },
+  { name: "Azul",     hex: "#2563eb" },
+];
+
+const TX_SIZES: TxSize[] = ["S", "M", "L", "XL", "XXL"];
+const TX_MIN_QTY = 5;
 type NotebookStyle = "cover-only" | "cover-pages";
 type NotebookMaterial = "cover-cartoncillo" | "cover-carton";
 type PageType = "blank" | "ruled" | "grid" | "dotted" | "calendar";
