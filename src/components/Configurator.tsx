@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import appleIcon from "@/assets/apple-icon.png.asset.json";
+
 import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
 import dieCutSample from "@/assets/cut-die-hand.png.asset.json";
 import sheetsSample from "@/assets/cut-sheets-names.png.asset.json";
