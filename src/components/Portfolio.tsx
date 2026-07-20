@@ -10,6 +10,7 @@ const FILTERS: Filter[] = [
   "Iron-ons",
   "PVC",
   "Impresos",
+  "Libretas",
   "Rotulación",
   "Regalos",
   "Servicios",
