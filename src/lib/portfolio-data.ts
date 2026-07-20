@@ -106,6 +106,10 @@ import bioseguridadEmpaques from "@/assets/portfolio-bioseguridad-empaques.jpg.a
 import cojinesGrinch from "@/assets/portfolio-cojines-grinch.jpg.asset.json";
 import gorrasPersonalizadas from "@/assets/portfolio-gorras-personalizadas.jpg.asset.json";
 import bannerOjales from "@/assets/portfolio-banner-ojales.jpg.asset.json";
+import microperforadoCasaMarina from "@/assets/portfolio-microperforado-casa-marina.jpg.asset.json";
+import cuadrosPvcMama from "@/assets/portfolio-cuadros-pvc-mama.jpg.asset.json";
+import cojinesTropical from "@/assets/portfolio-cojines-tropical.jpg.asset.json";
+import bannerArana from "@/assets/portfolio-banner-arana.jpg.asset.json";
 import idealoLogoColor from "@/assets/idealo-logo-color.png.asset.json";
 
 export type ProjectType =
