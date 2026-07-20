@@ -3744,7 +3744,7 @@ function StickersQuickInfo() {
     {
       icon: Truck,
       title: "¡EN CAMINO!",
-      desc: "Envío gratis dentro de La Ceiba. Fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
+      desc: "Listo para recoger en tienda dentro de La Ceiba. Si sos de fuera de la ciudad, recibí tu pedido en 3 a 5 días.",
       bg: "var(--brand-blue)",
     },
   ];
@@ -3798,6 +3798,27 @@ function StickersQuickInfo() {
             )}
           </div>
         ))}
+      </div>
+
+      <div
+        className="mt-10 flex flex-col items-center gap-3 rounded-2xl border-[3px] border-foreground p-6 text-center shadow-[6px_6px_0_0_hsl(var(--foreground)/0.9)] sm:flex-row sm:justify-between sm:text-left"
+        style={{ background: "linear-gradient(135deg, var(--brand-orange), var(--brand-pink))" }}
+      >
+        <div className="flex items-center gap-4 text-white">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-white/20 text-2xl">🎁</div>
+          <div>
+            <div className="text-lg font-black leading-tight sm:text-xl">¡5 stickers GRATIS!</div>
+            <div className="text-sm font-medium text-white/90">Solo pagás el envío. Probá nuestra calidad sin compromiso.</div>
+          </div>
+        </div>
+        <a
+          href="https://wa.me/50433635666?text=Hola!%20Quiero%20aprovechar%20la%20promo%20de%205%20stickers%20GRATIS%20(solo%20pagar%20env%C3%ADo)"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-white bg-white px-5 py-2.5 text-sm font-black text-foreground transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          Reclamar promo →
+        </a>
       </div>
       </div>
     </div>
