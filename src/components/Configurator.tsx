@@ -4,7 +4,7 @@ import {
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
-  HandCoins, Eye, PaintBucket, Microwave, Leaf, Anchor, Tag,
+  HandCoins, Eye, PaintBucket, Anchor, Tag,
   BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem,
   FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper,
@@ -17,16 +17,11 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import appleIcon from "@/assets/apple-icon.png.asset.json";
-import rollIcon from "@/assets/roll-icon.png.asset.json";
 import kissCutSample from "@/assets/kiss-cut-sample.png.asset.json";
-import rollsSample from "@/assets/rolls-sample.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
-import fireSticker from "@/assets/fire-sticker.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
-import ecoSticker from "@/assets/eco-sticker.png.asset.json";
-import hangtagSticker from "@/assets/hangtag-sticker.jpg.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
 import stickerTagIcon from "@/assets/sticker-tag.png.asset.json";
@@ -66,13 +61,10 @@ type ImprentaStyleId = "plantilla" | "personalizado" | "propio";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
   | "llavero-madera" | "vaso" | "coco" | "cadena";
-type CutShape = "die-cut" | "kiss-cut" | "sheets" | "rolls";
+type CutShape = "die-cut" | "kiss-cut" | "sheets";
 type Material =
   | "white-vinyl-removable"
-  | "clear-vinyl-removable"
-  | "eco-pet-matte"
-  | "white-vinyl-permanent"
-  | "hang-tag-removable";
+  | "clear-vinyl-removable";
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 type NotebookStyle = "cover-only" | "cover-pages";
 type NotebookMaterial = "cover-matte" | "cover-glossy";
@@ -96,12 +88,6 @@ const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
     name: "Hoja (Diseño Único)",
     desc: "Stickers personalizados cortados con precisión en hojas, sin cantidad mínima.",
     accent: "var(--brand-green)",
-  },
-  {
-    id: "rolls",
-    name: "Rollos",
-    desc: "Stickers impresos y cortados en rollo para dispensado fácil y mayor rentabilidad.",
-    accent: "var(--brand-blue)",
   },
 ];
 
@@ -133,42 +119,6 @@ const materials: {
       { icon: <WaterDropBlackIcon />, text: "Impermeable" },
     ],
     useCase: "Ideal para vidrio, escaparates y branding con efecto cristal.",
-  },
-  {
-    id: "eco-pet-matte", name: "Stickers Eco-Safe de PET Removible Mate",
-    desc: "Eco-seguro · Apto microondas · Sin PVC", priceFactor: 1.35, swatch: "#efeae4",
-    finish: "Mate",
-    advantages: [
-      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
-      { icon: <Microwave className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Apto para microondas" },
-      { icon: <Leaf className="h-4 w-4" style={{ color: "var(--brand-green)" }} />, text: "Sin PVC ni ftalatos" },
-    ],
-    useCase: "Ideal para empaques de alimentos y marcas eco-conscientes.",
-    sampleImage: ecoSticker.url,
-  },
-  {
-    id: "white-vinyl-permanent", name: "Stickers de Vinil Blanco Permanente Semi-Brillante",
-    desc: "Adhesivo fuerte y duradero", priceFactor: 1.2, swatch: "#fafafa",
-    finish: "Semi-Brillante (Laminado)",
-    sampleImage: fireSticker.url,
-    advantages: [
-      { icon: <Anchor className="h-4 w-4" style={{ color: "var(--brand-red)" }} />, text: "Adhesivo fuerte y duradero" },
-      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
-      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
-    ],
-    useCase: "Ideal para exteriores, industrial y aplicaciones de larga duración.",
-  },
-  {
-    id: "hang-tag-removable", name: "Stickers Etiqueta Colgante Removible",
-    desc: "Con pestaña para colgar", priceFactor: 1.4, swatch: "#fdfdfd",
-    finish: "Semi-Brillante (Laminado)",
-    advantages: [
-      { icon: <Tag className="h-4 w-4" style={{ color: "var(--brand-pink)" }} />, text: "Pestaña personalizada para colgar" },
-      { icon: <WaterDropBlackIcon />, text: "Impermeable" },
-      { icon: <StickerTagIcon />, text: "Removible sin dejar residuos" },
-    ],
-    useCase: "Ideal para etiquetas colgantes en botellas y productos retail.",
-    sampleImage: hangtagSticker.url,
   },
 ];
 
@@ -816,7 +766,7 @@ export function Configurator() {
           {step === 2 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige la forma de corte" />
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {cuts.map((c) => (
                   <CutCard
                     key={c.id}
@@ -1046,7 +996,7 @@ export function Configurator() {
           {step === 3 && !isNotebook && !isLaser && !isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
                 {materials.map((m, idx) => (
                   <MaterialCard
                     key={m.id}
@@ -2519,14 +2469,7 @@ function CutIllustration({ id }: { id: CutShape }) {
       </svg>
     );
   }
-  // rolls
-  return (
-    <img
-      src={rollsSample.url}
-      alt="Ejemplo de rollo de stickers"
-      className="h-full w-full object-contain"
-    />
-  );
+  return null;
 }
 
 
