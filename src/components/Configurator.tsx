@@ -1284,11 +1284,16 @@ export function Configurator() {
                 {/* Image Toolbox - only sliders */}
                 {hasArt && (
                   <div className="rounded-2xl border border-border bg-background p-4">
-                    <div className="mb-3 flex items-center justify-between">
+                    <div className="mb-3 flex items-center justify-between gap-2">
                       <Label className="text-sm font-semibold">Ajustes de imagen</Label>
-                      <span className="hidden items-center gap-1 text-[10px] text-muted-foreground sm:inline-flex">
-                        <MousePointer2 className="h-3 w-3" /> Toca la imagen en la vista previa para editarla
-                      </span>
+                      <button
+                        type="button"
+                        onClick={resetImageTools}
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition hover:border-foreground/30 hover:text-foreground"
+                        title="Volver a la vista original"
+                      >
+                        <RotateCcw className="h-3 w-3" /> Restablecer
+                      </button>
                     </div>
 
                     <div className="space-y-4">
@@ -1302,6 +1307,9 @@ export function Configurator() {
                       />
                     </div>
 
+                    <p className="mt-3 text-[10px] text-muted-foreground">
+                      Posición: X {offsetX >= 0 ? "+" : ""}{Math.round(offsetX)}% · Y {offsetY >= 0 ? "+" : ""}{Math.round(offsetY)}%
+                    </p>
                   </div>
                 )}
 
