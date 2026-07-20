@@ -4635,13 +4635,18 @@ function TextilesSizeQtyStep({
 }
 
 function TextilesDesignStep({
-  fabricData, sleeve, color, onColorChange, size, onSizeChange, qty, onQtyChange,
+  fabricData, sleeve, technique, onTechniqueChange, colorLock,
+  color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
   scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
-  sleeve: TxSleeve; color: string; onColorChange: (c: string) => void;
+  sleeve: TxSleeve;
+  technique: TxTechnique;
+  onTechniqueChange: (t: TxTechnique) => void;
+  colorLock: string | null;
+  color: string; onColorChange: (c: string) => void;
   size: TxSize | null; onSizeChange: (s: TxSize) => void;
   qty: number; onQtyChange: (n: number) => void;
   uploaded: string | null;
@@ -4654,8 +4659,7 @@ function TextilesDesignStep({
   onBack: () => void;
   onSubmitted: (m: TxWaModal) => void;
 }) {
-  const technique = fabricData?.technique ?? "dtf";
-  const colorLock = fabricData?.colorLock ?? null;
+  const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const colorHex = TX_COLORS.find((c) => c.name === color)?.hex ?? "#ffffff";
   const isLight = ["Blanco", "Amarillo"].includes(color);
   const strokeColor = isLight ? "#111827" : "#ffffff";
@@ -4666,10 +4670,10 @@ function TextilesDesignStep({
       "Hola! Quiero cotizar una Camiseta Personalizada:",
       `- Material: ${fabricData?.name ?? "-"}`,
       `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
+      `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
       `- Color: ${color}`,
       `- Talla: ${size}`,
       `- Cantidad: ${qty}`,
-      `- Técnica: ${technique === "sublimacion" ? "Sublimación (integrada en la tela)" : "Estampado DTF (alta definición)"}`,
       `- Posición del arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%`,
       notes ? `- Notas: ${notes}` : "",
       "",
@@ -4684,32 +4688,61 @@ function TextilesDesignStep({
     <div className="animate-step-in grid gap-8 lg:grid-cols-2">
       {/* LEFT */}
       <div className="space-y-6">
-        {/* Technique info panel */}
+        {/* Technique selector */}
         <div className="rounded-2xl border border-border bg-gradient-soft p-5">
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-3 flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-background text-[color:var(--brand-pink)]">
               <Info className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Técnica recomendada</div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Técnica de impresión</div>
               <div className="font-bold leading-tight">
                 {technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
               </div>
             </div>
           </div>
+          {availableTechniques.length > 1 ? (
+            <div className="mb-3 grid grid-cols-2 gap-2">
+              {availableTechniques.map((t) => {
+                const active = technique === t;
+                return (
+                  <button
+                    key={t}
+                    onClick={() => onTechniqueChange(t)}
+                    className={cn(
+                      "rounded-xl border-2 px-3 py-2 text-left text-xs transition",
+                      active ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                    )}
+                  >
+                    <div className="text-sm font-bold">
+                      {t === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground">
+                      {t === "sublimacion" ? "Solo tela blanca" : "Cualquier color"}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mb-3 text-[11px] font-medium text-muted-foreground">
+              Con {fabricData?.name} solo está disponible {technique === "sublimacion" ? "sublimación" : "estampado DTF"}.
+            </div>
+          )}
           <p className="text-xs leading-snug text-muted-foreground">
             {technique === "sublimacion"
-              ? "El diseño se integra directamente en las fibras de la tela. Tacto cero y máxima durabilidad — ideal para Kiana y Durazno blanco."
-              : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela. Perfecto para algodón."}
+              ? "El diseño se integra en las fibras de la tela. Tacto cero y máxima durabilidad — requiere tela blanca."
+              : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela."}
           </p>
           <details className="mt-3 text-xs">
             <summary className="cursor-pointer font-medium text-foreground">¿Cuál es la diferencia?</summary>
             <div className="mt-2 grid gap-2 text-muted-foreground">
-              <div><b className="text-foreground">Sublimación:</b> integrada en la tela, tacto cero, requiere poliéster claro.</div>
+              <div><b className="text-foreground">Sublimación:</b> integrada en la tela, tacto cero, requiere tela blanca.</div>
               <div><b className="text-foreground">DTF:</b> capa impresa sobre la tela, gran definición, funciona en cualquier color.</div>
             </div>
           </details>
         </div>
+
 
         {/* Upload */}
         <div>
