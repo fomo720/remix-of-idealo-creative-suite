@@ -9,7 +9,7 @@ export function Navbar() {
     { href: "/#personalizar", label: "Personalizar Ahora" },
     { href: "/empresas", label: "Empresas" },
     { href: "/eventos", label: "Eventos" },
-    { href: "/#portafolio", label: "Portafolio" },
+    { href: "/portafolio", label: "Portafolio" },
   ];
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">

@@ -68,6 +68,7 @@ import bolsosSublimados from "@/assets/portfolio-bolsos-sublimados.png.asset.jso
 import impresionLaserCapy from "@/assets/portfolio-impresion-laser-capy.jpg.asset.json";
 import stickerTroqueladoBrioche from "@/assets/portfolio-sticker-troquelado-brioche.jpg.asset.json";
 import snacksPersonalizados from "@/assets/portfolio-snacks-personalizados.png.asset.json";
+import fotosCristal from "@/assets/portfolio-fotos-cristal.jpg.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -104,6 +105,7 @@ export const slugify = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 const raw: Omit<Project, "slug">[] = [
+  { title: "Fotos tipo cristal", tag: "Regalos & Recuerdos", type: "Regalos", subtitle: "Fotos impresas tipo cristal con el diseño y tamaño que prefieras · ideal para aniversarios y bodas", image: fotosCristal.url, bg: "#e8ede8", fit: "contain", description: "Fotos impresas tipo cristal, acabado premium tipo periódico o collage personalizado. Diseño 100% a la medida con las fotos, textos y tamaño que prefieras. Perfectas para aniversarios, bodas, cumpleaños y regalos únicos.", highlights: ["Acabado tipo cristal premium", "El diseño y tamaño que prefieras", "Ideal para aniversarios y bodas", "Regalo único y personalizado"] },
   { title: "Snacks Personalizados", tag: "Branding & Empaques", type: "Regalos", subtitle: "Empaques de snacks personalizados con tu marca · ideal para eventos y regalos corporativos", image: snacksPersonalizados.url, bg: "#ffffff", fit: "cover", description: "Snacks personalizados con empaque impreso a la medida de tu marca o evento. Ideales para bodas, cumpleaños, activaciones, regalos corporativos y detalles para invitados. Cualquier diseño, sabor y cantidad.", highlights: ["Empaque 100% personalizado", "Ideal para eventos y regalos corporativos", "Cualquier diseño y cantidad", "Detalle único para invitados"] },
   { title: "Stickers troquelados en varios tamaños", tag: "Personalizados", type: "Stickers", subtitle: "Desde 1×1 hasta 3.5×3.5 pulgadas · cualquier forma, diseño y tamaño que desees", image: stickersTamanos.url, bg: "#ffffff", fit: "contain", description: "Stickers troquelados disponibles en múltiples tamaños: 1×1, 2×2, 2.5×2.5, 3×3 y 3.5×3.5 pulgadas. Se pueden realizar de la forma, diseño y tamaño que desees. Ideales para branding, empaques, eventos y regalos.", highlights: ["Tamaños desde 1×1 hasta 3.5×3.5 pulgadas", "Cualquier forma y diseño", "Vinil premium impermeable", "Impresión full color HD"] },
   { title: "Impresión Láser · Invitaciones Capy Birthday", tag: "Impresión & Papelería", type: "Impresos", subtitle: "Invitaciones full color en Opalina, Lino, Papel Photo, Bond y muchos más", image: impresionLaserCapy.url, bg: "#1a1533", fit: "contain", description: "Impresión láser full color para invitaciones, tarjetas y papelería de eventos. Disponible en varios tipos de papel: Opalina, Lino, Papel Photo, Bond y muchos más. Diseño 100% personalizado para cumpleaños, bodas, XV años y eventos corporativos.", highlights: ["Impresión láser full color", "Papeles: Opalina, Lino, Photo, Bond y más", "Diseño 100% personalizado", "Ideal para invitaciones y papelería de eventos"] },
