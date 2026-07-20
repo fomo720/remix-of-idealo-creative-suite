@@ -673,7 +673,23 @@ export function Configurator() {
     return Math.round(base * area * factor * bulkFactor * qty);
   }, [isLaser, laserProductData, laserVariantData, laserByob, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
-  const goTo = (s: number) => setStep(s);
+  const goTo = (s: number) => {
+    // Gating: only for stickers/iron-ons flow (not laser/notebook/imprenta)
+    if (!isLaser && !isNotebook && !isImprenta) {
+      if (s >= 3 && !cut) {
+        setGateMsg("Primero elige la forma de corte en el paso 2.");
+        setStep(2);
+        return;
+      }
+      if (s >= 4 && !material) {
+        setGateMsg("Primero elige el material en el paso 3.");
+        setStep(3);
+        return;
+      }
+    }
+    setGateMsg(null);
+    setStep(s);
+  };
 
   useEffect(() => {
     const handler = (e: Event) => {
