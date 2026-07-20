@@ -737,8 +737,8 @@ export function Configurator() {
   }, [isLaser, laserProductData, laserVariantData, laserByob, isNotebook, notebookSizeData, notebookMaterialData, notebookStyle, width, height, qty, materialData, bulkFactor]);
 
   const goTo = (s: number) => {
-    // Gating: only for stickers/iron-ons flow (not laser/notebook/imprenta)
-    if (!isLaser && !isNotebook && !isImprenta) {
+    // Gating for stickers flow (not textiles/laser/notebook/imprenta)
+    if (!isTextiles && !isLaser && !isNotebook && !isImprenta) {
       if (s >= 3 && !cut) {
         setGateMsg("Primero elige la forma de corte en el paso 2.");
         setStep(2);
@@ -747,6 +747,29 @@ export function Configurator() {
       if (s >= 4 && !material) {
         setGateMsg("Primero elige el material en el paso 3.");
         setStep(3);
+        return;
+      }
+    }
+    // Gating for textiles: Material → Manga → Color → Talla+Cantidad → Diseño
+    if (isTextiles) {
+      if (s >= 3 && !txFabric) {
+        setGateMsg("Primero elige el material de la camisa en el paso 2.");
+        setStep(2);
+        return;
+      }
+      if (s >= 4 && !txSleeve) {
+        setGateMsg("Primero elige el tipo de manga en el paso 3.");
+        setStep(3);
+        return;
+      }
+      if (s >= 5 && !txColor) {
+        setGateMsg("Primero elige el color de la camisa en el paso 4.");
+        setStep(4);
+        return;
+      }
+      if (s >= 6 && (!txSize || !txQty)) {
+        setGateMsg("Primero elige talla y cantidad en el paso 5.");
+        setStep(5);
         return;
       }
     }
