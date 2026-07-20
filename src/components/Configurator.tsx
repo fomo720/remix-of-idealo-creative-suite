@@ -776,7 +776,7 @@ export function Configurator() {
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
-                accent="var(--brand-magenta)"
+                accent="#FFD93D"
                 icon={<Layers className="h-7 w-7" />}
                 image={stickersHandCover.url}
                 active={category === "stickers"}
@@ -786,7 +786,7 @@ export function Configurator() {
               <CategoryCard
                 title="Iron-ons (Textiles)"
                 desc="Estampados sublimados y transfer para uniformes y merch."
-                accent="var(--brand-cyan-deep)"
+                accent="#F58BB4"
                 icon={<Package className="h-7 w-7" />}
                 image={ironOnCover.url}
                 active={category === "iron-ons"}
@@ -796,7 +796,7 @@ export function Configurator() {
               <CategoryCard
                 title="Libretas Personalizadas"
                 desc="Portadas premium con hojas blancas, rayadas, cuadriculadas o punteadas."
-                accent="var(--brand-magenta)"
+                accent="#FF6A3D"
                 icon={<BookOpen className="h-7 w-7" />}
                 image={libretasCover.url}
                 active={category === "libretas"}
@@ -806,7 +806,7 @@ export function Configurator() {
               <CategoryCard
                 title="Grabado Láser"
                 desc="Tablas, botellas, carteras, llaveros y más. Grabado permanente y elegante."
-                accent="var(--brand-cyan-deep)"
+                accent="#A855F7"
                 icon={<Flame className="h-7 w-7" />}
                 image={laserStanleyCover.url}
                 active={category === "laser"}
@@ -816,13 +816,14 @@ export function Configurator() {
               <CategoryCard
                 title="Imprenta & Papelería"
                 desc="Tarjetas, menús, carpetas y brochures con acabado profesional."
-                accent="var(--brand-magenta)"
+                accent="#1E3A8A"
                 icon={<Printer className="h-7 w-7" />}
                 image={imprentaCover.url}
                 active={category === "imprenta"}
                 onClick={() => setCategory("imprenta")}
                 variant={4}
               />
+
             </div>
           )}
           {step === 1 && (
@@ -2246,14 +2247,6 @@ function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string })
 function CategoryCard({
   title, desc, icon, active, onClick, accent, image, bestseller, variant = 0,
 }: { title: string; desc: string; icon: React.ReactNode; active: boolean; onClick: () => void; accent: string; image?: string; bestseller?: boolean; variant?: number }) {
-  const shimmerVariants = [
-    { gradient: "linear-gradient(90deg, #FFD93D, #F58BB4, #FF6A3D, #A855F7, #4F46E5, #48C9C8, #FFD93D)", duration: "5s", delay: "0s", direction: "normal", timing: "linear" },
-    { gradient: "linear-gradient(120deg, #48C9C8, #4F46E5, #A855F7, #F58BB4, #FF6A3D, #FFD93D, #48C9C8)", duration: "7s", delay: "-1.4s", direction: "reverse", timing: "ease-in-out" },
-    { gradient: "linear-gradient(75deg, #A855F7, #FF6A3D, #FFD93D, #48C9C8, #4F46E5, #F58BB4, #A855F7)", duration: "9s", delay: "-3s", direction: "normal", timing: "ease-out" },
-    { gradient: "linear-gradient(100deg, #F58BB4, #FFD93D, #48C9C8, #4F46E5, #A855F7, #FF6A3D, #F58BB4)", duration: "6.5s", delay: "-2.2s", direction: "alternate", timing: "ease-in-out" },
-    { gradient: "linear-gradient(60deg, #FF6A3D, #A855F7, #F58BB4, #FFD93D, #48C9C8, #4F46E5, #FF6A3D)", duration: "8s", delay: "-4.1s", direction: "reverse", timing: "linear" },
-  ];
-  const v = shimmerVariants[variant % shimmerVariants.length];
   return (
     <button
       onClick={onClick}
@@ -2303,17 +2296,10 @@ function CategoryCard({
         <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
         <span
           className={cn(
-            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all animate-rainbow-shimmer",
+            "mt-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all",
             !active && "group-hover:brightness-110 group-hover:shadow-lg",
           )}
-          style={{
-            backgroundImage: v.gradient,
-            backgroundSize: "300% 300%",
-            animationDuration: v.duration,
-            animationDelay: v.delay,
-            animationDirection: v.direction as any,
-            animationTimingFunction: v.timing,
-          }}
+          style={{ background: accent }}
         >
           {active ? "Seleccionado" : "Empezar personalización"}
           <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
