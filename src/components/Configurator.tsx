@@ -18,7 +18,8 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { toPng } from "html-to-image";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Check, Download, Copy, MessageCircle as WA } from "lucide-react";
+import { MessageCircle as WA } from "lucide-react";
+
 
 
 import kissCutSample from "@/assets/cut-kiss-idealo.png.asset.json";
