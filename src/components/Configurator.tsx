@@ -2086,7 +2086,7 @@ function CategoryCard({
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background: `linear-gradient(180deg, transparent 40%, color-mix(in oklab, ${accent} 55%, transparent) 100%)`,
+            background: `linear-gradient(180deg, transparent 65%, color-mix(in oklab, ${accent} 25%, transparent) 100%)`,
           }}
         />
         <div
