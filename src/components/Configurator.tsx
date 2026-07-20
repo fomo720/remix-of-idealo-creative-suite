@@ -4657,7 +4657,7 @@ function TextilesDesignStep({
   sleeve: TxSleeve; color: string; size: TxSize; qty: number;
   uploaded: string | null;
   onUpload: (f: File | null) => void;
-  fileRef: React.RefObject<HTMLInputElement>;
+  fileRef: React.RefObject<HTMLInputElement | null>;
   scale: number; setScale: (n: number) => void;
   offsetX: number; setOffsetX: (n: number) => void;
   offsetY: number; setOffsetY: (n: number) => void;
