@@ -4649,7 +4649,7 @@ function TextilesDesignStep({
   const strokeColor = isLight ? "#111827" : "#ffffff";
 
   const onSubmit = () => {
-    if (!uploaded) return;
+    if (!uploaded || !size) return;
     const lines = [
       "Hola! Quiero cotizar una Camiseta Personalizada:",
       `- Material: ${fabricData?.name ?? "-"}`,
