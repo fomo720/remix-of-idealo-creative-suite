@@ -1465,30 +1465,40 @@ export function Configurator() {
                     <span className="rounded-full bg-background px-2 py-0.5">{shapeData.name}</span>
                   </div>
 
-                  <InteractiveCanvas
-                    shapeData={shapeData}
-                    materialSwatch={materialData?.swatch ?? "#fff"}
-                    isDieCut={cut === "die-cut"}
-                    hasArt={hasArt}
-                    uploaded={uploaded}
-                    preset={preset}
-                    scale={scale}
-                    setScale={setScale}
-                    offsetX={offsetX}
-                    setOffsetX={setOffsetX}
-                    offsetY={offsetY}
-                    setOffsetY={setOffsetY}
-                    contrast={contrast}
-                    brightness={brightness}
-                    duplicated={duplicated}
-                    setDuplicated={setDuplicated}
-                    selected={selected}
-                    setSelected={setSelected}
-                    onClear={clearImage}
-                  />
+                  <div ref={previewRef} className="rounded-2xl bg-transparent p-1">
+                    <InteractiveCanvas
+                      shapeData={shapeData}
+                      materialSwatch={materialData?.swatch ?? "#fff"}
+                      isDieCut={cut === "die-cut"}
+                      hasArt={hasArt}
+                      uploaded={uploaded}
+                      preset={preset}
+                      scale={scale}
+                      setScale={setScale}
+                      offsetX={offsetX}
+                      setOffsetX={setOffsetX}
+                      offsetY={offsetY}
+                      setOffsetY={setOffsetY}
+                      contrast={contrast}
+                      brightness={brightness}
+                      duplicated={duplicated}
+                      setDuplicated={setDuplicated}
+                      selected={selected}
+                      setSelected={setSelected}
+                      onClear={clearImage}
+                    />
+                  </div>
 
+                  <div
+                    className="mx-auto mt-8 flex max-w-xs items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur"
+                  >
+                    <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
+                    <span>
+                      Todo lo que esté <strong className="text-foreground">dentro de la línea punteada</strong> es lo que se imprimirá y troquelará.
+                    </span>
+                  </div>
 
-                  <div className="mt-10 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+                  <div className="mt-4 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
                     <Stat label="Precio estimado" value={currency(price)} highlight />
