@@ -751,7 +751,7 @@ export function Configurator() {
         return;
       }
     }
-    // Gating for textiles: Material → Manga → Color → Talla+Cantidad → Diseño
+    // Gating for textiles: Material → Manga → Talla+Cantidad → Diseño (color en diseño)
     if (isTextiles) {
       if (s >= 3 && !txFabric) {
         setGateMsg("Primero elige el material de la camisa en el paso 2.");
@@ -763,14 +763,9 @@ export function Configurator() {
         setStep(3);
         return;
       }
-      if (s >= 5 && !txColor) {
-        setGateMsg("Primero elige el color de la camisa en el paso 4.");
+      if (s >= 5 && (!txSize || !txQty)) {
+        setGateMsg("Primero elige talla y cantidad en el paso 4.");
         setStep(4);
-        return;
-      }
-      if (s >= 6 && (!txSize || !txQty)) {
-        setGateMsg("Primero elige talla y cantidad en el paso 5.");
-        setStep(5);
         return;
       }
     }
