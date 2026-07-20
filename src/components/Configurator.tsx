@@ -682,6 +682,22 @@ export function Configurator() {
   const laserVariantData = laserProductData?.variants?.find((v) => v.id === laserVariantId);
   const laserColor = laserVariantData?.colors[Math.min(laserColorIdx, laserVariantData.colors.length - 1)];
   const laserDesignStep = laserHasVariants ? 4 : 3;
+  // textiles state
+  const [txFabric, setTxFabric] = useState<TxFabric | null>(null);
+  const [txSleeve, setTxSleeve] = useState<TxSleeve | null>(null);
+  const [txColor, setTxColor] = useState<string | null>(null);
+  const [txSize, setTxSize] = useState<TxSize | null>(null);
+  const [txQty, setTxQty] = useState<number>(TX_MIN_QTY);
+  const isTextiles = category === "iron-ons";
+  const txFabricData = TX_FABRICS.find((f) => f.id === txFabric) ?? null;
+
+  // Auto-lock color when Durazno is picked; clear invalid sleeve on fabric change
+  useEffect(() => {
+    if (!txFabricData) return;
+    if (txFabricData.colorLock) setTxColor(txFabricData.colorLock);
+    if (txSleeve && !txFabricData.sleeves.includes(txSleeve)) setTxSleeve(null);
+  }, [txFabric]);
+
   const shapeData = shapes.find((s) => s.id === shape)!;
 
   const bulkFactor = useMemo(() => {
