@@ -2935,8 +2935,8 @@ function NotebookDesigner({
   const showPages = styleId === "cover-pages";
   const showPageArt = showPages;
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
-  const [pageCount, setPageCount] = React.useState<number>(80);
-  const [extras, setExtras] = React.useState<NotebookExtra[]>([]);
+  const [pageCount, setPageCount] = useState<number>(80);
+  const [extras, setExtras] = useState<NotebookExtra[]>([]);
   const toggleExtra = (id: NotebookExtra) =>
     setExtras((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
