@@ -728,7 +728,9 @@ export function Configurator() {
   const hasArt = !!(uploaded || preset);
 
   return (
+    <>
     <section id="personalizar" className="relative py-20 sm:py-28">
+
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-10 text-center">
           <div
