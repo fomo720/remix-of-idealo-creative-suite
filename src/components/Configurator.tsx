@@ -72,7 +72,7 @@ function SmartImage({
   fit?: "cover" | "contain";
   loading?: "lazy" | "eager";
 }) {
-  const [loaded, setLoaded] = React.useState(false);
+  const [loaded, setLoaded] = useState(false);
   return (
     <>
       {!loaded && (
