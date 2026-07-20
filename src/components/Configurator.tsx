@@ -614,6 +614,7 @@ export function Configurator() {
 
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
   const [offsetY, setOffsetY] = useState(0);
+  const [showPosInputs, setShowPosInputs] = useState(false);
   const [contrast, setContrast] = useState(100); // %
   const [brightness, setBrightness] = useState(100);
   const [duplicated, setDuplicated] = useState(false);
