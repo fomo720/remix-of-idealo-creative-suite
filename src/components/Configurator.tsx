@@ -22,6 +22,8 @@ import promoGifts from "@/assets/promo-gifts-idealo.png.asset.json";
 import dieCutSample from "@/assets/cut-die-hand.png.asset.json";
 import sheetsSample from "@/assets/cut-sheets-names.png.asset.json";
 import dinoSticker from "@/assets/dino-sticker.png.asset.json";
+import materialVinilBlanco from "@/assets/material-vinil-blanco-brioche.jpg.asset.json";
+import materialVinilTransparente from "@/assets/material-vinil-transparente-corozal.jpg.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
