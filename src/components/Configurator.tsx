@@ -296,6 +296,12 @@ function pageBackground(type: PageType): React.CSSProperties {
         backgroundImage: "radial-gradient(circle, rgba(100,116,139,0.55) 1px, transparent 1.4px)",
         backgroundSize: "16px 16px",
       };
+    case "calendar":
+      return {
+        backgroundImage:
+          "linear-gradient(to right, rgba(148,163,184,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.5) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+      };
     default:
       return {};
   }
