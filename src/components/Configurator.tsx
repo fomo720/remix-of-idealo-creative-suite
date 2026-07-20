@@ -1045,13 +1045,15 @@ export function Configurator() {
               <SectionTitle icon={<FileImage className="h-5 w-5" />} title="Selecciona material y acabado" />
               <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
                 {materials.map((m, idx) => (
-                  <MaterialCard
-                    key={m.id}
-                    material={m}
-                    active={material === m.id}
-                    isBestSeller={idx === 0}
-                    onClick={() => setMaterial(m.id)}
-                  />
+                  <div key={m.id} className={cn(m.id === "clear-vinyl-removable" && "sm:col-span-2")}>
+                    <MaterialCard
+                      material={m}
+                      active={material === m.id}
+                      isBestSeller={idx === 0}
+                      wideImage={m.id === "clear-vinyl-removable"}
+                      onClick={() => setMaterial(m.id)}
+                    />
+                  </div>
                 ))}
               </div>
               <NavRow onBack={() => goTo(2)} onNext={material ? () => goTo(4) : undefined} />
@@ -2397,23 +2399,27 @@ function SelectCard({
 }
 
 function MaterialCard({
-  material: m, active, onClick, isBestSeller,
+  material: m, active, onClick, isBestSeller, wideImage,
 }: {
   material: (typeof materials)[number];
   active: boolean;
   onClick: () => void;
   isBestSeller?: boolean;
+  wideImage?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all",
+        "group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border-2 text-left transition-all",
         active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
       )}
     >
       {/* Sample image / preview */}
-      <div className="relative h-64 w-full overflow-hidden bg-muted/30" style={{ background: m.sampleImage ? "#f5f1ea" : m.swatch }}>
+      <div
+        className={cn("relative w-full overflow-hidden bg-muted/30", wideImage ? "aspect-[16/9]" : "h-64")}
+        style={{ background: m.sampleImage ? "#f5f1ea" : m.swatch }}
+      >
         {m.sampleImage ? (
           <SmartImage src={m.sampleImage} alt={m.name} />
         ) : (
