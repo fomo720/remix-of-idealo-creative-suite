@@ -685,18 +685,29 @@ export function Configurator() {
   // textiles state
   const [txFabric, setTxFabric] = useState<TxFabric | null>(null);
   const [txSleeve, setTxSleeve] = useState<TxSleeve | null>(null);
+  const [txTechnique, setTxTechnique] = useState<TxTechnique | null>(null);
   const [txColor, setTxColor] = useState<string | null>(null);
   const [txSize, setTxSize] = useState<TxSize | null>(null);
   const [txQty, setTxQty] = useState<number>(TX_MIN_QTY);
   const isTextiles = category === "iron-ons";
   const txFabricData = TX_FABRICS.find((f) => f.id === txFabric) ?? null;
+  const txColorLock = txTechnique === "sublimacion" ? "Blanco" : null;
 
-  // Auto-lock color when Durazno is picked; clear invalid sleeve on fabric change
+  // On fabric change: reset technique to default, clear invalid sleeve
   useEffect(() => {
     if (!txFabricData) return;
-    if (txFabricData.colorLock) setTxColor(txFabricData.colorLock);
+    if (!txTechnique || !txFabricData.techniques.includes(txTechnique)) {
+      setTxTechnique(txFabricData.techniques[0]);
+    }
     if (txSleeve && !txFabricData.sleeves.includes(txSleeve)) setTxSleeve(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txFabric]);
+
+  // Auto-lock color to Blanco when technique is sublimación
+  useEffect(() => {
+    if (txTechnique === "sublimacion") setTxColor("Blanco");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txTechnique]);
 
   const shapeData = shapes.find((s) => s.id === shape)!;
 
