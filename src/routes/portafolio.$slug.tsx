@@ -93,7 +93,6 @@ function ProjectDetail() {
                   src={project.video}
                   poster={project.image}
                   muted
-                  defaultMuted
                   playsInline
                   autoPlay
                   loop
