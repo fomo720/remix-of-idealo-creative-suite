@@ -4532,7 +4532,7 @@ function TextilesColorStep({
   onBack: () => void;
   onNext?: () => void;
 }) {
-  const locked = fabricData?.colorLock ?? null;
+  const locked: string | null = null;
   return (
     <div className="animate-step-in">
       <SectionTitle icon={<Palette className="h-5 w-5" />} title="Elige el color de la camisa" />
