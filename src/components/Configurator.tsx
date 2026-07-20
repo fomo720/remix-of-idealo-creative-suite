@@ -64,7 +64,7 @@ function SmartImage({
   alt = "",
   className = "",
   fit = "cover",
-  loading = "lazy",
+  loading = "eager",
 }: {
   src: string;
   alt?: string;
