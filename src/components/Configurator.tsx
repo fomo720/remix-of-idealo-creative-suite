@@ -89,12 +89,6 @@ const cuts: { id: CutShape; name: string; desc: string; accent: string }[] = [
     desc: "Stickers personalizados cortados con precisión en hojas, sin cantidad mínima.",
     accent: "var(--brand-green)",
   },
-  {
-    id: "rolls",
-    name: "Rollos",
-    desc: "Stickers impresos y cortados en rollo para dispensado fácil y mayor rentabilidad.",
-    accent: "var(--brand-blue)",
-  },
 ];
 
 const materials: {
