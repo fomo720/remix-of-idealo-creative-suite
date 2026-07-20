@@ -710,7 +710,7 @@ export function Configurator() {
 
         <div className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card-soft sm:p-10">
           {step === 1 && (
-            <div className="animate-step-in grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            <div className="animate-step-in mx-auto grid w-full auto-rows-fr items-stretch justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               <CategoryCard
                 title="Stickers Personalizados"
                 desc="Vinil, papel y acabados premium. Individuales, en hojas o rollos."
