@@ -45,21 +45,28 @@ export function Reveal({
       setVisible(true);
       return;
     }
+    // Safety fallback: if for any reason the observer never fires
+    // (very tall sections on mobile, iOS quirks, etc.) reveal anyway.
+    const failsafe = window.setTimeout(() => setVisible(true), 1200);
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             setVisible(true);
+            window.clearTimeout(failsafe);
             if (once) io.unobserve(entry.target);
           } else if (!once) {
             setVisible(false);
           }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      window.clearTimeout(failsafe);
+    };
   }, [once]);
 
   const shouldAnimate = !reduced;
