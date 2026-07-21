@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type Props = React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -24,6 +24,14 @@ export function SkeletonImage({
   ...imgProps
 }: Props) {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // If the image was cached and completed before onLoad handler attached
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      setLoaded(true);
+    }
+  }, []);
 
   return (
     <div
@@ -40,6 +48,7 @@ export function SkeletonImage({
         />
       )}
       <img
+        ref={imgRef}
         {...imgProps}
         alt={alt}
         decoding="async"
