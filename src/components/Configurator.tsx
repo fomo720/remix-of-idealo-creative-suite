@@ -34,6 +34,7 @@ import materialVinilBlanco from "@/assets/material-vinil-blanco-brioche.jpg.asse
 import materialVinilTransparente from "@/assets/material-vinil-transparente-corozal.jpg.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
+import shirt2dPattern from "@/assets/shirt-2d-pattern.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
@@ -5040,65 +5041,113 @@ function TextilesDesignStep({
 
                 <div
                   ref={previewRef}
-                  className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl"
-                  style={bgStyle}
+                  className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl"
+                  style={{ aspectRatio: "5 / 3", ...bgStyle }}
                 >
-                  {/* T-shirt SVG maquette (flat pattern) */}
-                  <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
-                    <path
-                      d="M80 90 L150 60 Q175 95 200 95 Q225 95 250 60 L320 90 L360 150 L300 175 L300 340 Q300 355 285 355 L115 355 Q100 355 100 340 L100 175 L40 150 Z"
-                      fill={colorHex}
-                      stroke={strokeColor}
-                      strokeWidth="2"
-                      opacity="0.98"
-                    />
-                    {sleeve === "larga" && (
-                      <>
-                        <path d="M40 150 L20 300 L75 315 L100 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
-                        <path d="M360 150 L380 300 L325 315 L300 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
-                      </>
-                    )}
-                    <text x="200" y="380" textAnchor="middle" fontSize="10" fill={strokeColor} opacity="0.6" fontWeight="600">
-                      {side === "front" ? "FRENTE — patrón plano" : "ATRÁS — patrón plano"}
-                    </text>
-                  </svg>
-
-                  {/* Print area with uploaded art (draggable) */}
+                  {/* Flat pattern PNG (tinted with shirt color via mix-blend) */}
                   <div
-                    ref={printAreaRef}
-                    onPointerDown={onPointerDown}
-                    onPointerMove={onPointerMove}
-                    onPointerUp={onPointerUp}
-                    onPointerCancel={onPointerUp}
-                    className={cn(
-                      "absolute select-none touch-none",
-                      uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
-                    )}
-                    style={{
-                      left: `${30 + offsetX * 0.4}%`,
-                      top: `${28 + offsetY * 0.4}%`,
-                      width: `${40 * (scale / 100)}%`,
-                      height: `${40 * (scale / 100)}%`,
-                      transform: `rotate(${rotation}deg) scaleX(${scaleX / 100})`,
-                      transformOrigin: "center",
-                      willChange: "transform,left,top,width,height",
-                    }}
-                  >
-                    {uploaded ? (
-                      <img
-                        src={uploaded}
-                        alt="Diseño"
-                        draggable={false}
-                        className="pointer-events-none h-full w-full object-contain"
-                      />
-                    ) : (
-                      <div
-                        className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
-                        style={{ color: strokeColor, borderColor: strokeColor }}
-                      >
-                        Área de impresión<br />Sube tu diseño
-                      </div>
-                    )}
+                    className="absolute inset-0"
+                    style={{ backgroundColor: colorHex }}
+                    aria-hidden
+                  />
+                  <img
+                    src={shirt2dPattern.url}
+                    alt="Patrón plano de la camiseta"
+                    draggable={false}
+                    className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain mix-blend-multiply"
+                    style={{ opacity: 0.85 }}
+                  />
+                  {/* Outline overlay so the pattern reads on any color */}
+                  <img
+                    src={shirt2dPattern.url}
+                    alt=""
+                    draggable={false}
+                    className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain opacity-20 mix-blend-overlay"
+                  />
+
+                  {/* Print zone indicator (front-left or back-right panel) */}
+                  {(() => {
+                    // Panel bounds inside the flat pattern (percent of container).
+                    // Front panel occupies the left ~44%; back panel the right ~44%.
+                    const zone = side === "front"
+                      ? { left: 5, top: 6, width: 42, height: 74 }
+                      : { left: 53, top: 6, width: 42, height: 74 };
+
+                    // Print area size clamped to the zone.
+                    const areaW = zone.width * (scale / 100) * 0.75; // 100% scale ≈ 75% of panel
+                    const areaH = zone.height * (scale / 100) * 0.55;
+                    const cx = zone.left + zone.width / 2 + (offsetX / 100) * (zone.width / 2);
+                    const cy = zone.top + zone.height / 2 + (offsetY / 100) * (zone.height / 2);
+
+                    return (
+                      <>
+                        {/* Dashed zone outline */}
+                        <div
+                          className="pointer-events-none absolute rounded-md border border-dashed"
+                          style={{
+                            left: `${zone.left}%`,
+                            top: `${zone.top}%`,
+                            width: `${zone.width}%`,
+                            height: `${zone.height}%`,
+                            borderColor: isLight ? "rgba(17,24,39,0.35)" : "rgba(255,255,255,0.55)",
+                          }}
+                        />
+                        <div
+                          className="pointer-events-none absolute rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider"
+                          style={{
+                            left: `${zone.left + 1}%`,
+                            top: `${zone.top + 1}%`,
+                            backgroundColor: isLight ? "rgba(17,24,39,0.75)" : "rgba(255,255,255,0.85)",
+                            color: isLight ? "#fff" : "#111827",
+                          }}
+                        >
+                          {side === "front" ? "Frente · área editable" : "Atrás · área editable"}
+                        </div>
+
+                        {/* Print area with uploaded art (draggable within zone only) */}
+                        <div
+                          ref={printAreaRef}
+                          onPointerDown={onPointerDown}
+                          onPointerMove={onPointerMove}
+                          onPointerUp={onPointerUp}
+                          onPointerCancel={onPointerUp}
+                          className={cn(
+                            "absolute select-none touch-none",
+                            uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
+                          )}
+                          style={{
+                            left: `${cx}%`,
+                            top: `${cy}%`,
+                            width: `${areaW}%`,
+                            height: `${areaH}%`,
+                            transform: `translate(-50%, -50%) rotate(${rotation}deg) scaleX(${scaleX / 100})`,
+                            transformOrigin: "center",
+                            willChange: "transform,left,top,width,height",
+                          }}
+                        >
+                          {uploaded ? (
+                            <img
+                              src={uploaded}
+                              alt="Diseño"
+                              draggable={false}
+                              className="pointer-events-none h-full w-full object-contain"
+                            />
+                          ) : (
+                            <div
+                              className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
+                              style={{ color: strokeColor, borderColor: strokeColor, backgroundColor: "rgba(255,255,255,0.4)" }}
+                            >
+                              Sube tu diseño
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })()}
+
+                  {/* Locked areas hint */}
+                  <div className="pointer-events-none absolute bottom-1 left-1 rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
+                    Mangas y cuello · bloqueados
                   </div>
                 </div>
               </div>
