@@ -5103,7 +5103,10 @@ function TextilesDesignStep({
             <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
             <span>Arrastra el diseño para posicionarlo. Usá los botones para zoom y rotar 90°.</span>
           </div>
+          </>
+          )}
         </div>
+
 
         <button
           type="button"
