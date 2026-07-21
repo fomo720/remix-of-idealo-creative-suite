@@ -112,13 +112,16 @@ function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, scaleX, rotat
             offsetX={offsetX}
             offsetY={offsetY}
             scale={scale}
+            scaleX={scaleX}
             rotation={rotation}
+            side={side}
           />
         </Suspense>
       ) : null}
     </group>
   );
 }
+
 
 export default function TextilesShirt3D(props: Props) {
   const controlsRef = useRef<any>(null);
