@@ -4734,7 +4734,7 @@ function TextilesDesignStep({
       `- Color de la camisa: ${color}`,
       `- Talla: ${size}`,
       `- Cantidad: ${qty}`,
-      `- Arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%, rotación ${rotation}°`,
+      `- Arte: zoom ${scale}%, escala horizontal ${scaleX}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%, rotación ${rotation}°, lado ${side === "front" ? "frente" : "atrás"}`,
       notes ? `- Notas: ${notes}` : "",
       "",
       "Adjunto la vista previa (PNG) en el chat.",
