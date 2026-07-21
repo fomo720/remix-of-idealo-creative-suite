@@ -4634,6 +4634,8 @@ function TextilesSizeQtyStep({
   );
 }
 
+type TxCanvasBg = "checker" | "white" | "gray";
+
 function TextilesDesignStep({
   fabricData, sleeve, technique, onTechniqueChange, colorLock,
   color, onColorChange, size, onSizeChange, qty, onQtyChange,
@@ -4664,24 +4666,97 @@ function TextilesDesignStep({
   const isLight = ["Blanco", "Amarillo"].includes(color);
   const strokeColor = isLight ? "#111827" : "#ffffff";
 
-  const onSubmit = () => {
-    if (!uploaded || !size) return;
+  const [rotation, setRotation] = useState(0);
+  const [canvasBg, setCanvasBg] = useState<TxCanvasBg>("checker");
+  const [busy, setBusy] = useState(false);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const printAreaRef = useRef<HTMLDivElement | null>(null);
+  const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
+
+  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+  const rotateLeft = () => setRotation((r) => (r - 90) % 360);
+  const zoomIn = () => setScale(clamp(scale + 10, 30, 200));
+  const zoomOut = () => setScale(clamp(scale - 10, 30, 200));
+
+  const bgStyle: React.CSSProperties =
+    canvasBg === "white"
+      ? { backgroundColor: "#ffffff" }
+      : canvasBg === "gray"
+      ? { backgroundColor: "#e5e7eb" }
+      : {
+          backgroundColor: "#ffffff",
+          backgroundImage:
+            "linear-gradient(45deg,#e5e7eb 25%,transparent 25%),linear-gradient(-45deg,#e5e7eb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e5e7eb 75%),linear-gradient(-45deg,transparent 75%,#e5e7eb 75%)",
+          backgroundSize: "16px 16px",
+          backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
+        };
+
+  // Pointer drag on the print area
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!uploaded || !printAreaRef.current) return;
+    const parent = printAreaRef.current.parentElement as HTMLElement | null;
+    if (!parent) return;
+    const rect = parent.getBoundingClientRect();
+    dragState.current = {
+      startX: e.clientX, startY: e.clientY,
+      ox: offsetX, oy: offsetY,
+      rectW: rect.width, rectH: rect.height,
+    };
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const s = dragState.current;
+    if (!s) return;
+    const dx = ((e.clientX - s.startX) / s.rectW) * 100;
+    const dy = ((e.clientY - s.startY) / s.rectH) * 100;
+    setOffsetX(clamp(s.ox + dx, -40, 40));
+    setOffsetY(clamp(s.oy + dy, -40, 40));
+  };
+  const onPointerUp = () => { dragState.current = null; };
+
+  const composeFilename = () =>
+    `idealo-textil-${(fabricData?.id ?? "camisa")}-${color.toLowerCase()}-${size ?? "talla"}-${Date.now()}.png`;
+
+  const onSubmit = async () => {
+    if (!uploaded || !size || busy) return;
+    setBusy(true);
     const lines = [
       "Hola! Quiero cotizar una Camiseta Personalizada:",
       `- Material: ${fabricData?.name ?? "-"}`,
       `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
       `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
-      `- Color: ${color}`,
+      `- Color de la camisa: ${color}`,
       `- Talla: ${size}`,
       `- Cantidad: ${qty}`,
-      `- Posición del arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%`,
+      `- Arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%, rotación ${rotation}°`,
       notes ? `- Notas: ${notes}` : "",
       "",
-      "Adjunto el diseño en el chat.",
+      "Adjunto la vista previa (PNG) en el chat.",
     ].filter(Boolean).join("\n");
+
+    // Try to render PNG of the preview; download it so the user can attach.
+    try {
+      if (previewRef.current) {
+        const blob = await toBlob(previewRef.current, { pixelRatio: 2, cacheBust: true, backgroundColor: canvasBg === "gray" ? "#e5e7eb" : "#ffffff" });
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = composeFilename();
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+      }
+    } catch {
+      // silent — WhatsApp still opens
+    }
+
     const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
     window.open(href, "_blank", "noopener,noreferrer");
     onSubmitted({ href, text: lines });
+    setBusy(false);
   };
 
   return (
@@ -4734,15 +4809,7 @@ function TextilesDesignStep({
               ? "El diseño se integra en las fibras de la tela. Tacto cero y máxima durabilidad — requiere tela blanca."
               : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela."}
           </p>
-          <details className="mt-3 text-xs">
-            <summary className="cursor-pointer font-medium text-foreground">¿Cuál es la diferencia?</summary>
-            <div className="mt-2 grid gap-2 text-muted-foreground">
-              <div><b className="text-foreground">Sublimación:</b> integrada en la tela, tacto cero, requiere tela blanca.</div>
-              <div><b className="text-foreground">DTF:</b> capa impresa sobre la tela, gran definición, funciona en cualquier color.</div>
-            </div>
-          </details>
         </div>
-
 
         {/* Upload */}
         <div>
@@ -4765,8 +4832,9 @@ function TextilesDesignStep({
         {uploaded && (
           <div className="space-y-4 rounded-2xl border border-border bg-background p-4">
             <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala (Zoom)" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
-            <ToolSlider icon={<Move className="h-3.5 w-3.5" />} label="Posición X" value={offsetX} min={-40} max={40} step={1} onChange={setOffsetX} suffix="%" />
-            <ToolSlider icon={<Move className="h-3.5 w-3.5" />} label="Posición Y" value={offsetY} min={-40} max={40} step={1} onChange={setOffsetY} suffix="%" />
+            <p className="text-[11px] text-muted-foreground">
+              💡 Arrastra el diseño directamente sobre la camisa para posicionarlo.
+            </p>
           </div>
         )}
 
@@ -4821,40 +4889,41 @@ function TextilesDesignStep({
 
       {/* RIGHT: preview */}
       <div className="lg:sticky lg:top-6 lg:self-start">
-        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
-          <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
+        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-4 sm:p-6">
+          <div className="mb-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
             <span>Vista previa en vivo</span>
             <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
           </div>
 
-
           {/* Color picker inline */}
-          <div className="mb-4 rounded-2xl border border-border bg-background/70 p-3">
+          <div className="mb-3 rounded-2xl border border-border bg-background/70 p-3">
             <div className="mb-2 flex items-center justify-between">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
               {colorLock && (
                 <div className="text-[10px] font-medium text-[color:var(--brand-magenta)]">Bloqueado en {colorLock}</div>
               )}
             </div>
-            <div className="grid grid-cols-8 gap-2">
+            <div className="grid grid-cols-9 gap-1.5 sm:gap-2">
               {TX_COLORS.map((c) => {
                 const disabled = colorLock !== null && c.name !== colorLock;
                 const active = color === c.name;
                 return (
                   <button
                     key={c.name}
+                    type="button"
                     disabled={disabled}
                     onClick={() => onColorChange(c.name)}
                     title={c.name}
+                    aria-label={`Color ${c.name}`}
                     className={cn(
-                      "flex flex-col items-center gap-1 transition",
+                      "flex items-center justify-center transition touch-manipulation",
                       disabled && "opacity-30 cursor-not-allowed",
                     )}
                   >
                     <span
                       className={cn(
                         "h-8 w-8 rounded-full border-2 transition",
-                        active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border hover:scale-110",
+                        active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border active:scale-95 hover:scale-110",
                         c.border && "border-neutral-300",
                       )}
                       style={{ backgroundColor: c.hex }}
@@ -4865,8 +4934,58 @@ function TextilesDesignStep({
             </div>
           </div>
 
+          {/* Toolbar */}
+          <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-2xl border border-border bg-background/80 p-1.5">
+            <button
+              type="button"
+              onClick={rotateLeft}
+              disabled={!uploaded}
+              title="Rotar 90° a la izquierda"
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-40"
+            >
+              <RotateCcw className="h-3.5 w-3.5" /> 90°
+            </button>
+            <button
+              type="button"
+              onClick={zoomOut}
+              disabled={!uploaded}
+              title="Reducir"
+              className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
+            >−</button>
+            <span className="min-w-[38px] text-center text-[11px] font-semibold text-muted-foreground">{scale}%</span>
+            <button
+              type="button"
+              onClick={zoomIn}
+              disabled={!uploaded}
+              title="Ampliar"
+              className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
+            >+</button>
+            <div className="mx-1 h-5 w-px bg-border" />
+            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Fondo</span>
+            {([
+              { id: "checker" as const, label: "PNG" },
+              { id: "white" as const, label: "Blanco" },
+              { id: "gray" as const, label: "Gris" },
+            ]).map((b) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => setCanvasBg(b.id)}
+                className={cn(
+                  "rounded-lg px-2 py-1 text-[11px] font-medium transition",
+                  canvasBg === b.id ? "bg-foreground text-background" : "hover:bg-muted",
+                )}
+              >
+                {b.label}
+              </button>
+            ))}
+          </div>
 
-          <div className="relative mx-auto aspect-square w-full max-w-md">
+          <div
+            ref={previewRef}
+            className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl"
+            style={bgStyle}
+          >
             {/* T-shirt SVG maquette */}
             <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
               <path
@@ -4884,51 +5003,73 @@ function TextilesDesignStep({
               )}
             </svg>
 
-            {/* Print area with uploaded art */}
+            {/* Print area with uploaded art (draggable) */}
             <div
-              className="absolute"
+              ref={printAreaRef}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+              className={cn(
+                "absolute select-none touch-none",
+                uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
+              )}
               style={{
                 left: `${30 + offsetX * 0.4}%`,
                 top: `${28 + offsetY * 0.4}%`,
                 width: `${40 * (scale / 100)}%`,
                 height: `${40 * (scale / 100)}%`,
-                transform: "translate(0, 0)",
+                transform: `rotate(${rotation}deg)`,
+                transformOrigin: "center",
+                willChange: "transform,left,top,width,height",
               }}
             >
               {uploaded ? (
-                <img src={uploaded} alt="Diseño" className="h-full w-full object-contain" />
+                <img
+                  src={uploaded}
+                  alt="Diseño"
+                  draggable={false}
+                  className="pointer-events-none h-full w-full object-contain"
+                />
               ) : (
-                <div className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed border-white/60 bg-black/10 p-2 text-center text-[10px] font-medium text-white/80" style={{ color: strokeColor, borderColor: strokeColor }}>
+                <div
+                  className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
+                  style={{ color: strokeColor, borderColor: strokeColor }}
+                >
                   Área de impresión<br />Sube tu diseño
                 </div>
               )}
             </div>
           </div>
 
-          <div className="mx-auto mt-6 flex max-w-xs items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
+          <div className="mx-auto mt-4 flex max-w-sm items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
             <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
-            <span>
-              Vista previa referencial. Ajustá zoom y posición para simular cómo quedará el arte sobre la camisa.
-            </span>
+            <span>Arrastra el diseño para posicionarlo. Usá los botones para zoom y rotar 90°.</span>
           </div>
         </div>
 
         <button
           type="button"
           onClick={onSubmit}
-          disabled={!uploaded || !size}
+          disabled={!uploaded || !size || busy}
           className={cn(
             "mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
-            uploaded && size
+            uploaded && size && !busy
               ? "bg-gradient-cta animate-rainbow-shimmer hover:scale-[1.01]"
               : "cursor-not-allowed bg-muted-foreground/40",
           )}
         >
-          <MessageCircle className="h-5 w-5" />
-          {!size ? "Elige una talla" : !uploaded ? "Sube tu diseño para continuar" : "Solicitar Cotización por WhatsApp"}
+          {busy ? (
+            <>Generando vista previa…</>
+          ) : (
+            <>
+              <Download className="h-5 w-5" />
+              {!size ? "Elige una talla" : !uploaded ? "Sube tu diseño para continuar" : "Descargar PNG y abrir WhatsApp"}
+            </>
+          )}
         </button>
         <p className="mt-2 text-center text-[11px] text-muted-foreground">
-          Se abre WhatsApp con todos los detalles listos. Solo adjunta tu diseño en el chat.
+          Se descarga tu vista previa (PNG) y se abre WhatsApp con todos los detalles. Adjunta el PNG en el chat.
         </p>
 
         <NavRow onBack={onBack} />
