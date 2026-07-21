@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { projects, type ProjectType } from "@/lib/portfolio-data";
+import { Reveal } from "@/components/Reveal";
 
 type Filter = "Todos" | ProjectType;
 const FILTERS: Filter[] = [
