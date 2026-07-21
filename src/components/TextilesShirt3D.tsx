@@ -26,7 +26,9 @@ function ChestDecal({
   offsetX = 0,
   offsetY = 0,
   scale = 100,
+  scaleX = 100,
   rotation = 0,
+  side = "front",
 }: Omit<Props, "color" | "sleeve">) {
   const texture = useLoader(THREE.TextureLoader, imageUrl!);
   useEffect(() => {
@@ -36,14 +38,16 @@ function ChestDecal({
   }, [texture]);
 
   const s = (scale / 100) * 0.9;
-  // Chest position: slightly above center; +x = right, +y = up, +z = towards viewer
+  const sx = s * (scaleX / 100);
   const px = (offsetX / 100) * 0.45;
   const py = -(offsetY / 100) * 0.45 + 0.08;
   const rot = (rotation * Math.PI) / 180;
+  const z = side === "front" ? 0.31 : -0.31;
+  const yaw = side === "front" ? 0 : Math.PI;
 
   return (
-    <mesh position={[px, py, 0.31]} rotation={[0, 0, -rot]}>
-      <planeGeometry args={[s, s]} />
+    <mesh position={[px, py, z]} rotation={[0, yaw, -rot]}>
+      <planeGeometry args={[sx, s]} />
       <meshStandardMaterial
         map={texture}
         transparent
@@ -55,6 +59,7 @@ function ChestDecal({
     </mesh>
   );
 }
+
 
 function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, rotation }: Props) {
   const bodyColor = useMemo(() => new THREE.Color(color), [color]);
