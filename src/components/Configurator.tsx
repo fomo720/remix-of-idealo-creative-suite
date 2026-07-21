@@ -34,6 +34,7 @@ import materialVinilBlanco from "@/assets/material-vinil-blanco-brioche.jpg.asse
 import materialVinilTransparente from "@/assets/material-vinil-transparente-corozal.jpg.asset.json";
 import stickersHandCover from "@/assets/stickers-hand-cover.png.asset.json";
 import laserStanleyCover from "@/assets/laser-stanley-cover.jpg.asset.json";
+import shirt2dPattern from "@/assets/shirt-2d-pattern.png.asset.json";
 import clearSticker from "@/assets/clear-sticker.png.asset.json";
 import coinHandIcon from "@/assets/coin-hand.png.asset.json";
 import waterDropIcon from "@/assets/water-drop.png.asset.json";
