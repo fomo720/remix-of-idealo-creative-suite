@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+
+const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
@@ -4669,6 +4671,7 @@ function TextilesDesignStep({
   const [rotation, setRotation] = useState(0);
   const [canvasBg, setCanvasBg] = useState<TxCanvasBg>("checker");
   const [busy, setBusy] = useState(false);
+  const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
   const previewRef = useRef<HTMLDivElement | null>(null);
   const printAreaRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
@@ -4934,6 +4937,60 @@ function TextilesDesignStep({
             </div>
           </div>
 
+          {/* View mode toggle */}
+          <div className="mb-3 flex justify-center">
+            <div className="inline-flex rounded-full border border-border bg-background/80 p-1 shadow-card-soft">
+              <button
+                type="button"
+                onClick={() => setViewMode("2d")}
+                className={cn(
+                  "rounded-full px-4 py-1.5 text-xs font-semibold transition",
+                  viewMode === "2d" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted",
+                )}
+              >
+                Editor 2D
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("3d")}
+                className={cn(
+                  "rounded-full px-4 py-1.5 text-xs font-semibold transition",
+                  viewMode === "3d"
+                    ? "bg-gradient-to-r from-[color:var(--brand-pink)] to-[color:var(--brand-cyan)] text-white shadow-sm"
+                    : "text-muted-foreground hover:bg-muted",
+                )}
+              >
+                Vista 3D · Realidad Interactiva
+              </button>
+            </div>
+          </div>
+
+          {viewMode === "3d" ? (
+            <div className="mx-auto w-full max-w-md">
+              <Suspense
+                fallback={
+                  <div className="flex h-[420px] w-full items-center justify-center rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200 text-xs text-muted-foreground">
+                    Cargando visor 3D…
+                  </div>
+                }
+              >
+                <TextilesShirt3D
+                  color={colorHex}
+                  sleeve={sleeve}
+                  imageUrl={uploaded}
+                  offsetX={offsetX}
+                  offsetY={offsetY}
+                  scale={scale}
+                  rotation={rotation}
+                />
+              </Suspense>
+              <div className="mx-auto mt-4 flex max-w-sm items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
+                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
+                <span>Desliza con el dedo para rotar 360°. Pellizca o usá +/− para acercar. Cambiá a Editor 2D para reposicionar tu diseño.</span>
+              </div>
+            </div>
+          ) : (
+          <>
           {/* Toolbar */}
           <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-2xl border border-border bg-background/80 p-1.5">
             <button
@@ -5046,7 +5103,10 @@ function TextilesDesignStep({
             <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
             <span>Arrastra el diseño para posicionarlo. Usá los botones para zoom y rotar 90°.</span>
           </div>
+          </>
+          )}
         </div>
+
 
         <button
           type="button"

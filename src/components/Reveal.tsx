@@ -74,11 +74,11 @@ export function Reveal({
     willChange: shouldAnimate && !visible ? "opacity, transform" : undefined,
   };
 
+  const TagAny = Tag as any;
   return (
-    
-    <Tag ref={ref} className={className} style={inlineStyle}>
+    <TagAny ref={ref} className={className} style={inlineStyle}>
       {children}
-    </Tag>
+    </TagAny>
   );
 }
 
