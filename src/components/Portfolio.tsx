@@ -103,38 +103,42 @@ export function Portfolio() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((p) => (
-              <Link
-                key={p.slug}
-                to="/portafolio/$slug"
-                params={{ slug: p.slug }}
-                className="group flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.06] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.15)]"
-              >
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : null}
-                  {p.watermark ? (
-                    <div className="absolute left-3 top-3 z-10 rounded-lg bg-white/85 px-2 py-1 shadow-md backdrop-blur-sm">
-                      <img src={p.watermark} alt="Idealo" className="h-5 w-auto sm:h-6" />
-                    </div>
-                  ) : null}
-                </div>
-                <div className="flex flex-1 flex-col gap-2 p-6">
-                  <div className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>
-                    {p.tag}
+            {visible.map((p, i) => (
+              <Reveal key={p.slug} delay={(i % 3) * 90} y={24}>
+                <Link
+                  to="/portafolio/$slug"
+                  params={{ slug: p.slug }}
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.06] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.15)]"
+                >
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
+                    <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-black/[0.03] to-black/[0.06]" aria-hidden="true" />
+                    {p.image ? (
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="relative z-10 absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : null}
+                    {p.watermark ? (
+                      <div className="absolute left-3 top-3 z-20 rounded-lg bg-white/85 px-2 py-1 shadow-md backdrop-blur-sm">
+                        <img src={p.watermark} alt="Idealo" className="h-5 w-auto sm:h-6" loading="lazy" decoding="async" />
+                      </div>
+                    ) : null}
                   </div>
-                  <h3 className="text-base font-bold leading-tight line-clamp-1">{p.title}</h3>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{p.subtitle}</p>
-                </div>
-              </Link>
+                  <div className="flex flex-1 flex-col gap-2 p-6">
+                    <div className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>
+                      {p.tag}
+                    </div>
+                    <h3 className="text-base font-bold leading-tight line-clamp-1">{p.title}</h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{p.subtitle}</p>
+                  </div>
+                </Link>
+              </Reveal>
             ))}
           </div>
+
         )}
 
         <div className="mt-16 flex justify-center">
