@@ -299,6 +299,20 @@
   animation: shimmer 6s linear infinite;
 }
 
+@utility skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #eceef2 0%,
+    #f6f7f9 40%,
+    #ffffff 50%,
+    #f6f7f9 60%,
+    #eceef2 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+
 /* Floating decorative shapes in Hero */
 @keyframes float-drift {
   0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }

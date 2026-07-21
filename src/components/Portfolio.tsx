@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { projects, type ProjectType } from "@/lib/portfolio-data";
+import { SkeletonImage } from "@/components/SkeletonImage";
 
 
 type Filter = "Todos" | ProjectType;
@@ -112,12 +113,15 @@ export function Portfolio() {
               >
                 <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
                   {p.image ? (
-                    <img
+                    <SkeletonImage
                       src={p.image}
                       alt={p.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      aspect="aspect-[4/5]"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  ) : null}
+                  ) : (
+                    <div aria-hidden className="absolute inset-0 skeleton-shimmer" />
+                  )}
                   {p.watermark ? (
                     <div className="absolute left-3 top-3 z-20 rounded-lg bg-white/85 px-2 py-1 shadow-md backdrop-blur-sm">
                       <img src={p.watermark} alt="Idealo" className="h-5 w-auto sm:h-6" />

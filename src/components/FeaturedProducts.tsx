@@ -1,3 +1,4 @@
+import { SkeletonImage } from "@/components/SkeletonImage";
 
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
 import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
@@ -55,13 +56,12 @@ export function FeaturedProducts() {
                 key={p.title}
                 className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.06] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.15)]"
               >
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
+                <SkeletonImage
+                  src={p.image}
+                  alt={p.title}
+                  aspect="aspect-[4/5]"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
                 <div className="flex flex-1 flex-col gap-4 p-6">
                   <div className="flex-1 min-h-[3.5rem]">
                     <h3 className="text-base font-bold leading-tight line-clamp-1">{p.title}</h3>
