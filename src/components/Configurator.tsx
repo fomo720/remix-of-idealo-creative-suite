@@ -4837,12 +4837,14 @@ function TextilesDesignStep({
 
         {uploaded && (
           <div className="space-y-4 rounded-2xl border border-border bg-background p-4">
-            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala (Zoom)" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
+            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Tamaño general" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
+            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala horizontal (estirar)" value={scaleX} min={50} max={200} step={1} onChange={setScaleX} suffix="%" />
             <p className="text-[11px] text-muted-foreground">
-              💡 Arrastra el diseño directamente sobre la camisa para posicionarlo.
+              💡 Arrastra el diseño directamente sobre la camisa 2D para posicionarlo. Se sincroniza en vivo con la vista 3D.
             </p>
           </div>
         )}
+
 
         {/* Talla + Cantidad */}
         <div className="rounded-2xl border border-border bg-background p-4">
