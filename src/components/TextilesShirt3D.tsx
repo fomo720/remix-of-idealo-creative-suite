@@ -10,11 +10,16 @@ type Props = {
   /** normalized 0..1 art position on the chest area */
   offsetX?: number;
   offsetY?: number;
-  /** scale in percent (30..200) matches the 2D editor */
+  /** overall scale in percent (30..200) matches the 2D editor */
   scale?: number;
+  /** horizontal-only stretch in percent (50..200) */
+  scaleX?: number;
   /** rotation in degrees */
   rotation?: number;
+  /** which side to preview */
+  side?: "front" | "back";
 };
+
 
 function ChestDecal({
   imageUrl,
