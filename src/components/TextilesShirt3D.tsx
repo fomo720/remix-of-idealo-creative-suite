@@ -65,7 +65,7 @@ function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, scaleX, rotat
   const bodyColor = useMemo(() => new THREE.Color(color), [color]);
 
   return (
-    <group position={[0, 0, 0]}>
+    <group position={[0, 0, 0]} rotation={[0, side === "back" ? Math.PI : 0, 0]}>
       {/* Body */}
       <RoundedBox args={[1.2, 1.55, 0.55]} radius={0.15} smoothness={6} position={[0, 0, 0]}>
         <meshStandardMaterial color={bodyColor} roughness={0.85} metalness={0.02} />
