@@ -4671,6 +4671,7 @@ function TextilesDesignStep({
   const [rotation, setRotation] = useState(0);
   const [canvasBg, setCanvasBg] = useState<TxCanvasBg>("checker");
   const [busy, setBusy] = useState(false);
+  const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
   const previewRef = useRef<HTMLDivElement | null>(null);
   const printAreaRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
