@@ -61,7 +61,7 @@ function ChestDecal({
 }
 
 
-function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, rotation }: Props) {
+function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, scaleX, rotation, side }: Props) {
   const bodyColor = useMemo(() => new THREE.Color(color), [color]);
 
   return (
