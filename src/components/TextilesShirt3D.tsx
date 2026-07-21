@@ -1,25 +1,22 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { OrbitControls, RoundedBox } from "@react-three/drei";
+import { OrbitControls, useGLTF, Center } from "@react-three/drei";
 import * as THREE from "three";
 
 type Props = {
   color: string;
   sleeve: "corta" | "larga";
   imageUrl: string | null;
-  /** normalized 0..1 art position on the chest area */
   offsetX?: number;
   offsetY?: number;
-  /** overall scale in percent (30..200) matches the 2D editor */
   scale?: number;
-  /** horizontal-only stretch in percent (50..200) */
   scaleX?: number;
-  /** rotation in degrees */
   rotation?: number;
-  /** which side to preview */
   side?: "front" | "back";
 };
 
+// Preload the shirt model
+useGLTF.preload("/models/shirt/scene.gltf");
 
 function ChestDecal({
   imageUrl,
@@ -37,12 +34,14 @@ function ChestDecal({
     texture.needsUpdate = true;
   }, [texture]);
 
-  const s = (scale / 100) * 0.9;
+  // The GLTF model, after Center + scale, roughly spans ~1.8 units tall.
+  // Chest is around y=0.15, front face around z=0.28.
+  const s = (scale / 100) * 0.55;
   const sx = s * (scaleX / 100);
-  const px = (offsetX / 100) * 0.45;
-  const py = -(offsetY / 100) * 0.45 + 0.08;
+  const px = (offsetX / 100) * 0.35;
+  const py = -(offsetY / 100) * 0.35 + 0.15;
   const rot = (rotation * Math.PI) / 180;
-  const z = side === "front" ? 0.31 : -0.31;
+  const z = side === "front" ? 0.29 : -0.29;
   const yaw = side === "front" ? 0 : Math.PI;
 
   return (
@@ -60,68 +59,32 @@ function ChestDecal({
   );
 }
 
-
-function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, scaleX, rotation, side }: Props) {
-  const bodyColor = useMemo(() => new THREE.Color(color), [color]);
+function ShirtModel({ color, side = "front" }: { color: string; side?: "front" | "back" }) {
+  const gltf = useGLTF("/models/shirt/scene.gltf");
+  const cloned = useMemo(() => {
+    const s = gltf.scene.clone(true);
+    s.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if ((mesh as any).isMesh) {
+        const src = mesh.material as THREE.MeshStandardMaterial;
+        const m = src.clone();
+        m.color = new THREE.Color(color);
+        // Keep the baked shading but tint via color; drop base map so tint is visible
+        m.map = null;
+        m.metalness = 0.02;
+        m.roughness = 0.85;
+        mesh.material = m;
+      }
+    });
+    return s;
+  }, [gltf.scene, color]);
 
   return (
-    <group position={[0, 0, 0]} rotation={[0, side === "back" ? Math.PI : 0, 0]}>
-      {/* Body */}
-      <RoundedBox args={[1.2, 1.55, 0.55]} radius={0.15} smoothness={6} position={[0, 0, 0]}>
-        <meshStandardMaterial color={bodyColor} roughness={0.85} metalness={0.02} />
-      </RoundedBox>
-
-      {/* Collar cutout (small dark ring at top-front) */}
-      <mesh position={[0, 0.72, 0.28]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.14, 0.05, 12, 24]} />
-        <meshStandardMaterial color={bodyColor} roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 0.72, 0.29]}>
-        <circleGeometry args={[0.13, 32]} />
-        <meshBasicMaterial color="#1f1f1f" side={THREE.DoubleSide} />
-      </mesh>
-
-      {/* Short sleeves */}
-      <mesh position={[-0.78, 0.42, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.28, 0.32, 0.5, 24]} />
-        <meshStandardMaterial color={bodyColor} roughness={0.85} />
-      </mesh>
-      <mesh position={[0.78, 0.42, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.28, 0.32, 0.5, 24]} />
-        <meshStandardMaterial color={bodyColor} roughness={0.85} />
-      </mesh>
-
-      {/* Long sleeves extension */}
-      {sleeve === "larga" && (
-        <>
-          <mesh position={[-1.15, -0.05, 0]} rotation={[0, 0, Math.PI / 2 + 0.15]}>
-            <cylinderGeometry args={[0.24, 0.28, 0.85, 24]} />
-            <meshStandardMaterial color={bodyColor} roughness={0.85} />
-          </mesh>
-          <mesh position={[1.15, -0.05, 0]} rotation={[0, 0, Math.PI / 2 - 0.15]}>
-            <cylinderGeometry args={[0.24, 0.28, 0.85, 24]} />
-            <meshStandardMaterial color={bodyColor} roughness={0.85} />
-          </mesh>
-        </>
-      )}
-
-      {imageUrl ? (
-        <Suspense fallback={null}>
-          <ChestDecal
-            imageUrl={imageUrl}
-            offsetX={offsetX}
-            offsetY={offsetY}
-            scale={scale}
-            scaleX={scaleX}
-            rotation={rotation}
-            side={side}
-          />
-        </Suspense>
-      ) : null}
+    <group rotation={[0, side === "back" ? Math.PI : 0, 0]}>
+      <primitive object={cloned} />
     </group>
   );
 }
-
 
 export default function TextilesShirt3D(props: Props) {
   const controlsRef = useRef<any>(null);
@@ -131,7 +94,6 @@ export default function TextilesShirt3D(props: Props) {
   const zoom = (delta: number) => {
     const c = controlsRef.current;
     if (!c) return;
-    // OrbitControls dolly by adjusting target distance
     const cam = c.object as THREE.PerspectiveCamera;
     const dir = new THREE.Vector3();
     cam.getWorldDirection(dir);
@@ -140,25 +102,32 @@ export default function TextilesShirt3D(props: Props) {
   };
 
   return (
-    <div className="relative h-[420px] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200">
+    <div className="relative h-[520px] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200">
       {ready ? (
         <Canvas
           shadows={false}
           dpr={[1, 2]}
-          camera={{ position: [0, 0.1, 3.4], fov: 35 }}
+          camera={{ position: [0, 0.1, 2.6], fov: 35 }}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
-          <ambientLight intensity={0.75} />
+          <ambientLight intensity={0.8} />
           <directionalLight position={[3, 4, 5]} intensity={0.9} />
           <directionalLight position={[-3, -2, -2]} intensity={0.35} />
-          <Shirt {...props} />
+
+          <Suspense fallback={null}>
+            <Center scale={1.6}>
+              <ShirtModel color={props.color} side={props.side} />
+            </Center>
+            {props.imageUrl ? <ChestDecal {...props} /> : null}
+          </Suspense>
+
           <OrbitControls
             ref={controlsRef}
             enablePan={false}
             enableDamping
             dampingFactor={0.08}
-            minDistance={2}
-            maxDistance={6}
+            minDistance={1.4}
+            maxDistance={5}
             rotateSpeed={0.9}
             zoomSpeed={0.8}
             touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
