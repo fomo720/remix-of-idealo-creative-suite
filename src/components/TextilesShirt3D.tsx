@@ -10,18 +10,25 @@ type Props = {
   /** normalized 0..1 art position on the chest area */
   offsetX?: number;
   offsetY?: number;
-  /** scale in percent (30..200) matches the 2D editor */
+  /** overall scale in percent (30..200) matches the 2D editor */
   scale?: number;
+  /** horizontal-only stretch in percent (50..200) */
+  scaleX?: number;
   /** rotation in degrees */
   rotation?: number;
+  /** which side to preview */
+  side?: "front" | "back";
 };
+
 
 function ChestDecal({
   imageUrl,
   offsetX = 0,
   offsetY = 0,
   scale = 100,
+  scaleX = 100,
   rotation = 0,
+  side = "front",
 }: Omit<Props, "color" | "sleeve">) {
   const texture = useLoader(THREE.TextureLoader, imageUrl!);
   useEffect(() => {
@@ -31,14 +38,16 @@ function ChestDecal({
   }, [texture]);
 
   const s = (scale / 100) * 0.9;
-  // Chest position: slightly above center; +x = right, +y = up, +z = towards viewer
+  const sx = s * (scaleX / 100);
   const px = (offsetX / 100) * 0.45;
   const py = -(offsetY / 100) * 0.45 + 0.08;
   const rot = (rotation * Math.PI) / 180;
+  const z = side === "front" ? 0.31 : -0.31;
+  const yaw = side === "front" ? 0 : Math.PI;
 
   return (
-    <mesh position={[px, py, 0.31]} rotation={[0, 0, -rot]}>
-      <planeGeometry args={[s, s]} />
+    <mesh position={[px, py, z]} rotation={[0, yaw, -rot]}>
+      <planeGeometry args={[sx, s]} />
       <meshStandardMaterial
         map={texture}
         transparent
@@ -51,11 +60,12 @@ function ChestDecal({
   );
 }
 
-function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, rotation }: Props) {
+
+function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, scaleX, rotation, side }: Props) {
   const bodyColor = useMemo(() => new THREE.Color(color), [color]);
 
   return (
-    <group position={[0, 0, 0]}>
+    <group position={[0, 0, 0]} rotation={[0, side === "back" ? Math.PI : 0, 0]}>
       {/* Body */}
       <RoundedBox args={[1.2, 1.55, 0.55]} radius={0.15} smoothness={6} position={[0, 0, 0]}>
         <meshStandardMaterial color={bodyColor} roughness={0.85} metalness={0.02} />
@@ -102,13 +112,16 @@ function Shirt({ color, sleeve, imageUrl, offsetX, offsetY, scale, rotation }: P
             offsetX={offsetX}
             offsetY={offsetY}
             scale={scale}
+            scaleX={scaleX}
             rotation={rotation}
+            side={side}
           />
         </Suspense>
       ) : null}
     </group>
   );
 }
+
 
 export default function TextilesShirt3D(props: Props) {
   const controlsRef = useRef<any>(null);

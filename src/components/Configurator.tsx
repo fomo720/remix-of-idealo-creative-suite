@@ -4671,7 +4671,10 @@ function TextilesDesignStep({
   const [rotation, setRotation] = useState(0);
   const [canvasBg, setCanvasBg] = useState<TxCanvasBg>("checker");
   const [busy, setBusy] = useState(false);
-  const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
+  const [viewMode, setViewMode] = useState<"2d" | "3d" | "both">("both");
+  const [scaleX, setScaleX] = useState(100);
+  const [side, setSide] = useState<"front" | "back">("front");
+
   const previewRef = useRef<HTMLDivElement | null>(null);
   const printAreaRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
@@ -4731,7 +4734,7 @@ function TextilesDesignStep({
       `- Color de la camisa: ${color}`,
       `- Talla: ${size}`,
       `- Cantidad: ${qty}`,
-      `- Arte: zoom ${scale}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%, rotación ${rotation}°`,
+      `- Arte: zoom ${scale}%, escala horizontal ${scaleX}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%, rotación ${rotation}°, lado ${side === "front" ? "frente" : "atrás"}`,
       notes ? `- Notas: ${notes}` : "",
       "",
       "Adjunto la vista previa (PNG) en el chat.",
@@ -4834,12 +4837,14 @@ function TextilesDesignStep({
 
         {uploaded && (
           <div className="space-y-4 rounded-2xl border border-border bg-background p-4">
-            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala (Zoom)" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
+            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Tamaño general" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
+            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala horizontal (estirar)" value={scaleX} min={50} max={200} step={1} onChange={setScaleX} suffix="%" />
             <p className="text-[11px] text-muted-foreground">
-              💡 Arrastra el diseño directamente sobre la camisa para posicionarlo.
+              💡 Arrastra el diseño directamente sobre la camisa 2D para posicionarlo. Se sincroniza en vivo con la vista 3D.
             </p>
           </div>
         )}
+
 
         {/* Talla + Cantidad */}
         <div className="rounded-2xl border border-border bg-background p-4">
@@ -4937,174 +4942,199 @@ function TextilesDesignStep({
             </div>
           </div>
 
-          {/* View mode toggle */}
-          <div className="mb-3 flex justify-center">
+          {/* Side (Front/Back) + View mode */}
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <div className="inline-flex rounded-full border border-border bg-background/80 p-1 shadow-card-soft">
-              <button
-                type="button"
-                onClick={() => setViewMode("2d")}
-                className={cn(
-                  "rounded-full px-4 py-1.5 text-xs font-semibold transition",
-                  viewMode === "2d" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted",
-                )}
-              >
-                Editor 2D
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("3d")}
-                className={cn(
-                  "rounded-full px-4 py-1.5 text-xs font-semibold transition",
-                  viewMode === "3d"
-                    ? "bg-gradient-to-r from-[color:var(--brand-pink)] to-[color:var(--brand-cyan)] text-white shadow-sm"
-                    : "text-muted-foreground hover:bg-muted",
-                )}
-              >
-                Vista 3D · Realidad Interactiva
-              </button>
-            </div>
-          </div>
-
-          {viewMode === "3d" ? (
-            <div className="mx-auto w-full max-w-md">
-              <Suspense
-                fallback={
-                  <div className="flex h-[420px] w-full items-center justify-center rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200 text-xs text-muted-foreground">
-                    Cargando visor 3D…
-                  </div>
-                }
-              >
-                <TextilesShirt3D
-                  color={colorHex}
-                  sleeve={sleeve}
-                  imageUrl={uploaded}
-                  offsetX={offsetX}
-                  offsetY={offsetY}
-                  scale={scale}
-                  rotation={rotation}
-                />
-              </Suspense>
-              <div className="mx-auto mt-4 flex max-w-sm items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
-                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
-                <span>Desliza con el dedo para rotar 360°. Pellizca o usá +/− para acercar. Cambiá a Editor 2D para reposicionar tu diseño.</span>
-              </div>
-            </div>
-          ) : (
-          <>
-          {/* Toolbar */}
-          <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-2xl border border-border bg-background/80 p-1.5">
-            <button
-              type="button"
-              onClick={rotateLeft}
-              disabled={!uploaded}
-              title="Rotar 90° a la izquierda"
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-40"
-            >
-              <RotateCcw className="h-3.5 w-3.5" /> 90°
-            </button>
-            <button
-              type="button"
-              onClick={zoomOut}
-              disabled={!uploaded}
-              title="Reducir"
-              className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
-            >−</button>
-            <span className="min-w-[38px] text-center text-[11px] font-semibold text-muted-foreground">{scale}%</span>
-            <button
-              type="button"
-              onClick={zoomIn}
-              disabled={!uploaded}
-              title="Ampliar"
-              className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
-            >+</button>
-            <div className="mx-1 h-5 w-px bg-border" />
-            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Fondo</span>
-            {([
-              { id: "checker" as const, label: "PNG" },
-              { id: "white" as const, label: "Blanco" },
-              { id: "gray" as const, label: "Gris" },
-            ]).map((b) => (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => setCanvasBg(b.id)}
-                className={cn(
-                  "rounded-lg px-2 py-1 text-[11px] font-medium transition",
-                  canvasBg === b.id ? "bg-foreground text-background" : "hover:bg-muted",
-                )}
-              >
-                {b.label}
-              </button>
-            ))}
-          </div>
-
-          <div
-            ref={previewRef}
-            className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl"
-            style={bgStyle}
-          >
-            {/* T-shirt SVG maquette */}
-            <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
-              <path
-                d="M80 90 L150 60 Q175 95 200 95 Q225 95 250 60 L320 90 L360 150 L300 175 L300 340 Q300 355 285 355 L115 355 Q100 355 100 340 L100 175 L40 150 Z"
-                fill={colorHex}
-                stroke={strokeColor}
-                strokeWidth="2"
-                opacity="0.98"
-              />
-              {sleeve === "larga" && (
-                <>
-                  <path d="M40 150 L20 300 L75 315 L100 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
-                  <path d="M360 150 L380 300 L325 315 L300 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
-                </>
-              )}
-            </svg>
-
-            {/* Print area with uploaded art (draggable) */}
-            <div
-              ref={printAreaRef}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              onPointerCancel={onPointerUp}
-              className={cn(
-                "absolute select-none touch-none",
-                uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
-              )}
-              style={{
-                left: `${30 + offsetX * 0.4}%`,
-                top: `${28 + offsetY * 0.4}%`,
-                width: `${40 * (scale / 100)}%`,
-                height: `${40 * (scale / 100)}%`,
-                transform: `rotate(${rotation}deg)`,
-                transformOrigin: "center",
-                willChange: "transform,left,top,width,height",
-              }}
-            >
-              {uploaded ? (
-                <img
-                  src={uploaded}
-                  alt="Diseño"
-                  draggable={false}
-                  className="pointer-events-none h-full w-full object-contain"
-                />
-              ) : (
-                <div
-                  className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
-                  style={{ color: strokeColor, borderColor: strokeColor }}
+              {([
+                { id: "front" as const, label: "Frente" },
+                { id: "back" as const, label: "Atrás" },
+              ]).map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setSide(s.id)}
+                  className={cn(
+                    "rounded-full px-3 py-1.5 text-xs font-semibold transition",
+                    side === s.id ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted",
+                  )}
                 >
-                  Área de impresión<br />Sube tu diseño
-                </div>
-              )}
+                  {s.label}
+                </button>
+              ))}
+            </div>
+            <div className="inline-flex rounded-full border border-border bg-background/80 p-1 shadow-card-soft">
+              {([
+                { id: "2d" as const, label: "2D" },
+                { id: "both" as const, label: "2D + 3D" },
+                { id: "3d" as const, label: "3D" },
+              ]).map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setViewMode(m.id)}
+                  className={cn(
+                    "rounded-full px-3 py-1.5 text-[11px] font-semibold transition",
+                    viewMode === m.id
+                      ? m.id === "3d" || m.id === "both"
+                        ? "bg-gradient-to-r from-[color:var(--brand-pink)] to-[color:var(--brand-cyan)] text-white shadow-sm"
+                        : "bg-foreground text-background"
+                      : "text-muted-foreground hover:bg-muted",
+                  )}
+                >
+                  {m.label}
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="mx-auto mt-4 flex max-w-sm items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
-            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
-            <span>Arrastra el diseño para posicionarlo. Usá los botones para zoom y rotar 90°.</span>
+          <div className={cn("grid gap-4", viewMode === "both" ? "xl:grid-cols-2" : "grid-cols-1")}>
+            {/* 2D editor */}
+            {(viewMode === "2d" || viewMode === "both") && (
+              <div>
+                {/* Toolbar */}
+                <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-2xl border border-border bg-background/80 p-1.5">
+                  <button
+                    type="button"
+                    onClick={rotateLeft}
+                    disabled={!uploaded}
+                    title="Rotar 90° a la izquierda"
+                    className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-40"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" /> 90°
+                  </button>
+                  <button
+                    type="button"
+                    onClick={zoomOut}
+                    disabled={!uploaded}
+                    title="Reducir"
+                    className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
+                  >−</button>
+                  <span className="min-w-[38px] text-center text-[11px] font-semibold text-muted-foreground">{scale}%</span>
+                  <button
+                    type="button"
+                    onClick={zoomIn}
+                    disabled={!uploaded}
+                    title="Ampliar"
+                    className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
+                  >+</button>
+                  <div className="mx-1 h-5 w-px bg-border" />
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Fondo</span>
+                  {([
+                    { id: "checker" as const, label: "PNG" },
+                    { id: "white" as const, label: "Blanco" },
+                    { id: "gray" as const, label: "Gris" },
+                  ]).map((b) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => setCanvasBg(b.id)}
+                      className={cn(
+                        "rounded-lg px-2 py-1 text-[11px] font-medium transition",
+                        canvasBg === b.id ? "bg-foreground text-background" : "hover:bg-muted",
+                      )}
+                    >
+                      {b.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div
+                  ref={previewRef}
+                  className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl"
+                  style={bgStyle}
+                >
+                  {/* T-shirt SVG maquette (flat pattern) */}
+                  <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
+                    <path
+                      d="M80 90 L150 60 Q175 95 200 95 Q225 95 250 60 L320 90 L360 150 L300 175 L300 340 Q300 355 285 355 L115 355 Q100 355 100 340 L100 175 L40 150 Z"
+                      fill={colorHex}
+                      stroke={strokeColor}
+                      strokeWidth="2"
+                      opacity="0.98"
+                    />
+                    {sleeve === "larga" && (
+                      <>
+                        <path d="M40 150 L20 300 L75 315 L100 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
+                        <path d="M360 150 L380 300 L325 315 L300 175 Z" fill={colorHex} stroke={strokeColor} strokeWidth="2" />
+                      </>
+                    )}
+                    <text x="200" y="380" textAnchor="middle" fontSize="10" fill={strokeColor} opacity="0.6" fontWeight="600">
+                      {side === "front" ? "FRENTE — patrón plano" : "ATRÁS — patrón plano"}
+                    </text>
+                  </svg>
+
+                  {/* Print area with uploaded art (draggable) */}
+                  <div
+                    ref={printAreaRef}
+                    onPointerDown={onPointerDown}
+                    onPointerMove={onPointerMove}
+                    onPointerUp={onPointerUp}
+                    onPointerCancel={onPointerUp}
+                    className={cn(
+                      "absolute select-none touch-none",
+                      uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
+                    )}
+                    style={{
+                      left: `${30 + offsetX * 0.4}%`,
+                      top: `${28 + offsetY * 0.4}%`,
+                      width: `${40 * (scale / 100)}%`,
+                      height: `${40 * (scale / 100)}%`,
+                      transform: `rotate(${rotation}deg) scaleX(${scaleX / 100})`,
+                      transformOrigin: "center",
+                      willChange: "transform,left,top,width,height",
+                    }}
+                  >
+                    {uploaded ? (
+                      <img
+                        src={uploaded}
+                        alt="Diseño"
+                        draggable={false}
+                        className="pointer-events-none h-full w-full object-contain"
+                      />
+                    ) : (
+                      <div
+                        className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
+                        style={{ color: strokeColor, borderColor: strokeColor }}
+                      >
+                        Área de impresión<br />Sube tu diseño
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3D viewer */}
+            {(viewMode === "3d" || viewMode === "both") && (
+              <div>
+                <Suspense
+                  fallback={
+                    <div className="flex h-[420px] w-full items-center justify-center rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200 text-xs text-muted-foreground">
+                      Cargando visor 3D…
+                    </div>
+                  }
+                >
+                  <TextilesShirt3D
+                    color={colorHex}
+                    sleeve={sleeve}
+                    imageUrl={uploaded}
+                    offsetX={offsetX}
+                    offsetY={offsetY}
+                    scale={scale}
+                    scaleX={scaleX}
+                    rotation={rotation}
+                    side={side}
+                  />
+                </Suspense>
+              </div>
+            )}
           </div>
-          </>
-          )}
+
+          <div className="mx-auto mt-4 flex max-w-md items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
+            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
+            <span>El logo colocado en el patrón 2D aparece en vivo sobre el modelo 3D. Deslizá el 3D para rotar 360°.</span>
+          </div>
+
         </div>
 
 
