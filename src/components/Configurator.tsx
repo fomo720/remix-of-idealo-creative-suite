@@ -847,19 +847,25 @@ export function Configurator() {
         return;
       }
     }
-    // Gating for textiles: Material → Manga → Diseño (color/talla/cantidad dentro)
+    // Gating for textiles: Tipo → Material → Manga → Diseño
     if (isTextiles) {
-      if (s >= 3 && !txFabric) {
-        setGateMsg("Primero elige el material de la camisa en el paso 2.");
+      if (s >= 3 && !txShirtType) {
+        setGateMsg("Primero elige el tipo de camisa en el paso 2.");
         setStep(2);
         return;
       }
-      if (s >= 4 && !txSleeve) {
-        setGateMsg("Primero elige el tipo de manga en el paso 3.");
+      if (s >= 4 && !txFabric) {
+        setGateMsg("Primero elige el material de la camisa en el paso 3.");
         setStep(3);
         return;
       }
+      if (s >= 5 && !txSleeve) {
+        setGateMsg("Primero elige el tipo de manga en el paso 4.");
+        setStep(4);
+        return;
+      }
     }
+
     setGateMsg(null);
     setStep(s);
   };
