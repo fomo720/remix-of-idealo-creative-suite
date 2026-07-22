@@ -749,6 +749,7 @@ export function Configurator() {
   const laserColor = laserVariantData?.colors[Math.min(laserColorIdx, laserVariantData.colors.length - 1)];
   const laserDesignStep = laserHasVariants ? 4 : 3;
   // textiles state
+  const [txShirtType, setTxShirtType] = useState<TxShirtType | null>(null);
   const [txFabric, setTxFabric] = useState<TxFabric | null>(null);
   const [txSleeve, setTxSleeve] = useState<TxSleeve | null>(null);
   const [txTechnique, setTxTechnique] = useState<TxTechnique | null>(null);
@@ -756,18 +757,37 @@ export function Configurator() {
   const [txSize, setTxSize] = useState<TxSize | null>(null);
   const [txQty, setTxQty] = useState<number>(TX_MIN_QTY);
   const isTextiles = category === "iron-ons";
-  const txFabricData = TX_FABRICS.find((f) => f.id === txFabric) ?? null;
+  const txFabricMeta = txFabric ? TX_FABRICS_META[txFabric] : null;
+  const txAvailableSleeves = getSleevesFor(txShirtType, txFabric);
+  const txFabricData = txFabricMeta
+    ? { id: txFabric as TxFabric, ...txFabricMeta, sleeves: txAvailableSleeves }
+    : null;
   const txColorLock = txTechnique === "sublimacion" ? "Blanco" : null;
+
+  // When shirt type changes: clear fabric/sleeve if no longer valid
+  useEffect(() => {
+    if (!txShirtType) return;
+    const fabrics = getFabricsForType(txShirtType);
+    if (txFabric && !fabrics.includes(txFabric)) {
+      setTxFabric(null);
+      setTxSleeve(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txShirtType]);
 
   // On fabric change: reset technique to default, clear invalid sleeve
   useEffect(() => {
-    if (!txFabricData) return;
-    if (!txTechnique || !txFabricData.techniques.includes(txTechnique)) {
-      setTxTechnique(txFabricData.techniques[0]);
+    if (!txFabricMeta) return;
+    if (!txTechnique || !txFabricMeta.techniques.includes(txTechnique)) {
+      setTxTechnique(txFabricMeta.techniques[0]);
     }
-    if (txSleeve && !txFabricData.sleeves.includes(txSleeve)) setTxSleeve(null);
+    const sleeves = getSleevesFor(txShirtType, txFabric);
+    if (txSleeve && !sleeves.includes(txSleeve)) setTxSleeve(null);
+    // Auto-pick if only one sleeve option
+    if (!txSleeve && sleeves.length === 1) setTxSleeve(sleeves[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txFabric]);
+
 
   // Auto-lock color to Blanco when technique is sublimación
   useEffect(() => {
