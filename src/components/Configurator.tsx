@@ -56,6 +56,9 @@ import tablaSalmo from "@/assets/tabla-teller.jpg.asset.json";
 import ironOnCover from "@/assets/portfolio-camisetas-estampadas.png.asset.json";
 import libretasCover from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
 import imprentaCover from "@/assets/portfolio-tarjetas.jpg.asset.json";
+import txCuelloRedondoImg from "@/assets/tx-cuello-redondo.jpg.asset.json";
+import txTipoPoloImg from "@/assets/tx-tipo-polo.jpg.asset.json";
+import txTipoColumbiaImg from "@/assets/tx-tipo-columbia.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <img src={coinHandIcon.url} alt="" className={className} style={{ filter: "grayscale(1) brightness(1.35) contrast(0.75)" }} />
@@ -123,18 +126,78 @@ type Material =
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 
 // ---------- Textiles (iron-ons) types & data ----------
-type TxFabric = "algodon" | "kiana" | "durazno";
+type TxShirtType = "redondo" | "polo" | "columbia";
+type TxFabric = "algodon" | "kiana" | "durazno" | "drifit" | "columbia";
 type TxSleeve = "corta" | "larga";
 type TxTechnique = "sublimacion" | "dtf";
 type TxSize = "S" | "M" | "L" | "XL" | "XXL";
 
-const TX_FABRICS: {
-  id: TxFabric; name: string; desc: string; techniques: TxTechnique[]; sleeves: TxSleeve[];
+// Fabric metadata (name / description / available printing techniques)
+const TX_FABRICS_META: Record<TxFabric, { name: string; desc: string; techniques: TxTechnique[] }> = {
+  algodon:  { name: "Algodón",  desc: "Tela suave y transpirable. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"] },
+  kiana:    { name: "Kiana",    desc: "Poliéster deportivo, liviano y de secado rápido. Solo sublimación (tacto cero).",     techniques: ["sublimacion"] },
+  durazno:  { name: "Durazno",  desc: "Tacto suave tipo piel de durazno. Sublimación en blanco o estampado DTF.",             techniques: ["sublimacion", "dtf"] },
+  drifit:   { name: "Dri Fit",  desc: "Poliéster técnico anti-transpirante. Ideal para uniformes tipo polo.",                 techniques: ["sublimacion"] },
+  columbia: { name: "Columbia", desc: "Tela tipo Columbia con acabado técnico. Estampado DTF o sublimación.",                 techniques: ["sublimacion", "dtf"] },
+};
+
+// Backwards-compatible flat list (used by helpers/design step lookups)
+const TX_FABRICS = (Object.keys(TX_FABRICS_META) as TxFabric[]).map((id) => ({
+  id,
+  ...TX_FABRICS_META[id],
+  sleeves: ["corta", "larga"] as TxSleeve[],
+}));
+
+// Shirt types (categoría de camisa) — controls fabrics + sleeves available
+const TX_SHIRT_TYPES: {
+  id: TxShirtType;
+  name: string;
+  desc: string;
+  image: string;
+  options: { fabric: TxFabric; sleeves: TxSleeve[] }[];
 }[] = [
-  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
-  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Solo sublimación (tacto cero).", techniques: ["sublimacion"], sleeves: ["corta"] },
-  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
+  {
+    id: "redondo",
+    name: "Cuello Redondo",
+    desc: "T-shirt clásica de cuello redondo. Disponible en manga corta o larga.",
+    image: txCuelloRedondoImg.url,
+    options: [
+      { fabric: "algodon", sleeves: ["corta", "larga"] },
+      { fabric: "kiana",   sleeves: ["corta", "larga"] },
+      { fabric: "durazno", sleeves: ["corta"] },
+    ],
+  },
+  {
+    id: "polo",
+    name: "Tipo Polo",
+    desc: "Estilo polo con cuello y botones. Solo manga corta.",
+    image: txTipoPoloImg.url,
+    options: [
+      { fabric: "algodon", sleeves: ["corta"] },
+      { fabric: "drifit",  sleeves: ["corta"] },
+    ],
+  },
+  {
+    id: "columbia",
+    name: "Columbia",
+    desc: "Camisa tipo Columbia con botones. Manga corta o larga.",
+    image: txTipoColumbiaImg.url,
+    options: [
+      { fabric: "columbia", sleeves: ["corta", "larga"] },
+    ],
+  },
 ];
+
+const getShirtTypeData = (id: TxShirtType | null) =>
+  TX_SHIRT_TYPES.find((s) => s.id === id) ?? null;
+const getFabricsForType = (id: TxShirtType | null): TxFabric[] =>
+  getShirtTypeData(id)?.options.map((o) => o.fabric) ?? [];
+const getSleevesFor = (shirtType: TxShirtType | null, fabric: TxFabric | null): TxSleeve[] => {
+  const s = getShirtTypeData(shirtType);
+  if (!s || !fabric) return [];
+  return s.options.find((o) => o.fabric === fabric)?.sleeves ?? [];
+};
+
 
 const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
   { name: "Negro",    hex: "#111111" },
@@ -686,6 +749,7 @@ export function Configurator() {
   const laserColor = laserVariantData?.colors[Math.min(laserColorIdx, laserVariantData.colors.length - 1)];
   const laserDesignStep = laserHasVariants ? 4 : 3;
   // textiles state
+  const [txShirtType, setTxShirtType] = useState<TxShirtType | null>(null);
   const [txFabric, setTxFabric] = useState<TxFabric | null>(null);
   const [txSleeve, setTxSleeve] = useState<TxSleeve | null>(null);
   const [txTechnique, setTxTechnique] = useState<TxTechnique | null>(null);
@@ -693,18 +757,37 @@ export function Configurator() {
   const [txSize, setTxSize] = useState<TxSize | null>(null);
   const [txQty, setTxQty] = useState<number>(TX_MIN_QTY);
   const isTextiles = category === "iron-ons";
-  const txFabricData = TX_FABRICS.find((f) => f.id === txFabric) ?? null;
+  const txFabricMeta = txFabric ? TX_FABRICS_META[txFabric] : null;
+  const txAvailableSleeves = getSleevesFor(txShirtType, txFabric);
+  const txFabricData = txFabricMeta
+    ? { id: txFabric as TxFabric, ...txFabricMeta, sleeves: txAvailableSleeves }
+    : null;
   const txColorLock = txTechnique === "sublimacion" ? "Blanco" : null;
+
+  // When shirt type changes: clear fabric/sleeve if no longer valid
+  useEffect(() => {
+    if (!txShirtType) return;
+    const fabrics = getFabricsForType(txShirtType);
+    if (txFabric && !fabrics.includes(txFabric)) {
+      setTxFabric(null);
+      setTxSleeve(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txShirtType]);
 
   // On fabric change: reset technique to default, clear invalid sleeve
   useEffect(() => {
-    if (!txFabricData) return;
-    if (!txTechnique || !txFabricData.techniques.includes(txTechnique)) {
-      setTxTechnique(txFabricData.techniques[0]);
+    if (!txFabricMeta) return;
+    if (!txTechnique || !txFabricMeta.techniques.includes(txTechnique)) {
+      setTxTechnique(txFabricMeta.techniques[0]);
     }
-    if (txSleeve && !txFabricData.sleeves.includes(txSleeve)) setTxSleeve(null);
+    const sleeves = getSleevesFor(txShirtType, txFabric);
+    if (txSleeve && !sleeves.includes(txSleeve)) setTxSleeve(null);
+    // Auto-pick if only one sleeve option
+    if (!txSleeve && sleeves.length === 1) setTxSleeve(sleeves[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txFabric]);
+
 
   // Auto-lock color to Blanco when technique is sublimación
   useEffect(() => {
@@ -764,19 +847,25 @@ export function Configurator() {
         return;
       }
     }
-    // Gating for textiles: Material → Manga → Diseño (color/talla/cantidad dentro)
+    // Gating for textiles: Tipo → Material → Manga → Diseño
     if (isTextiles) {
-      if (s >= 3 && !txFabric) {
-        setGateMsg("Primero elige el material de la camisa en el paso 2.");
+      if (s >= 3 && !txShirtType) {
+        setGateMsg("Primero elige el tipo de camisa en el paso 2.");
         setStep(2);
         return;
       }
-      if (s >= 4 && !txSleeve) {
-        setGateMsg("Primero elige el tipo de manga en el paso 3.");
+      if (s >= 4 && !txFabric) {
+        setGateMsg("Primero elige el material de la camisa en el paso 3.");
         setStep(3);
         return;
       }
+      if (s >= 5 && !txSleeve) {
+        setGateMsg("Primero elige el tipo de manga en el paso 4.");
+        setStep(4);
+        return;
+      }
     }
+
     setGateMsg(null);
     setStep(s);
   };
@@ -873,7 +962,7 @@ export function Configurator() {
               : isImprenta
               ? ["Categoría", "Producto", "Estilo de diseño", "Especificaciones + Envío"]
               : isTextiles
-              ? ["Categoría", "Material", "Manga", "Diseño"]
+              ? ["Categoría", "Tipo", "Material", "Manga", "Diseño"]
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
@@ -946,23 +1035,34 @@ export function Configurator() {
 
           {/* ============ TEXTILES FLOW ============ */}
           {isTextiles && step === 2 && (
-            <TextilesFabricStep
-              fabric={txFabric}
-              onPick={setTxFabric}
+            <TextilesShirtTypeStep
+              shirtType={txShirtType}
+              onPick={setTxShirtType}
               onBack={() => goTo(1)}
-              onNext={txFabric ? () => goTo(3) : undefined}
+              onNext={txShirtType ? () => goTo(3) : undefined}
             />
           )}
           {isTextiles && step === 3 && (
-            <TextilesSleeveStep
-              fabricData={txFabricData}
-              sleeve={txSleeve}
-              onPick={setTxSleeve}
+            <TextilesFabricStep
+              availableFabrics={getFabricsForType(txShirtType)}
+              shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
+              fabric={txFabric}
+              onPick={setTxFabric}
               onBack={() => goTo(2)}
-              onNext={txSleeve ? () => goTo(4) : undefined}
+              onNext={txFabric ? () => goTo(4) : undefined}
             />
           )}
           {isTextiles && step === 4 && (
+            <TextilesSleeveStep
+              fabricData={txFabricData}
+              availableSleeves={txAvailableSleeves}
+              sleeve={txSleeve}
+              onPick={setTxSleeve}
+              onBack={() => goTo(3)}
+              onNext={txSleeve ? () => goTo(5) : undefined}
+            />
+          )}
+          {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
@@ -986,10 +1086,11 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
-              onBack={() => goTo(3)}
+              onBack={() => goTo(4)}
               onSubmitted={(payload) => setWaModal(payload)}
             />
           )}
+
 
 
 
@@ -4435,9 +4536,62 @@ const TX_SLEEVES: { id: TxSleeve; name: string; desc: string }[] = [
   { id: "larga", name: "Manga Larga", desc: "Mayor cobertura y protección, look más formal o deportivo." },
 ];
 
-function TextilesFabricStep({
-  fabric, onPick, onBack, onNext,
+function TextilesShirtTypeStep({
+  shirtType, onPick, onBack, onNext,
 }: {
+  shirtType: TxShirtType | null;
+  onPick: (s: TxShirtType) => void;
+  onBack: () => void;
+  onNext?: () => void;
+}) {
+  return (
+    <div className="animate-step-in">
+      <SectionTitle icon={<Package className="h-5 w-5" />} title="Elige el tipo de camisa" />
+      <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
+        {TX_SHIRT_TYPES.map((s) => {
+          const active = shirtType === s.id;
+          return (
+            <button
+              key={s.id}
+              onClick={() => onPick(s.id)}
+              className={cn(
+                "group relative overflow-hidden rounded-2xl border-2 text-left transition",
+                active ? "rainbow-border-active shadow-elegant" : "border-border hover:border-foreground/20 hover:shadow-sm",
+              )}
+            >
+              <div className="aspect-[4/5] w-full overflow-hidden bg-neutral-50">
+                <img
+                  src={s.image}
+                  alt={s.name}
+                  className="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-4">
+                <div className="text-lg font-bold">{s.name}</div>
+                <p className="mt-1 text-xs leading-snug text-muted-foreground">{s.desc}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {s.options.map((o) => (
+                    <span key={o.fabric} className="inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {TX_FABRICS_META[o.fabric].name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <NavRow onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
+function TextilesFabricStep({
+  availableFabrics, shirtTypeName, fabric, onPick, onBack, onNext,
+}: {
+  availableFabrics: TxFabric[];
+  shirtTypeName: string;
   fabric: TxFabric | null;
   onPick: (f: TxFabric) => void;
   onBack: () => void;
@@ -4445,14 +4599,18 @@ function TextilesFabricStep({
 }) {
   return (
     <div className="animate-step-in">
-      <SectionTitle icon={<Layers className="h-5 w-5" />} title="Elige el material de la camisa" />
-      <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
-        {TX_FABRICS.map((f) => {
-          const active = fabric === f.id;
+      <SectionTitle
+        icon={<Layers className="h-5 w-5" />}
+        title={`Elige el material · ${shirtTypeName}`}
+      />
+      <div className={cn("mx-auto grid max-w-5xl gap-5", availableFabrics.length >= 3 ? "sm:grid-cols-3" : availableFabrics.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-1 max-w-md")}>
+        {availableFabrics.map((id) => {
+          const f = TX_FABRICS_META[id];
+          const active = fabric === id;
           return (
             <button
-              key={f.id}
-              onClick={() => onPick(f.id)}
+              key={id}
+              onClick={() => onPick(id)}
               className={cn(
                 "group relative overflow-hidden rounded-2xl border-2 p-5 text-left transition",
                 active ? "rainbow-border-active shadow-elegant" : "border-border hover:border-foreground/20 hover:shadow-sm",
@@ -4482,15 +4640,17 @@ function TextilesFabricStep({
 }
 
 function TextilesSleeveStep({
-  fabricData, sleeve, onPick, onBack, onNext,
+  fabricData, availableSleeves, sleeve, onPick, onBack, onNext,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
+  availableSleeves: TxSleeve[];
   sleeve: TxSleeve | null;
   onPick: (s: TxSleeve) => void;
   onBack: () => void;
   onNext?: () => void;
 }) {
-  const available = fabricData?.sleeves ?? [];
+  const available = availableSleeves.length ? availableSleeves : (fabricData?.sleeves ?? []);
+
   return (
     <div className="animate-step-in">
       <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige el tipo de manga" />
