@@ -4536,9 +4536,62 @@ const TX_SLEEVES: { id: TxSleeve; name: string; desc: string }[] = [
   { id: "larga", name: "Manga Larga", desc: "Mayor cobertura y protección, look más formal o deportivo." },
 ];
 
-function TextilesFabricStep({
-  fabric, onPick, onBack, onNext,
+function TextilesShirtTypeStep({
+  shirtType, onPick, onBack, onNext,
 }: {
+  shirtType: TxShirtType | null;
+  onPick: (s: TxShirtType) => void;
+  onBack: () => void;
+  onNext?: () => void;
+}) {
+  return (
+    <div className="animate-step-in">
+      <SectionTitle icon={<Package className="h-5 w-5" />} title="Elige el tipo de camisa" />
+      <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
+        {TX_SHIRT_TYPES.map((s) => {
+          const active = shirtType === s.id;
+          return (
+            <button
+              key={s.id}
+              onClick={() => onPick(s.id)}
+              className={cn(
+                "group relative overflow-hidden rounded-2xl border-2 text-left transition",
+                active ? "rainbow-border-active shadow-elegant" : "border-border hover:border-foreground/20 hover:shadow-sm",
+              )}
+            >
+              <div className="aspect-[4/5] w-full overflow-hidden bg-neutral-50">
+                <img
+                  src={s.image}
+                  alt={s.name}
+                  className="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-4">
+                <div className="text-lg font-bold">{s.name}</div>
+                <p className="mt-1 text-xs leading-snug text-muted-foreground">{s.desc}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {s.options.map((o) => (
+                    <span key={o.fabric} className="inline-flex items-center gap-1 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {TX_FABRICS_META[o.fabric].name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <NavRow onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
+function TextilesFabricStep({
+  availableFabrics, shirtTypeName, fabric, onPick, onBack, onNext,
+}: {
+  availableFabrics: TxFabric[];
+  shirtTypeName: string;
   fabric: TxFabric | null;
   onPick: (f: TxFabric) => void;
   onBack: () => void;
@@ -4546,14 +4599,18 @@ function TextilesFabricStep({
 }) {
   return (
     <div className="animate-step-in">
-      <SectionTitle icon={<Layers className="h-5 w-5" />} title="Elige el material de la camisa" />
-      <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
-        {TX_FABRICS.map((f) => {
-          const active = fabric === f.id;
+      <SectionTitle
+        icon={<Layers className="h-5 w-5" />}
+        title={`Elige el material · ${shirtTypeName}`}
+      />
+      <div className={cn("mx-auto grid max-w-5xl gap-5", availableFabrics.length >= 3 ? "sm:grid-cols-3" : availableFabrics.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-1 max-w-md")}>
+        {availableFabrics.map((id) => {
+          const f = TX_FABRICS_META[id];
+          const active = fabric === id;
           return (
             <button
-              key={f.id}
-              onClick={() => onPick(f.id)}
+              key={id}
+              onClick={() => onPick(id)}
               className={cn(
                 "group relative overflow-hidden rounded-2xl border-2 p-5 text-left transition",
                 active ? "rainbow-border-active shadow-elegant" : "border-border hover:border-foreground/20 hover:shadow-sm",
@@ -4583,15 +4640,17 @@ function TextilesFabricStep({
 }
 
 function TextilesSleeveStep({
-  fabricData, sleeve, onPick, onBack, onNext,
+  fabricData, availableSleeves, sleeve, onPick, onBack, onNext,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
+  availableSleeves: TxSleeve[];
   sleeve: TxSleeve | null;
   onPick: (s: TxSleeve) => void;
   onBack: () => void;
   onNext?: () => void;
 }) {
-  const available = fabricData?.sleeves ?? [];
+  const available = availableSleeves.length ? availableSleeves : (fabricData?.sleeves ?? []);
+
   return (
     <div className="animate-step-in">
       <SectionTitle icon={<Scissors className="h-5 w-5" />} title="Elige el tipo de manga" />
