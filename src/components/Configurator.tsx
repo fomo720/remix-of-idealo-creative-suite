@@ -962,7 +962,7 @@ export function Configurator() {
               : isImprenta
               ? ["Categoría", "Producto", "Estilo de diseño", "Especificaciones + Envío"]
               : isTextiles
-              ? ["Categoría", "Material", "Manga", "Diseño"]
+              ? ["Categoría", "Tipo", "Material", "Manga", "Diseño"]
               : ["Categoría", "Forma", "Material", "Diseño"]
           }
         />
