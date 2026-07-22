@@ -126,18 +126,78 @@ type Material =
 type StickerShape = "circle" | "square" | "rectangle" | "rounded" | "cloud" | "heart";
 
 // ---------- Textiles (iron-ons) types & data ----------
-type TxFabric = "algodon" | "kiana" | "durazno";
+type TxShirtType = "redondo" | "polo" | "columbia";
+type TxFabric = "algodon" | "kiana" | "durazno" | "drifit" | "columbia";
 type TxSleeve = "corta" | "larga";
 type TxTechnique = "sublimacion" | "dtf";
 type TxSize = "S" | "M" | "L" | "XL" | "XXL";
 
-const TX_FABRICS: {
-  id: TxFabric; name: string; desc: string; techniques: TxTechnique[]; sleeves: TxSleeve[];
+// Fabric metadata (name / description / available printing techniques)
+const TX_FABRICS_META: Record<TxFabric, { name: string; desc: string; techniques: TxTechnique[] }> = {
+  algodon:  { name: "Algodón",  desc: "Tela suave y transpirable. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"] },
+  kiana:    { name: "Kiana",    desc: "Poliéster deportivo, liviano y de secado rápido. Solo sublimación (tacto cero).",     techniques: ["sublimacion"] },
+  durazno:  { name: "Durazno",  desc: "Tacto suave tipo piel de durazno. Sublimación en blanco o estampado DTF.",             techniques: ["sublimacion", "dtf"] },
+  drifit:   { name: "Dri Fit",  desc: "Poliéster técnico anti-transpirante. Ideal para uniformes tipo polo.",                 techniques: ["sublimacion"] },
+  columbia: { name: "Columbia", desc: "Tela tipo Columbia con acabado técnico. Estampado DTF o sublimación.",                 techniques: ["sublimacion", "dtf"] },
+};
+
+// Backwards-compatible flat list (used by helpers/design step lookups)
+const TX_FABRICS = (Object.keys(TX_FABRICS_META) as TxFabric[]).map((id) => ({
+  id,
+  ...TX_FABRICS_META[id],
+  sleeves: ["corta", "larga"] as TxSleeve[],
+}));
+
+// Shirt types (categoría de camisa) — controls fabrics + sleeves available
+const TX_SHIRT_TYPES: {
+  id: TxShirtType;
+  name: string;
+  desc: string;
+  image: string;
+  options: { fabric: TxFabric; sleeves: TxSleeve[] }[];
 }[] = [
-  { id: "algodon", name: "Algodón", desc: "Tela suave y transpirable. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
-  { id: "kiana",   name: "Kiana",   desc: "Poliéster deportivo, liviano y de secado rápido. Solo sublimación (tacto cero).", techniques: ["sublimacion"], sleeves: ["corta"] },
-  { id: "durazno", name: "Durazno", desc: "Tacto suave tipo piel de durazno. Sublimación en blanco o estampado DTF en cualquier color.", techniques: ["sublimacion", "dtf"], sleeves: ["corta", "larga"] },
+  {
+    id: "redondo",
+    name: "Cuello Redondo",
+    desc: "T-shirt clásica de cuello redondo. Disponible en manga corta o larga.",
+    image: txCuelloRedondoImg.url,
+    options: [
+      { fabric: "algodon", sleeves: ["corta", "larga"] },
+      { fabric: "kiana",   sleeves: ["corta", "larga"] },
+      { fabric: "durazno", sleeves: ["corta"] },
+    ],
+  },
+  {
+    id: "polo",
+    name: "Tipo Polo",
+    desc: "Estilo polo con cuello y botones. Solo manga corta.",
+    image: txTipoPoloImg.url,
+    options: [
+      { fabric: "algodon", sleeves: ["corta"] },
+      { fabric: "drifit",  sleeves: ["corta"] },
+    ],
+  },
+  {
+    id: "columbia",
+    name: "Columbia",
+    desc: "Camisa tipo Columbia con botones. Manga corta o larga.",
+    image: txTipoColumbiaImg.url,
+    options: [
+      { fabric: "columbia", sleeves: ["corta", "larga"] },
+    ],
+  },
 ];
+
+const getShirtTypeData = (id: TxShirtType | null) =>
+  TX_SHIRT_TYPES.find((s) => s.id === id) ?? null;
+const getFabricsForType = (id: TxShirtType | null): TxFabric[] =>
+  getShirtTypeData(id)?.options.map((o) => o.fabric) ?? [];
+const getSleevesFor = (shirtType: TxShirtType | null, fabric: TxFabric | null): TxSleeve[] => {
+  const s = getShirtTypeData(shirtType);
+  if (!s || !fabric) return [];
+  return s.options.find((o) => o.fabric === fabric)?.sleeves ?? [];
+};
+
 
 const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
   { name: "Negro",    hex: "#111111" },
