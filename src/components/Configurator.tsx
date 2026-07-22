@@ -1035,23 +1035,34 @@ export function Configurator() {
 
           {/* ============ TEXTILES FLOW ============ */}
           {isTextiles && step === 2 && (
-            <TextilesFabricStep
-              fabric={txFabric}
-              onPick={setTxFabric}
+            <TextilesShirtTypeStep
+              shirtType={txShirtType}
+              onPick={setTxShirtType}
               onBack={() => goTo(1)}
-              onNext={txFabric ? () => goTo(3) : undefined}
+              onNext={txShirtType ? () => goTo(3) : undefined}
             />
           )}
           {isTextiles && step === 3 && (
-            <TextilesSleeveStep
-              fabricData={txFabricData}
-              sleeve={txSleeve}
-              onPick={setTxSleeve}
+            <TextilesFabricStep
+              availableFabrics={getFabricsForType(txShirtType)}
+              shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
+              fabric={txFabric}
+              onPick={setTxFabric}
               onBack={() => goTo(2)}
-              onNext={txSleeve ? () => goTo(4) : undefined}
+              onNext={txFabric ? () => goTo(4) : undefined}
             />
           )}
           {isTextiles && step === 4 && (
+            <TextilesSleeveStep
+              fabricData={txFabricData}
+              availableSleeves={txAvailableSleeves}
+              sleeve={txSleeve}
+              onPick={setTxSleeve}
+              onBack={() => goTo(3)}
+              onNext={txSleeve ? () => goTo(5) : undefined}
+            />
+          )}
+          {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
               sleeve={txSleeve!}
@@ -1075,10 +1086,11 @@ export function Configurator() {
               setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
-              onBack={() => goTo(3)}
+              onBack={() => goTo(4)}
               onSubmitted={(payload) => setWaModal(payload)}
             />
           )}
+
 
 
 
