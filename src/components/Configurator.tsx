@@ -1569,6 +1569,15 @@ export function Configurator() {
                     <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
                     {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
                   </button>
+                  {uploaded && uploadedDims && (
+                    <ResolutionWarning
+                      naturalW={uploadedDims.w}
+                      naturalH={uploadedDims.h}
+                      width={parseFloat(width) || 0}
+                      height={parseFloat(height) || 0}
+                      unit={unit}
+                    />
+                  )}
                 </div>
 
 
