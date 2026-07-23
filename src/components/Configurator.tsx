@@ -1413,7 +1413,7 @@ export function Configurator() {
                 {imprentaStyles.map((s) => (
                   <button
                     key={s.id}
-                    onClick={() => { setImprentaStyle(s.id); goTo(4); }}
+                    onClick={() => { setImprentaStyle(s.id); setGateMsg(null); setStep(4); }}
                     className={cn(
                       "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
                       imprentaStyle === s.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
