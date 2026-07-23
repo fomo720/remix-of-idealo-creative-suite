@@ -1902,7 +1902,7 @@ export function Configurator() {
             </>
           )}
         </div>
-        {category && category !== "laser" && (
+        {category && category !== "laser" && ((isTextiles && step === 5) || (!isTextiles && step === 4)) && (
           <DesignExamples
             type={
               category === "stickers"
@@ -1915,6 +1915,7 @@ export function Configurator() {
             }
           />
         )}
+
       </div>
     </section>
     <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
