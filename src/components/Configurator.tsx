@@ -2015,6 +2015,44 @@ export function Configurator() {
         </button>
       </DialogContent>
     </Dialog>
+    <Dialog open={showResExample} onOpenChange={setShowResExample}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">¿Por qué importa la resolución?</DialogTitle>
+          <DialogDescription>
+            Cuando una imagen pequeña se estira a un tamaño de impresión grande,
+            los píxeles se agrandan y se ve borrosa o "cuadriculada". Este es un
+            ejemplo real:
+          </DialogDescription>
+        </DialogHeader>
+        <div className="mt-2 grid gap-4 sm:grid-cols-2">
+          <figure className="overflow-hidden rounded-2xl border-2 border-emerald-300 bg-emerald-50">
+            <img src={stickerAltaEx.url} alt="Alta resolución" className="aspect-square w-full object-cover" />
+            <figcaption className="p-3 text-center text-xs font-semibold text-emerald-900">
+              ✅ Alta resolución — nítido y profesional
+            </figcaption>
+          </figure>
+          <figure className="overflow-hidden rounded-2xl border-2 border-red-300 bg-red-50">
+            <img src={stickerBajaEx.url} alt="Baja resolución" className="aspect-square w-full object-cover" />
+            <figcaption className="p-3 text-center text-xs font-semibold text-red-900">
+              ❌ Baja resolución — pixelado ("Minecraft")
+            </figcaption>
+          </figure>
+        </div>
+        <div className="mt-2 rounded-xl bg-muted/50 p-3 text-xs text-muted-foreground">
+          <b>Tip:</b> lo ideal es enviar un archivo vectorial (SVG, PDF o AI) o
+          una imagen de al menos <b>300 DPI</b> al tamaño real de impresión. Si
+          no tienes uno, podemos vectorizarlo por ti.
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowResExample(false)}
+          className="mt-2 w-full rounded-2xl bg-foreground px-6 py-3 text-sm font-semibold text-background hover:opacity-90"
+        >
+          Entendido, continuar
+        </button>
+      </DialogContent>
+    </Dialog>
     </>
   );
 }
