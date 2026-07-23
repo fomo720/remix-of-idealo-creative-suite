@@ -952,6 +952,28 @@ export function Configurator() {
     setHeight(String(sizePresets[i].h));
     setUnit("in");
   };
+  const applyMediumPreset = (i: number) => {
+    setActivePreset(i);
+    setSizeMode("preset");
+    setWidth(String(mediumSizePresets[i].w));
+    setHeight(String(mediumSizePresets[i].h));
+    setUnit("in");
+  };
+  const selectSizeCategory = (cat: StickerSizeCategory) => {
+    setSizeCategory(cat);
+    setUnit("in");
+    if (cat === "small") {
+      setSizeMode("preset");
+      applyPreset(2);
+    } else if (cat === "medium") {
+      setSizeMode("preset");
+      applyMediumPreset(2); // 8x8
+    } else {
+      setSizeMode("custom");
+      setWidth("36");
+      setHeight("60");
+    }
+  };
 
   const hasArt = !!(uploaded || preset);
 
