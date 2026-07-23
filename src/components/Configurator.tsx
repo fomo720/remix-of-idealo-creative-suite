@@ -1046,7 +1046,7 @@ export function Configurator() {
               availableFabrics={getFabricsForType(txShirtType)}
               shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
               fabric={txFabric}
-              onPick={setTxFabric}
+              onPick={(v) => { setTxFabric(v); goTo(4); }}
               onBack={() => goTo(2)}
               onNext={txFabric ? () => goTo(4) : undefined}
             />
@@ -1056,7 +1056,7 @@ export function Configurator() {
               fabricData={txFabricData}
               availableSleeves={txAvailableSleeves}
               sleeve={txSleeve}
-              onPick={setTxSleeve}
+              onPick={(v) => { setTxSleeve(v); goTo(5); }}
               onBack={() => goTo(3)}
               onNext={txSleeve ? () => goTo(5) : undefined}
             />
@@ -1106,7 +1106,7 @@ export function Configurator() {
                     desc={c.desc}
                     accent={c.accent}
                     active={cut === c.id}
-                    onClick={() => setCut(c.id)}
+                    onClick={() => { setCut(c.id); goTo(3); }}
                     bestseller={c.id === "die-cut"}
                   />
                 ))}
@@ -1127,7 +1127,7 @@ export function Configurator() {
                     accent={s.accent}
                     icon={s.icon}
                     active={notebookStyle === s.id}
-                    onClick={() => setNotebookStyle(s.id)}
+                    onClick={() => { setNotebookStyle(s.id); goTo(3); }}
                   />
                 ))}
               </div>
@@ -1151,6 +1151,7 @@ export function Configurator() {
                       setLaserVariantId(first);
                       setLaserColorIdx(0);
                       setLaserByob(false);
+                      goTo(3);
                     }}
                   />
                 ))}
@@ -1214,8 +1215,8 @@ export function Configurator() {
                         const y = window.scrollY;
                         setLaserVariantId(v.id);
                         setLaserColorIdx(0);
-                        // Prevent layout jump when the color panel appears below
                         requestAnimationFrame(() => window.scrollTo({ top: y }));
+                        goTo(4);
                       }}
                       className={cn(
                         "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
@@ -1335,7 +1336,7 @@ export function Configurator() {
                     material={m}
                     active={material === m.id}
                     isBestSeller={idx === 0}
-                    onClick={() => setMaterial(m.id)}
+                    onClick={() => { setMaterial(m.id); goTo(4); }}
                   />
                 ))}
               </div>
@@ -1352,7 +1353,7 @@ export function Configurator() {
                     key={m.id}
                     material={m}
                     active={notebookMaterial === m.id}
-                    onClick={() => setNotebookMaterial(m.id)}
+                    onClick={() => { setNotebookMaterial(m.id); goTo(4); }}
                   />
                 ))}
               </div>
@@ -1372,6 +1373,7 @@ export function Configurator() {
                       setImprentaProduct(p.id);
                       setImprentaSpecs({});
                       setImprentaQty(p.qtyOptions[0]);
+                      goTo(3);
                     }}
                     className={cn(
                       "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
@@ -1402,7 +1404,7 @@ export function Configurator() {
                 {imprentaStyles.map((s) => (
                   <button
                     key={s.id}
-                    onClick={() => setImprentaStyle(s.id)}
+                    onClick={() => { setImprentaStyle(s.id); goTo(4); }}
                     className={cn(
                       "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
                       imprentaStyle === s.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
