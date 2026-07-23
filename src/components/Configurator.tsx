@@ -1969,8 +1969,11 @@ export function Configurator() {
         </ol>
         {(() => {
           if (!uploadedDims || !width || !height) return null;
-          const wIn = unit === "in" ? width : width / 2.54;
-          const hIn = unit === "in" ? height : height / 2.54;
+          const wNum = parseFloat(String(width));
+          const hNum = parseFloat(String(height));
+          if (!wNum || !hNum) return null;
+          const wIn = unit === "in" ? wNum : wNum / 2.54;
+          const hIn = unit === "in" ? hNum : hNum / 2.54;
           if (!wIn || !hIn) return null;
           const dpi = Math.min(uploadedDims.w / wIn, uploadedDims.h / hIn);
           if (dpi >= 150) return null;
