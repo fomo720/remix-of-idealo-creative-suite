@@ -984,7 +984,7 @@ export function Configurator() {
                 icon={<Layers className="h-7 w-7" />}
                 image={stickersHandCover.url}
                 active={category === "stickers"}
-                onClick={() => setCategory("stickers")}
+                onClick={() => { setCategory("stickers"); goTo(2); }}
                 variant={0}
               />
               <CategoryCard
@@ -994,7 +994,7 @@ export function Configurator() {
                 icon={<Package className="h-7 w-7" />}
                 image={ironOnCover.url}
                 active={category === "iron-ons"}
-                onClick={() => setCategory("iron-ons")}
+                onClick={() => { setCategory("iron-ons"); goTo(2); }}
                 variant={1}
               />
               <CategoryCard
@@ -1004,7 +1004,7 @@ export function Configurator() {
                 icon={<BookOpen className="h-7 w-7" />}
                 image={libretasCover.url}
                 active={category === "libretas"}
-                onClick={() => setCategory("libretas")}
+                onClick={() => { setCategory("libretas"); goTo(2); }}
                 variant={2}
               />
               <CategoryCard
@@ -1014,7 +1014,7 @@ export function Configurator() {
                 icon={<Flame className="h-7 w-7" />}
                 image={laserStanleyCover.url}
                 active={category === "laser"}
-                onClick={() => setCategory("laser")}
+                onClick={() => { setCategory("laser"); goTo(2); }}
                 variant={3}
               />
               <CategoryCard
@@ -1024,15 +1024,13 @@ export function Configurator() {
                 icon={<Printer className="h-7 w-7" />}
                 image={imprentaCover.url}
                 active={category === "imprenta"}
-                onClick={() => setCategory("imprenta")}
+                onClick={() => { setCategory("imprenta"); goTo(2); }}
                 variant={4}
               />
 
             </div>
           )}
-          {step === 1 && (
-            <NavRow onNext={category ? () => goTo(2) : undefined} />
-          )}
+
 
           {/* ============ TEXTILES FLOW ============ */}
           {isTextiles && step === 2 && (
