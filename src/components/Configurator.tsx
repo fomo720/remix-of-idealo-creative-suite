@@ -683,6 +683,7 @@ export function Configurator() {
   const [shape, setShape] = useState<StickerShape>("circle");
   const [preset, setPreset] = useState<string | null>(null);
   const [uploaded, setUploaded] = useState<string | null>(null);
+  const [uploadedDims, setUploadedDims] = useState<{ w: number; h: number } | null>(null);
 
   // size
   const [width, setWidth] = useState("2");
