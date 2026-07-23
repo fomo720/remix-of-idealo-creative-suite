@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { projects, type ProjectType } from "@/lib/portfolio-data";
 import { SkeletonImage } from "@/components/SkeletonImage";
 
@@ -18,26 +18,27 @@ const FILTERS: Filter[] = [
   "Servicios",
 ];
 
-function readInitialFilter(): Filter {
-  if (typeof window === "undefined") return "Todos";
-  const p = new URLSearchParams(window.location.search).get("tipo");
-  const found = FILTERS.find((f) => f.toLowerCase() === (p ?? "").toLowerCase());
+function matchFilter(raw: string | undefined | null): Filter {
+  const val = (raw ?? "").toLowerCase();
+  const found = FILTERS.find((f) => f.toLowerCase() === val);
   return (found as Filter) ?? "Todos";
 }
 
 export function Portfolio() {
-  const [filter, setFilter] = useState<Filter>(readInitialFilter);
+  const location = useLocation();
+  const searchTipo = (location.search as { tipo?: string } | undefined)?.tipo;
+
+  const [filter, setFilter] = useState<Filter>(() => matchFilter(searchTipo));
 
   useEffect(() => {
-    const onPop = () => setFilter(readInitialFilter());
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
+    setFilter(matchFilter(searchTipo));
+  }, [searchTipo]);
 
   const visible = useMemo(
     () => (filter === "Todos" ? projects : projects.filter((p) => p.type === filter)),
     [filter],
   );
+
 
   const counts = useMemo(() => {
     const c: Record<Filter, number> = {
