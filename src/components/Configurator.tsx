@@ -5158,11 +5158,24 @@ function TextilesDesignStep({
   const previewRef = useRef<HTMLDivElement | null>(null);
   const printAreaRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
+  type HandleId = "tl" | "tr" | "bl" | "br" | "ml" | "mr";
+  const handleDrag = useRef<
+    | { h: HandleId; sx: number; sy: number; scale: number; scaleX: number; rectW: number; rectH: number }
+    | null
+  >(null);
+  const [selected, setSelected] = useState(false);
+
+  // Auto-select on new upload so handles appear immediately.
+  useEffect(() => {
+    if (uploaded) setSelected(true);
+    else setSelected(false);
+  }, [uploaded]);
 
   const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
   const rotateLeft = () => setRotation((r) => (r - 90) % 360);
   const zoomIn = () => setScale(clamp(scale + 10, 30, 200));
   const zoomOut = () => setScale(clamp(scale - 10, 30, 200));
+  const deleteArt = () => { onUpload(null); setSelected(false); };
 
   const bgStyle: React.CSSProperties =
     canvasBg === "white"
@@ -5177,12 +5190,13 @@ function TextilesDesignStep({
           backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
         };
 
-  // Pointer drag on the print area
+  // Pointer drag on the print area (move the design)
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!uploaded || !printAreaRef.current) return;
     const parent = printAreaRef.current.parentElement as HTMLElement | null;
     if (!parent) return;
     const rect = parent.getBoundingClientRect();
+    setSelected(true);
     dragState.current = {
       startX: e.clientX, startY: e.clientY,
       ox: offsetX, oy: offsetY,
@@ -5191,14 +5205,44 @@ function TextilesDesignStep({
     (e.target as Element).setPointerCapture?.(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const h = handleDrag.current;
+    if (h) {
+      const dx = ((e.clientX - h.sx) / h.rectW) * 100;
+      const dy = ((e.clientY - h.sy) / h.rectH) * 100;
+      const signX = h.h.endsWith("l") ? -1 : h.h.endsWith("r") ? 1 : 0;
+      const signY = h.h.startsWith("t") ? -1 : h.h.startsWith("b") ? 1 : 0;
+      if (h.h === "ml" || h.h === "mr") {
+        setScaleX(clamp(h.scaleX + signX * dx * 3, 50, 200));
+      } else {
+        const delta = ((signX * dx) + (signY * dy)) / 2;
+        setScale(clamp(h.scale + delta * 3, 30, 200));
+      }
+      return;
+    }
     const s = dragState.current;
     if (!s) return;
     const dx = ((e.clientX - s.startX) / s.rectW) * 100;
     const dy = ((e.clientY - s.startY) / s.rectH) * 100;
-    setOffsetX(clamp(s.ox + dx, -40, 40));
-    setOffsetY(clamp(s.oy + dy, -40, 40));
+    setOffsetX(clamp(s.ox + dx, -45, 45));
+    setOffsetY(clamp(s.oy + dy, -45, 45));
   };
-  const onPointerUp = () => { dragState.current = null; };
+  const onPointerUp = () => { dragState.current = null; handleDrag.current = null; };
+
+  const onHandleDown = (h: HandleId) => (e: React.PointerEvent) => {
+    e.stopPropagation();
+    if (!printAreaRef.current) return;
+    const parent = printAreaRef.current.parentElement as HTMLElement | null;
+    if (!parent) return;
+    const rect = parent.getBoundingClientRect();
+    setSelected(true);
+    handleDrag.current = {
+      h, sx: e.clientX, sy: e.clientY,
+      scale, scaleX,
+      rectW: rect.width, rectH: rect.height,
+    };
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  };
+
 
   const composeFilename = () =>
     `idealo-textil-${(fabricData?.id ?? "camisa")}-${color.toLowerCase()}-${size ?? "talla"}-${Date.now()}.png`;
