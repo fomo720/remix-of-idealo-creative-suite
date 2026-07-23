@@ -729,6 +729,7 @@ export function Configurator() {
 
   // image toolbox
   const [waModal, setWaModal] = useState<{ href: string; text: string } | null>(null);
+  const [showResExample, setShowResExample] = useState(false);
   const [scale, setScale] = useState(100);       // 30-250%
 
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
