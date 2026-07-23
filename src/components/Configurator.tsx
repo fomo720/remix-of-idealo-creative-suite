@@ -21,6 +21,7 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
+import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
 
@@ -683,6 +684,7 @@ export function Configurator() {
   const [shape, setShape] = useState<StickerShape>("circle");
   const [preset, setPreset] = useState<string | null>(null);
   const [uploaded, setUploaded] = useState<string | null>(null);
+  const [uploadedDims, setUploadedDims] = useState<{ w: number; h: number } | null>(null);
 
   // size
   const [width, setWidth] = useState("2");
@@ -888,6 +890,12 @@ export function Configurator() {
     setUploaded(url);
     setPreset(null);
     resetImageTools();
+    setUploadedDims(null);
+    const probe = new Image();
+    probe.onload = () => {
+      setUploadedDims({ w: probe.naturalWidth, h: probe.naturalHeight });
+    };
+    probe.src = url;
   };
 
   const resetImageTools = () => {
@@ -897,6 +905,7 @@ export function Configurator() {
 
   const clearImage = () => {
     setUploaded(null); setPreset(null); resetImageTools();
+    setUploadedDims(null);
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -1560,6 +1569,15 @@ export function Configurator() {
                     <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
                     {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
                   </button>
+                  {uploaded && uploadedDims && (
+                    <ResolutionWarning
+                      naturalW={uploadedDims.w}
+                      naturalH={uploadedDims.h}
+                      width={parseFloat(width) || 0}
+                      height={parseFloat(height) || 0}
+                      unit={unit}
+                    />
+                  )}
                 </div>
 
 
@@ -1873,8 +1891,8 @@ export function Configurator() {
                   };
 
                   const onSubmit = () => {
-                    // Abrimos WhatsApp con el mensaje listo. El usuario adjunta la imagen desde el chat.
-                    window.open(waHref, "_blank", "noopener,noreferrer");
+                    // Abrir primero el modal con instrucciones. WhatsApp se abre
+                    // solo cuando el usuario confirma en "Entendido, ir a WhatsApp".
                     setWaModal({ href: waHref, text: lines });
                   };
 
@@ -1924,16 +1942,17 @@ export function Configurator() {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Mensaje enviado a WhatsApp!</span>
+            <span className="bg-gradient-cta bg-clip-text text-transparent">Antes de ir a WhatsApp</span>
           </DialogTitle>
           <DialogDescription>
-            Ya abrimos WhatsApp con todos los detalles de tu cotización. Solo falta adjuntar tu diseño.
+            Te vamos a llevar a WhatsApp con tu mensaje ya escrito. Sigue estos
+            3 pasos para que podamos preparar tu cotización sin demoras:
           </DialogDescription>
         </DialogHeader>
         <ol className="mt-2 space-y-3 text-sm">
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">1</span>
-            <span>Envía el mensaje que ya tienes escrito en WhatsApp.</span>
+            <span>Envía el mensaje que ya tienes escrito en WhatsApp (no borres nada, ya lleva todos los detalles).</span>
           </li>
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">2</span>
@@ -1951,14 +1970,14 @@ export function Configurator() {
           onClick={() => setTimeout(() => setWaModal(null), 300)}
           className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
         >
-          <WA className="h-5 w-5" /> Abrir WhatsApp de nuevo
+          <WA className="h-5 w-5" /> Entendido, ir a WhatsApp
         </a>
         <button
           type="button"
           onClick={() => setWaModal(null)}
           className="mt-1 text-center text-xs text-muted-foreground hover:text-foreground"
         >
-          Cerrar
+          Cancelar
         </button>
       </DialogContent>
     </Dialog>
