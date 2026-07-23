@@ -96,15 +96,14 @@ export function DesignExamples({ type }: { type: ProjectType }) {
       </div>
 
       <div className="mt-10 flex justify-center">
-        <Link
-          to="/portafolio"
-          search={{ tipo: type } as never}
+        <a
+          href={`/portafolio?tipo=${encodeURIComponent(type)}`}
           className="group inline-flex items-center gap-3 rounded-full px-7 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl sm:text-base"
           style={{ background: "linear-gradient(135deg, var(--brand-magenta), var(--brand-cyan))" }}
         >
           Ver todo lo que hemos hecho en {label}
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </Link>
+        </a>
       </div>
     </div>
   );
