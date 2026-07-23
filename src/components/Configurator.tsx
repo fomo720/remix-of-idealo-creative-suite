@@ -173,7 +173,6 @@ const TX_SHIRT_TYPES: {
     desc: "Estilo polo con cuello y botones. Solo manga corta.",
     image: txTipoPoloImg.url,
     options: [
-      { fabric: "algodon", sleeves: ["corta"] },
       { fabric: "drifit",  sleeves: ["corta"] },
     ],
   },
