@@ -1055,7 +1055,7 @@ export function Configurator() {
               availableFabrics={getFabricsForType(txShirtType)}
               shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
               fabric={txFabric}
-              onPick={(v) => { setTxFabric(v); goTo(4); }}
+              onPick={(v) => { setTxFabric(v); setGateMsg(null); setStep(4); }}
               onBack={() => goTo(2)}
               onNext={txFabric ? () => goTo(4) : undefined}
             />
