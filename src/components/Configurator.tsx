@@ -1045,7 +1045,7 @@ export function Configurator() {
           {isTextiles && step === 2 && (
             <TextilesShirtTypeStep
               shirtType={txShirtType}
-              onPick={(v) => { setTxShirtType(v); goTo(3); }}
+              onPick={(v) => { setTxShirtType(v); setGateMsg(null); setStep(3); }}
               onBack={() => goTo(1)}
               onNext={txShirtType ? () => goTo(3) : undefined}
             />
