@@ -57,7 +57,8 @@ import ironOnCover from "@/assets/portfolio-camisetas-estampadas.png.asset.json"
 import libretasCover from "@/assets/evt-cuaderno-sticker.jpg.asset.json";
 import imprentaCover from "@/assets/portfolio-tarjetas.jpg.asset.json";
 import txCuelloRedondoImg from "@/assets/tx-cuello-redondo.jpg.asset.json";
-import txTipoPoloImg from "@/assets/tx-tipo-polo.jpg.asset.json";
+import txTipoPoloImgUrl from "@/assets/tx-tipo-polo-v2.jpg";
+const txTipoPoloImg = { url: txTipoPoloImgUrl };
 import txTipoColumbiaImg from "@/assets/tx-tipo-columbia.jpg.asset.json";
 
 const CoinHandIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
