@@ -24,6 +24,9 @@ import { DesignExamples } from "@/components/DesignExamples";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import stickerAltaEx from "@/assets/sticker-alta-resolucion.jpg.asset.json";
+import stickerBajaEx from "@/assets/sticker-baja-resolucion.jpg.asset.json";
 
 
 
@@ -726,6 +729,7 @@ export function Configurator() {
 
   // image toolbox
   const [waModal, setWaModal] = useState<{ href: string; text: string } | null>(null);
+  const [showResExample, setShowResExample] = useState(false);
   const [scale, setScale] = useState(100);       // 30-250%
 
   const [offsetX, setOffsetX] = useState(0);     // % of container (-50..50)
@@ -1963,6 +1967,36 @@ export function Configurator() {
             <span>¡Listo! Nosotros nos encargamos del resto y te respondemos con tu cotización.</span>
           </li>
         </ol>
+        {(() => {
+          if (!uploadedDims || !width || !height) return null;
+          const wNum = parseFloat(String(width));
+          const hNum = parseFloat(String(height));
+          if (!wNum || !hNum) return null;
+          const wIn = unit === "in" ? wNum : wNum / 2.54;
+          const hIn = unit === "in" ? hNum : hNum / 2.54;
+          if (!wIn || !hIn) return null;
+          const dpi = Math.min(uploadedDims.w / wIn, uploadedDims.h / hIn);
+          if (dpi >= 150) return null;
+          return (
+            <div className="mt-4 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50 p-3.5 text-amber-900">
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+              <div className="text-[13px] leading-snug">
+                <p className="font-semibold">Advertencia: resolución baja (~{Math.round(dpi)} DPI)</p>
+                <p className="mt-1 text-amber-800/90">
+                  Tu imagen podría verse pixelada al imprimirse.{" "}
+                  <button
+                    type="button"
+                    onClick={() => setShowResExample(true)}
+                    className="font-semibold underline decoration-yellow-500 decoration-2 underline-offset-2 hover:text-amber-950"
+                    style={{ textDecorationColor: "#eab308" }}
+                  >
+                    Ver ejemplo de por qué importa
+                  </button>
+                </p>
+              </div>
+            </div>
+          );
+        })()}
         <a
           href={waModal?.href ?? "#"}
           target="_blank"
@@ -1978,6 +2012,44 @@ export function Configurator() {
           className="mt-1 text-center text-xs text-muted-foreground hover:text-foreground"
         >
           Cancelar
+        </button>
+      </DialogContent>
+    </Dialog>
+    <Dialog open={showResExample} onOpenChange={setShowResExample}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">¿Por qué importa la resolución?</DialogTitle>
+          <DialogDescription>
+            Cuando una imagen pequeña se estira a un tamaño de impresión grande,
+            los píxeles se agrandan y se ve borrosa o "cuadriculada". Este es un
+            ejemplo real:
+          </DialogDescription>
+        </DialogHeader>
+        <div className="mt-2 grid gap-4 sm:grid-cols-2">
+          <figure className="overflow-hidden rounded-2xl border-2 border-emerald-300 bg-emerald-50">
+            <img src={stickerAltaEx.url} alt="Alta resolución" className="aspect-square w-full object-cover" />
+            <figcaption className="p-3 text-center text-xs font-semibold text-emerald-900">
+              ✅ Alta resolución — nítido y profesional
+            </figcaption>
+          </figure>
+          <figure className="overflow-hidden rounded-2xl border-2 border-red-300 bg-red-50">
+            <img src={stickerBajaEx.url} alt="Baja resolución" className="aspect-square w-full object-cover" />
+            <figcaption className="p-3 text-center text-xs font-semibold text-red-900">
+              ❌ Baja resolución — pixelado ("Minecraft")
+            </figcaption>
+          </figure>
+        </div>
+        <div className="mt-2 rounded-xl bg-muted/50 p-3 text-xs text-muted-foreground">
+          <b>Tip:</b> lo ideal es enviar un archivo vectorial (SVG, PDF o AI) o
+          una imagen de al menos <b>300 DPI</b> al tamaño real de impresión. Si
+          no tienes uno, podemos vectorizarlo por ti.
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowResExample(false)}
+          className="mt-2 w-full rounded-2xl bg-foreground px-6 py-3 text-sm font-semibold text-background hover:opacity-90"
+        >
+          Entendido, continuar
         </button>
       </DialogContent>
     </Dialog>
