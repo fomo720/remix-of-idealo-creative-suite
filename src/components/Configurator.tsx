@@ -1891,8 +1891,8 @@ export function Configurator() {
                   };
 
                   const onSubmit = () => {
-                    // Abrimos WhatsApp con el mensaje listo. El usuario adjunta la imagen desde el chat.
-                    window.open(waHref, "_blank", "noopener,noreferrer");
+                    // Abrir primero el modal con instrucciones. WhatsApp se abre
+                    // solo cuando el usuario confirma en "Entendido, ir a WhatsApp".
                     setWaModal({ href: waHref, text: lines });
                   };
 
