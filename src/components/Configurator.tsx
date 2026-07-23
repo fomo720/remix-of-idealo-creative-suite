@@ -1362,7 +1362,7 @@ export function Configurator() {
                     key={m.id}
                     material={m}
                     active={notebookMaterial === m.id}
-                    onClick={() => { setNotebookMaterial(m.id); goTo(4); }}
+                    onClick={() => { setNotebookMaterial(m.id); setGateMsg(null); setStep(4); }}
                   />
                 ))}
               </div>
