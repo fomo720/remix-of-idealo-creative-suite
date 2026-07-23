@@ -297,9 +297,25 @@ const sizePresets = [
   { w: 2.5, h: 2.5, label: '2.5" x 2.5"', hint: "Uso versátil" },
   { w: 3.5, h: 3.5, label: '3.5" x 3.5"', hint: "Branding visible y termos" },
 ];
+const mediumSizePresets = [
+  { w: 6, h: 6, label: '6" x 6"', hint: "Empaques medianos" },
+  { w: 7, h: 7, label: '7" x 7"', hint: "Cajas y bolsas" },
+  { w: 8, h: 8, label: '8" x 8"', hint: "Escaparates pequeños" },
+  { w: 9, h: 9, label: '9" x 9"', hint: "Ventanas y vitrinas" },
+  { w: 10, h: 10, label: '10" x 10"', hint: "Impacto visual" },
+  { w: 11, h: 11, label: '11" x 11"', hint: "Grande y visible" },
+  { w: 12, h: 12, label: '12" x 12"', hint: "Máximo mediano" },
+];
+const GIANT_W_MIN = 24;
+const GIANT_W_MAX = 63; // límite del rollo Mimaki UCJV300-160 (~63")
+const GIANT_H_MIN = 36;
+const GIANT_H_MAX = 78;
 const SIZE_MIN = 1;
 const SIZE_MAX = 5;
 const MIN_QTY = 25;
+
+type StickerSizeCategory = "small" | "medium" | "giant";
+type StickerMount = "vinyl" | "pvc";
 
 /* ---------- Libretas ---------- */
 const notebookStyles: {
@@ -695,6 +711,8 @@ export function Configurator() {
   const [unit, setUnit] = useState<"in" | "cm">("in");
   const [sizeMode, setSizeMode] = useState<"preset" | "custom">("preset");
   const [activePreset, setActivePreset] = useState<number>(2); // 2x2
+  const [sizeCategory, setSizeCategory] = useState<StickerSizeCategory>("small");
+  const [stickerMount, setStickerMount] = useState<StickerMount>("vinyl");
 
   const [qty, setQty] = useState(MIN_QTY);
   const [notes, setNotes] = useState("");
@@ -933,6 +951,28 @@ export function Configurator() {
     setWidth(String(sizePresets[i].w));
     setHeight(String(sizePresets[i].h));
     setUnit("in");
+  };
+  const applyMediumPreset = (i: number) => {
+    setActivePreset(i);
+    setSizeMode("preset");
+    setWidth(String(mediumSizePresets[i].w));
+    setHeight(String(mediumSizePresets[i].h));
+    setUnit("in");
+  };
+  const selectSizeCategory = (cat: StickerSizeCategory) => {
+    setSizeCategory(cat);
+    setUnit("in");
+    if (cat === "small") {
+      setSizeMode("preset");
+      applyPreset(2);
+    } else if (cat === "medium") {
+      setSizeMode("preset");
+      applyMediumPreset(2); // 8x8
+    } else {
+      setSizeMode("custom");
+      setWidth("36");
+      setHeight("60");
+    }
   };
 
   const hasArt = !!(uploaded || preset);
@@ -1645,107 +1685,278 @@ export function Configurator() {
                   </div>
                 )}
 
-                {/* Size presets */}
+                {/* Size categories */}
                 <div>
                   <Label className="mb-3 block text-sm font-semibold">Tamaño del sticker</Label>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {sizePresets.map((p, i) => {
-                      const isActive = sizeMode === "preset" && activePreset === i;
+
+                  {/* Category tabs */}
+                  <div className="mb-4 grid grid-cols-3 gap-2 rounded-2xl border-2 border-border bg-background p-1.5">
+                    {([
+                      { id: "small", label: "Pequeños", hint: '1" – 3.5"' },
+                      { id: "medium", label: "Medianos", hint: '6" – 12"' },
+                      { id: "giant", label: "Gigantes", hint: 'Hasta 63" × 78"' },
+                    ] as { id: StickerSizeCategory; label: string; hint: string }[]).map((c) => {
+                      const active = sizeCategory === c.id;
                       return (
                         <button
-                          key={p.label}
-                          onClick={() => applyPreset(i)}
+                          key={c.id}
+                          type="button"
+                          onClick={() => selectSizeCategory(c.id)}
                           className={cn(
-                            "relative rounded-2xl border-2 p-4 text-left transition",
-                            isActive
-                              ? "scale-[1.02] bg-orange-50/60 shadow-[0_12px_30px_-10px_rgba(249,115,22,0.45)]"
-                              : "border-border hover:border-foreground/20 hover:shadow-sm",
+                            "rounded-xl px-2 py-2.5 text-center text-xs font-semibold transition sm:text-sm",
+                            active
+                              ? "bg-foreground text-background shadow"
+                              : "text-muted-foreground hover:text-foreground",
                           )}
-                          style={isActive ? { borderColor: "#f97316" } : undefined}
                         >
-                          {isActive && (
-                            <span
-                              className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow animate-rainbow-shimmer"
-                              style={{
-                                backgroundImage:
-                                  "linear-gradient(90deg, #ff5470, #ffb347, #ffd93d, #4fd1c5, #38bdf8, #a78bfa, #ff5470)",
-                              }}
-                            >
-                              Seleccionado
-                            </span>
-                          )}
-                          <div className="text-lg font-bold sm:text-xl">{p.label}</div>
-                          <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
+                          <div>{c.label}</div>
+                          <div className={cn("mt-0.5 text-[10px] font-normal", active ? "text-background/70" : "text-muted-foreground")}>{c.hint}</div>
                         </button>
-
                       );
                     })}
                   </div>
 
-                  <button
-                    onClick={() => setSizeMode("custom")}
-                    className={cn(
-                      "mt-2 w-full rounded-xl border-2 p-3 text-left text-sm font-medium transition",
-                      sizeMode === "custom"
-                        ? "border-transparent text-foreground shadow-[0_8px_20px_-8px_rgba(72,201,200,0.5)]"
-                        : "border-dashed border-border hover:border-foreground/20",
-                    )}
-                    style={sizeMode === "custom" ? {
-                      outline: "2px solid var(--brand-cyan)",
-                      outlineOffset: "-2px",
-                      background: "color-mix(in oklab, var(--brand-cyan) 6%, white)",
-                    } : undefined}
-                  >
-                    Tamaño Personalizado (mín. 1" — máx. 5")
-                  </button>
-
-                  {sizeMode === "custom" && (
-                    <>
-                      <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
-                        <div>
-                          <Label htmlFor="w" className="mb-1 block text-[11px] text-muted-foreground">Ancho</Label>
-                          <Input
-                            id="w"
-                            value={width}
-                            onChange={(e) => setWidth(e.target.value)}
-                            onBlur={() => setWidth(String(Math.min(SIZE_MAX, Math.max(SIZE_MIN, parseFloat(width) || SIZE_MIN))))}
-                            inputMode="decimal"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="h" className="mb-1 block text-[11px] text-muted-foreground">Alto</Label>
-                          <Input
-                            id="h"
-                            value={height}
-                            onChange={(e) => setHeight(e.target.value)}
-                            onBlur={() => setHeight(String(Math.min(SIZE_MAX, Math.max(SIZE_MIN, parseFloat(height) || SIZE_MIN))))}
-                            inputMode="decimal"
-                          />
-                        </div>
-                        <div>
-                          <Label className="mb-1 block text-[11px] text-muted-foreground">Unidad</Label>
-                          <div className="flex h-9 rounded-md border border-border p-1 text-xs">
-                            {(["in", "cm"] as const).map((u) => (
-                              <button
-                                key={u}
-                                onClick={() => setUnit(u)}
-                                className={cn(
-                                  "rounded px-2 font-medium transition",
-                                  unit === u ? "bg-foreground text-background" : "text-muted-foreground",
-                                )}
-                              >
-                                {u}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
+                  {/* Material / mount selector (medianos + gigantes) */}
+                  {sizeCategory !== "small" && (
+                    <div className="mb-4">
+                      <Label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        Material del sticker
+                      </Label>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {([
+                          {
+                            id: "vinyl" as StickerMount,
+                            title: "Solo Vinil flexible",
+                            desc: "Sticker adhesivo. Se pega en ventanas, autos, paredes lisas.",
+                            visual: (
+                              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-100 to-cyan-50">
+                                <div className="h-6 w-6 rounded-md border-2 border-dashed border-cyan-500 bg-white/60" />
+                              </div>
+                            ),
+                          },
+                          {
+                            id: "pvc" as StickerMount,
+                            title: "Montado en PVC rígido",
+                            desc: "Letreros, señales o standees que se sostienen solos.",
+                            visual: (
+                              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-slate-200 to-slate-100">
+                                <div className="h-6 w-6 rounded-sm border-2 border-slate-600 bg-slate-50 shadow-[2px_2px_0_rgba(0,0,0,0.15)]" />
+                              </div>
+                            ),
+                          },
+                        ]).map((m) => {
+                          const active = stickerMount === m.id;
+                          return (
+                            <button
+                              key={m.id}
+                              type="button"
+                              onClick={() => setStickerMount(m.id)}
+                              className={cn(
+                                "flex items-start gap-3 rounded-2xl border-2 p-3 text-left transition",
+                                active
+                                  ? "border-foreground bg-foreground/5 shadow"
+                                  : "border-border hover:border-foreground/30",
+                              )}
+                            >
+                              {m.visual}
+                              <div className="min-w-0 flex-1">
+                                <div className="text-sm font-bold leading-tight">{m.title}</div>
+                                <div className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{m.desc}</div>
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>
-                      <p className="mt-2 text-[11px] text-muted-foreground">
-                        Rango permitido: 1" a 5" por lado.
-                      </p>
+                    </div>
+                  )}
+
+                  {/* Small presets */}
+                  {sizeCategory === "small" && (
+                    <>
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                        {sizePresets.map((p, i) => {
+                          const isActive = sizeMode === "preset" && activePreset === i;
+                          return (
+                            <button
+                              key={p.label}
+                              onClick={() => applyPreset(i)}
+                              className={cn(
+                                "relative rounded-2xl border-2 p-4 text-left transition",
+                                isActive
+                                  ? "scale-[1.02] bg-orange-50/60 shadow-[0_12px_30px_-10px_rgba(249,115,22,0.45)]"
+                                  : "border-border hover:border-foreground/20 hover:shadow-sm",
+                              )}
+                              style={isActive ? { borderColor: "#f97316" } : undefined}
+                            >
+                              {isActive && (
+                                <span
+                                  className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow animate-rainbow-shimmer"
+                                  style={{
+                                    backgroundImage:
+                                      "linear-gradient(90deg, #ff5470, #ffb347, #ffd93d, #4fd1c5, #38bdf8, #a78bfa, #ff5470)",
+                                  }}
+                                >
+                                  Seleccionado
+                                </span>
+                              )}
+                              <div className="text-lg font-bold sm:text-xl">{p.label}</div>
+                              <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <button
+                        onClick={() => setSizeMode("custom")}
+                        className={cn(
+                          "mt-2 w-full rounded-xl border-2 p-3 text-left text-sm font-medium transition",
+                          sizeMode === "custom"
+                            ? "border-transparent text-foreground shadow-[0_8px_20px_-8px_rgba(72,201,200,0.5)]"
+                            : "border-dashed border-border hover:border-foreground/20",
+                        )}
+                        style={sizeMode === "custom" ? {
+                          outline: "2px solid var(--brand-cyan)",
+                          outlineOffset: "-2px",
+                          background: "color-mix(in oklab, var(--brand-cyan) 6%, white)",
+                        } : undefined}
+                      >
+                        Tamaño Personalizado (mín. 1" — máx. 5")
+                      </button>
+
+                      {sizeMode === "custom" && (
+                        <>
+                          <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
+                            <div>
+                              <Label htmlFor="w" className="mb-1 block text-[11px] text-muted-foreground">Ancho</Label>
+                              <Input
+                                id="w"
+                                value={width}
+                                onChange={(e) => setWidth(e.target.value)}
+                                onBlur={() => setWidth(String(Math.min(SIZE_MAX, Math.max(SIZE_MIN, parseFloat(width) || SIZE_MIN))))}
+                                inputMode="decimal"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="h" className="mb-1 block text-[11px] text-muted-foreground">Alto</Label>
+                              <Input
+                                id="h"
+                                value={height}
+                                onChange={(e) => setHeight(e.target.value)}
+                                onBlur={() => setHeight(String(Math.min(SIZE_MAX, Math.max(SIZE_MIN, parseFloat(height) || SIZE_MIN))))}
+                                inputMode="decimal"
+                              />
+                            </div>
+                            <div>
+                              <Label className="mb-1 block text-[11px] text-muted-foreground">Unidad</Label>
+                              <div className="flex h-9 rounded-md border border-border p-1 text-xs">
+                                {(["in", "cm"] as const).map((u) => (
+                                  <button
+                                    key={u}
+                                    onClick={() => setUnit(u)}
+                                    className={cn(
+                                      "rounded px-2 font-medium transition",
+                                      unit === u ? "bg-foreground text-background" : "text-muted-foreground",
+                                    )}
+                                  >
+                                    {u}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-[11px] text-muted-foreground">
+                            Rango permitido: 1" a 5" por lado.
+                          </p>
+                        </>
+                      )}
                     </>
                   )}
+
+                  {/* Medium presets */}
+                  {sizeCategory === "medium" && (
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                      {mediumSizePresets.map((p, i) => {
+                        const isActive = sizeMode === "preset" && activePreset === i;
+                        return (
+                          <button
+                            key={p.label}
+                            onClick={() => applyMediumPreset(i)}
+                            className={cn(
+                              "relative rounded-2xl border-2 p-4 text-left transition",
+                              isActive
+                                ? "scale-[1.02] bg-orange-50/60 shadow-[0_12px_30px_-10px_rgba(249,115,22,0.45)]"
+                                : "border-border hover:border-foreground/20 hover:shadow-sm",
+                            )}
+                            style={isActive ? { borderColor: "#f97316" } : undefined}
+                          >
+                            {isActive && (
+                              <span
+                                className="absolute -top-2 right-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow animate-rainbow-shimmer"
+                                style={{
+                                  backgroundImage:
+                                    "linear-gradient(90deg, #ff5470, #ffb347, #ffd93d, #4fd1c5, #38bdf8, #a78bfa, #ff5470)",
+                                }}
+                              >
+                                Seleccionado
+                              </span>
+                            )}
+                            <div className="text-lg font-bold sm:text-xl">{p.label}</div>
+                            <div className="mt-1 text-xs leading-snug text-muted-foreground">{p.hint}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Giant custom */}
+                  {sizeCategory === "giant" && (
+                    <div className="rounded-2xl border-2 border-dashed border-border p-4">
+                      <div className="mb-3 text-[11px] leading-snug text-muted-foreground">
+                        Formato gran formato en rollo (Mimaki UCJV300). Ancho de {GIANT_W_MIN}"–{GIANT_W_MAX}" y alto de {GIANT_H_MIN}"–{GIANT_H_MAX}".
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <Label htmlFor="gw" className="mb-1 block text-[11px] text-muted-foreground">Ancho (in)</Label>
+                          <Input
+                            id="gw"
+                            value={width}
+                            onChange={(e) => setWidth(e.target.value)}
+                            onBlur={() => setWidth(String(Math.min(GIANT_W_MAX, Math.max(GIANT_W_MIN, parseFloat(width) || GIANT_W_MIN))))}
+                            inputMode="decimal"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="gh" className="mb-1 block text-[11px] text-muted-foreground">Alto (in)</Label>
+                          <Input
+                            id="gh"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                            onBlur={() => setHeight(String(Math.min(GIANT_H_MAX, Math.max(GIANT_H_MIN, parseFloat(height) || GIANT_H_MIN))))}
+                            inputMode="decimal"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-3 grid grid-cols-3 gap-2">
+                        {[
+                          { w: 36, h: 60, label: 'Standee 60"' },
+                          { w: 40, h: 72, label: 'Personaje 72"' },
+                          { w: 48, h: 78, label: 'XL 78"' },
+                        ].map((p) => (
+                          <button
+                            key={p.label}
+                            type="button"
+                            onClick={() => { setWidth(String(p.w)); setHeight(String(p.h)); }}
+                            className="rounded-xl border border-border px-2 py-2 text-[11px] font-medium text-muted-foreground transition hover:border-foreground/30 hover:text-foreground"
+                          >
+                            {p.label}
+                            <div className="text-[10px] opacity-70">{p.w}" × {p.h}"</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
+
 
                 {/* Quantity */}
                 <div>
@@ -1850,6 +2061,8 @@ export function Configurator() {
                     `- Producto: ${catName}`,
                     `- Forma: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
                     materialData ? `- Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
+                    `- Categoría de tamaño: ${sizeCategory === "small" ? "Pequeño" : sizeCategory === "medium" ? "Mediano" : "Gigante / Personaje"}`,
+                    sizeCategory !== "small" ? `- Montaje: ${stickerMount === "pvc" ? "Montado en PVC rígido" : "Solo vinil flexible"}` : "",
                     `- Tamaño: ${width} x ${height} ${unit}`,
                     `- Cantidad: ${qty}`,
                     `- Escala de zoom: ${scale}% y posición en coordenadas (X: ${Math.round(offsetX)}%, Y: ${Math.round(offsetY)}%)`,
