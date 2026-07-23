@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useLoader } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Center } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -15,10 +15,20 @@ type Props = {
   side?: "front" | "back";
 };
 
-// Preload the shirt model
 useGLTF.preload("/models/shirt/scene.gltf");
 
-function ChestDecal({
+/**
+ * Builds a CanvasTexture that becomes the shirt's diffuse map.
+ * The design is painted directly onto the texture at UV coordinates,
+ * so it follows the shirt's real UVs (curves, sleeves, folds) instead
+ * of floating on top as a rigid PlaneGeometry decal.
+ *
+ * The model's UVs live in u∈[2.09, 2.98], v∈[0.057, 0.96]. With
+ * RepeatWrapping the sampler reads (u mod 1, v mod 1), so we paint
+ * inside a 1024×1024 tile using those normalized coords.
+ */
+function useShirtTexture({
+  color,
   imageUrl,
   offsetX = 0,
   offsetY = 0,
@@ -26,41 +36,92 @@ function ChestDecal({
   scaleX = 100,
   rotation = 0,
   side = "front",
-}: Omit<Props, "color" | "sleeve">) {
-  const texture = useLoader(THREE.TextureLoader, imageUrl!);
+}: Omit<Props, "sleeve">) {
+  // Load the user image imperatively so we can redraw the canvas on change.
+  const [img, setImg] = useState<HTMLImageElement | null>(null);
   useEffect(() => {
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 8;
+    if (!imageUrl) {
+      setImg(null);
+      return;
+    }
+    const i = new Image();
+    i.crossOrigin = "anonymous";
+    i.onload = () => setImg(i);
+    i.src = imageUrl;
+  }, [imageUrl]);
+
+  const { canvas, texture } = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = 1024;
+    c.height = 1024;
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.wrapS = THREE.RepeatWrapping;
+    t.wrapT = THREE.RepeatWrapping;
+    t.anisotropy = 8;
+    t.flipY = false; // gltf UVs
+    return { canvas: c, texture: t };
+  }, []);
+
+  useEffect(() => {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 1) Base fabric color fills the whole UV tile.
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+
+    // 2) Paint the user's design at the chest UV region.
+    if (img) {
+      // Chest region in normalized UV space (found empirically for this model).
+      // Front chest sits around (u≈0.55, v≈0.42); the back mirrors to (u≈0.55, v≈0.72).
+      const chest = side === "front" ? { u: 0.55, v: 0.42 } : { u: 0.55, v: 0.72 };
+
+      const baseSize = 0.28; // ~28% of the UV tile → realistic chest print size
+      const s = (scale / 100) * baseSize;
+      const sx = s * (scaleX / 100);
+      const sy = s;
+
+      // Slider offsets nudge inside the UV tile (±35% of base size).
+      const du = (offsetX / 100) * baseSize * 0.6;
+      const dv = -(offsetY / 100) * baseSize * 0.6;
+
+      const cx = (chest.u + du) * W;
+      const cy = (chest.v + dv) * H;
+      const dw = sx * W;
+      const dh = sy * H;
+
+      const ratio = img.width / img.height;
+      // Fit the image into the target box while preserving aspect ratio.
+      let drawW = dw;
+      let drawH = dh;
+      if (ratio > dw / dh) {
+        drawH = dw / ratio;
+      } else {
+        drawW = dh * ratio;
+      }
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate((rotation * Math.PI) / 180);
+      ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+      ctx.restore();
+    }
+
     texture.needsUpdate = true;
-  }, [texture]);
+  }, [canvas, texture, color, img, offsetX, offsetY, scale, scaleX, rotation, side]);
 
-  // The GLTF model, after Center + scale, roughly spans ~1.8 units tall.
-  // Chest is around y=0.15, front face around z=0.28.
-  const s = (scale / 100) * 0.55;
-  const sx = s * (scaleX / 100);
-  const px = (offsetX / 100) * 0.35;
-  const py = -(offsetY / 100) * 0.35 + 0.15;
-  const rot = (rotation * Math.PI) / 180;
-  const z = side === "front" ? 0.29 : -0.29;
-  const yaw = side === "front" ? 0 : Math.PI;
-
-  return (
-    <mesh position={[px, py, z]} rotation={[0, yaw, -rot]}>
-      <planeGeometry args={[sx, s]} />
-      <meshStandardMaterial
-        map={texture}
-        transparent
-        alphaTest={0.02}
-        depthWrite={false}
-        roughness={0.9}
-        metalness={0}
-      />
-    </mesh>
-  );
+  return texture;
 }
 
-function ShirtModel({ color, side = "front" }: { color: string; side?: "front" | "back" }) {
+function ShirtModel(props: Omit<Props, "sleeve">) {
   const gltf = useGLTF("/models/shirt/scene.gltf");
+  const texture = useShirtTexture(props);
+
   const cloned = useMemo(() => {
     const s = gltf.scene.clone(true);
     s.traverse((o) => {
@@ -68,19 +129,20 @@ function ShirtModel({ color, side = "front" }: { color: string; side?: "front" |
       if ((mesh as any).isMesh) {
         const src = mesh.material as THREE.MeshStandardMaterial;
         const m = src.clone();
-        m.color = new THREE.Color(color);
-        // Keep the baked shading but tint via color; drop base map so tint is visible
-        m.map = null;
+        // Diffuse comes from the CanvasTexture (base color + design baked in).
+        m.map = texture;
+        m.color = new THREE.Color("#ffffff");
         m.metalness = 0.02;
         m.roughness = 0.85;
+        m.needsUpdate = true;
         mesh.material = m;
       }
     });
     return s;
-  }, [gltf.scene, color]);
+  }, [gltf.scene, texture]);
 
   return (
-    <group rotation={[0, side === "back" ? Math.PI : 0, 0]}>
+    <group rotation={[0, props.side === "back" ? Math.PI : 0, 0]}>
       <primitive object={cloned} />
     </group>
   );
@@ -116,9 +178,17 @@ export default function TextilesShirt3D(props: Props) {
 
           <Suspense fallback={null}>
             <Center scale={1.6}>
-              <ShirtModel color={props.color} side={props.side} />
+              <ShirtModel
+                color={props.color}
+                imageUrl={props.imageUrl}
+                offsetX={props.offsetX}
+                offsetY={props.offsetY}
+                scale={props.scale}
+                scaleX={props.scaleX}
+                rotation={props.rotation}
+                side={props.side}
+              />
             </Center>
-            {props.imageUrl ? <ChestDecal {...props} /> : null}
           </Suspense>
 
           <OrbitControls
