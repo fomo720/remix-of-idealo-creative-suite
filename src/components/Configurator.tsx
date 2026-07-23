@@ -5158,11 +5158,24 @@ function TextilesDesignStep({
   const previewRef = useRef<HTMLDivElement | null>(null);
   const printAreaRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
+  type HandleId = "tl" | "tr" | "bl" | "br" | "ml" | "mr";
+  const handleDrag = useRef<
+    | { h: HandleId; sx: number; sy: number; scale: number; scaleX: number; rectW: number; rectH: number }
+    | null
+  >(null);
+  const [selected, setSelected] = useState(false);
+
+  // Auto-select on new upload so handles appear immediately.
+  useEffect(() => {
+    if (uploaded) setSelected(true);
+    else setSelected(false);
+  }, [uploaded]);
 
   const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
   const rotateLeft = () => setRotation((r) => (r - 90) % 360);
   const zoomIn = () => setScale(clamp(scale + 10, 30, 200));
   const zoomOut = () => setScale(clamp(scale - 10, 30, 200));
+  const deleteArt = () => { onUpload(null); setSelected(false); };
 
   const bgStyle: React.CSSProperties =
     canvasBg === "white"
@@ -5177,12 +5190,13 @@ function TextilesDesignStep({
           backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
         };
 
-  // Pointer drag on the print area
+  // Pointer drag on the print area (move the design)
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!uploaded || !printAreaRef.current) return;
     const parent = printAreaRef.current.parentElement as HTMLElement | null;
     if (!parent) return;
     const rect = parent.getBoundingClientRect();
+    setSelected(true);
     dragState.current = {
       startX: e.clientX, startY: e.clientY,
       ox: offsetX, oy: offsetY,
@@ -5191,14 +5205,44 @@ function TextilesDesignStep({
     (e.target as Element).setPointerCapture?.(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const h = handleDrag.current;
+    if (h) {
+      const dx = ((e.clientX - h.sx) / h.rectW) * 100;
+      const dy = ((e.clientY - h.sy) / h.rectH) * 100;
+      const signX = h.h.endsWith("l") ? -1 : h.h.endsWith("r") ? 1 : 0;
+      const signY = h.h.startsWith("t") ? -1 : h.h.startsWith("b") ? 1 : 0;
+      if (h.h === "ml" || h.h === "mr") {
+        setScaleX(clamp(h.scaleX + signX * dx * 3, 50, 200));
+      } else {
+        const delta = ((signX * dx) + (signY * dy)) / 2;
+        setScale(clamp(h.scale + delta * 3, 30, 200));
+      }
+      return;
+    }
     const s = dragState.current;
     if (!s) return;
     const dx = ((e.clientX - s.startX) / s.rectW) * 100;
     const dy = ((e.clientY - s.startY) / s.rectH) * 100;
-    setOffsetX(clamp(s.ox + dx, -40, 40));
-    setOffsetY(clamp(s.oy + dy, -40, 40));
+    setOffsetX(clamp(s.ox + dx, -45, 45));
+    setOffsetY(clamp(s.oy + dy, -45, 45));
   };
-  const onPointerUp = () => { dragState.current = null; };
+  const onPointerUp = () => { dragState.current = null; handleDrag.current = null; };
+
+  const onHandleDown = (h: HandleId) => (e: React.PointerEvent) => {
+    e.stopPropagation();
+    if (!printAreaRef.current) return;
+    const parent = printAreaRef.current.parentElement as HTMLElement | null;
+    if (!parent) return;
+    const rect = parent.getBoundingClientRect();
+    setSelected(true);
+    handleDrag.current = {
+      h, sx: e.clientX, sy: e.clientY,
+      scale, scaleX,
+      rectW: rect.width, rectH: rect.height,
+    };
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  };
+
 
   const composeFilename = () =>
     `idealo-textil-${(fabricData?.id ?? "camisa")}-${color.toLowerCase()}-${size ?? "talla"}-${Date.now()}.png`;
@@ -5520,10 +5564,16 @@ function TextilesDesignStep({
 
                 <div
                   ref={previewRef}
+                  onPointerDown={(e) => {
+                    // Click on empty canvas deselects.
+                    if (e.target === e.currentTarget) setSelected(false);
+                  }}
                   className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl"
                   style={{ aspectRatio: "5 / 3", ...bgStyle }}
                 >
-                  {/* Flat pattern PNG (tinted with shirt color via mix-blend) */}
+                  {/* Flat pattern PNG (tinted with shirt color via mix-blend).
+                      Source PNG has the shirt panels upside-down (collar at
+                      bottom), so we rotate 180° to place collars on top. */}
                   <div
                     className="absolute inset-0"
                     style={{ backgroundColor: colorHex }}
@@ -5534,7 +5584,7 @@ function TextilesDesignStep({
                     alt="Patrón plano de la camiseta"
                     draggable={false}
                     className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain mix-blend-multiply"
-                    style={{ opacity: 0.85 }}
+                    style={{ opacity: 0.85, transform: "rotate(180deg)" }}
                   />
                   {/* Outline overlay so the pattern reads on any color */}
                   <img
@@ -5542,82 +5592,152 @@ function TextilesDesignStep({
                     alt=""
                     draggable={false}
                     className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain opacity-20 mix-blend-overlay"
+                    style={{ transform: "rotate(180deg)" }}
                   />
 
-                  {/* Print zone indicator (front-left or back-right panel) */}
+                  {/* Print zone indicator + interactive art */}
                   {(() => {
-                    // Panel bounds inside the flat pattern (percent of container).
-                    // Front panel occupies the left ~44%; back panel the right ~44%.
+                    // After the 180° pattern rotation the V-neck panel (FRONT)
+                    // ends up on the LEFT and the flat-collar panel (BACK) on
+                    // the RIGHT. Zones are tightened to the chest so sleeves
+                    // and collar stay untouched.
                     const zone = side === "front"
-                      ? { left: 5, top: 6, width: 42, height: 74 }
-                      : { left: 53, top: 6, width: 42, height: 74 };
+                      ? { left: 10, top: 20, width: 30, height: 34 }
+                      : { left: 60, top: 20, width: 30, height: 34 };
 
                     // Print area size clamped to the zone.
-                    const areaW = zone.width * (scale / 100) * 0.75; // 100% scale ≈ 75% of panel
-                    const areaH = zone.height * (scale / 100) * 0.55;
+                    const areaW = zone.width * (scale / 100) * 0.85;
+                    const areaH = zone.height * (scale / 100) * 0.85;
                     const cx = zone.left + zone.width / 2 + (offsetX / 100) * (zone.width / 2);
                     const cy = zone.top + zone.height / 2 + (offsetY / 100) * (zone.height / 2);
 
                     return (
                       <>
-                        {/* Dashed zone outline */}
-                        <div
-                          className="pointer-events-none absolute rounded-md border border-dashed"
-                          style={{
-                            left: `${zone.left}%`,
-                            top: `${zone.top}%`,
-                            width: `${zone.width}%`,
-                            height: `${zone.height}%`,
-                            borderColor: isLight ? "rgba(17,24,39,0.35)" : "rgba(255,255,255,0.55)",
-                          }}
-                        />
-                        <div
-                          className="pointer-events-none absolute rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider"
-                          style={{
-                            left: `${zone.left + 1}%`,
-                            top: `${zone.top + 1}%`,
-                            backgroundColor: isLight ? "rgba(17,24,39,0.75)" : "rgba(255,255,255,0.85)",
-                            color: isLight ? "#fff" : "#111827",
-                          }}
-                        >
-                          {side === "front" ? "Frente · área editable" : "Atrás · área editable"}
-                        </div>
+                        {/* Dashed zone outline — only shown when there is no
+                            uploaded art yet (avoids the "cut lines" look). */}
+                        {!uploaded && (
+                          <>
+                            <div
+                              className="pointer-events-none absolute rounded-md border border-dashed"
+                              style={{
+                                left: `${zone.left}%`,
+                                top: `${zone.top}%`,
+                                width: `${zone.width}%`,
+                                height: `${zone.height}%`,
+                                borderColor: isLight ? "rgba(17,24,39,0.35)" : "rgba(255,255,255,0.55)",
+                              }}
+                            />
+                            <div
+                              className="pointer-events-none absolute rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider"
+                              style={{
+                                left: `${zone.left + 1}%`,
+                                top: `${zone.top + 1}%`,
+                                backgroundColor: isLight ? "rgba(17,24,39,0.75)" : "rgba(255,255,255,0.85)",
+                                color: isLight ? "#fff" : "#111827",
+                              }}
+                            >
+                              {side === "front" ? "Frente · área editable" : "Atrás · área editable"}
+                            </div>
+                          </>
+                        )}
 
-                        {/* Print area with uploaded art (draggable within zone only) */}
+                        {/* Wrapper (not transformed) holds handles at fixed size */}
                         <div
-                          ref={printAreaRef}
-                          onPointerDown={onPointerDown}
-                          onPointerMove={onPointerMove}
-                          onPointerUp={onPointerUp}
-                          onPointerCancel={onPointerUp}
-                          className={cn(
-                            "absolute select-none touch-none",
-                            uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
-                          )}
+                          className="absolute"
                           style={{
                             left: `${cx}%`,
                             top: `${cy}%`,
                             width: `${areaW}%`,
                             height: `${areaH}%`,
-                            transform: `translate(-50%, -50%) rotate(${rotation}deg) scaleX(${scaleX / 100})`,
-                            transformOrigin: "center",
-                            willChange: "transform,left,top,width,height",
+                            transform: "translate(-50%, -50%)",
                           }}
                         >
-                          {uploaded ? (
-                            <img
-                              src={uploaded}
-                              alt="Diseño"
-                              draggable={false}
-                              className="pointer-events-none h-full w-full object-contain"
-                            />
-                          ) : (
-                            <div
-                              className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
-                              style={{ color: strokeColor, borderColor: strokeColor, backgroundColor: "rgba(255,255,255,0.4)" }}
-                            >
-                              Sube tu diseño
-                            </div>
+                          {/* Transformed inner box holds the art (rotation + horizontal stretch) */}
+                          <div
+                            ref={printAreaRef}
+                            onPointerDown={onPointerDown}
+                            onPointerMove={onPointerMove}
+                            onPointerUp={onPointerUp}
+                            onPointerCancel={onPointerUp}
+                            className={cn(
+                              "absolute inset-0 select-none touch-none",
+                              uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
+                            )}
+                            style={{
+                              transform: `rotate(${rotation}deg) scaleX(${scaleX / 100})`,
+                              transformOrigin: "center",
+                              willChange: "transform",
+                            }}
+                          >
+                            {uploaded ? (
+                              <img
+                                src={uploaded}
+                                alt="Diseño"
+                                draggable={false}
+                                className="pointer-events-none h-full w-full object-contain"
+                              />
+                            ) : (
+                              <div
+                                className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
+                                style={{ color: strokeColor, borderColor: strokeColor, backgroundColor: "rgba(255,255,255,0.4)" }}
+                              >
+                                Sube tu diseño
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Selection frame + 6 resize handles + delete */}
+                          {uploaded && selected && (
+                            <>
+                              <div
+                                className="pointer-events-none absolute -inset-1 rounded-md"
+                                style={{ border: "1.5px dashed color-mix(in oklab, var(--brand-pink) 80%, white)" }}
+                              />
+                              {(["tl","tr","bl","br","ml","mr"] as const).map((h) => {
+                                const pos: React.CSSProperties = {
+                                  top: h.startsWith("t") ? -7 : h.startsWith("b") ? "auto" : "50%",
+                                  bottom: h.startsWith("b") ? -7 : "auto",
+                                  left: h.endsWith("l") ? -7 : h.endsWith("r") ? "auto" : "50%",
+                                  right: h.endsWith("r") ? -7 : "auto",
+                                  transform:
+                                    h === "ml" || h === "mr"
+                                      ? "translateY(-50%)"
+                                      : h === "tl" || h === "bl" || h === "tr" || h === "br"
+                                      ? undefined
+                                      : "translateX(-50%)",
+                                  cursor:
+                                    h === "ml" || h === "mr"
+                                      ? "ew-resize"
+                                      : h === "tl" || h === "br"
+                                      ? "nwse-resize"
+                                      : "nesw-resize",
+                                };
+                                return (
+                                  <span
+                                    key={h}
+                                    onPointerDown={onHandleDown(h)}
+                                    className="absolute z-40 h-3.5 w-3.5 rounded-full bg-white transition-transform hover:scale-125"
+                                    style={{
+                                      ...pos,
+                                      border: "2px solid color-mix(in oklab, var(--brand-pink) 85%, black)",
+                                      boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
+                                      touchAction: "none",
+                                    }}
+                                  />
+                                );
+                              })}
+                              <button
+                                type="button"
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onClick={(e) => { e.stopPropagation(); deleteArt(); }}
+                                className="absolute z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white text-red-600 shadow-md ring-1 ring-red-200 hover:bg-red-50"
+                                style={{ top: -30, right: -8 }}
+                                aria-label="Eliminar diseño"
+                                title="Eliminar diseño"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </>
                           )}
                         </div>
                       </>
@@ -5629,6 +5749,7 @@ function TextilesDesignStep({
                     Mangas y cuello · bloqueados
                   </div>
                 </div>
+
               </div>
             )}
 
