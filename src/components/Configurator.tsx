@@ -904,6 +904,7 @@ export function Configurator() {
 
   const clearImage = () => {
     setUploaded(null); setPreset(null); resetImageTools();
+    setUploadedDims(null);
     if (fileRef.current) fileRef.current.value = "";
   };
 
