@@ -24,6 +24,9 @@ import { DesignExamples } from "@/components/DesignExamples";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import stickerAltaEx from "@/assets/sticker-alta-resolucion.jpg.asset.json";
+import stickerBajaEx from "@/assets/sticker-baja-resolucion.jpg.asset.json";
 
 
 
