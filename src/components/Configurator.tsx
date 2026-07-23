@@ -2061,6 +2061,8 @@ export function Configurator() {
                     `- Producto: ${catName}`,
                     `- Forma: ${shapeData.name}${cut === "die-cut" ? " (troquelado)" : cut ? ` (${cut})` : ""}`,
                     materialData ? `- Material: ${materialData.name}${isTransparent ? " (transparente)" : ""}` : "",
+                    `- Categoría de tamaño: ${sizeCategory === "small" ? "Pequeño" : sizeCategory === "medium" ? "Mediano" : "Gigante / Personaje"}`,
+                    sizeCategory !== "small" ? `- Montaje: ${stickerMount === "pvc" ? "Montado en PVC rígido" : "Solo vinil flexible"}` : "",
                     `- Tamaño: ${width} x ${height} ${unit}`,
                     `- Cantidad: ${qty}`,
                     `- Escala de zoom: ${scale}% y posición en coordenadas (X: ${Math.round(offsetX)}%, Y: ${Math.round(offsetY)}%)`,
