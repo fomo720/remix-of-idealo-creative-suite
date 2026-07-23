@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "d342d1de-25fe-4b07-bfc8-d65881a8d0f5",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/d342d1de-25fe-4b07-bfc8-d65881a8d0f5/portfolio-etiquetas-foil.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/d342d1de-25fe-4b07-bfc8-d65881a8d0f5/portfolio-etiquetas-foil.png",
-  "original_filename": "portfolio-etiquetas-foil.png",
-  "size": 559938,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:23:34Z"
+  "created_at": "2026-07-19T05:23:34Z",
+  "original_filename": "portfolio-etiquetas-foil.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/d342d1de-25fe-4b07-bfc8-d65881a8d0f5/portfolio-etiquetas-foil.png",
+  "size": 559938,
+  "url": "/__l5e/assets-v1/d342d1de-25fe-4b07-bfc8-d65881a8d0f5/portfolio-etiquetas-foil.png",
+  "version": 1
 }

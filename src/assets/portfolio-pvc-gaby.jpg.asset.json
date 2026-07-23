@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "8df7db63-8f63-470c-9e86-e391c065b9f1",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/8df7db63-8f63-470c-9e86-e391c065b9f1/portfolio-pvc-gaby.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/8df7db63-8f63-470c-9e86-e391c065b9f1/portfolio-pvc-gaby.jpg",
-  "original_filename": "portfolio-pvc-gaby.jpg",
-  "size": 337550,
   "content_type": "image/jpeg",
-  "created_at": "2026-07-18T17:00:55Z"
+  "created_at": "2026-07-18T17:00:55Z",
+  "original_filename": "portfolio-pvc-gaby.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/8df7db63-8f63-470c-9e86-e391c065b9f1/portfolio-pvc-gaby.jpg",
+  "size": 337550,
+  "url": "/__l5e/assets-v1/8df7db63-8f63-470c-9e86-e391c065b9f1/portfolio-pvc-gaby.jpg",
+  "version": 1
 }

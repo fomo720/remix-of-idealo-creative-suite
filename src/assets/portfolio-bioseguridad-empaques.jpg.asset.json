@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "a8b9b365-fbdb-4044-b204-f461a1bc91b7",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/a8b9b365-fbdb-4044-b204-f461a1bc91b7/portfolio-bioseguridad-empaques.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/a8b9b365-fbdb-4044-b204-f461a1bc91b7/portfolio-bioseguridad-empaques.jpg",
-  "original_filename": "portfolio-bioseguridad-empaques.jpg",
-  "size": 589819,
   "content_type": "image/png",
-  "created_at": "2026-07-20T17:12:12Z"
+  "created_at": "2026-07-20T17:12:12Z",
+  "original_filename": "portfolio-bioseguridad-empaques.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/a8b9b365-fbdb-4044-b204-f461a1bc91b7/portfolio-bioseguridad-empaques.jpg",
+  "size": 589819,
+  "url": "/__l5e/assets-v1/a8b9b365-fbdb-4044-b204-f461a1bc91b7/portfolio-bioseguridad-empaques.jpg",
+  "version": 1
 }

@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "05f9985e-b3da-4757-8671-9562157bc159",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/05f9985e-b3da-4757-8671-9562157bc159/portfolio-sticker-troquelado-cafe.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/05f9985e-b3da-4757-8671-9562157bc159/portfolio-sticker-troquelado-cafe.png",
-  "original_filename": "portfolio-sticker-troquelado-cafe.png",
-  "size": 1526219,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:13:06Z"
+  "created_at": "2026-07-19T05:13:06Z",
+  "original_filename": "portfolio-sticker-troquelado-cafe.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/05f9985e-b3da-4757-8671-9562157bc159/portfolio-sticker-troquelado-cafe.png",
+  "size": 1526219,
+  "url": "/__l5e/assets-v1/05f9985e-b3da-4757-8671-9562157bc159/portfolio-sticker-troquelado-cafe.png",
+  "version": 1
 }

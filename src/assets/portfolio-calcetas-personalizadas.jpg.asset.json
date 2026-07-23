@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "d8815732-9c57-4d17-b06c-4c719976dcb6",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/d8815732-9c57-4d17-b06c-4c719976dcb6/portfolio-calcetas-personalizadas.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/d8815732-9c57-4d17-b06c-4c719976dcb6/portfolio-calcetas-personalizadas.jpg",
-  "original_filename": "portfolio-calcetas-personalizadas.jpg",
-  "size": 640454,
   "content_type": "image/png",
-  "created_at": "2026-07-20T17:12:12Z"
+  "created_at": "2026-07-20T17:12:12Z",
+  "original_filename": "portfolio-calcetas-personalizadas.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/d8815732-9c57-4d17-b06c-4c719976dcb6/portfolio-calcetas-personalizadas.jpg",
+  "size": 640454,
+  "url": "/__l5e/assets-v1/d8815732-9c57-4d17-b06c-4c719976dcb6/portfolio-calcetas-personalizadas.jpg",
+  "version": 1
 }

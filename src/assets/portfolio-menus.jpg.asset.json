@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "b9a2a748-9edf-4bb6-9561-c7eb6e9c7a28",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/b9a2a748-9edf-4bb6-9561-c7eb6e9c7a28/portfolio-menus.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/b9a2a748-9edf-4bb6-9561-c7eb6e9c7a28/portfolio-menus.jpg",
-  "original_filename": "portfolio-menus.jpg",
-  "size": 1146709,
   "content_type": "image/png",
-  "created_at": "2026-07-12T06:31:12Z"
+  "created_at": "2026-07-12T06:31:12Z",
+  "original_filename": "portfolio-menus.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/b9a2a748-9edf-4bb6-9561-c7eb6e9c7a28/portfolio-menus.jpg",
+  "size": 1146709,
+  "url": "/__l5e/assets-v1/b9a2a748-9edf-4bb6-9561-c7eb6e9c7a28/portfolio-menus.jpg",
+  "version": 1
 }

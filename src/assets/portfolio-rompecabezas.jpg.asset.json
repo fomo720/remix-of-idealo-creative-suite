@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "e1a23efb-015c-40be-913d-c62944243f27",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/e1a23efb-015c-40be-913d-c62944243f27/portfolio-rompecabezas.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/e1a23efb-015c-40be-913d-c62944243f27/portfolio-rompecabezas.jpg",
-  "original_filename": "portfolio-rompecabezas.jpg",
-  "size": 4528680,
   "content_type": "image/png",
-  "created_at": "2026-07-18T17:46:24Z"
+  "created_at": "2026-07-18T17:46:24Z",
+  "original_filename": "portfolio-rompecabezas.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/e1a23efb-015c-40be-913d-c62944243f27/portfolio-rompecabezas.jpg",
+  "size": 4528680,
+  "url": "/__l5e/assets-v1/e1a23efb-015c-40be-913d-c62944243f27/portfolio-rompecabezas.jpg",
+  "version": 1
 }

@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "79d4ff57-b40d-436c-b185-9426086bb48a",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/79d4ff57-b40d-436c-b185-9426086bb48a/apple-clean.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/79d4ff57-b40d-436c-b185-9426086bb48a/apple-clean.png",
-  "original_filename": "apple-clean.png",
-  "size": 227263,
   "content_type": "image/png",
-  "created_at": "2026-07-12T07:31:41Z"
+  "created_at": "2026-07-12T07:31:41Z",
+  "original_filename": "apple-clean.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/79d4ff57-b40d-436c-b185-9426086bb48a/apple-clean.png",
+  "size": 227263,
+  "url": "/__l5e/assets-v1/79d4ff57-b40d-436c-b185-9426086bb48a/apple-clean.png",
+  "version": 1
 }

@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "ee5877f8-3f9b-43cd-8c94-790959c4a6ba",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/ee5877f8-3f9b-43cd-8c94-790959c4a6ba/evt-fp-totes.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/ee5877f8-3f9b-43cd-8c94-790959c4a6ba/evt-fp-totes.jpg",
-  "original_filename": "evt-fp-totes.jpg",
-  "size": 1447121,
   "content_type": "image/png",
-  "created_at": "2026-07-18T20:21:19Z"
+  "created_at": "2026-07-18T20:21:19Z",
+  "original_filename": "evt-fp-totes.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/ee5877f8-3f9b-43cd-8c94-790959c4a6ba/evt-fp-totes.jpg",
+  "size": 1447121,
+  "url": "/__l5e/assets-v1/ee5877f8-3f9b-43cd-8c94-790959c4a6ba/evt-fp-totes.jpg",
+  "version": 1
 }

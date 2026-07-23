@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "b7fa676b-9f99-4f6d-a950-9568e8e5998d",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/b7fa676b-9f99-4f6d-a950-9568e8e5998d/evt-fp-tazas.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/b7fa676b-9f99-4f6d-a950-9568e8e5998d/evt-fp-tazas.jpg",
-  "original_filename": "evt-fp-tazas.jpg",
-  "size": 1151742,
   "content_type": "image/png",
-  "created_at": "2026-07-18T20:21:32Z"
+  "created_at": "2026-07-18T20:21:32Z",
+  "original_filename": "evt-fp-tazas.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/b7fa676b-9f99-4f6d-a950-9568e8e5998d/evt-fp-tazas.jpg",
+  "size": 1151742,
+  "url": "/__l5e/assets-v1/b7fa676b-9f99-4f6d-a950-9568e8e5998d/evt-fp-tazas.jpg",
+  "version": 1
 }

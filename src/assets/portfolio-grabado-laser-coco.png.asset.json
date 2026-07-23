@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "f16dc9d2-06f5-4b11-bf87-38a23d80b3b0",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/f16dc9d2-06f5-4b11-bf87-38a23d80b3b0/portfolio-grabado-laser-coco.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/f16dc9d2-06f5-4b11-bf87-38a23d80b3b0/portfolio-grabado-laser-coco.png",
-  "original_filename": "portfolio-grabado-laser-coco.png",
-  "size": 1234437,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:24:37Z"
+  "created_at": "2026-07-19T05:24:37Z",
+  "original_filename": "portfolio-grabado-laser-coco.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/f16dc9d2-06f5-4b11-bf87-38a23d80b3b0/portfolio-grabado-laser-coco.png",
+  "size": 1234437,
+  "url": "/__l5e/assets-v1/f16dc9d2-06f5-4b11-bf87-38a23d80b3b0/portfolio-grabado-laser-coco.png",
+  "version": 1
 }

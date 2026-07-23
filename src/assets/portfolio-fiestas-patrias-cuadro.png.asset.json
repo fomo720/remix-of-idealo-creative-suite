@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "10e07584-beb0-4466-964e-f57c56b57015",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/10e07584-beb0-4466-964e-f57c56b57015/portfolio-fiestas-patrias-cuadro.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/10e07584-beb0-4466-964e-f57c56b57015/portfolio-fiestas-patrias-cuadro.png",
-  "original_filename": "portfolio-fiestas-patrias-cuadro.png",
-  "size": 1568467,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:08:12Z"
+  "created_at": "2026-07-19T05:08:12Z",
+  "original_filename": "portfolio-fiestas-patrias-cuadro.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/10e07584-beb0-4466-964e-f57c56b57015/portfolio-fiestas-patrias-cuadro.png",
+  "size": 1568467,
+  "url": "/__l5e/assets-v1/10e07584-beb0-4466-964e-f57c56b57015/portfolio-fiestas-patrias-cuadro.png",
+  "version": 1
 }

@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "b879a94a-1fa7-4292-aa67-00b165c25703",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/b879a94a-1fa7-4292-aa67-00b165c25703/portfolio-fiestas-patrias-proceres.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/b879a94a-1fa7-4292-aa67-00b165c25703/portfolio-fiestas-patrias-proceres.png",
-  "original_filename": "portfolio-fiestas-patrias-proceres.png",
-  "size": 1558434,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:12:07Z"
+  "created_at": "2026-07-19T05:12:07Z",
+  "original_filename": "portfolio-fiestas-patrias-proceres.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/b879a94a-1fa7-4292-aa67-00b165c25703/portfolio-fiestas-patrias-proceres.png",
+  "size": 1558434,
+  "url": "/__l5e/assets-v1/b879a94a-1fa7-4292-aa67-00b165c25703/portfolio-fiestas-patrias-proceres.png",
+  "version": 1
 }

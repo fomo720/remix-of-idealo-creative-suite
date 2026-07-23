@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "dabe53bb-4ecb-404e-a55a-85333f47d195",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/dabe53bb-4ecb-404e-a55a-85333f47d195/libreta-suena-planea.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/dabe53bb-4ecb-404e-a55a-85333f47d195/libreta-suena-planea.jpg",
-  "original_filename": "libreta-suena-planea.jpg",
-  "size": 1003128,
   "content_type": "image/png",
-  "created_at": "2026-07-20T04:42:27Z"
+  "created_at": "2026-07-20T04:42:27Z",
+  "original_filename": "libreta-suena-planea.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/dabe53bb-4ecb-404e-a55a-85333f47d195/libreta-suena-planea.jpg",
+  "size": 1003128,
+  "url": "/__l5e/assets-v1/dabe53bb-4ecb-404e-a55a-85333f47d195/libreta-suena-planea.jpg",
+  "version": 1
 }

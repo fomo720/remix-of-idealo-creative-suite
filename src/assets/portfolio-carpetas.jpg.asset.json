@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "f7b4590c-bf36-451d-8c8e-8973fdbe28dd",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/f7b4590c-bf36-451d-8c8e-8973fdbe28dd/portfolio-carpetas.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/f7b4590c-bf36-451d-8c8e-8973fdbe28dd/portfolio-carpetas.jpg",
-  "original_filename": "portfolio-carpetas.jpg",
-  "size": 671990,
   "content_type": "image/png",
-  "created_at": "2026-07-12T06:28:28Z"
+  "created_at": "2026-07-12T06:28:28Z",
+  "original_filename": "portfolio-carpetas.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/f7b4590c-bf36-451d-8c8e-8973fdbe28dd/portfolio-carpetas.jpg",
+  "size": 671990,
+  "url": "/__l5e/assets-v1/f7b4590c-bf36-451d-8c8e-8973fdbe28dd/portfolio-carpetas.jpg",
+  "version": 1
 }

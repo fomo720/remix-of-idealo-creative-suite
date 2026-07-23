@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "f86a52cd-4177-49f1-9455-99853eb9e43c",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/f86a52cd-4177-49f1-9455-99853eb9e43c/kit-flota-avion.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/f86a52cd-4177-49f1-9455-99853eb9e43c/kit-flota-avion.jpg",
-  "original_filename": "kit-flota-avion.jpg",
-  "size": 2105572,
   "content_type": "image/png",
-  "created_at": "2026-07-15T17:18:51Z"
+  "created_at": "2026-07-15T17:18:51Z",
+  "original_filename": "kit-flota-avion.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/f86a52cd-4177-49f1-9455-99853eb9e43c/kit-flota-avion.jpg",
+  "size": 2105572,
+  "url": "/__l5e/assets-v1/f86a52cd-4177-49f1-9455-99853eb9e43c/kit-flota-avion.jpg",
+  "version": 1
 }

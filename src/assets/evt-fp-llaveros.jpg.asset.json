@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "fe0ffb5f-25ac-49eb-82f9-26aa201f0aae",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/fe0ffb5f-25ac-49eb-82f9-26aa201f0aae/evt-fp-llaveros.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/fe0ffb5f-25ac-49eb-82f9-26aa201f0aae/evt-fp-llaveros.jpg",
-  "original_filename": "evt-fp-llaveros.jpg",
-  "size": 1076016,
   "content_type": "image/png",
-  "created_at": "2026-07-18T20:21:37Z"
+  "created_at": "2026-07-18T20:21:37Z",
+  "original_filename": "evt-fp-llaveros.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/fe0ffb5f-25ac-49eb-82f9-26aa201f0aae/evt-fp-llaveros.jpg",
+  "size": 1076016,
+  "url": "/__l5e/assets-v1/fe0ffb5f-25ac-49eb-82f9-26aa201f0aae/evt-fp-llaveros.jpg",
+  "version": 1
 }

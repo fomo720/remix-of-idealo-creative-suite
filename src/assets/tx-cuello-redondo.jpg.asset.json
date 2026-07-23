@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "774f3945-d0b6-49ee-89bc-073442f71f8b",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/774f3945-d0b6-49ee-89bc-073442f71f8b/tx-cuello-redondo.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/774f3945-d0b6-49ee-89bc-073442f71f8b/tx-cuello-redondo.jpg",
-  "original_filename": "tx-cuello-redondo.jpg",
-  "size": 4610338,
   "content_type": "image/png",
-  "created_at": "2026-07-22T16:58:46Z"
+  "created_at": "2026-07-22T16:58:46Z",
+  "original_filename": "tx-cuello-redondo.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/774f3945-d0b6-49ee-89bc-073442f71f8b/tx-cuello-redondo.jpg",
+  "size": 4610338,
+  "url": "/__l5e/assets-v1/774f3945-d0b6-49ee-89bc-073442f71f8b/tx-cuello-redondo.jpg",
+  "version": 1
 }

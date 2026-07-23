@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "f14333ee-9925-4844-b921-d0e1af5a50b0",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/f14333ee-9925-4844-b921-d0e1af5a50b0/portfolio-camisetas-honduras-2.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/f14333ee-9925-4844-b921-d0e1af5a50b0/portfolio-camisetas-honduras-2.png",
-  "original_filename": "portfolio-camisetas-honduras-2.png",
-  "size": 873893,
   "content_type": "image/png",
-  "created_at": "2026-07-19T01:11:36Z"
+  "created_at": "2026-07-19T01:11:36Z",
+  "original_filename": "portfolio-camisetas-honduras-2.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/f14333ee-9925-4844-b921-d0e1af5a50b0/portfolio-camisetas-honduras-2.png",
+  "size": 873893,
+  "url": "/__l5e/assets-v1/f14333ee-9925-4844-b921-d0e1af5a50b0/portfolio-camisetas-honduras-2.png",
+  "version": 1
 }

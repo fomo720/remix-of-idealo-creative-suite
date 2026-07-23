@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "eb22bede-8bd0-4ebf-927f-778b48e24eb6",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/eb22bede-8bd0-4ebf-927f-778b48e24eb6/libreta-182.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/eb22bede-8bd0-4ebf-927f-778b48e24eb6/libreta-182.jpg",
-  "original_filename": "libreta-182.jpg",
-  "size": 906459,
   "content_type": "image/png",
-  "created_at": "2026-07-20T04:23:59Z"
+  "created_at": "2026-07-20T04:23:59Z",
+  "original_filename": "libreta-182.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/eb22bede-8bd0-4ebf-927f-778b48e24eb6/libreta-182.jpg",
+  "size": 906459,
+  "url": "/__l5e/assets-v1/eb22bede-8bd0-4ebf-927f-778b48e24eb6/libreta-182.jpg",
+  "version": 1
 }

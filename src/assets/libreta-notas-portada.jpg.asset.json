@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "47c45560-29e2-46fb-9f77-6c2b56c6e2fa",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/47c45560-29e2-46fb-9f77-6c2b56c6e2fa/libreta-notas-portada.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/47c45560-29e2-46fb-9f77-6c2b56c6e2fa/libreta-notas-portada.jpg",
-  "original_filename": "libreta-notas-portada.jpg",
-  "size": 1026044,
   "content_type": "image/png",
-  "created_at": "2026-07-20T04:42:27Z"
+  "created_at": "2026-07-20T04:42:27Z",
+  "original_filename": "libreta-notas-portada.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/47c45560-29e2-46fb-9f77-6c2b56c6e2fa/libreta-notas-portada.jpg",
+  "size": 1026044,
+  "url": "/__l5e/assets-v1/47c45560-29e2-46fb-9f77-6c2b56c6e2fa/libreta-notas-portada.jpg",
+  "version": 1
 }

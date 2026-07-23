@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "bcdb380b-5067-4f6a-9ac1-22c0455e47bf",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/bcdb380b-5067-4f6a-9ac1-22c0455e47bf/evt-fp-canvas.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/bcdb380b-5067-4f6a-9ac1-22c0455e47bf/evt-fp-canvas.jpg",
-  "original_filename": "evt-fp-canvas.jpg",
-  "size": 1443623,
   "content_type": "image/png",
-  "created_at": "2026-07-18T20:21:42Z"
+  "created_at": "2026-07-18T20:21:42Z",
+  "original_filename": "evt-fp-canvas.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/bcdb380b-5067-4f6a-9ac1-22c0455e47bf/evt-fp-canvas.jpg",
+  "size": 1443623,
+  "url": "/__l5e/assets-v1/bcdb380b-5067-4f6a-9ac1-22c0455e47bf/evt-fp-canvas.jpg",
+  "version": 1
 }

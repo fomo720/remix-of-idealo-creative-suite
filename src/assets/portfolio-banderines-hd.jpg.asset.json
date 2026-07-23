@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "7d726775-05e4-45c4-acf1-f7758d3438a6",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/7d726775-05e4-45c4-acf1-f7758d3438a6/portfolio-banderines-hd.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/7d726775-05e4-45c4-acf1-f7758d3438a6/portfolio-banderines-hd.jpg",
-  "original_filename": "portfolio-banderines-hd.jpg",
-  "size": 5917281,
   "content_type": "image/png",
-  "created_at": "2026-07-18T17:13:26Z"
+  "created_at": "2026-07-18T17:13:26Z",
+  "original_filename": "portfolio-banderines-hd.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/7d726775-05e4-45c4-acf1-f7758d3438a6/portfolio-banderines-hd.jpg",
+  "size": 5917281,
+  "url": "/__l5e/assets-v1/7d726775-05e4-45c4-acf1-f7758d3438a6/portfolio-banderines-hd.jpg",
+  "version": 1
 }

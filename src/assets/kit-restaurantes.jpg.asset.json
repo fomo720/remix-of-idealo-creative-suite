@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "098907e9-8a0c-442c-a6d5-738cf08465a3",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/098907e9-8a0c-442c-a6d5-738cf08465a3/kit-restaurantes.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/098907e9-8a0c-442c-a6d5-738cf08465a3/kit-restaurantes.jpg",
-  "original_filename": "kit-restaurantes.jpg",
-  "size": 3068518,
   "content_type": "image/png",
-  "created_at": "2026-07-15T17:18:51Z"
+  "created_at": "2026-07-15T17:18:51Z",
+  "original_filename": "kit-restaurantes.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/098907e9-8a0c-442c-a6d5-738cf08465a3/kit-restaurantes.jpg",
+  "size": 3068518,
+  "url": "/__l5e/assets-v1/098907e9-8a0c-442c-a6d5-738cf08465a3/kit-restaurantes.jpg",
+  "version": 1
 }

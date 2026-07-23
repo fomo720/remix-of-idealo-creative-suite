@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "91522c6e-8f1d-4573-ab7f-87bd912a50a5",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/91522c6e-8f1d-4573-ab7f-87bd912a50a5/portfolio-pvc-bienvenida-jessie.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/91522c6e-8f1d-4573-ab7f-87bd912a50a5/portfolio-pvc-bienvenida-jessie.png",
-  "original_filename": "portfolio-pvc-bienvenida-jessie.png",
-  "size": 1663342,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:31:40Z"
+  "created_at": "2026-07-19T05:31:40Z",
+  "original_filename": "portfolio-pvc-bienvenida-jessie.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/91522c6e-8f1d-4573-ab7f-87bd912a50a5/portfolio-pvc-bienvenida-jessie.png",
+  "size": 1663342,
+  "url": "/__l5e/assets-v1/91522c6e-8f1d-4573-ab7f-87bd912a50a5/portfolio-pvc-bienvenida-jessie.png",
+  "version": 1
 }

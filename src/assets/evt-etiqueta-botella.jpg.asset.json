@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "aba1cc78-a1ca-4af8-bb46-74606824af40",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/aba1cc78-a1ca-4af8-bb46-74606824af40/evt-etiqueta-botella.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/aba1cc78-a1ca-4af8-bb46-74606824af40/evt-etiqueta-botella.jpg",
-  "original_filename": "evt-etiqueta-botella.jpg",
-  "size": 1330642,
   "content_type": "image/png",
-  "created_at": "2026-07-13T07:17:01Z"
+  "created_at": "2026-07-13T07:17:01Z",
+  "original_filename": "evt-etiqueta-botella.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/aba1cc78-a1ca-4af8-bb46-74606824af40/evt-etiqueta-botella.jpg",
+  "size": 1330642,
+  "url": "/__l5e/assets-v1/aba1cc78-a1ca-4af8-bb46-74606824af40/evt-etiqueta-botella.jpg",
+  "version": 1
 }

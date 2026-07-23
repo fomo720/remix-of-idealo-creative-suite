@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "a6d9de14-677d-4587-911f-d290030f692e",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/a6d9de14-677d-4587-911f-d290030f692e/portfolio-marcos-personalizados.png",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/a6d9de14-677d-4587-911f-d290030f692e/portfolio-marcos-personalizados.png",
-  "original_filename": "portfolio-marcos-personalizados.png",
-  "size": 653455,
   "content_type": "image/png",
-  "created_at": "2026-07-19T05:35:14Z"
+  "created_at": "2026-07-19T05:35:14Z",
+  "original_filename": "portfolio-marcos-personalizados.png",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/a6d9de14-677d-4587-911f-d290030f692e/portfolio-marcos-personalizados.png",
+  "size": 653455,
+  "url": "/__l5e/assets-v1/a6d9de14-677d-4587-911f-d290030f692e/portfolio-marcos-personalizados.png",
+  "version": 1
 }

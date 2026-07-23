@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "28aa706f-094c-478b-82d7-70693bf8a3d9",
-  "project_id": "3b90851b-6a86-463f-8e4f-ec4d6fdbc38d",
-  "url": "/__l5e/assets-v1/28aa706f-094c-478b-82d7-70693bf8a3d9/portfolio-tarjetas.jpg",
-  "r2_key": "a/v1/3b90851b-6a86-463f-8e4f-ec4d6fdbc38d/28aa706f-094c-478b-82d7-70693bf8a3d9/portfolio-tarjetas.jpg",
-  "original_filename": "portfolio-tarjetas.jpg",
-  "size": 1934282,
   "content_type": "image/png",
-  "created_at": "2026-07-12T06:28:43Z"
+  "created_at": "2026-07-12T06:28:43Z",
+  "original_filename": "portfolio-tarjetas.jpg",
+  "project_id": "3825c643-7cef-43ad-82f4-3dac18de7f65",
+  "r2_key": "a/v1/3825c643-7cef-43ad-82f4-3dac18de7f65/28aa706f-094c-478b-82d7-70693bf8a3d9/portfolio-tarjetas.jpg",
+  "size": 1934282,
+  "url": "/__l5e/assets-v1/28aa706f-094c-478b-82d7-70693bf8a3d9/portfolio-tarjetas.jpg",
+  "version": 1
 }
