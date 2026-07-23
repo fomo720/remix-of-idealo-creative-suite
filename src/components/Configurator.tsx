@@ -297,9 +297,25 @@ const sizePresets = [
   { w: 2.5, h: 2.5, label: '2.5" x 2.5"', hint: "Uso versátil" },
   { w: 3.5, h: 3.5, label: '3.5" x 3.5"', hint: "Branding visible y termos" },
 ];
+const mediumSizePresets = [
+  { w: 6, h: 6, label: '6" x 6"', hint: "Empaques medianos" },
+  { w: 7, h: 7, label: '7" x 7"', hint: "Cajas y bolsas" },
+  { w: 8, h: 8, label: '8" x 8"', hint: "Escaparates pequeños" },
+  { w: 9, h: 9, label: '9" x 9"', hint: "Ventanas y vitrinas" },
+  { w: 10, h: 10, label: '10" x 10"', hint: "Impacto visual" },
+  { w: 11, h: 11, label: '11" x 11"', hint: "Grande y visible" },
+  { w: 12, h: 12, label: '12" x 12"', hint: "Máximo mediano" },
+];
+const GIANT_W_MIN = 24;
+const GIANT_W_MAX = 63; // límite del rollo Mimaki UCJV300-160 (~63")
+const GIANT_H_MIN = 36;
+const GIANT_H_MAX = 78;
 const SIZE_MIN = 1;
 const SIZE_MAX = 5;
 const MIN_QTY = 25;
+
+type StickerSizeCategory = "small" | "medium" | "giant";
+type StickerMount = "vinyl" | "pvc";
 
 /* ---------- Libretas ---------- */
 const notebookStyles: {
