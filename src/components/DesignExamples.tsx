@@ -34,16 +34,18 @@ export function DesignExamples({ type }: { type: ProjectType }) {
           }}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          ¿Prefieres que lo hagamos por vos?
+          Lo adaptamos a TU MARCA
         </div>
         <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Elegí un diseño ya hecho y{" "}
-          <span style={{ color: "var(--brand-magenta)" }}>cotizá YA</span>
+          Elegí un estilo y{" "}
+          <span style={{ color: "var(--brand-magenta)" }}>nosotros lo adaptamos</span>
         </h3>
         <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-          Estos son {label} que ya hemos producido. Tocá el que te guste y te
-          hacemos uno igual o adaptado a tu marca.
+          Estos son {label} que ya hemos producido. Escogé el estilo que más te
+          guste y lo adaptamos con tu logo, colores y contenido — vos decís
+          "quiero algo así, pero con mi marca" y nosotros nos encargamos.
         </p>
+
       </div>
 
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
