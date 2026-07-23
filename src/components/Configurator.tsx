@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { toPng, toBlob } from "html-to-image";
+import { DesignExamples } from "@/components/DesignExamples";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
 
@@ -1903,6 +1904,19 @@ export function Configurator() {
             </>
           )}
         </div>
+        {category && category !== "laser" && (
+          <DesignExamples
+            type={
+              category === "stickers"
+                ? "Stickers"
+                : category === "iron-ons"
+                ? "Iron-ons"
+                : category === "libretas"
+                ? "Libretas"
+                : "Impresos"
+            }
+          />
+        )}
       </div>
     </section>
     <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
