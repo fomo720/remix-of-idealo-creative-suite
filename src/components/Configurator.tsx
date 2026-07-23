@@ -1942,16 +1942,17 @@ export function Configurator() {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Mensaje enviado a WhatsApp!</span>
+            <span className="bg-gradient-cta bg-clip-text text-transparent">Antes de ir a WhatsApp</span>
           </DialogTitle>
           <DialogDescription>
-            Ya abrimos WhatsApp con todos los detalles de tu cotización. Solo falta adjuntar tu diseño.
+            Te vamos a llevar a WhatsApp con tu mensaje ya escrito. Sigue estos
+            3 pasos para que podamos preparar tu cotización sin demoras:
           </DialogDescription>
         </DialogHeader>
         <ol className="mt-2 space-y-3 text-sm">
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">1</span>
-            <span>Envía el mensaje que ya tienes escrito en WhatsApp.</span>
+            <span>Envía el mensaje que ya tienes escrito en WhatsApp (no borres nada, ya lleva todos los detalles).</span>
           </li>
           <li className="flex gap-3">
             <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">2</span>
@@ -1969,14 +1970,14 @@ export function Configurator() {
           onClick={() => setTimeout(() => setWaModal(null), 300)}
           className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
         >
-          <WA className="h-5 w-5" /> Abrir WhatsApp de nuevo
+          <WA className="h-5 w-5" /> Entendido, ir a WhatsApp
         </a>
         <button
           type="button"
           onClick={() => setWaModal(null)}
           className="mt-1 text-center text-xs text-muted-foreground hover:text-foreground"
         >
-          Cerrar
+          Cancelar
         </button>
       </DialogContent>
     </Dialog>
