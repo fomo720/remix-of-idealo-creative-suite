@@ -889,6 +889,12 @@ export function Configurator() {
     setUploaded(url);
     setPreset(null);
     resetImageTools();
+    setUploadedDims(null);
+    const probe = new Image();
+    probe.onload = () => {
+      setUploadedDims({ w: probe.naturalWidth, h: probe.naturalHeight });
+    };
+    probe.src = url;
   };
 
   const resetImageTools = () => {
