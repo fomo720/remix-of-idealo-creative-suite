@@ -1045,7 +1045,7 @@ export function Configurator() {
           {isTextiles && step === 2 && (
             <TextilesShirtTypeStep
               shirtType={txShirtType}
-              onPick={(v) => { setTxShirtType(v); goTo(3); }}
+              onPick={(v) => { setTxShirtType(v); setGateMsg(null); setStep(3); }}
               onBack={() => goTo(1)}
               onNext={txShirtType ? () => goTo(3) : undefined}
             />
@@ -1055,7 +1055,7 @@ export function Configurator() {
               availableFabrics={getFabricsForType(txShirtType)}
               shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
               fabric={txFabric}
-              onPick={(v) => { setTxFabric(v); goTo(4); }}
+              onPick={(v) => { setTxFabric(v); setGateMsg(null); setStep(4); }}
               onBack={() => goTo(2)}
               onNext={txFabric ? () => goTo(4) : undefined}
             />
@@ -1065,7 +1065,7 @@ export function Configurator() {
               fabricData={txFabricData}
               availableSleeves={txAvailableSleeves}
               sleeve={txSleeve}
-              onPick={(v) => { setTxSleeve(v); goTo(5); }}
+              onPick={(v) => { setTxSleeve(v); setGateMsg(null); setStep(5); }}
               onBack={() => goTo(3)}
               onNext={txSleeve ? () => goTo(5) : undefined}
             />
@@ -1115,7 +1115,7 @@ export function Configurator() {
                     desc={c.desc}
                     accent={c.accent}
                     active={cut === c.id}
-                    onClick={() => { setCut(c.id); goTo(3); }}
+                    onClick={() => { setCut(c.id); setGateMsg(null); setStep(3); }}
                     bestseller={c.id === "die-cut"}
                   />
                 ))}
@@ -1136,7 +1136,7 @@ export function Configurator() {
                     accent={s.accent}
                     icon={s.icon}
                     active={notebookStyle === s.id}
-                    onClick={() => { setNotebookStyle(s.id); goTo(3); }}
+                    onClick={() => { setNotebookStyle(s.id); setGateMsg(null); setStep(3); }}
                   />
                 ))}
               </div>
@@ -1345,7 +1345,7 @@ export function Configurator() {
                     material={m}
                     active={material === m.id}
                     isBestSeller={idx === 0}
-                    onClick={() => { setMaterial(m.id); goTo(4); }}
+                    onClick={() => { setMaterial(m.id); setGateMsg(null); setStep(4); }}
                   />
                 ))}
               </div>
@@ -1362,7 +1362,7 @@ export function Configurator() {
                     key={m.id}
                     material={m}
                     active={notebookMaterial === m.id}
-                    onClick={() => { setNotebookMaterial(m.id); goTo(4); }}
+                    onClick={() => { setNotebookMaterial(m.id); setGateMsg(null); setStep(4); }}
                   />
                 ))}
               </div>
@@ -1413,7 +1413,7 @@ export function Configurator() {
                 {imprentaStyles.map((s) => (
                   <button
                     key={s.id}
-                    onClick={() => { setImprentaStyle(s.id); goTo(4); }}
+                    onClick={() => { setImprentaStyle(s.id); setGateMsg(null); setStep(4); }}
                     className={cn(
                       "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
                       imprentaStyle === s.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
