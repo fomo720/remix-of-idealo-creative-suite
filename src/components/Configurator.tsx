@@ -1967,6 +1967,33 @@ export function Configurator() {
             <span>¡Listo! Nosotros nos encargamos del resto y te respondemos con tu cotización.</span>
           </li>
         </ol>
+        {(() => {
+          if (!uploadedDims || !width || !height) return null;
+          const wIn = unit === "in" ? width : width / 2.54;
+          const hIn = unit === "in" ? height : height / 2.54;
+          if (!wIn || !hIn) return null;
+          const dpi = Math.min(uploadedDims.w / wIn, uploadedDims.h / hIn);
+          if (dpi >= 150) return null;
+          return (
+            <div className="mt-4 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50 p-3.5 text-amber-900">
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+              <div className="text-[13px] leading-snug">
+                <p className="font-semibold">Advertencia: resolución baja (~{Math.round(dpi)} DPI)</p>
+                <p className="mt-1 text-amber-800/90">
+                  Tu imagen podría verse pixelada al imprimirse.{" "}
+                  <button
+                    type="button"
+                    onClick={() => setShowResExample(true)}
+                    className="font-semibold underline decoration-yellow-500 decoration-2 underline-offset-2 hover:text-amber-950"
+                    style={{ textDecorationColor: "#eab308" }}
+                  >
+                    Ver ejemplo de por qué importa
+                  </button>
+                </p>
+              </div>
+            </div>
+          );
+        })()}
         <a
           href={waModal?.href ?? "#"}
           target="_blank"
