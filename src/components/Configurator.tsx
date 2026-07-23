@@ -711,6 +711,8 @@ export function Configurator() {
   const [unit, setUnit] = useState<"in" | "cm">("in");
   const [sizeMode, setSizeMode] = useState<"preset" | "custom">("preset");
   const [activePreset, setActivePreset] = useState<number>(2); // 2x2
+  const [sizeCategory, setSizeCategory] = useState<StickerSizeCategory>("small");
+  const [stickerMount, setStickerMount] = useState<StickerMount>("vinyl");
 
   const [qty, setQty] = useState(MIN_QTY);
   const [notes, setNotes] = useState("");
