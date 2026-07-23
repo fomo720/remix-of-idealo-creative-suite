@@ -1903,6 +1903,19 @@ export function Configurator() {
             </>
           )}
         </div>
+        {category && category !== "laser" && (
+          <DesignExamples
+            type={
+              category === "stickers"
+                ? "Stickers"
+                : category === "iron-ons"
+                ? "Iron-ons"
+                : category === "libretas"
+                ? "Libretas"
+                : "Impresos"
+            }
+          />
+        )}
       </div>
     </section>
     <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
