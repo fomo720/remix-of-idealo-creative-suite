@@ -5407,7 +5407,6 @@ function TextilesDesignStep({
               "No tengo diseño listo — quisiera que ustedes se encarguen del diseño (entiendo que tiene un costo adicional).",
             ].filter(Boolean).join("\n");
             const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
-            window.open(href, "_blank", "noopener,noreferrer");
             onSubmitted({ href, text: lines });
           }}
           onWhatsApp={({ viewsSummary }) => {
@@ -5426,7 +5425,6 @@ function TextilesDesignStep({
               "Adjunto la vista previa (PNG) en el chat.",
             ].filter(Boolean).join("\n");
             const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
-            window.open(href, "_blank", "noopener,noreferrer");
             onSubmitted({ href, text: lines });
           }}
         />
