@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
+import TextilesEditor2D from "@/components/TextilesEditor2D";
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
@@ -5423,11 +5424,11 @@ function TextilesDesignStep({
       <div className="lg:sticky lg:top-6 lg:self-start">
         <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-4 sm:p-6">
           <div className="mb-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
-            <span>Vista previa en vivo</span>
+            <span>Editor 2D · Mockups fotorrealistas</span>
             <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
           </div>
 
-          {/* Color picker inline */}
+          {/* Color picker */}
           <div className="mb-3 rounded-2xl border border-border bg-background/70 p-3">
             <div className="mb-2 flex items-center justify-between">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
@@ -5466,350 +5467,31 @@ function TextilesDesignStep({
             </div>
           </div>
 
-          {/* Side (Front/Back) + View mode */}
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="inline-flex rounded-full border border-border bg-background/80 p-1 shadow-card-soft">
-              {([
-                { id: "front" as const, label: "Frente" },
-                { id: "back" as const, label: "Atrás" },
-              ]).map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setSide(s.id)}
-                  className={cn(
-                    "rounded-full px-3 py-1.5 text-xs font-semibold transition",
-                    side === s.id ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted",
-                  )}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-            <div className="inline-flex rounded-full border border-border bg-background/80 p-1 shadow-card-soft">
-              {([
-                { id: "2d" as const, label: "2D" },
-                { id: "both" as const, label: "2D + 3D" },
-                { id: "3d" as const, label: "3D" },
-              ]).map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => setViewMode(m.id)}
-                  className={cn(
-                    "rounded-full px-3 py-1.5 text-[11px] font-semibold transition",
-                    viewMode === m.id
-                      ? m.id === "3d" || m.id === "both"
-                        ? "bg-gradient-to-r from-[color:var(--brand-pink)] to-[color:var(--brand-cyan)] text-white shadow-sm"
-                        : "bg-foreground text-background"
-                      : "text-muted-foreground hover:bg-muted",
-                  )}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={cn("grid gap-4", viewMode === "both" ? "xl:grid-cols-2" : "grid-cols-1")}>
-            {/* 2D editor */}
-            {(viewMode === "2d" || viewMode === "both") && (
-              <div>
-                {/* Toolbar */}
-                <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-2xl border border-border bg-background/80 p-1.5">
-                  <button
-                    type="button"
-                    onClick={rotateLeft}
-                    disabled={!uploaded}
-                    title="Rotar 90° a la izquierda"
-                    className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-40"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" /> 90°
-                  </button>
-                  <button
-                    type="button"
-                    onClick={zoomOut}
-                    disabled={!uploaded}
-                    title="Reducir"
-                    className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
-                  >−</button>
-                  <span className="min-w-[38px] text-center text-[11px] font-semibold text-muted-foreground">{scale}%</span>
-                  <button
-                    type="button"
-                    onClick={zoomIn}
-                    disabled={!uploaded}
-                    title="Ampliar"
-                    className="rounded-lg px-2 py-1.5 text-sm font-bold hover:bg-muted disabled:opacity-40"
-                  >+</button>
-                  <div className="mx-1 h-5 w-px bg-border" />
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Fondo</span>
-                  {([
-                    { id: "checker" as const, label: "PNG" },
-                    { id: "white" as const, label: "Blanco" },
-                    { id: "gray" as const, label: "Gris" },
-                  ]).map((b) => (
-                    <button
-                      key={b.id}
-                      type="button"
-                      onClick={() => setCanvasBg(b.id)}
-                      className={cn(
-                        "rounded-lg px-2 py-1 text-[11px] font-medium transition",
-                        canvasBg === b.id ? "bg-foreground text-background" : "hover:bg-muted",
-                      )}
-                    >
-                      {b.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div
-                  ref={previewRef}
-                  onPointerDown={(e) => {
-                    // Click on empty canvas deselects.
-                    if (e.target === e.currentTarget) setSelected(false);
-                  }}
-                  className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl"
-                  style={{ aspectRatio: "5 / 3", ...bgStyle }}
-                >
-                  {/* Flat pattern PNG (tinted with shirt color via mix-blend).
-                      Source PNG has the shirt panels upside-down (collar at
-                      bottom), so we rotate 180° to place collars on top. */}
-                  <div
-                    className="absolute inset-0"
-                    style={{ backgroundColor: colorHex }}
-                    aria-hidden
-                  />
-                  <img
-                    src={shirt2dPattern.url}
-                    alt="Patrón plano de la camiseta"
-                    draggable={false}
-                    className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain mix-blend-multiply"
-                    style={{ opacity: 0.85, transform: "rotate(180deg)" }}
-                  />
-                  {/* Outline overlay so the pattern reads on any color */}
-                  <img
-                    src={shirt2dPattern.url}
-                    alt=""
-                    draggable={false}
-                    className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain opacity-20 mix-blend-overlay"
-                    style={{ transform: "rotate(180deg)" }}
-                  />
-
-                  {/* Print zone indicator + interactive art */}
-                  {(() => {
-                    // After the 180° pattern rotation the V-neck panel (FRONT)
-                    // ends up on the LEFT and the flat-collar panel (BACK) on
-                    // the RIGHT. Zones are tightened to the chest so sleeves
-                    // and collar stay untouched.
-                    const zone = side === "front"
-                      ? { left: 10, top: 20, width: 30, height: 34 }
-                      : { left: 60, top: 20, width: 30, height: 34 };
-
-                    // Print area size clamped to the zone.
-                    const areaW = zone.width * (scale / 100) * 0.85;
-                    const areaH = zone.height * (scale / 100) * 0.85;
-                    const cx = zone.left + zone.width / 2 + (offsetX / 100) * (zone.width / 2);
-                    const cy = zone.top + zone.height / 2 + (offsetY / 100) * (zone.height / 2);
-
-                    return (
-                      <>
-                        {/* Dashed zone outline — only shown when there is no
-                            uploaded art yet (avoids the "cut lines" look). */}
-                        {!uploaded && (
-                          <>
-                            <div
-                              className="pointer-events-none absolute rounded-md border border-dashed"
-                              style={{
-                                left: `${zone.left}%`,
-                                top: `${zone.top}%`,
-                                width: `${zone.width}%`,
-                                height: `${zone.height}%`,
-                                borderColor: isLight ? "rgba(17,24,39,0.35)" : "rgba(255,255,255,0.55)",
-                              }}
-                            />
-                            <div
-                              className="pointer-events-none absolute rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider"
-                              style={{
-                                left: `${zone.left + 1}%`,
-                                top: `${zone.top + 1}%`,
-                                backgroundColor: isLight ? "rgba(17,24,39,0.75)" : "rgba(255,255,255,0.85)",
-                                color: isLight ? "#fff" : "#111827",
-                              }}
-                            >
-                              {side === "front" ? "Frente · área editable" : "Atrás · área editable"}
-                            </div>
-                          </>
-                        )}
-
-                        {/* Wrapper (not transformed) holds handles at fixed size */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: `${cx}%`,
-                            top: `${cy}%`,
-                            width: `${areaW}%`,
-                            height: `${areaH}%`,
-                            transform: "translate(-50%, -50%)",
-                          }}
-                        >
-                          {/* Transformed inner box holds the art (rotation + horizontal stretch) */}
-                          <div
-                            ref={printAreaRef}
-                            onPointerDown={onPointerDown}
-                            onPointerMove={onPointerMove}
-                            onPointerUp={onPointerUp}
-                            onPointerCancel={onPointerUp}
-                            className={cn(
-                              "absolute inset-0 select-none touch-none",
-                              uploaded ? "cursor-grab active:cursor-grabbing" : "cursor-default",
-                            )}
-                            style={{
-                              transform: `rotate(${rotation}deg) scaleX(${scaleX / 100})`,
-                              transformOrigin: "center",
-                              willChange: "transform",
-                            }}
-                          >
-                            {uploaded ? (
-                              <img
-                                src={uploaded}
-                                alt="Diseño"
-                                draggable={false}
-                                className="pointer-events-none h-full w-full object-contain"
-                              />
-                            ) : (
-                              <div
-                                className="flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed p-2 text-center text-[10px] font-medium"
-                                style={{ color: strokeColor, borderColor: strokeColor, backgroundColor: "rgba(255,255,255,0.4)" }}
-                              >
-                                Sube tu diseño
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Selection frame + 6 resize handles + delete */}
-                          {uploaded && selected && (
-                            <>
-                              <div
-                                className="pointer-events-none absolute -inset-1 rounded-md"
-                                style={{ border: "1.5px dashed color-mix(in oklab, var(--brand-pink) 80%, white)" }}
-                              />
-                              {(["tl","tr","bl","br","ml","mr"] as const).map((h) => {
-                                const pos: React.CSSProperties = {
-                                  top: h.startsWith("t") ? -7 : h.startsWith("b") ? "auto" : "50%",
-                                  bottom: h.startsWith("b") ? -7 : "auto",
-                                  left: h.endsWith("l") ? -7 : h.endsWith("r") ? "auto" : "50%",
-                                  right: h.endsWith("r") ? -7 : "auto",
-                                  transform:
-                                    h === "ml" || h === "mr"
-                                      ? "translateY(-50%)"
-                                      : h === "tl" || h === "bl" || h === "tr" || h === "br"
-                                      ? undefined
-                                      : "translateX(-50%)",
-                                  cursor:
-                                    h === "ml" || h === "mr"
-                                      ? "ew-resize"
-                                      : h === "tl" || h === "br"
-                                      ? "nwse-resize"
-                                      : "nesw-resize",
-                                };
-                                return (
-                                  <span
-                                    key={h}
-                                    onPointerDown={onHandleDown(h)}
-                                    className="absolute z-40 h-3.5 w-3.5 rounded-full bg-white transition-transform hover:scale-125"
-                                    style={{
-                                      ...pos,
-                                      border: "2px solid color-mix(in oklab, var(--brand-pink) 85%, black)",
-                                      boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
-                                      touchAction: "none",
-                                    }}
-                                  />
-                                );
-                              })}
-                              <button
-                                type="button"
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onClick={(e) => { e.stopPropagation(); deleteArt(); }}
-                                className="absolute z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white text-red-600 shadow-md ring-1 ring-red-200 hover:bg-red-50"
-                                style={{ top: -30, right: -8 }}
-                                aria-label="Eliminar diseño"
-                                title="Eliminar diseño"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </>
-                    );
-                  })()}
-
-                  {/* Locked areas hint */}
-                  <div className="pointer-events-none absolute bottom-1 left-1 rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
-                    Mangas y cuello · bloqueados
-                  </div>
-                </div>
-
-              </div>
-            )}
-
-            {/* 3D viewer */}
-            {(viewMode === "3d" || viewMode === "both") && (
-              <div>
-                <Suspense
-                  fallback={
-                    <div className="flex h-[420px] w-full items-center justify-center rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200 text-xs text-muted-foreground">
-                      Cargando visor 3D…
-                    </div>
-                  }
-                >
-                  <TextilesShirt3D
-                    color={colorHex}
-                    sleeve={sleeve}
-                    imageUrl={uploaded}
-                    offsetX={offsetX}
-                    offsetY={offsetY}
-                    scale={scale}
-                    scaleX={scaleX}
-                    rotation={rotation}
-                    side={side}
-                  />
-                </Suspense>
-              </div>
-            )}
-          </div>
-
-          <div className="mx-auto mt-4 flex max-w-md items-start gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-card-soft backdrop-blur">
-            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--brand-cyan-deep)" }} />
-            <span>El logo colocado en el patrón 2D aparece en vivo sobre el modelo 3D. Deslizá el 3D para rotar 360°.</span>
-          </div>
-
+          <TextilesEditor2D
+            shirtColor={colorHex}
+            disabled={!size}
+            ctaLabel={!size ? "Elige una talla primero" : "Cotizar por WhatsApp"}
+            onWhatsApp={({ viewsSummary }) => {
+              if (!size) return;
+              const lines = [
+                "Hola! Quiero cotizar una Camiseta Personalizada:",
+                `- Material: ${fabricData?.name ?? "-"}`,
+                `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
+                `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
+                `- Color: ${color}`,
+                `- Talla: ${size}`,
+                `- Cantidad: ${qty}`,
+                `- Diseño (vistas): ${viewsSummary}`,
+                notes ? `- Notas: ${notes}` : "",
+                "",
+                "Adjunto la vista previa (PNG) en el chat.",
+              ].filter(Boolean).join("\n");
+              const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
+              window.open(href, "_blank", "noopener,noreferrer");
+              onSubmitted({ href, text: lines });
+            }}
+          />
         </div>
-
-
-        <button
-          type="button"
-          onClick={onSubmit}
-          disabled={!uploaded || !size || busy}
-          className={cn(
-            "mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold text-white shadow-elegant transition",
-            uploaded && size && !busy
-              ? "bg-gradient-cta animate-rainbow-shimmer hover:scale-[1.01]"
-              : "cursor-not-allowed bg-muted-foreground/40",
-          )}
-        >
-          {busy ? (
-            <>Generando vista previa…</>
-          ) : (
-            <>
-              <Download className="h-5 w-5" />
-              {!size ? "Elige una talla" : !uploaded ? "Sube tu diseño para continuar" : "Descargar PNG y abrir WhatsApp"}
-            </>
-          )}
-        </button>
-        <p className="mt-2 text-center text-[11px] text-muted-foreground">
-          Se descarga tu vista previa (PNG) y se abre WhatsApp con todos los detalles. Adjunta el PNG en el chat.
-        </p>
 
         <NavRow onBack={onBack} />
       </div>
