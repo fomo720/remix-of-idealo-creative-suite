@@ -190,7 +190,7 @@ function CategoriaPage() {
               <>
                 {p.image ? (
                   <div className="mb-4 overflow-hidden rounded-2xl border border-border bg-white">
-                    <img src={p.image} alt={p.title} className="aspect-[4/3] w-full object-cover transition group-hover:scale-105" />
+                    <img src={p.image} alt={p.title} className="aspect-square w-full object-cover transition group-hover:scale-105" />
                   </div>
                 ) : (
                   <div
