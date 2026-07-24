@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
+import TextilesEditor2D from "@/components/TextilesEditor2D";
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
