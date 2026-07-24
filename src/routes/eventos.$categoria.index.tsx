@@ -11,6 +11,13 @@ import evtFpTazas from "@/assets/evt-fp-tazas.jpg.asset.json";
 import evtFpSombreros from "@/assets/evt-fp-sombreros.jpg.asset.json";
 import evtFpCamisetas from "@/assets/evt-fp-camisetas.png.asset.json";
 import evtBtsCombo from "@/assets/evt-bts-combo-rotuladores.png.asset.json";
+import evtCumplePvc from "@/assets/evt-cumple-pvc-bienvenida.png.asset.json";
+import evtCumpleBanner from "@/assets/evt-cumple-banner.png.asset.json";
+import evtCumpleCake from "@/assets/evt-cumple-cake-topper.png.asset.json";
+import evtCumpleMenu from "@/assets/evt-cumple-menu.png.asset.json";
+import evtCumpleCajitas from "@/assets/evt-cumple-cajitas.png.asset.json";
+import evtCumpleBotellas from "@/assets/evt-cumple-botellas.png.asset.json";
+import evtCumpleMesa from "@/assets/evt-cumple-numero-mesa.png.asset.json";
 
 
 export const Route = createFileRoute("/eventos/$categoria/")({
