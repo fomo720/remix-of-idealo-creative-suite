@@ -63,18 +63,18 @@ type Categoria = {
   productos: Producto[];
 };
 
-const PRODUCTOS_CUMPLE: Producto[] = [
-  { slug: "pvc-bienvenida", title: "PVC de Bienvenida", icon: PartyPopper, desc: "Letrero rígido con el nombre del cumpleañero.", color: "var(--brand-pink)" },
-  { slug: "banner-parador", title: "Banner Parador", icon: Flag, desc: "Backdrop vertical de gran formato.", color: "var(--brand-violet)" },
-  { slug: "cake-topper", title: "Cake Topper", icon: Cookie, desc: "Decoración troquelada para el pastel.", color: "var(--brand-orange)" },
-  { slug: "menu", title: "Menú", icon: BookOpen, desc: "Menú impreso personalizado por invitado.", color: "var(--brand-indigo)" },
-  { slug: "cajitas", title: "Cajitas", icon: Package, desc: "Cajas de regalo o dulces temáticas.", color: "var(--brand-blue)" },
-  { slug: "etiquetas-botellas", title: "Etiquetas para Botellas", icon: Tags, desc: "Etiquetas adhesivas para agua o licores.", color: "var(--brand-pink)" },
-  { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética para cada mesa del evento.", color: "var(--brand-violet)" },
-];
-
 const WA = "50433635666";
 const wa = (msg: string) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+
+const PRODUCTOS_CUMPLE: Producto[] = [
+  { slug: "pvc-bienvenida", title: "PVC de Bienvenida", icon: PartyPopper, desc: "Letrero rígido tamaño real con el nombre y tema del cumpleañero. Recibí a tus invitados con estilo.", color: "var(--brand-pink)", image: evtCumplePvc.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar un *PVC de Bienvenida* para un cumpleaños. ¿Me pasan opciones, tamaños y precios?") },
+  { slug: "banner-parador", title: "Banner Personalizado", icon: Flag, desc: "Backdrop de gran formato con el tema del cumpleaños. Perfecto para fotos y decoración.", color: "var(--brand-violet)", image: evtCumpleBanner.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar un *Banner personalizado* para un cumpleaños. ¿Me pasan tamaños y precios?") },
+  { slug: "cake-topper", title: "Cake Topper", icon: Cookie, desc: "Decoración troquelada personalizada para el pastel con nombre, edad y personajes.", color: "var(--brand-orange)", image: evtCumpleCake.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar un *Cake Topper* personalizado. ¿Me pasan opciones y precios?") },
+  { slug: "menu", title: "Menú Personalizado", icon: BookOpen, desc: "Menú impreso temático con entrada, plato fuerte y postre. Uno por invitado o de mesa.", color: "var(--brand-indigo)", image: evtCumpleMenu.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *Menús personalizados* para un cumpleaños. ¿Me pasan opciones y precios?") },
+  { slug: "cajitas", title: "Cajitas Personalizadas", icon: Package, desc: "Cajitas temáticas para dulces, regalitos o snacks. Con el diseño del cumpleaños.", color: "var(--brand-blue)", image: evtCumpleCajitas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *Cajitas personalizadas* para un cumpleaños. ¿Me pasan opciones y precios?") },
+  { slug: "etiquetas-botellas", title: "Botellas Personalizadas", icon: Tags, desc: "Etiquetas adhesivas para botellas de agua o refresco con el nombre y tema del cumple.", color: "var(--brand-pink)", image: evtCumpleBotellas.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *Etiquetas para botellas* personalizadas. ¿Me pasan opciones y precios?") },
+  { slug: "numero-mesa", title: "Número de Mesa", icon: Hash, desc: "Señalética temática troquelada con el número o edad. Ideal para mesa de dulces o principal.", color: "var(--brand-violet)", image: evtCumpleMesa.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *Números de Mesa* personalizados para un cumpleaños. ¿Me pasan opciones y precios?") },
+];
 
 const PRODUCTOS_FP: Producto[] = [
   { slug: "llaveros", title: "Llaveros", icon: KeyRound, desc: "Llaveros patrióticos con diseño personalizado. También con grabado láser en acero.", color: "var(--brand-blue)", image: evtFpLlaveros.url, whatsapp: wa("Hola Idealo 👋 Quiero cotizar *llaveros patrióticos* para fiestas patrias. ¿Me pueden pasar opciones y precios?") },
