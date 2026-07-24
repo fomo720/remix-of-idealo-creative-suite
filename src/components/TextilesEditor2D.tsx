@@ -3,9 +3,10 @@ import { toBlob } from "html-to-image";
 import { cn } from "@/lib/utils";
 import {
   Upload, Type, Trash2, Image as ImageIcon, Download,
-  Palette, Sparkles,
+  Palette, Sparkles, ZoomIn, X,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import viewFrontLine from "@/assets/view-11-line.png.asset.json";
 import viewFrontFill from "@/assets/view-11-fill.png.asset.json";
 import viewBackLine from "@/assets/view-12-line.png.asset.json";
@@ -14,9 +15,9 @@ import viewSleeveLLine from "@/assets/view-13-line.png.asset.json";
 import viewSleeveLFill from "@/assets/view-13-fill.png.asset.json";
 import viewSleeveRLine from "@/assets/view-14-line.png.asset.json";
 import viewSleeveRFill from "@/assets/view-14-fill.png.asset.json";
-import photoFront from "@/assets/tx-photo-front.jpg.asset.json";
-import photoBack from "@/assets/tx-photo-back.jpg.asset.json";
-import photoFolded from "@/assets/tx-photo-folded.jpg.asset.json";
+import mockFront from "@/assets/tx-mock-front.png.asset.json";
+import mockBack from "@/assets/tx-mock-back.png.asset.json";
+import mockFolded from "@/assets/tx-mock-folded.png.asset.json";
 
 export type ViewId = "front" | "back" | "sleeve-left" | "sleeve-right";
 
@@ -82,11 +83,29 @@ type Props = {
   ctaLabel?: string;
 };
 
+// A mockup describes how each view's design projects onto a real photo.
+// `box` = bounding box of design area (% of image). `transform` = extra CSS
+// transform applied to the design layer inside the box to fake curvature.
+type MockOverlay = {
+  view: ViewId;
+  box: { x: number; y: number; w: number; h: number };
+  transform?: string;    // extra CSS transform (perspective, rotate)
+  opacity?: number;
+  blend?: React.CSSProperties["mixBlendMode"];
+};
+type Mockup = {
+  id: string;
+  label: string;
+  src: string;
+  overlays: MockOverlay[];
+};
+
 export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe, disabled, ctaLabel }: Props) {
   useEffect(() => { ensureFonts(); }, []);
   const [view, setView] = useState<ViewId>("front");
   const [layers, setLayers] = useState<Layer[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [zoomed, setZoomed] = useState<Mockup | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const printRef = useRef<HTMLDivElement | null>(null);
@@ -105,19 +124,16 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   };
 
   const addImageLayer = (src: string, natW: number, natH: number) => {
-    // Fit within the print zone, preserve aspect. Coords stored in % of the print zone.
-    const zoneRatio = zone.w / zone.h; // aspect of zone
+    const zoneRatio = zone.w / zone.h;
     const imgRatio = natW / natH;
-    let w = 80; // start at 80% of zone width
-    let h = (w / imgRatio) * zoneRatio; // convert to % of zone height
+    let w = 80;
+    let h = (w / imgRatio) * zoneRatio;
     if (h > 80) { h = 80; w = (h * imgRatio) / zoneRatio; }
     const id = uid();
     setLayers((ls) => [
       ...ls,
-      {
-        id, view, type: "image", src, naturalW: natW, naturalH: natH,
-        x: 50 - w / 2, y: 50 - h / 2, w, h, rotation: 0,
-      },
+      { id, view, type: "image", src, naturalW: natW, naturalH: natH,
+        x: 50 - w / 2, y: 50 - h / 2, w, h, rotation: 0 },
     ]);
     setSelectedId(id);
   };
@@ -127,11 +143,9 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     const w = 80, h = 18;
     setLayers((ls) => [
       ...ls,
-      {
-        id, view, type: "text",
+      { id, view, type: "text",
         text: "TU TEXTO", font: FONTS[4].id, color: "#111827", weight: 700,
-        x: 50 - w / 2, y: 50 - h / 2, w, h, rotation: 0,
-      },
+        x: 50 - w / 2, y: 50 - h / 2, w, h, rotation: 0 },
     ]);
     setSelectedId(id);
   };
@@ -144,7 +158,6 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     img.src = url;
   };
 
-  // Drag / resize inside the PRINT ZONE (coords in % of print zone).
   type Op =
     | { kind: "move"; id: string; sx: number; sy: number; ox: number; oy: number }
     | { kind: "resize"; id: string; handle: string; sx: number; sy: number; ox: number; oy: number; ow: number; oh: number };
@@ -199,22 +212,36 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     op.current = { kind: "resize", id: l.id, handle, sx: p.x, sy: p.y, ox: l.x, oy: l.y, ow: l.w, oh: l.h };
   };
 
-  // Mockups: photo-front receives Front layers + both Sleeve layers overlaid on the model's arms.
-  // photo-back receives Back. photo-folded receives Front.
-  type MockOverlay = { view: ViewId; box: { x: number; y: number; w: number; h: number } };
-  const mockups: { id: string; label: string; src: string; overlays: MockOverlay[] }[] = useMemo(() => ([
+  // MOCKUPS
+  // Each mockup uses a transparent-background PNG of a blank sweater. We
+  // desaturate the shirt with a CSS filter and overlay `shirtColor` masked
+  // to the shirt silhouette so only fabric recolors (never the background).
+  // Sleeve overlays get an extra 3D perspective transform to mimic wrap.
+  const mockups: Mockup[] = useMemo(() => ([
     {
-      id: "photo-front", label: "Frente (lifestyle)", src: photoFront.url,
+      id: "photo-front", label: "Frente (lifestyle)", src: mockFront.url,
       overlays: [
-        { view: "front",        box: { x: 36, y: 32, w: 28, h: 30 } },
-        { view: "sleeve-left",  box: { x: 12, y: 34, w: 12, h: 20 } },
-        { view: "sleeve-right", box: { x: 76, y: 34, w: 12, h: 20 } },
+        { view: "front",        box: { x: 34, y: 36, w: 32, h: 30 }, blend: "multiply", opacity: 0.95 },
+        { view: "sleeve-left",  box: { x: 18, y: 46, w: 14, h: 22 },
+          transform: "perspective(360px) rotateY(35deg)", blend: "multiply", opacity: 0.9 },
+        { view: "sleeve-right", box: { x: 68, y: 46, w: 14, h: 22 },
+          transform: "perspective(360px) rotateY(-35deg)", blend: "multiply", opacity: 0.9 },
       ],
     },
-    { id: "photo-back",   label: "Espalda", src: photoBack.url,
-      overlays: [{ view: "back", box: { x: 34, y: 22, w: 32, h: 34 } }] },
-    { id: "photo-folded", label: "Doblada", src: photoFolded.url,
-      overlays: [{ view: "front", box: { x: 40, y: 44, w: 22, h: 20 } }] },
+    {
+      id: "photo-back", label: "Espalda", src: mockBack.url,
+      overlays: [
+        { view: "back", box: { x: 36, y: 26, w: 28, h: 30 }, blend: "multiply", opacity: 0.95 },
+      ],
+    },
+    {
+      id: "photo-folded", label: "Doblada", src: mockFolded.url,
+      overlays: [
+        { view: "front", box: { x: 26, y: 50, w: 34, h: 30 },
+          transform: "perspective(500px) rotateX(48deg) rotate(-6deg)",
+          blend: "multiply", opacity: 0.92 },
+      ],
+    },
   ]), []);
 
   const composeAndSend = async () => {
@@ -240,7 +267,6 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
 
   const totalLayers = layers.length;
 
-  // Renders a layer positioned inside a clipping rectangle. `box` values in %.
   const renderLayerIn = (l: Layer, opts?: { interactive?: boolean }) => {
     const interactive = opts?.interactive ?? false;
     const isSel = interactive && selectedId === l.id;
@@ -298,8 +324,63 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     );
   };
 
+  // Renders one mockup card (shared between grid + zoom modal).
+  const renderMockup = (m: Mockup, opts?: { large?: boolean }) => {
+    const large = opts?.large ?? false;
+    return (
+      <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
+        {/* Desaturated shirt photo — preserves folds & lighting */}
+        <img
+          src={m.src}
+          alt={m.label}
+          className="absolute inset-0 h-full w-full object-contain"
+          style={{ filter: "grayscale(1) brightness(1.08) contrast(0.98)" }}
+          loading={large ? "eager" : "lazy"}
+        />
+        {/* Color layer masked to the shirt silhouette (background stays clean) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundColor: shirtColor,
+            mixBlendMode: "multiply",
+            WebkitMaskImage: `url(${m.src})`,
+            maskImage: `url(${m.src})`,
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+          }}
+        />
+        {/* Design overlays with per-view perspective */}
+        {m.overlays.map((ov, idx) => {
+          const overlayLayers = layers.filter((l) => l.view === ov.view);
+          if (overlayLayers.length === 0) return null;
+          return (
+            <div
+              key={idx}
+              className="pointer-events-none absolute overflow-hidden"
+              style={{
+                left: `${ov.box.x}%`, top: `${ov.box.y}%`,
+                width: `${ov.box.w}%`, height: `${ov.box.h}%`,
+                mixBlendMode: ov.blend ?? "multiply",
+                opacity: ov.opacity ?? 0.95,
+                transform: ov.transform,
+                transformOrigin: "center",
+              }}
+            >
+              {overlayLayers.map((l) => renderLayerIn(l))}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
-    <div className="grid gap-4 lg:grid-cols-[240px_minmax(0,1fr)_240px]">
+    <div className="grid gap-4 lg:grid-cols-[240px_minmax(0,1fr)_260px]">
       {/* LEFT: tools */}
       <div className="space-y-3 rounded-2xl border border-border bg-background p-3">
         <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Herramientas</div>
@@ -403,7 +484,6 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
               className="absolute overflow-hidden"
               style={{ left: `${zone.x}%`, top: `${zone.y}%`, width: `${zone.w}%`, height: `${zone.h}%` }}
             >
-              {/* Dashed guide */}
               <div className="pointer-events-none absolute inset-0 rounded-[2px] border-2 border-dashed" style={{ borderColor: "rgba(60,60,60,0.55)" }} />
               {viewLayers.map((l) => renderLayerIn(l, { interactive: true }))}
             </div>
@@ -432,32 +512,38 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
       <div className="space-y-2">
         <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Mockups fotorrealistas</div>
         {mockups.map((m) => (
-          <div key={m.id} className="overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
-            <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
-              <img src={m.src} alt={m.label} className="absolute inset-0 h-full w-full object-cover" />
-              <div className="absolute inset-0" style={{ backgroundColor: shirtColor, mixBlendMode: "multiply", opacity: 0.28 }} />
-              {m.overlays.map((ov, idx) => {
-                const overlayLayers = layers.filter((l) => l.view === ov.view);
-                if (overlayLayers.length === 0) return null;
-                return (
-                  <div
-                    key={idx}
-                    className="absolute overflow-hidden"
-                    style={{
-                      left: `${ov.box.x}%`, top: `${ov.box.y}%`,
-                      width: `${ov.box.w}%`, height: `${ov.box.h}%`,
-                      mixBlendMode: "multiply", opacity: 0.95,
-                    }}
-                  >
-                    {overlayLayers.map((l) => renderLayerIn(l))}
-                  </div>
-                );
-              })}
-            </div>
+          <div key={m.id} className="group relative overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
+            {renderMockup(m)}
+            <button
+              type="button"
+              onClick={() => setZoomed(m)}
+              className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur transition hover:bg-black/90"
+              aria-label={`Ampliar ${m.label}`}
+            >
+              <ZoomIn className="h-3 w-3" /> Zoom
+            </button>
             <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground">{m.label}</div>
           </div>
         ))}
       </div>
+
+      {/* Zoom modal */}
+      <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
+        <DialogContent className="max-w-3xl p-2 sm:p-4">
+          {zoomed && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between px-1">
+                <div className="text-sm font-semibold">{zoomed.label}</div>
+                <button onClick={() => setZoomed(null)} className="rounded-full p-1 text-muted-foreground hover:bg-muted"><X className="h-4 w-4" /></button>
+              </div>
+              <div className="overflow-hidden rounded-xl bg-white">
+                {renderMockup(zoomed, { large: true })}
+              </div>
+              <p className="text-center text-[11px] text-muted-foreground">Vista previa fotorrealista · el diseño se adapta al color y forma de la prenda.</p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* CTA — spans all columns */}
       <div className="lg:col-span-3">
