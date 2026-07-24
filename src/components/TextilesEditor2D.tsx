@@ -3,53 +3,51 @@ import { toBlob } from "html-to-image";
 import { cn } from "@/lib/utils";
 import {
   Upload, Type, Trash2, Image as ImageIcon, Download,
-  ChevronUp, ChevronDown, Palette,
+  Palette, Sparkles,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import viewFront from "@/assets/tx-view-front.png.asset.json";
-import viewBack from "@/assets/tx-view-back.png.asset.json";
-import viewSleeveL from "@/assets/tx-view-sleeve-left.png.asset.json";
-import viewSleeveR from "@/assets/tx-view-sleeve-right.png.asset.json";
-import viewNeck from "@/assets/tx-view-neck.png.asset.json";
+import viewFrontLine from "@/assets/view-11-line.png.asset.json";
+import viewFrontFill from "@/assets/view-11-fill.png.asset.json";
+import viewBackLine from "@/assets/view-12-line.png.asset.json";
+import viewBackFill from "@/assets/view-12-fill.png.asset.json";
+import viewSleeveLLine from "@/assets/view-13-line.png.asset.json";
+import viewSleeveLFill from "@/assets/view-13-fill.png.asset.json";
+import viewSleeveRLine from "@/assets/view-14-line.png.asset.json";
+import viewSleeveRFill from "@/assets/view-14-fill.png.asset.json";
 import photoFront from "@/assets/tx-photo-front.jpg.asset.json";
 import photoBack from "@/assets/tx-photo-back.jpg.asset.json";
 import photoFolded from "@/assets/tx-photo-folded.jpg.asset.json";
 
-export type ViewId = "front" | "back" | "sleeve-left" | "sleeve-right" | "neck";
+export type ViewId = "front" | "back" | "sleeve-left" | "sleeve-right";
 
 type Layer = {
   id: string;
   view: ViewId;
   type: "image" | "text";
-  // % of canvas
-  x: number; y: number; w: number; h: number;
+  x: number; y: number; w: number; h: number; // % of print zone
   rotation: number;
-  // image
   src?: string;
   naturalW?: number;
   naturalH?: number;
-  // text
   text?: string;
   font?: string;
   color?: string;
   weight?: number;
 };
 
-// Print zones in % of the corresponding view image (empirically matched to uploads)
+// Print zones measured from the source vector artworks (% of full view image).
 const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }> = {
-  front: { x: 30, y: 25, w: 40, h: 45 },
-  back: { x: 30, y: 20, w: 40, h: 50 },
-  "sleeve-left": { x: 42, y: 22, w: 20, h: 55 },
-  "sleeve-right": { x: 42, y: 22, w: 20, h: 55 },
-  neck: { x: 38, y: 25, w: 24, h: 30 },
+  front:         { x: 37.7, y: 28.6, w: 27.1, h: 41.9 },
+  back:          { x: 42.3, y: 15.0, w: 21.3, h: 48.0 },
+  "sleeve-left": { x: 44.6, y: 23.5, w: 15.6, h: 57.9 },
+  "sleeve-right":{ x: 45.7, y: 19.2, w: 13.5, h: 60.1 },
 };
 
-const VIEWS: { id: ViewId; label: string; src: string }[] = [
-  { id: "front", label: "Frente", src: viewFront.url },
-  { id: "back", label: "Espalda", src: viewBack.url },
-  { id: "sleeve-left", label: "Manga izquierda", src: viewSleeveL.url },
-  { id: "sleeve-right", label: "Manga derecha", src: viewSleeveR.url },
-  { id: "neck", label: "Etiqueta interna", src: viewNeck.url },
+const VIEWS: { id: ViewId; label: string; line: string; fill: string }[] = [
+  { id: "front",         label: "Frente",         line: viewFrontLine.url,   fill: viewFrontFill.url },
+  { id: "back",          label: "Espalda",        line: viewBackLine.url,    fill: viewBackFill.url },
+  { id: "sleeve-left",   label: "Manga izq.",     line: viewSleeveLLine.url, fill: viewSleeveLFill.url },
+  { id: "sleeve-right",  label: "Manga der.",     line: viewSleeveRLine.url, fill: viewSleeveRFill.url },
 ];
 
 const FONTS = [
@@ -63,7 +61,6 @@ const FONTS = [
   { id: "'Anton', sans-serif", label: "Anton" },
 ];
 
-// One-time Google Fonts load
 let __fontsLoaded = false;
 function ensureFonts() {
   if (__fontsLoaded || typeof document === "undefined") return;
@@ -75,26 +72,27 @@ function ensureFonts() {
   document.head.appendChild(link);
 }
 
-function uid() {
-  return Math.random().toString(36).slice(2, 9);
-}
+function uid() { return Math.random().toString(36).slice(2, 9); }
 
 type Props = {
   shirtColor: string; // hex
   onWhatsApp: (extra: { viewsSummary: string; blob: Blob | null }) => void;
+  onDesignForMe?: () => void;
   disabled?: boolean;
   ctaLabel?: string;
 };
 
-export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, ctaLabel }: Props) {
+export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe, disabled, ctaLabel }: Props) {
   useEffect(() => { ensureFonts(); }, []);
   const [view, setView] = useState<ViewId>("front");
   const [layers, setLayers] = useState<Layer[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const printRef = useRef<HTMLDivElement | null>(null);
   const [busy, setBusy] = useState(false);
 
+  const currentView = VIEWS.find((v) => v.id === view)!;
   const zone = PRINT_ZONE[view];
   const viewLayers = layers.filter((l) => l.view === view);
   const selected = layers.find((l) => l.id === selectedId) ?? null;
@@ -107,19 +105,18 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
   };
 
   const addImageLayer = (src: string, natW: number, natH: number) => {
-    // Fit inside print zone, preserve aspect ratio.
-    const ratio = natW / natH;
-    let w = zone.w * 0.7;
-    let h = w / ratio;
-    if (h > zone.h * 0.7) { h = zone.h * 0.7; w = h * ratio; }
+    // Fit within the print zone, preserve aspect. Coords stored in % of the print zone.
+    const zoneRatio = zone.w / zone.h; // aspect of zone
+    const imgRatio = natW / natH;
+    let w = 80; // start at 80% of zone width
+    let h = (w / imgRatio) * zoneRatio; // convert to % of zone height
+    if (h > 80) { h = 80; w = (h * imgRatio) / zoneRatio; }
     const id = uid();
     setLayers((ls) => [
       ...ls,
       {
         id, view, type: "image", src, naturalW: natW, naturalH: natH,
-        x: zone.x + zone.w / 2 - w / 2,
-        y: zone.y + zone.h / 2 - h / 2,
-        w, h, rotation: 0,
+        x: 50 - w / 2, y: 50 - h / 2, w, h, rotation: 0,
       },
     ]);
     setSelectedId(id);
@@ -127,17 +124,13 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
 
   const addTextLayer = () => {
     const id = uid();
-    const w = zone.w * 0.7;
-    const h = 8;
+    const w = 80, h = 18;
     setLayers((ls) => [
       ...ls,
       {
         id, view, type: "text",
-        text: "TU TEXTO",
-        font: FONTS[4].id, color: "#111827", weight: 700,
-        x: zone.x + zone.w / 2 - w / 2,
-        y: zone.y + zone.h / 2 - h / 2,
-        w, h, rotation: 0,
+        text: "TU TEXTO", font: FONTS[4].id, color: "#111827", weight: 700,
+        x: 50 - w / 2, y: 50 - h / 2, w, h, rotation: 0,
       },
     ]);
     setSelectedId(id);
@@ -151,25 +144,24 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
     img.src = url;
   };
 
-  // Pointer drag/resize
+  // Drag / resize inside the PRINT ZONE (coords in % of print zone).
   type Op =
     | { kind: "move"; id: string; sx: number; sy: number; ox: number; oy: number }
     | { kind: "resize"; id: string; handle: string; sx: number; sy: number; ox: number; oy: number; ow: number; oh: number };
   const op = useRef<Op | null>(null);
 
   const pctFromEvent = (e: React.PointerEvent | PointerEvent) => {
-    const rect = stageRef.current!.getBoundingClientRect();
+    const rect = printRef.current!.getBoundingClientRect();
     return {
       x: ((e.clientX - rect.left) / rect.width) * 100,
       y: ((e.clientY - rect.top) / rect.height) * 100,
-      rect,
     };
   };
 
   useEffect(() => {
     const move = (e: PointerEvent) => {
       const cur = op.current;
-      if (!cur || !stageRef.current) return;
+      if (!cur || !printRef.current) return;
       const p = pctFromEvent(e);
       const dx = p.x - cur.sx;
       const dy = p.y - cur.sy;
@@ -178,10 +170,10 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
       } else {
         let { ox, oy, ow, oh } = cur;
         const h = cur.handle;
-        if (h.includes("r")) ow = Math.max(3, cur.ow + dx);
-        if (h.includes("l")) { ow = Math.max(3, cur.ow - dx); ox = cur.ox + (cur.ow - ow); }
-        if (h.includes("b")) oh = Math.max(3, cur.oh + dy);
-        if (h.includes("t")) { oh = Math.max(3, cur.oh - dy); oy = cur.oy + (cur.oh - oh); }
+        if (h.includes("r")) ow = Math.max(4, cur.ow + dx);
+        if (h.includes("l")) { ow = Math.max(4, cur.ow - dx); ox = cur.ox + (cur.ow - ow); }
+        if (h.includes("b")) oh = Math.max(4, cur.oh + dy);
+        if (h.includes("t")) { oh = Math.max(4, cur.oh - dy); oy = cur.oy + (cur.oh - oh); }
         updateLayer(cur.id, { x: ox, y: oy, w: ow, h: oh });
       }
     };
@@ -207,11 +199,22 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
     op.current = { kind: "resize", id: l.id, handle, sx: p.x, sy: p.y, ox: l.x, oy: l.y, ow: l.w, oh: l.h };
   };
 
-  // Mockup: only front photo shows the current front-view design overlay
-  const mockups = useMemo(() => ([
-    { id: "photo-front", label: "Frente (lifestyle)", src: photoFront.url, view: "front" as ViewId, overlay: { x: 34, y: 34, w: 32, h: 32 } },
-    { id: "photo-back", label: "Espalda", src: photoBack.url, view: "back" as ViewId, overlay: { x: 34, y: 24, w: 32, h: 36 } },
-    { id: "photo-folded", label: "Doblada", src: photoFolded.url, view: "front" as ViewId, overlay: { x: 40, y: 44, w: 22, h: 20 } },
+  // Mockups: photo-front receives Front layers + both Sleeve layers overlaid on the model's arms.
+  // photo-back receives Back. photo-folded receives Front.
+  type MockOverlay = { view: ViewId; box: { x: number; y: number; w: number; h: number } };
+  const mockups: { id: string; label: string; src: string; overlays: MockOverlay[] }[] = useMemo(() => ([
+    {
+      id: "photo-front", label: "Frente (lifestyle)", src: photoFront.url,
+      overlays: [
+        { view: "front",        box: { x: 36, y: 32, w: 28, h: 30 } },
+        { view: "sleeve-left",  box: { x: 12, y: 34, w: 12, h: 20 } },
+        { view: "sleeve-right", box: { x: 76, y: 34, w: 12, h: 20 } },
+      ],
+    },
+    { id: "photo-back",   label: "Espalda", src: photoBack.url,
+      overlays: [{ view: "back", box: { x: 34, y: 22, w: 32, h: 34 } }] },
+    { id: "photo-folded", label: "Doblada", src: photoFolded.url,
+      overlays: [{ view: "front", box: { x: 40, y: 44, w: 22, h: 20 } }] },
   ]), []);
 
   const composeAndSend = async () => {
@@ -237,21 +240,91 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
 
   const totalLayers = layers.length;
 
+  // Renders a layer positioned inside a clipping rectangle. `box` values in %.
+  const renderLayerIn = (l: Layer, opts?: { interactive?: boolean }) => {
+    const interactive = opts?.interactive ?? false;
+    const isSel = interactive && selectedId === l.id;
+    return (
+      <div
+        key={l.id}
+        onPointerDown={interactive ? (e) => startMove(e, l) : undefined}
+        className={cn("absolute select-none", interactive && "cursor-move touch-none")}
+        style={{
+          left: `${l.x}%`, top: `${l.y}%`, width: `${l.w}%`, height: `${l.h}%`,
+          transform: `rotate(${l.rotation}deg)`, transformOrigin: "center",
+        }}
+      >
+        {l.type === "image" ? (
+          <img src={l.src} alt="" draggable={false} className="pointer-events-none h-full w-full object-contain" />
+        ) : (
+          <div
+            className="pointer-events-none flex h-full w-full items-center justify-center whitespace-nowrap"
+            style={{
+              fontFamily: l.font, color: l.color, fontWeight: l.weight,
+              fontSize: `${l.h * 0.9}cqh`,
+              containerType: "size" as any,
+            }}
+          >
+            {l.text}
+          </div>
+        )}
+        {isSel && (
+          <>
+            <div className="pointer-events-none absolute -inset-1 rounded border-2 border-dashed border-[color:var(--brand-pink)]" />
+            {["tl","tr","bl","br","tm","bm","ml","mr"].map((h) => {
+              const style: React.CSSProperties = {
+                position: "absolute", width: 12, height: 12, borderRadius: 999,
+                background: "#fff",
+                border: "2px solid color-mix(in oklab, var(--brand-pink) 90%, black)",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.25)", touchAction: "none",
+                top: h.startsWith("t") ? -6 : h.startsWith("b") ? "auto" : "50%",
+                bottom: h.startsWith("b") ? -6 : "auto",
+                left: h.endsWith("l") ? -6 : h.endsWith("r") ? "auto" : "50%",
+                right: h.endsWith("r") ? -6 : "auto",
+                transform: (h === "tm" || h === "bm") ? "translateX(-50%)" : (h === "ml" || h === "mr") ? "translateY(-50%)" : undefined,
+                cursor: (h === "tl" || h === "br") ? "nwse-resize" : (h === "tr" || h === "bl") ? "nesw-resize" : (h === "tm" || h === "bm") ? "ns-resize" : "ew-resize",
+                zIndex: 40,
+              };
+              const handleMap: Record<string, string> = { tl:"tl", tr:"tr", bl:"bl", br:"br", tm:"t", bm:"b", ml:"l", mr:"r" };
+              return (
+                <span key={h}
+                  onPointerDown={(e) => startResize(e, l, handleMap[h])}
+                  style={style} />
+              );
+            })}
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)_260px]">
+    <div className="grid gap-4 lg:grid-cols-[240px_minmax(0,1fr)_240px]">
       {/* LEFT: tools */}
       <div className="space-y-3 rounded-2xl border border-border bg-background p-3">
         <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Herramientas</div>
         <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/svg+xml" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
         <button onClick={() => fileRef.current?.click()} className="flex w-full items-center gap-2 rounded-xl border-2 border-dashed border-border px-3 py-3 text-sm font-semibold hover:border-foreground/30">
-          <Upload className="h-4 w-4" style={{ color: "var(--brand-pink)" }} /> Subir imagen / logo
+          <Upload className="h-4 w-4" style={{ color: "var(--brand-pink)" }} /> Subir mi Arte / Logo
         </button>
         <p className="text-[10px] leading-snug text-muted-foreground">PNG con fondo transparente recomendado.</p>
         <button onClick={addTextLayer} className="flex w-full items-center gap-2 rounded-xl border border-border px-3 py-3 text-sm font-semibold hover:bg-muted">
           <Type className="h-4 w-4" style={{ color: "var(--brand-cyan-deep)" }} /> Agregar texto
         </button>
 
-        {/* Selected layer inspector */}
+        {onDesignForMe && (
+          <button
+            onClick={onDesignForMe}
+            className="flex w-full items-center gap-2 rounded-xl border border-[color:var(--brand-pink)]/40 bg-[color:var(--brand-pink)]/5 px-3 py-3 text-left text-xs font-semibold text-foreground hover:bg-[color:var(--brand-pink)]/10"
+          >
+            <Sparkles className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--brand-pink)" }} />
+            <span className="leading-snug">
+              Quiero que ustedes me lo diseñen
+              <span className="mt-0.5 block text-[10px] font-medium text-muted-foreground">Servicio con costo adicional · Te contactamos por WhatsApp</span>
+            </span>
+          </button>
+        )}
+
         {selected && (
           <div className="space-y-2 rounded-xl border border-border/70 bg-muted/40 p-2.5">
             <div className="flex items-center justify-between">
@@ -264,49 +337,27 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
             </div>
             {selected.type === "text" && (
               <>
-                <Input
-                  value={selected.text ?? ""}
-                  onChange={(e) => updateLayer(selected.id, { text: e.target.value })}
-                  className="h-8 text-xs"
-                  placeholder="Tu texto"
-                />
-                <select
-                  value={selected.font}
-                  onChange={(e) => updateLayer(selected.id, { font: e.target.value })}
-                  className="h-8 w-full rounded-md border border-border bg-background px-2 text-xs"
-                >
-                  {FONTS.map((f) => (
-                    <option key={f.id} value={f.id} style={{ fontFamily: f.id }}>{f.label}</option>
-                  ))}
+                <Input value={selected.text ?? ""} onChange={(e) => updateLayer(selected.id, { text: e.target.value })} className="h-8 text-xs" placeholder="Tu texto" />
+                <select value={selected.font} onChange={(e) => updateLayer(selected.id, { font: e.target.value })} className="h-8 w-full rounded-md border border-border bg-background px-2 text-xs">
+                  {FONTS.map((f) => (<option key={f.id} value={f.id} style={{ fontFamily: f.id }}>{f.label}</option>))}
                 </select>
                 <div className="flex items-center gap-2">
                   <Palette className="h-3.5 w-3.5 text-muted-foreground" />
-                  <input
-                    type="color"
-                    value={selected.color ?? "#111827"}
-                    onChange={(e) => updateLayer(selected.id, { color: e.target.value })}
-                    className="h-7 w-full cursor-pointer rounded border border-border bg-background"
-                  />
+                  <input type="color" value={selected.color ?? "#111827"} onChange={(e) => updateLayer(selected.id, { color: e.target.value })} className="h-7 w-full cursor-pointer rounded border border-border bg-background" />
                 </div>
               </>
             )}
-            <div className="text-[10px] text-muted-foreground">Arrastra las esquinas para redimensionar.</div>
+            <div className="text-[10px] text-muted-foreground">Arrastra las esquinas para redimensionar. Lo que sale del recuadro no se imprime.</div>
           </div>
         )}
 
-        {/* Layers list */}
         {viewLayers.length > 0 && (
           <div className="space-y-1">
-            <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Capas · {VIEWS.find(v => v.id === view)?.label}</div>
+            <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Capas · {currentView.label}</div>
             {viewLayers.map((l, i) => (
-              <button
-                key={l.id}
-                onClick={() => setSelectedId(l.id)}
-                className={cn(
-                  "flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left text-xs transition",
-                  selectedId === l.id ? "border-foreground bg-foreground/5" : "border-border hover:bg-muted"
-                )}
-              >
+              <button key={l.id} onClick={() => setSelectedId(l.id)}
+                className={cn("flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left text-xs transition",
+                  selectedId === l.id ? "border-foreground bg-foreground/5" : "border-border hover:bg-muted")}>
                 {l.type === "image" ? <ImageIcon className="h-3.5 w-3.5" /> : <Type className="h-3.5 w-3.5" />}
                 <span className="truncate">{l.type === "text" ? (l.text || "Texto") : `Imagen ${i + 1}`}</span>
               </button>
@@ -317,94 +368,45 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
 
       {/* CENTER: canvas */}
       <div className="min-w-0">
-        <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Editor · {VIEWS.find(v => v.id === view)?.label}
+        <div className="mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span>Editor · {currentView.label}</span>
+          <span className="hidden sm:inline">Solo el área punteada se imprime</span>
         </div>
         <div
           className="relative mx-auto w-full overflow-hidden rounded-2xl border border-border shadow-card-soft"
-          style={{ aspectRatio: "4 / 3", backgroundColor: "#f5f2ea" }}
+          style={{ aspectRatio: "4 / 3", background: "linear-gradient(180deg,#fbfaf6, #f2efe6)" }}
           onPointerDown={(e) => { if (e.target === e.currentTarget) setSelectedId(null); }}
         >
           <div ref={stageRef} className="absolute inset-0">
-            {/* Fabric color tint under the vector line-art */}
-            <div className="absolute inset-[8%] rounded-xl" style={{ backgroundColor: shirtColor, opacity: 0.35 }} aria-hidden />
-            <img
-              src={VIEWS.find(v => v.id === view)!.src}
-              alt=""
-              draggable={false}
-              className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain"
-            />
-            {/* Print area */}
+            {/* Shirt silhouette tinted with selected color via mask */}
             <div
-              className="pointer-events-none absolute rounded-md border-2 border-dashed"
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
               style={{
-                left: `${zone.x}%`, top: `${zone.y}%`, width: `${zone.w}%`, height: `${zone.h}%`,
-                borderColor: "rgba(60,60,60,0.55)",
+                backgroundColor: shirtColor,
+                WebkitMaskImage: `url(${currentView.fill})`,
+                maskImage: `url(${currentView.fill})`,
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskPosition: "center",
+                WebkitMaskSize: "contain",
+                maskSize: "contain",
               }}
             />
+            {/* Vector outline on top */}
+            <img src={currentView.line} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain" />
 
-            {/* Layers */}
-            {viewLayers.map((l) => {
-              const isSel = selectedId === l.id;
-              return (
-                <div
-                  key={l.id}
-                  onPointerDown={(e) => startMove(e, l)}
-                  className={cn("absolute select-none touch-none cursor-move", isSel && "outline-2")}
-                  style={{
-                    left: `${l.x}%`, top: `${l.y}%`, width: `${l.w}%`, height: `${l.h}%`,
-                    transform: `rotate(${l.rotation}deg)`, transformOrigin: "center",
-                  }}
-                >
-                  {l.type === "image" ? (
-                    <img src={l.src} alt="" draggable={false} className="pointer-events-none h-full w-full object-contain" />
-                  ) : (
-                    <div
-                      className="pointer-events-none flex h-full w-full items-center justify-center whitespace-nowrap"
-                      style={{
-                        fontFamily: l.font,
-                        color: l.color,
-                        fontWeight: l.weight,
-                        fontSize: `${l.h * 0.9}cqh`,
-                        containerType: "size" as any,
-                      }}
-                    >
-                      {l.text}
-                    </div>
-                  )}
-                  {isSel && (
-                    <>
-                      <div className="pointer-events-none absolute -inset-1 rounded border-2 border-dashed border-[color:var(--brand-pink)]" />
-                      {["tl","tr","bl","br","tm","bm","ml","mr"].map((h) => {
-                        const style: React.CSSProperties = {
-                          position: "absolute",
-                          width: 12, height: 12, borderRadius: 999,
-                          background: "#fff",
-                          border: "2px solid color-mix(in oklab, var(--brand-pink) 90%, black)",
-                          boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
-                          touchAction: "none",
-                          top: h.startsWith("t") ? -6 : h.startsWith("b") ? "auto" : "50%",
-                          bottom: h.startsWith("b") ? -6 : "auto",
-                          left: h.endsWith("l") ? -6 : h.endsWith("r") ? "auto" : "50%",
-                          right: h.endsWith("r") ? -6 : "auto",
-                          transform: (h === "tm" || h === "bm") ? "translateX(-50%)" : (h === "ml" || h === "mr") ? "translateY(-50%)" : undefined,
-                          cursor: (h === "tl" || h === "br") ? "nwse-resize" : (h === "tr" || h === "bl") ? "nesw-resize" : (h === "tm" || h === "bm") ? "ns-resize" : "ew-resize",
-                          zIndex: 40,
-                        };
-                        const handleMap: Record<string, string> = { tl:"tl", tr:"tr", bl:"bl", br:"br", tm:"t", bm:"b", ml:"l", mr:"r" };
-                        return (
-                          <span
-                            key={h}
-                            onPointerDown={(e) => startResize(e, l, handleMap[h])}
-                            style={style}
-                          />
-                        );
-                      })}
-                    </>
-                  )}
-                </div>
-              );
-            })}
+            {/* Print area (clips content) */}
+            <div
+              ref={printRef}
+              className="absolute overflow-hidden"
+              style={{ left: `${zone.x}%`, top: `${zone.y}%`, width: `${zone.w}%`, height: `${zone.h}%` }}
+            >
+              {/* Dashed guide */}
+              <div className="pointer-events-none absolute inset-0 rounded-[2px] border-2 border-dashed" style={{ borderColor: "rgba(60,60,60,0.55)" }} />
+              {viewLayers.map((l) => renderLayerIn(l, { interactive: true }))}
+            </div>
           </div>
         </div>
 
@@ -414,14 +416,10 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
             const active = view === v.id;
             const count = layers.filter((l) => l.view === v.id).length;
             return (
-              <button
-                key={v.id}
+              <button key={v.id}
                 onClick={() => { setView(v.id); setSelectedId(null); }}
-                className={cn(
-                  "rounded-full px-3 py-1.5 text-xs font-semibold transition",
-                  active ? "bg-foreground text-background" : "border border-border bg-background text-muted-foreground hover:bg-muted",
-                )}
-              >
+                className={cn("rounded-full px-3 py-1.5 text-xs font-semibold transition",
+                  active ? "bg-foreground text-background" : "border border-border bg-background text-muted-foreground hover:bg-muted")}>
                 {v.label}
                 {count > 0 && <span className="ml-1.5 rounded-full bg-[color:var(--brand-pink)]/20 px-1.5 py-0.5 text-[9px] text-[color:var(--brand-pink)]">{count}</span>}
               </button>
@@ -433,47 +431,32 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
       {/* RIGHT: mockups */}
       <div className="space-y-2">
         <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Mockups fotorrealistas</div>
-        {mockups.map((m) => {
-          const overlays = layers.filter((l) => l.view === m.view);
-          return (
-            <div key={m.id} className="overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
-              <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
-                <img src={m.src} alt={m.label} className="absolute inset-0 h-full w-full object-cover" />
-                {/* Color tint */}
-                <div className="absolute inset-0" style={{ backgroundColor: shirtColor, mixBlendMode: "multiply", opacity: 0.28 }} />
-                {/* Print area window with layers, blended into fabric */}
-                <div
-                  className="absolute overflow-hidden"
-                  style={{
-                    left: `${m.overlay.x}%`, top: `${m.overlay.y}%`,
-                    width: `${m.overlay.w}%`, height: `${m.overlay.h}%`,
-                    mixBlendMode: "multiply",
-                    opacity: 0.95,
-                  }}
-                >
-                  {overlays.map((l) => {
-                    const zx = PRINT_ZONE[m.view];
-                    // Map layer coords (relative to full-view canvas) into overlay window (relative to print zone)
-                    const nx = ((l.x - zx.x) / zx.w) * 100;
-                    const ny = ((l.y - zx.y) / zx.h) * 100;
-                    const nw = (l.w / zx.w) * 100;
-                    const nh = (l.h / zx.h) * 100;
-                    return (
-                      <div key={l.id} className="absolute" style={{ left: `${nx}%`, top: `${ny}%`, width: `${nw}%`, height: `${nh}%`, transform: `rotate(${l.rotation}deg)` }}>
-                        {l.type === "image" ? (
-                          <img src={l.src} alt="" className="h-full w-full object-contain" />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center whitespace-nowrap" style={{ fontFamily: l.font, color: l.color, fontWeight: l.weight, fontSize: `${nh * 0.9}cqh`, containerType: "size" as any }}>{l.text}</div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground">{m.label}</div>
+        {mockups.map((m) => (
+          <div key={m.id} className="overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
+            <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
+              <img src={m.src} alt={m.label} className="absolute inset-0 h-full w-full object-cover" />
+              <div className="absolute inset-0" style={{ backgroundColor: shirtColor, mixBlendMode: "multiply", opacity: 0.28 }} />
+              {m.overlays.map((ov, idx) => {
+                const overlayLayers = layers.filter((l) => l.view === ov.view);
+                if (overlayLayers.length === 0) return null;
+                return (
+                  <div
+                    key={idx}
+                    className="absolute overflow-hidden"
+                    style={{
+                      left: `${ov.box.x}%`, top: `${ov.box.y}%`,
+                      width: `${ov.box.w}%`, height: `${ov.box.h}%`,
+                      mixBlendMode: "multiply", opacity: 0.95,
+                    }}
+                  >
+                    {overlayLayers.map((l) => renderLayerIn(l))}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+            <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground">{m.label}</div>
+          </div>
+        ))}
       </div>
 
       {/* CTA — spans all columns */}
@@ -492,6 +475,16 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, disabled, cta
           <Download className="h-5 w-5" />
           {busy ? "Generando vista…" : totalLayers === 0 ? "Agrega tu diseño para continuar" : (ctaLabel ?? "Cotizar por WhatsApp")}
         </button>
+        {totalLayers === 0 && onDesignForMe && (
+          <button
+            type="button"
+            onClick={onDesignForMe}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[color:var(--brand-pink)]/50 bg-[color:var(--brand-pink)]/5 px-6 py-3 text-sm font-semibold text-foreground hover:bg-[color:var(--brand-pink)]/10"
+          >
+            <Sparkles className="h-4 w-4" style={{ color: "var(--brand-pink)" }} />
+            ¿No tenés diseño? Nosotros te lo diseñamos (costo adicional)
+          </button>
+        )}
         <p className="mt-2 text-center text-[11px] text-muted-foreground">
           Se descarga la vista del editor (PNG) y se abre WhatsApp con todos los detalles.
         </p>

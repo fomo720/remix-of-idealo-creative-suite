@@ -5291,10 +5291,10 @@ function TextilesDesignStep({
   };
 
   return (
-    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
-      {/* LEFT */}
-      <div className="space-y-6">
-        {/* Technique selector */}
+    <div className="animate-step-in space-y-6">
+      {/* TOP ROW: technique + color */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Technique */}
         <div className="rounded-2xl border border-border bg-gradient-soft p-5">
           <div className="mb-3 flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-background text-[color:var(--brand-pink)]">
@@ -5342,36 +5342,98 @@ function TextilesDesignStep({
           </p>
         </div>
 
-        {/* Upload */}
-        <div>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => onUpload(e.target.files?.[0] ?? null)}
-          />
-          <button
-            onClick={() => fileRef.current?.click()}
-            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
-          >
-            <Upload className="h-5 w-5" style={{ color: "var(--brand-pink)" }} />
-            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
-          </button>
-        </div>
-
-        {uploaded && (
-          <div className="space-y-4 rounded-2xl border border-border bg-background p-4">
-            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Tamaño general" value={scale} min={30} max={200} step={1} onChange={setScale} suffix="%" />
-            <ToolSlider icon={<ZoomIn className="h-3.5 w-3.5" />} label="Escala horizontal (estirar)" value={scaleX} min={50} max={200} step={1} onChange={setScaleX} suffix="%" />
-            <p className="text-[11px] text-muted-foreground">
-              💡 Arrastra el diseño directamente sobre la camisa 2D para posicionarlo. Se sincroniza en vivo con la vista 3D.
-            </p>
+        {/* Color picker */}
+        <div className="rounded-2xl border border-border bg-background p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
+            {colorLock && (
+              <div className="text-[10px] font-medium text-[color:var(--brand-magenta)]">Bloqueado en {colorLock}</div>
+            )}
           </div>
-        )}
+          <div className="grid grid-cols-9 gap-1.5 sm:gap-2">
+            {TX_COLORS.map((c) => {
+              const disabled = colorLock !== null && c.name !== colorLock;
+              const active = color === c.name;
+              return (
+                <button
+                  key={c.name}
+                  type="button"
+                  disabled={disabled}
+                  onClick={() => onColorChange(c.name)}
+                  title={c.name}
+                  aria-label={`Color ${c.name}`}
+                  className={cn(
+                    "flex items-center justify-center transition touch-manipulation",
+                    disabled && "opacity-30 cursor-not-allowed",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "h-8 w-8 rounded-full border-2 transition",
+                      active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border active:scale-95 hover:scale-110",
+                      c.border && "border-neutral-300",
+                    )}
+                    style={{ backgroundColor: c.hex }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-2 text-[10px] text-muted-foreground">Solo se colorea la prenda del editor y los mockups. El fondo permanece limpio.</p>
+        </div>
+      </div>
 
+      {/* EDITOR 2D (full width) */}
+      <div className="rounded-3xl border border-border bg-gradient-soft p-4 sm:p-6">
+        <div className="mb-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
+          <span>Editor 2D · Mockups fotorrealistas</span>
+          <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
+        </div>
+        <TextilesEditor2D
+          shirtColor={colorHex}
+          disabled={!size}
+          ctaLabel={!size ? "Elige una talla primero" : "Cotizar por WhatsApp"}
+          onDesignForMe={() => {
+            const lines = [
+              "Hola! Quiero que ustedes me diseñen una Camiseta Personalizada:",
+              `- Material: ${fabricData?.name ?? "-"}`,
+              `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
+              `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
+              `- Color: ${color}`,
+              size ? `- Talla: ${size}` : "",
+              `- Cantidad: ${qty}`,
+              notes ? `- Notas: ${notes}` : "",
+              "",
+              "No tengo diseño listo — quisiera que ustedes se encarguen del diseño (entiendo que tiene un costo adicional).",
+            ].filter(Boolean).join("\n");
+            const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
+            window.open(href, "_blank", "noopener,noreferrer");
+            onSubmitted({ href, text: lines });
+          }}
+          onWhatsApp={({ viewsSummary }) => {
+            if (!size) return;
+            const lines = [
+              "Hola! Quiero cotizar una Camiseta Personalizada:",
+              `- Material: ${fabricData?.name ?? "-"}`,
+              `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
+              `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
+              `- Color: ${color}`,
+              `- Talla: ${size}`,
+              `- Cantidad: ${qty}`,
+              `- Diseño (vistas): ${viewsSummary}`,
+              notes ? `- Notas: ${notes}` : "",
+              "",
+              "Adjunto la vista previa (PNG) en el chat.",
+            ].filter(Boolean).join("\n");
+            const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
+            window.open(href, "_blank", "noopener,noreferrer");
+            onSubmitted({ href, text: lines });
+          }}
+        />
+      </div>
 
-        {/* Talla + Cantidad */}
+      {/* BOTTOM: talla + cantidad + notas */}
+      <div className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-background p-4">
           <Label className="mb-2 block text-sm font-semibold">Talla</Label>
           <div className="grid grid-cols-5 gap-2">
@@ -5414,87 +5476,13 @@ function TextilesDesignStep({
           <p className="mt-2 text-[11px] text-muted-foreground">Mínimo 1. Para más de 50, escribe la cantidad manualmente.</p>
         </div>
 
-        <div>
+        <div className="rounded-2xl border border-border bg-background p-4">
           <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Notas adicionales</Label>
-          <Textarea id="txnotes" rows={3} placeholder="Ej: colores específicos, ubicación del logo, referencia visual..." value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <Textarea id="txnotes" rows={6} placeholder="Ej: colores específicos, ubicación del logo, referencia visual..." value={notes} onChange={(e) => setNotes(e.target.value)} />
         </div>
       </div>
 
-      {/* RIGHT: preview */}
-      <div className="lg:sticky lg:top-6 lg:self-start">
-        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-4 sm:p-6">
-          <div className="mb-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
-            <span>Editor 2D · Mockups fotorrealistas</span>
-            <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
-          </div>
-
-          {/* Color picker */}
-          <div className="mb-3 rounded-2xl border border-border bg-background/70 p-3">
-            <div className="mb-2 flex items-center justify-between">
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
-              {colorLock && (
-                <div className="text-[10px] font-medium text-[color:var(--brand-magenta)]">Bloqueado en {colorLock}</div>
-              )}
-            </div>
-            <div className="grid grid-cols-9 gap-1.5 sm:gap-2">
-              {TX_COLORS.map((c) => {
-                const disabled = colorLock !== null && c.name !== colorLock;
-                const active = color === c.name;
-                return (
-                  <button
-                    key={c.name}
-                    type="button"
-                    disabled={disabled}
-                    onClick={() => onColorChange(c.name)}
-                    title={c.name}
-                    aria-label={`Color ${c.name}`}
-                    className={cn(
-                      "flex items-center justify-center transition touch-manipulation",
-                      disabled && "opacity-30 cursor-not-allowed",
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "h-8 w-8 rounded-full border-2 transition",
-                        active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border active:scale-95 hover:scale-110",
-                        c.border && "border-neutral-300",
-                      )}
-                      style={{ backgroundColor: c.hex }}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <TextilesEditor2D
-            shirtColor={colorHex}
-            disabled={!size}
-            ctaLabel={!size ? "Elige una talla primero" : "Cotizar por WhatsApp"}
-            onWhatsApp={({ viewsSummary }) => {
-              if (!size) return;
-              const lines = [
-                "Hola! Quiero cotizar una Camiseta Personalizada:",
-                `- Material: ${fabricData?.name ?? "-"}`,
-                `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
-                `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
-                `- Color: ${color}`,
-                `- Talla: ${size}`,
-                `- Cantidad: ${qty}`,
-                `- Diseño (vistas): ${viewsSummary}`,
-                notes ? `- Notas: ${notes}` : "",
-                "",
-                "Adjunto la vista previa (PNG) en el chat.",
-              ].filter(Boolean).join("\n");
-              const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
-              window.open(href, "_blank", "noopener,noreferrer");
-              onSubmitted({ href, text: lines });
-            }}
-          />
-        </div>
-
-        <NavRow onBack={onBack} />
-      </div>
+      <NavRow onBack={onBack} />
     </div>
   );
 }
