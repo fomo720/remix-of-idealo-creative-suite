@@ -2158,10 +2158,11 @@ export function Configurator() {
       </div>
     </section>
     <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
-      <DialogContent className="max-w-md">
-        <div className="pointer-events-none absolute -top-16 right-2 z-10">
-          <Mascot pose="thumbsup" size={110} animation="none" className="mascot-anim-bounce drop-shadow-2xl" />
+      <DialogContent className="max-w-md overflow-visible">
+        <div className="pointer-events-none absolute -bottom-6 -right-6 z-10">
+          <Mascot pose="thumbsup" size={96} animation="none" className="mascot-anim-bounce drop-shadow-2xl" />
         </div>
+
         <DialogHeader>
           <DialogTitle className="text-2xl">
             <span className="bg-gradient-cta bg-clip-text text-transparent">¡Excelente elección!</span>

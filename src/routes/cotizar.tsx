@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Mascot } from "@/components/Mascot";
 import { MessageCircle, ArrowLeft, Mail, Phone } from "lucide-react";
+
 
 export const Route = createFileRoute("/cotizar")({
   component: CotizarPage,
@@ -42,7 +44,10 @@ function CotizarPage() {
           tiempos y opciones el mismo día.
         </p>
 
-        <div className="mt-10 rounded-3xl border border-border bg-card p-8 shadow-elegant">
+        <div className="relative mt-10 overflow-visible rounded-3xl border border-border bg-card p-8 shadow-elegant">
+          <div className="pointer-events-none absolute -top-14 -right-4 hidden sm:block">
+            <Mascot pose="point" size={140} animation="float" className="drop-shadow-2xl" />
+          </div>
           <a
             href={waHref}
             target="_blank"
@@ -62,6 +67,7 @@ function CotizarPage() {
             </a>
           </div>
         </div>
+
 
         <div className="mt-8 text-sm text-muted-foreground">
           💡 Tip: si ya tienes un diseño o referencia, adjúntalo en el chat para una cotización más exacta.
