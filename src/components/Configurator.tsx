@@ -2158,9 +2158,12 @@ export function Configurator() {
     </section>
     <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
       <DialogContent className="max-w-md">
+        <div className="pointer-events-none absolute -top-16 right-2 z-10">
+          <Mascot pose="thumbsup" size={110} animation="none" className="mascot-anim-bounce drop-shadow-2xl" />
+        </div>
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            <span className="bg-gradient-cta bg-clip-text text-transparent">Antes de ir a WhatsApp</span>
+            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Excelente elección!</span>
           </DialogTitle>
           <DialogDescription>
             Te vamos a llevar a WhatsApp con tu mensaje ya escrito. Sigue estos
