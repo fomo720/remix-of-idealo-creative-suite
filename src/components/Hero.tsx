@@ -106,12 +106,13 @@ export function Hero() {
           <div className="absolute -bottom-2 left-6 rounded-2xl border border-black/5 bg-white/95 px-3 py-2 text-xs font-semibold shadow-xl backdrop-blur">
             <span style={{ color: "var(--brand-cyan)" }}>●</span> Asesoría personalizada
           </div>
-          {/* Mascota Idealo — framed como una tarjeta más del collage */}
-          <div className="absolute -bottom-4 -right-6 z-20 h-40 w-40 rotate-[5deg] overflow-hidden rounded-3xl border-4 border-white shadow-2xl sm:-bottom-6 sm:-right-10 sm:h-48 sm:w-48" style={{ background: "#e2e8f0" }}>
-            <div className="flex h-full w-full items-end justify-center">
-              <Mascot pose="hero" size={170} animation="float" className="!pointer-events-auto" />
-            </div>
-          </div>
+        </div>
+      </div>
+      {/* Mascota Idealo — asomándose desde la esquina inferior izquierda */}
+      <div className="pointer-events-none absolute bottom-0 left-0 z-20 hidden -translate-x-4 translate-y-2 md:block">
+        <Mascot pose="point" size={180} animation="float" className="drop-shadow-2xl" />
+      </div>
+
         </div>
       </div>
     </section>
