@@ -1,12 +1,12 @@
 import { type CSSProperties } from "react";
-import wave from "@/assets/mascot-wave.png";
-import point from "@/assets/mascot-point.png";
-import celebrate from "@/assets/mascot-celebrate.png";
-import alert from "@/assets/mascot-alert.png";
-import think from "@/assets/mascot-think.png";
-import confused from "@/assets/mascot-confused.png";
-import thumbsup from "@/assets/mascot-thumbsup.png";
-import hero from "@/assets/mascot-hero.png";
+import wave from "@/assets/mascot-wave.webp";
+import point from "@/assets/mascot-point.webp";
+import celebrate from "@/assets/mascot-celebrate.webp";
+import alert from "@/assets/mascot-alert.webp";
+import think from "@/assets/mascot-think.webp";
+import confused from "@/assets/mascot-confused.webp";
+import thumbsup from "@/assets/mascot-thumbsup.webp";
+import hero from "@/assets/mascot-hero.webp";
 
 const POSES = {
   hero,
@@ -30,6 +30,7 @@ type Props = {
   className?: string;
   style?: CSSProperties;
   alt?: string;
+  priority?: boolean;
 };
 
 /**
@@ -44,6 +45,7 @@ export function Mascot({
   className = "",
   style,
   alt = "Idealo mascota",
+  priority = false,
 }: Props) {
   const animClass =
     animation === "float"
@@ -60,6 +62,10 @@ export function Mascot({
       alt={alt}
       width={size}
       height={size}
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      // @ts-expect-error - fetchpriority is a valid HTML attribute
+      fetchpriority={priority ? "high" : "auto"}
       className={`pointer-events-none select-none ${animClass} ${className}`}
       style={{
         width: size,
@@ -71,3 +77,4 @@ export function Mascot({
     />
   );
 }
+
