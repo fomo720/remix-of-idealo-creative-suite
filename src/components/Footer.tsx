@@ -1,10 +1,24 @@
 import { Instagram, Facebook, MessageCircle, Mail, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/idealo-logo.png.asset.json";
+import { Mascot } from "@/components/Mascot";
 
 export function Footer() {
   return (
     <footer className="relative overflow-hidden text-slate-200" style={{ background: "#37474f" }}>
       <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, var(--brand-magenta), var(--brand-cyan))" }} />
+
+      {/* Mascota saludando desde arriba del footer */}
+      <div className="relative mx-auto flex max-w-6xl items-end justify-center px-4 pt-10 md:justify-end md:pr-16">
+        <div className="flex items-end gap-4">
+          <div className="hidden max-w-xs rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-xl sm:block">
+            <span className="block text-xs uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>¿Necesitas ayuda?</span>
+            Escríbenos por WhatsApp — respondemos rapidísimo 👋
+            <span className="absolute -bottom-2 right-8 h-4 w-4 rotate-45 bg-white" />
+          </div>
+          <Mascot pose="wave" size={140} animation="wave" className="drop-shadow-2xl" />
+        </div>
+      </div>
+
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="inline-flex items-center gap-3 rounded-2xl bg-white/95 px-4 py-2">

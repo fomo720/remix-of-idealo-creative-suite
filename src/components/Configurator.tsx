@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
+import { Mascot } from "@/components/Mascot";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
 import { AlertTriangle } from "lucide-react";
@@ -2158,9 +2159,12 @@ export function Configurator() {
     </section>
     <Dialog open={!!waModal} onOpenChange={(o) => !o && setWaModal(null)}>
       <DialogContent className="max-w-md">
+        <div className="pointer-events-none absolute -top-16 right-2 z-10">
+          <Mascot pose="thumbsup" size={110} animation="none" className="mascot-anim-bounce drop-shadow-2xl" />
+        </div>
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            <span className="bg-gradient-cta bg-clip-text text-transparent">Antes de ir a WhatsApp</span>
+            <span className="bg-gradient-cta bg-clip-text text-transparent">¡Excelente elección!</span>
           </DialogTitle>
           <DialogDescription>
             Te vamos a llevar a WhatsApp con tu mensaje ya escrito. Sigue estos

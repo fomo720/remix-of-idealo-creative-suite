@@ -3,6 +3,7 @@ import { AlertTriangle, X, ZoomIn } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import stickerAlta from "@/assets/sticker-alta-resolucion.jpg.asset.json";
 import stickerBaja from "@/assets/sticker-baja-resolucion.jpg.asset.json";
+import { Mascot } from "@/components/Mascot";
 
 type Props = {
   /** Natural pixel width of the uploaded image */
@@ -52,7 +53,10 @@ export function ResolutionWarning({
   return (
     <>
       <div className="relative mt-3 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50 p-3.5 pr-9 text-amber-900 shadow-sm">
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-200/70">
+        <div className="hidden shrink-0 sm:block">
+          <Mascot pose="alert" size={72} animation="none" className="mascot-anim-bounce" />
+        </div>
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-200/70 sm:hidden">
           <AlertTriangle className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1 text-[13px] leading-snug">

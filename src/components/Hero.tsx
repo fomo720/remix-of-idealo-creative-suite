@@ -4,6 +4,7 @@ import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
 import tazas from "@/assets/portfolio-tazas-sublimadas.png.asset.json";
 import banner from "@/assets/portfolio-banner.jpg.asset.json";
 import tarjetas from "@/assets/portfolio-tarjetas.jpg.asset.json";
+import { Mascot } from "@/components/Mascot";
 
 export function Hero() {
   return (
@@ -104,6 +105,10 @@ export function Hero() {
           </div>
           <div className="absolute -bottom-2 left-6 rounded-2xl border border-black/5 bg-white/95 px-3 py-2 text-xs font-semibold shadow-xl backdrop-blur">
             <span style={{ color: "var(--brand-cyan)" }}>●</span> Asesoría personalizada
+          </div>
+          {/* Mascota Idealo — flotando en la esquina */}
+          <div className="pointer-events-none absolute -bottom-6 -right-4 z-20 sm:-bottom-8 sm:-right-8">
+            <Mascot pose="hero" size={170} animation="float" className="drop-shadow-2xl" />
           </div>
         </div>
       </div>
