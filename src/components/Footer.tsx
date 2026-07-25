@@ -7,16 +7,20 @@ export function Footer() {
     <footer className="relative overflow-hidden text-slate-200" style={{ background: "#37474f" }}>
       <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, var(--brand-magenta), var(--brand-cyan))" }} />
 
-      {/* Mascota saludando desde arriba del footer */}
+      {/* Mascota saludando — click abre WhatsApp */}
       <div className="relative mx-auto flex max-w-6xl items-end justify-center px-4 pt-10 md:justify-end md:pr-16">
-        <div className="flex items-end gap-4">
-          <div className="hidden max-w-xs rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-xl sm:block">
-            <span className="block text-xs uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>¿Necesitas ayuda?</span>
-            Escríbenos por WhatsApp — respondemos rapidísimo 👋
-            <span className="absolute -bottom-2 right-8 h-4 w-4 rotate-45 bg-white" />
-          </div>
-          <Mascot pose="wave" size={140} animation="wave" className="drop-shadow-2xl" />
-        </div>
+        <a
+          href="https://wa.me/50433635666?text=%C2%A1Hola%20Idealo!%20Necesito%20ayuda%20con%20un%20proyecto%20%F0%9F%99%8C"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Escríbenos por WhatsApp"
+          className="group inline-flex flex-col items-center gap-2 transition hover:scale-105"
+        >
+          <Mascot pose="wave" size={140} animation="wave" className="drop-shadow-2xl !pointer-events-auto" />
+          <span className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-800 shadow-lg">
+            ¿Necesitas ayuda? <span style={{ color: "#25D366" }}>Escríbenos por WhatsApp →</span>
+          </span>
+        </a>
       </div>
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
