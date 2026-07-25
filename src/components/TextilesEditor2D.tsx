@@ -38,10 +38,10 @@ type Layer = {
 
 // Print zones measured from the source vector artworks (% of full view image).
 const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }> = {
-  front:         { x: 37.7, y: 28.6, w: 27.1, h: 41.9 },
-  back:          { x: 42.3, y: 15.0, w: 21.3, h: 48.0 },
-  "sleeve-left": { x: 44.6, y: 23.5, w: 15.6, h: 57.9 },
-  "sleeve-right":{ x: 45.7, y: 19.2, w: 13.5, h: 60.1 },
+  front:         { x: 37.7, y: 30.0, w: 27.1, h: 38.0 },
+  back:          { x: 42.0, y: 26.0, w: 22.0, h: 40.0 },
+  "sleeve-left": { x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
+  "sleeve-right":{ x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
 };
 
 const VIEWS: { id: ViewId; label: string; line: string; fill: string }[] = [
