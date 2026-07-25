@@ -15,9 +15,9 @@ import viewSleeveLLine from "@/assets/view-13-line.png.asset.json";
 import viewSleeveLFill from "@/assets/view-13-fill.png.asset.json";
 import viewSleeveRLine from "@/assets/view-14-line.png.asset.json";
 import viewSleeveRFill from "@/assets/view-14-fill.png.asset.json";
-import mockFront from "@/assets/tx-mock-front.png.asset.json";
-import mockBack from "@/assets/tx-mock-back.png.asset.json";
-import mockFolded from "@/assets/tx-mock-folded.png.asset.json";
+import mockFront from "@/assets/tx-white-front.jpg.asset.json";
+import mockBack from "@/assets/tx-white-back.jpg.asset.json";
+import mockFolded from "@/assets/tx-white-folded.jpg.asset.json";
 
 export type ViewId = "front" | "back" | "sleeve-left" | "sleeve-right";
 
