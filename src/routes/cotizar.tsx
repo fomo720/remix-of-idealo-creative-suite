@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Mascot } from "@/components/Mascot";
 import { MessageCircle, ArrowLeft, Mail, Phone } from "lucide-react";
+
 
 export const Route = createFileRoute("/cotizar")({
   component: CotizarPage,
