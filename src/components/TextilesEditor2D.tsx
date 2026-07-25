@@ -15,9 +15,9 @@ import viewSleeveLLine from "@/assets/view-13-line.png.asset.json";
 import viewSleeveLFill from "@/assets/view-13-fill.png.asset.json";
 import viewSleeveRLine from "@/assets/view-14-line.png.asset.json";
 import viewSleeveRFill from "@/assets/view-14-fill.png.asset.json";
-import mockFront from "@/assets/tx-mock-front.png.asset.json";
-import mockBack from "@/assets/tx-mock-back.png.asset.json";
-import mockFolded from "@/assets/tx-mock-folded.png.asset.json";
+import mockFront from "@/assets/tx-white-front.jpg.asset.json";
+import mockBack from "@/assets/tx-white-back.jpg.asset.json";
+import mockFolded from "@/assets/tx-white-folded.jpg.asset.json";
 
 export type ViewId = "front" | "back" | "sleeve-left" | "sleeve-right";
 
@@ -38,10 +38,10 @@ type Layer = {
 
 // Print zones measured from the source vector artworks (% of full view image).
 const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }> = {
-  front:         { x: 37.7, y: 28.6, w: 27.1, h: 41.9 },
-  back:          { x: 42.3, y: 15.0, w: 21.3, h: 48.0 },
-  "sleeve-left": { x: 44.6, y: 23.5, w: 15.6, h: 57.9 },
-  "sleeve-right":{ x: 45.7, y: 19.2, w: 13.5, h: 60.1 },
+  front:         { x: 37.7, y: 30.0, w: 27.1, h: 38.0 },
+  back:          { x: 42.0, y: 26.0, w: 22.0, h: 40.0 },
+  "sleeve-left": { x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
+  "sleeve-right":{ x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
 };
 
 const VIEWS: { id: ViewId; label: string; line: string; fill: string }[] = [
@@ -221,24 +221,24 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     {
       id: "photo-front", label: "Frente (lifestyle)", src: mockFront.url,
       overlays: [
-        { view: "front",        box: { x: 34, y: 36, w: 32, h: 30 }, blend: "multiply", opacity: 0.95 },
-        { view: "sleeve-left",  box: { x: 18, y: 46, w: 14, h: 22 },
+        { view: "front",        box: { x: 36, y: 34, w: 28, h: 26 }, blend: "multiply", opacity: 0.95 },
+        { view: "sleeve-left",  box: { x: 20, y: 44, w: 10, h: 18 },
           transform: "perspective(360px) rotateY(35deg)", blend: "multiply", opacity: 0.9 },
-        { view: "sleeve-right", box: { x: 68, y: 46, w: 14, h: 22 },
+        { view: "sleeve-right", box: { x: 70, y: 44, w: 10, h: 18 },
           transform: "perspective(360px) rotateY(-35deg)", blend: "multiply", opacity: 0.9 },
       ],
     },
     {
       id: "photo-back", label: "Espalda", src: mockBack.url,
       overlays: [
-        { view: "back", box: { x: 36, y: 26, w: 28, h: 30 }, blend: "multiply", opacity: 0.95 },
+        { view: "back", box: { x: 36, y: 30, w: 28, h: 28 }, blend: "multiply", opacity: 0.95 },
       ],
     },
     {
       id: "photo-folded", label: "Doblada", src: mockFolded.url,
       overlays: [
-        { view: "front", box: { x: 26, y: 50, w: 34, h: 30 },
-          transform: "perspective(500px) rotateX(48deg) rotate(-6deg)",
+        { view: "front", box: { x: 38, y: 46, w: 20, h: 16 },
+          transform: "perspective(600px) rotateX(48deg) rotate(-6deg)",
           blend: "multiply", opacity: 0.92 },
       ],
     },
@@ -327,33 +327,40 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   // Renders one mockup card (shared between grid + zoom modal).
   const renderMockup = (m: Mockup, opts?: { large?: boolean }) => {
     const large = opts?.large ?? false;
+    // Detect "white" so we skip the multiply tint (which would darken).
+    const hex = shirtColor.replace("#", "");
+    const isWhite = hex.length === 6 &&
+      parseInt(hex.slice(0,2),16) > 240 &&
+      parseInt(hex.slice(2,4),16) > 240 &&
+      parseInt(hex.slice(4,6),16) > 240;
     return (
       <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
-        {/* Desaturated shirt photo — preserves folds & lighting */}
+        {/* White sweater photo — preserves folds & lighting naturally */}
         <img
           src={m.src}
           alt={m.label}
           className="absolute inset-0 h-full w-full object-contain"
-          style={{ filter: "grayscale(1) brightness(1.08) contrast(0.98)" }}
           loading={large ? "eager" : "lazy"}
         />
-        {/* Color layer masked to the shirt silhouette (background stays clean) */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundColor: shirtColor,
-            mixBlendMode: "multiply",
-            WebkitMaskImage: `url(${m.src})`,
-            maskImage: `url(${m.src})`,
-            WebkitMaskRepeat: "no-repeat",
-            maskRepeat: "no-repeat",
-            WebkitMaskPosition: "center",
-            maskPosition: "center",
-            WebkitMaskSize: "contain",
-            maskSize: "contain",
-          }}
-        />
+        {/* Color tint only when not white — masked to shirt silhouette */}
+        {!isWhite && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundColor: shirtColor,
+              mixBlendMode: "multiply",
+              WebkitMaskImage: `url(${m.src})`,
+              maskImage: `url(${m.src})`,
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+            }}
+          />
+        )}
         {/* Design overlays with per-view perspective */}
         {m.overlays.map((ov, idx) => {
           const overlayLayers = layers.filter((l) => l.view === ov.view);
