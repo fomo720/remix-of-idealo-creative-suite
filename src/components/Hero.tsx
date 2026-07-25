@@ -108,10 +108,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-      {/* Mascota Idealo — asomándose desde la esquina inferior izquierda */}
-      <div className="pointer-events-none absolute bottom-0 left-0 z-20 hidden -translate-x-4 translate-y-2 md:block">
-        <Mascot pose="point" size={180} animation="float" className="drop-shadow-2xl" />
-      </div>
     </section>
   );
 }
