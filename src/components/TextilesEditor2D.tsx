@@ -221,24 +221,24 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     {
       id: "photo-front", label: "Frente (lifestyle)", src: mockFront.url,
       overlays: [
-        { view: "front",        box: { x: 34, y: 36, w: 32, h: 30 }, blend: "multiply", opacity: 0.95 },
-        { view: "sleeve-left",  box: { x: 18, y: 46, w: 14, h: 22 },
+        { view: "front",        box: { x: 36, y: 34, w: 28, h: 26 }, blend: "multiply", opacity: 0.95 },
+        { view: "sleeve-left",  box: { x: 20, y: 44, w: 10, h: 18 },
           transform: "perspective(360px) rotateY(35deg)", blend: "multiply", opacity: 0.9 },
-        { view: "sleeve-right", box: { x: 68, y: 46, w: 14, h: 22 },
+        { view: "sleeve-right", box: { x: 70, y: 44, w: 10, h: 18 },
           transform: "perspective(360px) rotateY(-35deg)", blend: "multiply", opacity: 0.9 },
       ],
     },
     {
       id: "photo-back", label: "Espalda", src: mockBack.url,
       overlays: [
-        { view: "back", box: { x: 36, y: 26, w: 28, h: 30 }, blend: "multiply", opacity: 0.95 },
+        { view: "back", box: { x: 36, y: 30, w: 28, h: 28 }, blend: "multiply", opacity: 0.95 },
       ],
     },
     {
       id: "photo-folded", label: "Doblada", src: mockFolded.url,
       overlays: [
-        { view: "front", box: { x: 26, y: 50, w: 34, h: 30 },
-          transform: "perspective(500px) rotateX(48deg) rotate(-6deg)",
+        { view: "front", box: { x: 38, y: 46, w: 20, h: 16 },
+          transform: "perspective(600px) rotateX(48deg) rotate(-6deg)",
           blend: "multiply", opacity: 0.92 },
       ],
     },
