@@ -327,33 +327,40 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   // Renders one mockup card (shared between grid + zoom modal).
   const renderMockup = (m: Mockup, opts?: { large?: boolean }) => {
     const large = opts?.large ?? false;
+    // Detect "white" so we skip the multiply tint (which would darken).
+    const hex = shirtColor.replace("#", "");
+    const isWhite = hex.length === 6 &&
+      parseInt(hex.slice(0,2),16) > 240 &&
+      parseInt(hex.slice(2,4),16) > 240 &&
+      parseInt(hex.slice(4,6),16) > 240;
     return (
       <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
-        {/* Desaturated shirt photo — preserves folds & lighting */}
+        {/* White sweater photo — preserves folds & lighting naturally */}
         <img
           src={m.src}
           alt={m.label}
           className="absolute inset-0 h-full w-full object-contain"
-          style={{ filter: "grayscale(1) brightness(1.08) contrast(0.98)" }}
           loading={large ? "eager" : "lazy"}
         />
-        {/* Color layer masked to the shirt silhouette (background stays clean) */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundColor: shirtColor,
-            mixBlendMode: "multiply",
-            WebkitMaskImage: `url(${m.src})`,
-            maskImage: `url(${m.src})`,
-            WebkitMaskRepeat: "no-repeat",
-            maskRepeat: "no-repeat",
-            WebkitMaskPosition: "center",
-            maskPosition: "center",
-            WebkitMaskSize: "contain",
-            maskSize: "contain",
-          }}
-        />
+        {/* Color tint only when not white — masked to shirt silhouette */}
+        {!isWhite && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundColor: shirtColor,
+              mixBlendMode: "multiply",
+              WebkitMaskImage: `url(${m.src})`,
+              maskImage: `url(${m.src})`,
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+            }}
+          />
+        )}
         {/* Design overlays with per-view perspective */}
         {m.overlays.map((ov, idx) => {
           const overlayLayers = layers.filter((l) => l.view === ov.view);
