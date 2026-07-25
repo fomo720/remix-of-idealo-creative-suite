@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
+import { Mascot } from "@/components/Mascot";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
 import { AlertTriangle } from "lucide-react";
