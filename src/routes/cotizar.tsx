@@ -45,8 +45,8 @@ function CotizarPage() {
         </p>
 
         <div className="relative mt-10 overflow-visible rounded-3xl border border-border bg-card p-8 shadow-elegant">
-          <div className="pointer-events-none absolute -top-14 -right-4 hidden sm:block">
-            <Mascot pose="point" size={140} animation="float" className="drop-shadow-2xl" />
+          <div className="pointer-events-none absolute -top-16 -right-6 hidden sm:block">
+            <Mascot pose="hero" size={150} animation="float" className="drop-shadow-2xl" />
           </div>
           <a
             href={waHref}
