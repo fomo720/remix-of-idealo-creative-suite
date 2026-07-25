@@ -111,6 +111,16 @@ import cuadrosPvcMama from "@/assets/portfolio-cuadros-pvc-mama.jpg.asset.json";
 import cojinesTropical from "@/assets/portfolio-cojines-tropical.jpg.asset.json";
 import bannerArana from "@/assets/portfolio-banner-arana.jpg.asset.json";
 import idealoLogoColor from "@/assets/idealo-logo-color.png.asset.json";
+import sobresCorporativos from "@/assets/portfolio-sobres-corporativos.jpg.asset.json";
+import impresionFlyer from "@/assets/portfolio-impresion-flyer.jpg.asset.json";
+import impresionVolantes from "@/assets/portfolio-impresion-volantes.jpg.asset.json";
+import kitCampanaPolitica from "@/assets/portfolio-kit-campana-politica.jpg.asset.json";
+import empaquesJoyeria from "@/assets/portfolio-empaques-joyeria.jpg.asset.json";
+import cartoncilloVinilTexturizado from "@/assets/portfolio-cartoncillo-vinil-texturizado.jpg.asset.json";
+import tazasHonduras from "@/assets/portfolio-tazas-honduras.jpg.asset.json";
+import calendariosCorporativosPared from "@/assets/portfolio-calendarios-corporativos-pared.jpg.asset.json";
+import tazasSublimadasPartenon from "@/assets/portfolio-tazas-sublimadas-partenon.jpg.asset.json";
+import calendariosCorporativos2026 from "@/assets/portfolio-calendarios-corporativos-2026.jpg.asset.json";
 
 export type ProjectType =
   | "Stickers"
