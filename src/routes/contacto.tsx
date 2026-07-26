@@ -64,7 +64,7 @@ function ContactoPage() {
       {/* Hero header — estilo similar al referente, colores Idealo */}
       <section className="relative overflow-hidden bg-foreground text-background">
         {/* Viento de colores Idealo fluyendo lento hacia la izquierda */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40">
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
           <div className="contacto-wind" />
           <div className="contacto-wind contacto-wind--2" />
         </div>
