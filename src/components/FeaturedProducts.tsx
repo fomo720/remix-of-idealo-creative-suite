@@ -1,4 +1,8 @@
+import { useState } from "react";
+import { Check, Plus } from "lucide-react";
 import { SkeletonImage } from "@/components/SkeletonImage";
+import { useQuote } from "@/context/QuoteContext";
+import { slugify } from "@/lib/portfolio-data";
 
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
 import etiquetasFoil from "@/assets/portfolio-etiquetas-foil.png.asset.json";
@@ -9,8 +13,6 @@ import figuraPvc from "@/assets/portfolio-figura-pvc.jpg.asset.json";
 import tarjetas from "@/assets/portfolio-tarjetas.jpg.asset.json";
 import menus from "@/assets/portfolio-menus.jpg.asset.json";
 import microperforado from "@/assets/portfolio-microperforado.jpg.asset.json";
-
-const WA = "50433635666";
 
 const products = [
   { title: "Stickers troquelados", subtitle: "Cualquier forma y tamaño", image: troquelados.url },
@@ -24,15 +26,24 @@ const products = [
   { title: "Microperforado", subtitle: "Vinil para vidrieras y locales", image: microperforado.url },
 ];
 
-function WhatsAppIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M20.52 3.48A11.94 11.94 0 0 0 12.02 0C5.42 0 .06 5.36.06 11.96c0 2.11.55 4.17 1.6 5.98L0 24l6.2-1.62a11.95 11.95 0 0 0 5.82 1.48h.01c6.6 0 11.96-5.36 11.96-11.96 0-3.19-1.24-6.19-3.47-8.42ZM12.03 21.8h-.01a9.85 9.85 0 0 1-5.02-1.38l-.36-.21-3.68.96.98-3.59-.23-.37a9.86 9.86 0 1 1 18.29-5.25c0 5.44-4.43 9.84-9.97 9.84Zm5.4-7.37c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.66.15-.2.3-.76.96-.93 1.16-.17.2-.34.22-.63.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.34.44-.51.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.66-1.6-.9-2.19-.24-.57-.48-.5-.66-.5h-.57c-.2 0-.51.07-.78.37s-1.03 1-1.03 2.45c0 1.45 1.06 2.85 1.2 3.05.15.2 2.08 3.17 5.04 4.45.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.09 1.75-.72 2-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35Z" />
-    </svg>
-  );
-}
-
 export function FeaturedProducts() {
+  const { addItem, removeItem, hasItem } = useQuote();
+  const [justAdded, setJustAdded] = useState<string | null>(null);
+
+  const handleToggle = (p: (typeof products)[number]) => {
+    const slug = slugify(p.title);
+    if (hasItem(slug)) {
+      removeItem(slug);
+      setJustAdded(null);
+      return;
+    }
+    addItem({ slug, title: p.title, image: p.image });
+    setJustAdded(slug);
+    setTimeout(() => {
+      setJustAdded((cur) => (cur === slug ? null : cur));
+    }, 1500);
+  };
+
   return (
     <section id="productos" className="bg-[#f8f9fa] py-24">
       <div className="mx-auto max-w-6xl px-4">
@@ -44,13 +55,15 @@ export function FeaturedProducts() {
             Lo más pedido de <span style={{ color: "var(--brand-cyan)" }}>nuestro catálogo</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
-            Cotiza directo por WhatsApp. Te guiamos con materiales, tamaños y tiempos.
+            Agrega los productos que te interesen a tu cotización y envíalos todos juntos por WhatsApp.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((p, i) => {
-            const msg = encodeURIComponent(`Hola Idealo, quiero personalizar: ${p.title}. ¿Me pueden asesorar?`);
+          {products.map((p) => {
+            const slug = slugify(p.title);
+            const added = hasItem(slug);
+            const showJustAdded = justAdded === slug;
             return (
               <div
                 key={p.title}
@@ -67,15 +80,38 @@ export function FeaturedProducts() {
                     <h3 className="text-base font-bold leading-tight line-clamp-1">{p.title}</h3>
                     <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2">{p.subtitle}</p>
                   </div>
-                  <a
-                    href={`https://wa.me/${WA}?text=${msg}`}
-                    target="_blank"
-                    rel="noopener"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebe57] hover:shadow-lg"
+                  <button
+                    type="button"
+                    onClick={() => handleToggle(p)}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5"
+                    style={
+                      added || showJustAdded
+                        ? {
+                            background: "#22c55e",
+                            borderColor: "#22c55e",
+                            color: "white",
+                          }
+                        : {
+                            background: "white",
+                            borderColor: "rgba(0,0,0,0.1)",
+                            color: "var(--foreground)",
+                          }
+                    }
                   >
-                    <WhatsAppIcon className="h-4 w-4" />
-                    Personalizar ahora
-                  </a>
+                    {showJustAdded ? (
+                      <>
+                        <Check className="h-4 w-4" /> ¡Agregado!
+                      </>
+                    ) : added ? (
+                      <>
+                        <Check className="h-4 w-4" /> Agregado
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4" /> Agregar a cotización
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             );
