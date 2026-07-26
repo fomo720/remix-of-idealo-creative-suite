@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as EmpresasRouteImport } from './routes/empresas'
 import { Route as CotizarRouteImport } from './routes/cotizar'
+import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortafolioIndexRouteImport } from './routes/portafolio.index'
 import { Route as EventosIndexRouteImport } from './routes/eventos.index'
@@ -35,6 +36,11 @@ const EmpresasRoute = EmpresasRouteImport.update({
 const CotizarRoute = CotizarRouteImport.update({
   id: '/cotizar',
   path: '/cotizar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -86,6 +92,7 @@ const EventosCategoriaProductoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contacto': typeof ContactoRoute
   '/cotizar': typeof CotizarRoute
   '/empresas': typeof EmpresasRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contacto': typeof ContactoRoute
   '/cotizar': typeof CotizarRoute
   '/empresas/$kit': typeof EmpresasKitRoute
   '/portafolio/$slug': typeof PortafolioSlugRoute
@@ -112,6 +120,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contacto': typeof ContactoRoute
   '/cotizar': typeof CotizarRoute
   '/empresas': typeof EmpresasRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/contacto'
     | '/cotizar'
     | '/empresas'
     | '/eventos'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/contacto'
     | '/cotizar'
     | '/empresas/$kit'
     | '/portafolio/$slug'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/contacto'
     | '/cotizar'
     | '/empresas'
     | '/eventos'
@@ -168,6 +180,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactoRoute: typeof ContactoRoute
   CotizarRoute: typeof CotizarRoute
   EmpresasRoute: typeof EmpresasRouteWithChildren
   EventosRoute: typeof EventosRouteWithChildren
@@ -196,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/cotizar'
       fullPath: '/cotizar'
       preLoaderRoute: typeof CotizarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -306,6 +326,7 @@ const EventosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactoRoute: ContactoRoute,
   CotizarRoute: CotizarRoute,
   EmpresasRoute: EmpresasRouteWithChildren,
   EventosRoute: EventosRouteWithChildren,
