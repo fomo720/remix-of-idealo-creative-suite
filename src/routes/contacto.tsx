@@ -22,39 +22,7 @@ const MAPS_LINK = "https://maps.app.goo.gl/U7w2qo2K6tJTQyqA9";
 const MAPS_EMBED = "https://www.google.com/maps?q=15.7785536,-86.7905529&z=17&output=embed";
 
 function ContactoPage() {
-  const [form, setForm] = useState({
-    nombre: "",
-    empresa: "",
-    correo: "",
-    telefono: "",
-    asunto: "Cotización",
-    mensaje: "",
-  });
-
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.nombre || !form.correo || !form.mensaje) return;
-    const lines = [
-      `Hola Idealo 👋 Soy *${form.nombre}*.`,
-      form.empresa && `Empresa: ${form.empresa}`,
-      `Correo: ${form.correo}`,
-      form.telefono && `Teléfono: ${form.telefono}`,
-      `Asunto: ${form.asunto}`,
-      "",
-      "Mensaje:",
-      form.mensaje,
-    ].filter(Boolean).join("\n");
-    const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(lines)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
-
   const directWa = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola Idealo 👋 quiero hacerles una consulta.")}`;
-
-  const inputCls =
-    "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-[var(--brand-cyan)]/50";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -193,80 +161,37 @@ function ContactoPage() {
             </div>
           </div>
 
-          {/* Right column — form */}
-          <div className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
-            <h2 className="text-2xl font-bold">Envíanos un mensaje</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Te respondemos en menos de 24 horas en días hábiles.</p>
-
-            <form onSubmit={onSubmit} className="mt-6 space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                    Nombre *
-                  </label>
-                  <input required value={form.nombre} onChange={set("nombre")} className={inputCls} placeholder="Tu nombre" />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                    Empresa
-                  </label>
-                  <input value={form.empresa} onChange={set("empresa")} className={inputCls} placeholder="Empresa u organización" />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                    Correo electrónico *
-                  </label>
-                  <input required type="email" value={form.correo} onChange={set("correo")} className={inputCls} placeholder="correo@ejemplo.com" />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                    Teléfono / WhatsApp
-                  </label>
-                  <input value={form.telefono} onChange={set("telefono")} className={inputCls} placeholder="0000 0000" />
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                  Asunto *
-                </label>
-                <select required value={form.asunto} onChange={set("asunto")} className={inputCls}>
-                  <option value="">Selecciona un tema...</option>
-                  <option>Cotización</option>
-                  <option>Soporte</option>
-                  <option>Trabajemos juntos</option>
-                  <option>Otro</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                  Mensaje *
-                </label>
-                <textarea required rows={5} value={form.mensaje} onChange={set("mensaje")} className={inputCls} placeholder="Cuéntanos qué necesitas: productos, cantidades, fechas de entrega..." />
-              </div>
-
-              <button
-                type="submit"
-                className="bg-gradient-cta inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-base font-semibold text-white shadow-md transition hover:scale-[1.01]"
-              >
-                <Send className="h-5 w-5" /> Enviar mensaje
-              </button>
-            </form>
-
-            <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
-              <span className="h-px flex-1 bg-border" /> o <span className="h-px flex-1 bg-border" />
-            </div>
+          {/* Right column — WhatsApp CTA */}
+          <div className="flex flex-col justify-center rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8 lg:sticky lg:top-24 lg:self-start">
+            <h2 className="text-2xl font-bold">Escríbenos por WhatsApp</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Te respondemos más rápido por mensaje directo. Cuéntanos qué necesitas y te ayudamos con tu cotización.
+            </p>
 
             <a
               href={directWa}
               target="_blank"
               rel="noreferrer"
-              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-lg font-semibold text-white shadow-md transition hover:brightness-95"
+              className="mt-8 flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-lg font-semibold text-white shadow-md transition hover:brightness-95"
               style={{ background: "#25D366" }}
             >
-              <MessageCircle className="h-6 w-6" /> Escríbenos por WhatsApp
+              <MessageCircle className="h-6 w-6" /> Abrir WhatsApp
             </a>
+
+            <div className="mt-6 space-y-3 text-sm text-muted-foreground">
+              <p className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 shrink-0 rounded-full" style={{ background: "var(--brand-cyan)" }} />
+                <span>Cotizaciones personalizadas al instante</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 shrink-0 rounded-full" style={{ background: "var(--brand-magenta)" }} />
+                <span>Atención en La Ceiba y envíos a todo Honduras</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 shrink-0 rounded-full" style={{ background: "var(--brand-cyan)" }} />
+                <span>Horario: Lun–Vie 9am–5pm, Sáb 9am–1pm</span>
+              </p>
+            </div>
           </div>
         </div>
       </main>
