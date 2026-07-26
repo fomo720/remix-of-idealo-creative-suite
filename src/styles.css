@@ -359,20 +359,28 @@
   inset: -20% 0;
   width: 200%;
   background:
-    radial-gradient(40% 60% at 10% 40%, var(--brand-magenta) 0%, transparent 60%),
-    radial-gradient(35% 55% at 30% 60%, var(--brand-cyan) 0%, transparent 65%),
-    radial-gradient(45% 65% at 55% 35%, var(--brand-magenta) 0%, transparent 60%),
-    radial-gradient(40% 60% at 80% 55%, var(--brand-cyan-deep) 0%, transparent 65%),
-    radial-gradient(35% 55% at 95% 40%, var(--brand-magenta) 0%, transparent 60%);
+    radial-gradient(38% 55% at 8% 45%, #ffd93d 0%, transparent 60%),
+    radial-gradient(35% 55% at 22% 60%, #ff8a3d 0%, transparent 62%),
+    radial-gradient(40% 60% at 38% 35%, var(--brand-magenta) 0%, transparent 62%),
+    radial-gradient(38% 58% at 55% 60%, #a855f7 0%, transparent 62%),
+    radial-gradient(40% 60% at 72% 35%, #1e3a8a 0%, transparent 65%),
+    radial-gradient(38% 58% at 88% 55%, var(--brand-cyan) 0%, transparent 62%),
+    radial-gradient(35% 55% at 98% 40%, #ffd93d 0%, transparent 60%);
   filter: blur(40px);
   animation: contacto-wind-flow 28s linear infinite;
   will-change: transform;
 }
 .contacto-wind--2 {
-  opacity: 0.7;
+  opacity: 0.75;
   animation-duration: 42s;
   animation-delay: -14s;
   filter: blur(60px);
   mix-blend-mode: screen;
+  background:
+    radial-gradient(38% 55% at 15% 50%, #ff8a3d 0%, transparent 60%),
+    radial-gradient(40% 60% at 40% 40%, var(--brand-magenta) 0%, transparent 62%),
+    radial-gradient(38% 58% at 65% 60%, #a855f7 0%, transparent 62%),
+    radial-gradient(40% 60% at 85% 45%, var(--brand-cyan) 0%, transparent 62%);
 }
+
 
