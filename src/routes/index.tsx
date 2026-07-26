@@ -24,7 +24,9 @@ function Index() {
         <HowItWorks />
         <Configurator />
         <FeaturedProducts />
+        <ClientsSection />
         <Testimonials />
+
         <MissionVision />
       </main>
       <Footer />
