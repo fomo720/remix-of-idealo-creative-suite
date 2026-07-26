@@ -162,6 +162,30 @@ function ProjectDetail() {
               {project.tag} · {project.type}
             </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{project.title}</h1>
+            <button
+              type="button"
+              onClick={handleToggle}
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 sm:w-auto"
+              style={
+                added || justAdded
+                  ? { background: "#22c55e", borderColor: "#22c55e", color: "white" }
+                  : { background: "white", borderColor: "rgba(0,0,0,0.1)", color: "var(--foreground)" }
+              }
+            >
+              {justAdded ? (
+                <>
+                  <Check className="h-4 w-4" /> ¡Agregado!
+                </>
+              ) : added ? (
+                <>
+                  <Check className="h-4 w-4" /> Agregado
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4" /> Agregar a cotización
+                </>
+              )}
+            </button>
             <p className="mt-4 text-lg text-muted-foreground">{project.subtitle}</p>
 
             {project.description && (
