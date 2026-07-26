@@ -63,10 +63,13 @@ function ContactoPage() {
 
       {/* Hero header — estilo similar al referente, colores Idealo */}
       <section className="relative overflow-hidden bg-foreground text-background">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-[var(--brand-magenta)] blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-[var(--brand-cyan)] blur-3xl" />
+        {/* Viento de colores Idealo fluyendo lento hacia la izquierda */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40">
+          <div className="contacto-wind" />
+          <div className="contacto-wind contacto-wind--2" />
         </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/40" />
+
         <div className="relative mx-auto max-w-6xl px-4 py-16 text-center sm:py-20">
           <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-background/70 hover:text-background">
             <ArrowLeft className="h-4 w-4" /> Volver al inicio
