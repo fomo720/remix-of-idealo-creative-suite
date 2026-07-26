@@ -1,4 +1,4 @@
-import { Instagram, Facebook, MessageCircle, Mail, MapPin, Phone } from "lucide-react";
+import { Instagram, Facebook, MessageCircle, Mail, MapPin, Phone, Clock } from "lucide-react";
 import logo from "@/assets/idealo-logo.png.asset.json";
 import { Mascot } from "@/components/Mascot";
 
