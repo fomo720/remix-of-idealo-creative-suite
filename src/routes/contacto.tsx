@@ -55,122 +55,125 @@ function ContactoPage() {
   const directWa = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola Idealo 👋 quiero hacerles una consulta.")}`;
 
   const inputCls =
-    "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2";
-  const focusStyle = { boxShadow: undefined } as React.CSSProperties;
+    "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-[var(--brand-cyan)]/50";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <main className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
-        <Link to="/" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Volver al inicio
-        </Link>
 
-        <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Contacto</div>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Contáctanos · <span className="text-gradient-rainbow">Idealo</span>
-        </h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          Estamos en La Ceiba — escríbenos o visítanos.
-        </p>
+      {/* Hero header — estilo similar al referente, colores Idealo */}
+      <section className="relative overflow-hidden bg-foreground text-background">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-[var(--brand-magenta)] blur-3xl" />
+          <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-[var(--brand-cyan)] blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-6xl px-4 py-16 text-center sm:py-20">
+          <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-background/70 hover:text-background">
+            <ArrowLeft className="h-4 w-4" /> Volver al inicio
+          </Link>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            Contáctanos · <span className="text-gradient-rainbow">Idealo</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-background/80">
+            Estamos en La Ceiba, Honduras — escríbenos o visítanos.
+          </p>
+        </div>
+      </section>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+      <main className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <div className="grid gap-8 lg:grid-cols-2">
           {/* Left column */}
-          <div className="space-y-6">
-            <div className="rounded-3xl border border-border bg-card p-6 shadow-elegant sm:p-8">
-              <h2 className="text-xl font-bold">Información de contacto</h2>
-              <ul className="mt-5 space-y-4 text-sm">
-                <li className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full text-white"
-                    style={{ background: "var(--brand-magenta)" }}
-                  >
-                    <MapPin className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <div className="font-semibold text-foreground">IDEALO</div>
-                    <div className="text-muted-foreground">[Dirección — completar]</div>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full text-white"
-                    style={{ background: "var(--brand-cyan)" }}
-                  >
-                    <Phone className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <div className="font-semibold text-foreground">Teléfono / WhatsApp</div>
-                    <a href={`tel:+${WHATSAPP}`} className="text-muted-foreground hover:text-foreground">
-                      +504 3363-5666
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full text-white"
-                    style={{ background: "var(--brand-magenta)" }}
-                  >
-                    <Mail className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <div className="font-semibold text-foreground">Correo</div>
-                    <a href="mailto:idealo.hn@gmail.com" className="text-muted-foreground hover:text-foreground">
-                      idealo.hn@gmail.com
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full text-white"
-                    style={{ background: "var(--brand-cyan)" }}
-                  >
-                    <Clock className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <div className="font-semibold text-foreground">Horario</div>
-                    <div className="text-muted-foreground">[Horario — completar]</div>
-                  </div>
-                </li>
-              </ul>
+          <div className="space-y-8">
+            {/* Contact info card */}
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-card">
+              <div className="bg-foreground px-6 py-4 text-background">
+                <h2 className="text-sm font-bold uppercase tracking-widest">Información de contacto</h2>
+              </div>
+              <div className="p-6 sm:p-8">
+                <ul className="space-y-5 text-sm">
+                  <li className="flex items-start gap-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-magenta)" }}>
+                      <MapPin className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Dirección</div>
+                      <div className="font-medium text-foreground">Shopping Center Almina, Ave Colón, La Ceiba</div>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-cyan)" }}>
+                      <Phone className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Teléfono / WhatsApp</div>
+                      <a href={`tel:+${WHATSAPP}`} className="font-medium text-foreground hover:text-[var(--brand-magenta)]">
+                        +504 3363-5666
+                      </a>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-magenta)" }}>
+                      <Mail className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Correo electrónico</div>
+                      <a href="mailto:idealo.hn@gmail.com" className="font-medium text-foreground hover:text-[var(--brand-magenta)]">
+                        idealo.hn@gmail.com
+                      </a>
+                      <div className="text-xs text-muted-foreground">Respondemos en menos de 24 horas</div>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-cyan)" }}>
+                      <Clock className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Horario</div>
+                      <div className="font-medium text-foreground">Lunes a Viernes: 9:00 a.m. – 5:00 p.m.</div>
+                      <div className="font-medium text-foreground">Sábado: 9:00 a.m. – 1:00 p.m.</div>
+                    </div>
+                  </li>
+                </ul>
 
-              <div className="mt-6">
-                <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Redes sociales</div>
-                <div className="flex flex-wrap gap-2">
-                  <a
-                    href={`https://wa.me/${WHATSAPP}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
-                    style={{ background: "#25D366" }}
-                  >
-                    <MessageCircle className="h-4 w-4" /> WhatsApp
-                  </a>
-                  <a
-                    href="https://www.instagram.com/idealohn_/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
-                    style={{ background: "var(--brand-magenta)" }}
-                  >
-                    <Instagram className="h-4 w-4" /> Instagram
-                  </a>
-                  <a
-                    href="https://www.facebook.com/idealohnd/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
-                    style={{ background: "var(--brand-cyan)" }}
-                  >
-                    <Facebook className="h-4 w-4" /> Facebook
-                  </a>
+                <div className="mt-8">
+                  <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Redes sociales</div>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href={`https://wa.me/${WHATSAPP}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
+                      style={{ background: "#25D366" }}
+                    >
+                      <MessageCircle className="h-4 w-4" /> WhatsApp
+                    </a>
+                    <a
+                      href="https://www.instagram.com/idealohn_/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
+                      style={{ background: "var(--brand-magenta)" }}
+                    >
+                      <Instagram className="h-4 w-4" /> Instagram
+                    </a>
+                    <a
+                      href="https://www.facebook.com/idealohnd/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:scale-105"
+                      style={{ background: "var(--brand-cyan)" }}
+                    >
+                      <Facebook className="h-4 w-4" /> Facebook
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-elegant">
-              <div className="flex items-center justify-between px-6 py-3">
-                <div className="text-sm font-semibold">Nuestra ubicación</div>
+            {/* Map card */}
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-card">
+              <div className="flex items-center justify-between px-6 py-4">
+                <div className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Nuestra ubicación</div>
                 <a
                   href={MAPS_LINK}
                   target="_blank"
@@ -191,46 +194,45 @@ function ContactoPage() {
             </div>
           </div>
 
-          {/* Right column */}
-          <div className="rounded-3xl border border-border bg-card p-6 shadow-elegant sm:p-8">
-            <h2 className="text-xl font-bold">Envíanos un mensaje</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Rellena el formulario y te contactamos por WhatsApp.
-            </p>
+          {/* Right column — form */}
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
+            <h2 className="text-2xl font-bold">Envíanos un mensaje</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Te respondemos en menos de 24 horas en días hábiles.</p>
 
             <form onSubmit={onSubmit} className="mt-6 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
                     Nombre *
                   </label>
-                  <input required value={form.nombre} onChange={set("nombre")} className={inputCls} style={focusStyle} />
+                  <input required value={form.nombre} onChange={set("nombre")} className={inputCls} placeholder="Tu nombre" />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
                     Empresa
                   </label>
-                  <input value={form.empresa} onChange={set("empresa")} className={inputCls} />
+                  <input value={form.empresa} onChange={set("empresa")} className={inputCls} placeholder="Empresa u organización" />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
                     Correo electrónico *
                   </label>
-                  <input required type="email" value={form.correo} onChange={set("correo")} className={inputCls} />
+                  <input required type="email" value={form.correo} onChange={set("correo")} className={inputCls} placeholder="correo@ejemplo.com" />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <label className="mb-1.5 block text-sm font-semibold text-foreground">
                     Teléfono / WhatsApp
                   </label>
-                  <input value={form.telefono} onChange={set("telefono")} className={inputCls} />
+                  <input value={form.telefono} onChange={set("telefono")} className={inputCls} placeholder="0000 0000" />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Asunto
+                <label className="mb-1.5 block text-sm font-semibold text-foreground">
+                  Asunto *
                 </label>
-                <select value={form.asunto} onChange={set("asunto")} className={inputCls}>
+                <select required value={form.asunto} onChange={set("asunto")} className={inputCls}>
+                  <option value="">Selecciona un tema...</option>
                   <option>Cotización</option>
                   <option>Soporte</option>
                   <option>Trabajemos juntos</option>
@@ -239,16 +241,15 @@ function ContactoPage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <label className="mb-1.5 block text-sm font-semibold text-foreground">
                   Mensaje *
                 </label>
-                <textarea required rows={5} value={form.mensaje} onChange={set("mensaje")} className={inputCls} />
+                <textarea required rows={5} value={form.mensaje} onChange={set("mensaje")} className={inputCls} placeholder="Cuéntanos qué necesitas: productos, cantidades, fechas de entrega..." />
               </div>
 
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-base font-semibold text-white shadow-md transition hover:scale-[1.01]"
-                style={{ background: "linear-gradient(90deg, var(--brand-magenta), var(--brand-cyan))" }}
+                className="bg-gradient-cta inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-base font-semibold text-white shadow-md transition hover:scale-[1.01]"
               >
                 <Send className="h-5 w-5" /> Enviar mensaje
               </button>
