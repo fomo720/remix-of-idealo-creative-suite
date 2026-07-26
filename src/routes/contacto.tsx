@@ -61,23 +61,27 @@ function ContactoPage() {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      {/* Hero header — estilo similar al referente, colores Idealo */}
-      <section className="relative overflow-hidden bg-foreground text-background">
-        {/* Viento de colores Idealo fluyendo lento hacia la izquierda */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
+      {/* Hero header — viento de colores Idealo sobre fondo brillante */}
+      <section className="relative overflow-hidden bg-white text-foreground">
+        {/* Fondo brillante detrás del viento */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="contacto-wind-glow" />
+        </div>
+        {/* Viento de colores Idealo fluyendo hacia la izquierda */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-90">
           <div className="contacto-wind" />
           <div className="contacto-wind contacto-wind--2" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white/80" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 text-center sm:py-20">
-          <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-background/70 hover:text-background">
+          <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> Volver al inicio
           </Link>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Contáctanos · <span className="text-gradient-rainbow">Idealo</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-background/80">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-foreground/80">
             Estamos en La Ceiba, Honduras — escríbenos o visítanos.
           </p>
         </div>
