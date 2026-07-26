@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { MapPin, Phone, Mail, Clock, MessageCircle, Instagram, Facebook, ExternalLink, ArrowLeft, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageCircle, Instagram, Facebook, ExternalLink, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/contacto")({
   component: ContactoPage,
