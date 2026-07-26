@@ -61,7 +61,21 @@ function ProjectDetail() {
   const mensaje = `Hola Idealo 👋 Me interesa *${project.title}*. ¿Me pueden cotizar?`;
   const waHref = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
   const [playingVideo, setPlayingVideo] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { addItem, removeItem, hasItem } = useQuote();
+  const added = hasItem(project.slug);
+
+  const handleToggle = () => {
+    if (added) {
+      removeItem(project.slug);
+      setJustAdded(false);
+      return;
+    }
+    addItem({ slug: project.slug, title: project.title, image: project.image });
+    setJustAdded(true);
+    setTimeout(() => setJustAdded((cur) => (cur ? false : cur)), 1500);
+  };
 
   const handlePlay = () => {
     setPlayingVideo(true);
