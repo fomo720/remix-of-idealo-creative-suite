@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { Plus, Check } from "lucide-react";
 import { projects, type ProjectType } from "@/lib/portfolio-data";
 import { SkeletonImage } from "@/components/SkeletonImage";
+import { useQuote } from "@/context/QuoteContext";
 
 
 type Filter = "Todos" | ProjectType;
@@ -29,10 +31,19 @@ export function Portfolio() {
   const searchTipo = (location.search as { tipo?: string } | undefined)?.tipo;
 
   const [filter, setFilter] = useState<Filter>(() => matchFilter(searchTipo));
+  const [justAdded, setJustAdded] = useState<string | null>(null);
+
+  const { addItem, hasItem } = useQuote();
 
   useEffect(() => {
     setFilter(matchFilter(searchTipo));
   }, [searchTipo]);
+
+  useEffect(() => {
+    if (!justAdded) return;
+    const t = setTimeout(() => setJustAdded(null), 1500);
+    return () => clearTimeout(t);
+  }, [justAdded]);
 
   const visible = useMemo(
     () => (filter === "Todos" ? projects : projects.filter((p) => p.type === filter)),
@@ -58,6 +69,13 @@ export function Portfolio() {
     });
     return c;
   }, []);
+
+  const handleAdd = (e: React.MouseEvent, p: (typeof projects)[number]) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem({ slug: p.slug, title: p.title, image: p.image });
+    setJustAdded(p.slug);
+  };
 
   return (
     <section id="portafolio" className="bg-white py-24">
@@ -105,39 +123,83 @@ export function Portfolio() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((p) => (
-              <Link
-                key={p.slug}
-                to="/portafolio/$slug"
-                params={{ slug: p.slug }}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.06] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.15)]"
-              >
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
-                  {p.image ? (
-                    <SkeletonImage
-                      src={p.image}
-                      alt={p.title}
-                      aspect="aspect-[4/5]"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div aria-hidden className="absolute inset-0 skeleton-shimmer" />
-                  )}
-                  {p.watermark ? (
-                    <div className="absolute left-3 top-3 z-20 rounded-lg bg-white/85 px-2 py-1 shadow-md backdrop-blur-sm">
-                      <img src={p.watermark} alt="Idealo" className="h-5 w-auto sm:h-6" />
+            {visible.map((p) => {
+              const added = hasItem(p.slug);
+              const showJustAdded = justAdded === p.slug;
+              return (
+                <div
+                  key={p.slug}
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.06] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.15)]"
+                >
+                  <Link
+                    to="/portafolio/$slug"
+                    params={{ slug: p.slug }}
+                    className="flex flex-1 flex-col"
+                  >
+                    <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
+                      {p.image ? (
+                        <SkeletonImage
+                          src={p.image}
+                          alt={p.title}
+                          aspect="aspect-[4/5]"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div aria-hidden className="absolute inset-0 skeleton-shimmer" />
+                      )}
+                      {p.watermark ? (
+                        <div className="absolute left-3 top-3 z-20 rounded-lg bg-white/85 px-2 py-1 shadow-md backdrop-blur-sm">
+                          <img src={p.watermark} alt="Idealo" className="h-5 w-auto sm:h-6" />
+                        </div>
+                      ) : null}
                     </div>
-                  ) : null}
-                </div>
-                <div className="flex flex-1 flex-col gap-2 p-6">
-                  <div className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>
-                    {p.tag}
+                    <div className="flex flex-1 flex-col gap-2 p-6">
+                      <div className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--brand-magenta)" }}>
+                        {p.tag}
+                      </div>
+                      <h3 className="text-base font-bold leading-tight line-clamp-1">{p.title}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{p.subtitle}</p>
+                    </div>
+                  </Link>
+
+                  <div className="px-6 pb-6">
+                    <button
+                      type="button"
+                      onClick={(e) => handleAdd(e, p)}
+                      disabled={added}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+                      style={
+                        added || showJustAdded
+                          ? {
+                              background: "#22c55e",
+                              borderColor: "#22c55e",
+                              color: "white",
+                            }
+                          : {
+                              background: "white",
+                              borderColor: "rgba(0,0,0,0.1)",
+                              color: "var(--foreground)",
+                            }
+                      }
+                    >
+                      {showJustAdded ? (
+                        <>
+                          <Check className="h-4 w-4" /> ¡Agregado!
+                        </>
+                      ) : added ? (
+                        <>
+                          <Check className="h-4 w-4" /> Agregado
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="h-4 w-4" /> Agregar a cotización
+                        </>
+                      )}
+                    </button>
                   </div>
-                  <h3 className="text-base font-bold leading-tight line-clamp-1">{p.title}</h3>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{p.subtitle}</p>
                 </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
 
         )}
