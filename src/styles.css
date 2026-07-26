@@ -348,3 +348,31 @@
 .mascot-anim-float  { animation: mascot-float 4.5s ease-in-out infinite; }
 .mascot-anim-wave   { animation: mascot-wave  2.4s ease-in-out infinite; transform-origin: 50% 90%; }
 .mascot-anim-bounce { animation: mascot-bounce-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* ---- Contacto: viento de colores Idealo fluyendo lento hacia la izquierda ---- */
+@keyframes contacto-wind-flow {
+  0%   { transform: translate3d(0%, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+.contacto-wind {
+  position: absolute;
+  inset: -20% 0;
+  width: 200%;
+  background:
+    radial-gradient(40% 60% at 10% 40%, var(--brand-magenta) 0%, transparent 60%),
+    radial-gradient(35% 55% at 30% 60%, var(--brand-cyan) 0%, transparent 65%),
+    radial-gradient(45% 65% at 55% 35%, var(--brand-magenta) 0%, transparent 60%),
+    radial-gradient(40% 60% at 80% 55%, var(--brand-cyan-deep) 0%, transparent 65%),
+    radial-gradient(35% 55% at 95% 40%, var(--brand-magenta) 0%, transparent 60%);
+  filter: blur(40px);
+  animation: contacto-wind-flow 28s linear infinite;
+  will-change: transform;
+}
+.contacto-wind--2 {
+  opacity: 0.7;
+  animation-duration: 42s;
+  animation-delay: -14s;
+  filter: blur(60px);
+  mix-blend-mode: screen;
+}
+
