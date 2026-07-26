@@ -10,6 +10,7 @@ export function Navbar() {
     { href: "/empresas", label: "Empresas" },
     { href: "/eventos", label: "Eventos" },
     { href: "/portafolio", label: "Portafolio" },
+    { href: "/clientes", label: "Clientes" },
     { href: "/contacto", label: "Contáctanos" },
   ];
   return (
