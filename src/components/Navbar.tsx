@@ -10,6 +10,7 @@ export function Navbar() {
     { href: "/empresas", label: "Empresas" },
     { href: "/eventos", label: "Eventos" },
     { href: "/portafolio", label: "Portafolio" },
+    { href: "/contacto", label: "Contáctanos" },
   ];
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
