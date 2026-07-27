@@ -43,8 +43,8 @@ const clientLogos: { imageUrl: string }[] = [
 
 const stats = [
   { value: "50+", label: "clientes activos" },
-  { value: "5+", label: "años de experiencia" },
-  { value: "8", label: "técnicas de impresión" },
+  { value: "4", label: "años de experiencia" },
+  { value: "6", label: "técnicas de impresión" },
 ];
 
 export function ClientsSection() {
