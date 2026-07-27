@@ -1,3 +1,7 @@
+import { Link } from "@tanstack/react-router";
+
+const WA = "50433635666";
+
 const clientLogos: { imageUrl: string }[] = [
   { imageUrl: "/__l5e/assets-v1/26cf497f-a2d1-44dc-a7d2-87a74825f41f/client-logo-01.png" },
   { imageUrl: "/__l5e/assets-v1/7839ef73-2c11-4a21-89cf-4c997f8458b1/client-logo-02.png" },
