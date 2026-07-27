@@ -121,6 +121,9 @@ import tazasHonduras from "@/assets/portfolio-tazas-honduras.jpg.asset.json";
 import calendariosCorporativosPared from "@/assets/portfolio-calendarios-corporativos-pared.jpg.asset.json";
 import tazasSublimadasPartenon from "@/assets/portfolio-tazas-sublimadas-partenon.jpg.asset.json";
 import calendariosCorporativos2026 from "@/assets/portfolio-calendarios-corporativos-2026.jpg.asset.json";
+import stickersEscolares from "@/assets/portfolio-stickers-escolares.png.asset.json";
+import stickersEscolares2 from "@/assets/portfolio-stickers-escolares-2.png.asset.json";
+import stickersEscolares3 from "@/assets/portfolio-stickers-escolares-3.png.asset.json";
 
 export type ProjectType =
   | "Stickers"
