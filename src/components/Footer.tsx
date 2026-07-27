@@ -84,8 +84,9 @@ export function Footer() {
           </a>
         </div>
       </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} Idealo · Producción gráfica profesional · Hecho en Honduras 🇭🇳
+      <div className="border-t border-white/10 py-5 text-center text-xs text-slate-400 space-y-1">
+        <p>© {new Date().getFullYear()} Idealo · Producción gráfica profesional · Hecho en Honduras 🇭🇳</p>
+        <p>No incluye costo por personalización, estos costos se calculan dentro del carrito de compra.</p>
       </div>
     </footer>
   );
