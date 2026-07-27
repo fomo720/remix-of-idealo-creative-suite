@@ -3954,11 +3954,8 @@ function LaserProductCard({
       <div className="flex flex-1 flex-col gap-1.5 p-4">
         <h4 className="text-sm font-bold leading-tight">{product.name}</h4>
         <p className="text-xs text-muted-foreground">{product.desc}</p>
-        <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
+        <div className="mt-2 border-t border-border pt-2">
           <span className="text-[11px] text-muted-foreground">{product.hint}</span>
-          <span className="text-[11px] font-semibold" style={{ color: "var(--brand-orange)" }}>
-            desde {currency(product.price)}
-          </span>
         </div>
       </div>
     </button>
