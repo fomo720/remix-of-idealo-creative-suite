@@ -121,6 +121,54 @@ export function ClientsSection() {
           ))}
         </div>
       </div>
+
+      {/* CTA */}
+      <div className="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div
+          className="relative overflow-hidden rounded-3xl px-6 py-12 text-center text-white sm:px-12 sm:py-16"
+          style={{
+            background:
+              "linear-gradient(135deg, var(--brand-magenta) 0%, var(--brand-orange) 50%, var(--brand-cyan) 100%)",
+          }}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.7) 1px, transparent 0)",
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div className="relative">
+            <h3 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
+              ¿Listo para unirte a nosotros?
+            </h3>
+            <p className="mx-auto mt-3 max-w-xl text-base text-white/90 sm:text-lg">
+              Cotiza sin compromiso y descubre cómo podemos llevar tu marca al siguiente nivel.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                to="/portafolio"
+                className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3 text-sm font-semibold text-[var(--brand-magenta)] shadow-lg transition hover:bg-white/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white/50"
+              >
+                Ver Portafolio completo
+              </Link>
+              <a
+                href={`https://wa.me/${WA}?text=${encodeURIComponent("Hola Idealo 👋 Quiero cotizar sin compromiso. ¿Me puedes ayudar?")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white px-7 py-3 text-sm font-semibold text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/50"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-9.405h-.004c-3.94 0-7.14 3.2-7.14 7.14 0 1.541.49 3.026 1.39 4.262l.24.32-.637 2.327 2.386-.626.233.137c1.118.655 2.39 1.003 3.689 1.003h.004c3.939 0 7.139-3.2 7.139-7.14 0-3.938-3.2-7.138-7.14-7.138m7.14 7.14c0 3.939-3.2 7.14-7.14 7.14h-.004c-1.232 0-2.43-.314-3.49-.905l-3.063.803.815-2.975c-.68-1.165-1.057-2.506-1.057-3.901 0-3.939 3.2-7.14 7.14-7.14 3.94 0 7.14 3.201 7.14 7.14z" />
+                </svg>
+                WhatsApp directo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
