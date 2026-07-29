@@ -493,7 +493,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
               className="absolute overflow-hidden"
               style={{ left: `${zone.x}%`, top: `${zone.y}%`, width: `${zone.w}%`, height: `${zone.h}%` }}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-[2px] border-2 border-dashed" style={{ borderColor: "rgba(60,60,60,0.55)" }} />
+              <div data-composite-skip="true" className="pointer-events-none absolute inset-0 rounded-[2px] border-2 border-dashed" style={{ borderColor: "rgba(60,60,60,0.55)" }} />
               {viewLayers.map((l) => renderLayerIn(l, { interactive: true }))}
             </div>
           </div>
