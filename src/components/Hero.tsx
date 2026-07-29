@@ -1,5 +1,5 @@
 import { ArrowRight, Sparkles, MessageCircle, Star } from "lucide-react";
-import hondurasFlag from "@/assets/honduras-flag.png.asset.json";
+
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
 import tazas from "@/assets/portfolio-tazas-sublimadas.png.asset.json";
 import banner from "@/assets/portfolio-banner.jpg.asset.json";
@@ -63,18 +63,6 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <img src={hondurasFlag.url} alt="Bandera de Honduras" className="h-5 w-auto shrink-0" />
-              +200 marcas hondureñas
-            </div>
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-3.5 w-3.5 fill-current" style={{ color: "var(--brand-magenta)" }} />
-              ))}
-              <span className="ml-1">5.0 · Reseñas reales</span>
-            </div>
-          </div>
         </div>
 
         {/* RIGHT — collage */}
