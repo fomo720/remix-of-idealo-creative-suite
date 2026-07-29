@@ -547,38 +547,72 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
         </div>
       </div>
 
-      {/* RIGHT: mockups */}
+      {/* RIGHT: real 3D viewer (front/back) or sleeve notice */}
       <div className="space-y-2">
-        <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Mockups fotorrealistas</div>
-        {mockups.map((m) => (
-          <div key={m.id} className="group relative overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
-            {renderMockup(m)}
+        <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span>Vista 3D real</span>
+          {(view === "front" || view === "back") && (
             <button
               type="button"
-              onClick={() => setZoomed(m)}
-              className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur transition hover:bg-black/90"
-              aria-label={`Ampliar ${m.label}`}
+              onClick={() => setZoomed({ id: "3d", label: `Vista 3D · ${currentView.label}`, src: "", overlays: [] })}
+              className="flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold text-muted-foreground hover:bg-muted"
+              aria-label="Ampliar 3D"
             >
               <ZoomIn className="h-3 w-3" /> Zoom
             </button>
-            <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground">{m.label}</div>
+          )}
+        </div>
+
+        {view === "front" || view === "back" ? (
+          <div className="overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
+            <Suspense
+              fallback={
+                <div className="flex h-[420px] items-center justify-center text-xs text-muted-foreground">
+                  Cargando vista 3D…
+                </div>
+              }
+            >
+              <TextilesShirt3D
+                color={shirtColor}
+                sleeve="corta"
+                side={view === "back" ? "back" : "front"}
+                imageUrl={composite[view] ?? null}
+              />
+            </Suspense>
+            <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground">
+              {currentView.label} · gira, acerca y aleja la prenda
+            </div>
           </div>
-        ))}
+        ) : (
+          <div className="flex h-[220px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-4 text-center">
+            <div className="text-xs font-semibold text-foreground">Vista 3D disponible para frente y espalda</div>
+            <p className="text-[11px] leading-snug text-muted-foreground">
+              El diseño de manga se confirma sobre la vista técnica de la izquierda.
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Zoom modal */}
+      {/* Zoom modal (3D viewer at large size) */}
       <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
         <DialogContent className="max-w-3xl p-2 sm:p-4">
-          {zoomed && (
+          {zoomed && (view === "front" || view === "back") && (
             <div className="space-y-2">
               <div className="flex items-center justify-between px-1">
                 <div className="text-sm font-semibold">{zoomed.label}</div>
                 <button onClick={() => setZoomed(null)} className="rounded-full p-1 text-muted-foreground hover:bg-muted"><X className="h-4 w-4" /></button>
               </div>
               <div className="overflow-hidden rounded-xl bg-white">
-                {renderMockup(zoomed, { large: true })}
+                <Suspense fallback={<div className="flex h-[520px] items-center justify-center text-xs text-muted-foreground">Cargando vista 3D…</div>}>
+                  <TextilesShirt3D
+                    color={shirtColor}
+                    sleeve="corta"
+                    side={view === "back" ? "back" : "front"}
+                    imageUrl={composite[view] ?? null}
+                  />
+                </Suspense>
               </div>
-              <p className="text-center text-[11px] text-muted-foreground">Vista previa fotorrealista · el diseño se adapta al color y forma de la prenda.</p>
+              <p className="text-center text-[11px] text-muted-foreground">Modelo 3D real · el diseño se aplica sobre las UVs de la prenda.</p>
             </div>
           )}
         </DialogContent>
