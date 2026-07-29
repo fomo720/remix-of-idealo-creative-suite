@@ -111,6 +111,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   const stageRef = useRef<HTMLDivElement | null>(null);
   const printRef = useRef<HTMLDivElement | null>(null);
   const [busy, setBusy] = useState(false);
+  const [composite, setComposite] = useState<{ front: string | null; back: string | null }>({ front: null, back: null });
 
   const currentView = VIEWS.find((v) => v.id === view)!;
   const zone = PRINT_ZONE[view];
