@@ -7,7 +7,25 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import ErrorBoundary from "@/components/ErrorBoundary";
 const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
+
+function Viewer3DFallback({ reset }: { reset: () => void }) {
+  return (
+    <div className="flex h-[420px] flex-col items-center justify-center gap-3 p-4 text-center">
+      <div className="text-sm font-semibold text-foreground">
+        No se pudo cargar la vista 3D. Recargá la página o avisanos.
+      </div>
+      <button
+        type="button"
+        onClick={reset}
+        className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
+      >
+        Reintentar
+      </button>
+    </div>
+  );
+}
 import viewFrontLine from "@/assets/view-11-line.png.asset.json";
 import viewFrontFill from "@/assets/view-11-fill.png.asset.json";
 import viewBackLine from "@/assets/view-12-line.png.asset.json";
@@ -565,20 +583,22 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
 
         {view === "front" || view === "back" ? (
           <div className="overflow-hidden rounded-xl border border-border bg-white shadow-card-soft">
-            <Suspense
-              fallback={
-                <div className="flex h-[420px] items-center justify-center text-xs text-muted-foreground">
-                  Cargando vista 3D…
-                </div>
-              }
-            >
-              <TextilesShirt3D
-                color={shirtColor}
-                sleeve="corta"
-                side={view === "back" ? "back" : "front"}
-                imageUrl={composite[view] ?? null}
-              />
-            </Suspense>
+            <ErrorBoundary fallback={(reset) => <Viewer3DFallback reset={reset} />}>
+              <Suspense
+                fallback={
+                  <div className="flex h-[420px] items-center justify-center text-xs text-muted-foreground">
+                    Cargando vista 3D…
+                  </div>
+                }
+              >
+                <TextilesShirt3D
+                  color={shirtColor}
+                  sleeve="corta"
+                  side={view === "back" ? "back" : "front"}
+                  imageUrl={composite[view] ?? null}
+                />
+              </Suspense>
+            </ErrorBoundary>
             <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground">
               {currentView.label} · gira, acerca y aleja la prenda
             </div>
@@ -603,14 +623,16 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
                 <button onClick={() => setZoomed(null)} className="rounded-full p-1 text-muted-foreground hover:bg-muted"><X className="h-4 w-4" /></button>
               </div>
               <div className="overflow-hidden rounded-xl bg-white">
-                <Suspense fallback={<div className="flex h-[520px] items-center justify-center text-xs text-muted-foreground">Cargando vista 3D…</div>}>
-                  <TextilesShirt3D
-                    color={shirtColor}
-                    sleeve="corta"
-                    side={view === "back" ? "back" : "front"}
-                    imageUrl={composite[view] ?? null}
-                  />
-                </Suspense>
+                <ErrorBoundary fallback={(reset) => <Viewer3DFallback reset={reset} />}>
+                  <Suspense fallback={<div className="flex h-[520px] items-center justify-center text-xs text-muted-foreground">Cargando vista 3D…</div>}>
+                    <TextilesShirt3D
+                      color={shirtColor}
+                      sleeve="corta"
+                      side={view === "back" ? "back" : "front"}
+                      imageUrl={composite[view] ?? null}
+                    />
+                  </Suspense>
+                </ErrorBoundary>
               </div>
               <p className="text-center text-[11px] text-muted-foreground">Modelo 3D real · el diseño se aplica sobre las UVs de la prenda.</p>
             </div>
