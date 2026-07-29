@@ -201,6 +201,36 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     };
   }, []);
 
+  // Regenerate the composite image for the current view (front/back only) so
+  // the real 3D shirt can wear it as a UV-mapped texture. Debounced to avoid
+  // hammering html-to-image while the user is dragging.
+  useEffect(() => {
+    if (view !== "front" && view !== "back") return;
+    const activeView = view;
+    const node = printRef.current;
+    if (!node) return;
+    const hasLayers = layers.some((l) => l.view === activeView);
+    if (!hasLayers) {
+      setComposite((c) => (c[activeView] === null ? c : { ...c, [activeView]: null }));
+      return;
+    }
+    const t = setTimeout(async () => {
+      try {
+        const url = await toPng(node, {
+          pixelRatio: 2,
+          cacheBust: true,
+          backgroundColor: undefined,
+          filter: (n) =>
+            !(n instanceof HTMLElement && n.dataset.compositeSkip === "true"),
+        });
+        setComposite((c) => ({ ...c, [activeView]: url }));
+      } catch {
+        /* ignore */
+      }
+    }, 300);
+    return () => clearTimeout(t);
+  }, [layers, view]);
+
   const startMove = (e: React.PointerEvent, l: Layer) => {
     e.stopPropagation();
     setSelectedId(l.id);
