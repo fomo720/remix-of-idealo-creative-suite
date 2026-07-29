@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { toBlob } from "html-to-image";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { toBlob, toPng } from "html-to-image";
 import { cn } from "@/lib/utils";
 import {
   Upload, Type, Trash2, Image as ImageIcon, Download,
@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
 import viewFrontLine from "@/assets/view-11-line.png.asset.json";
 import viewFrontFill from "@/assets/view-11-fill.png.asset.json";
 import viewBackLine from "@/assets/view-12-line.png.asset.json";
