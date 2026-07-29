@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, MessageCircle, Star } from "lucide-react";
+import { ArrowRight, Sparkles, MessageCircle } from "lucide-react";
 
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
 import tazas from "@/assets/portfolio-tazas-sublimadas.png.asset.json";
