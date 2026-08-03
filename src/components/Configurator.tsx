@@ -5127,6 +5127,7 @@ function TextilesSizeQtyStep({
 
 type TxCanvasBg = "checker" | "white" | "gray";
 
+
 function TextilesDesignStep({
   fabricData, sleeve, technique, onTechniqueChange, colorLock,
   color, onColorChange, size, onSizeChange, qty, onQtyChange,
@@ -5150,247 +5151,352 @@ function TextilesDesignStep({
 }) {
   const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
+  const [view, setView] = useState<TxStageView>("front");
+  const [backMode, setBackMode] = useState<"blank" | "design">("blank");
+  const [layer, setLayer] = useState<StageLayer>({ x: 22, y: 20, w: 56, h: 42 });
+  const [sizeQty, setSizeQty] = useState<Record<TxSize, number>>(
+    () => Object.fromEntries(TX_SIZES.map((s) => [s, 0])) as Record<TxSize, number>,
+  );
+
+  const totalQty = TX_SIZES.reduce((a, s) => a + (sizeQty[s] || 0), 0);
+  const zoneView: ViewId = view === "back" ? "back" : "front";
+  const stagePhoto = TX_STAGE_VIEWS.find((v) => v.id === view) ?? TX_STAGE_VIEWS[0];
+  const showDesignOnStage = view === "front" || (view === "back" && backMode === "design");
+
+  // Mantiene el estado del padre en sync con la tabla de tallas.
+  useEffect(() => {
+    if (totalQty <= 0) return;
+    onQtyChange(totalQty);
+    const first = TX_SIZES.find((s) => (sizeQty[s] || 0) > 0);
+    if (first && first !== size) onSizeChange(first);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalQty, sizeQty]);
 
   useEffect(() => {
     if (!uploaded) { setDims(null); return; }
     const img = new Image();
-    img.onload = () => setDims({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onload = () => {
+      setDims({ w: img.naturalWidth, h: img.naturalHeight });
+      // Ajusta la capa inicial al aspecto real de la imagen, dentro de la zona.
+      const zone = ZONE_CM[zoneView];
+      const ar = img.naturalWidth / img.naturalHeight;
+      const zoneAr = zone.w / zone.h;
+      let w = 60, h = 60;
+      if (ar > zoneAr) { w = 60; h = (60 * zoneAr) / ar; } else { h = 60; w = (60 * ar) / zoneAr; }
+      setLayer({ x: (100 - w) / 2, y: (100 - h) / 2, w, h });
+    };
     img.src = uploaded;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploaded]);
+
+  const setQtyFor = (s: TxSize, n: number) =>
+    setSizeQty((prev) => ({ ...prev, [s]: Math.max(0, Math.min(9999, n || 0)) }));
+
+  const sizeBreakdown = TX_SIZES.filter((s) => (sizeQty[s] || 0) > 0)
+    .map((s) => `${s} x${sizeQty[s]}`)
+    .join(", ");
 
   const buildMessage = (mode: "propio" | "disenanmelo") => {
     const lines = [
       mode === "propio"
         ? "Hola! Quiero cotizar una prenda personalizada:"
-        : "Hola! Quiero que ustedes me diseñen una prenda personalizada:",
+        : "Hola! Quiero que ustedes me diseñen una prenda personalizada (diseño incluido):",
       `- Prenda: ${fabricData?.name ?? "-"}`,
       `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
       `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
       `- Color: ${color}`,
-      size ? `- Talla: ${size}` : "",
-      `- Cantidad: ${qty}`,
+      `- Parte trasera: ${backMode === "blank" ? "En blanco" : "Con diseño"}`,
+      sizeBreakdown ? `- Tallas: ${sizeBreakdown}` : (size ? `- Talla: ${size}` : ""),
+      `- Cantidad total: ${totalQty || qty}`,
+      uploaded ? `- Tamaño del diseño (frente): ≈ ${measureLabel(zoneView, layer.w, layer.h)}` : "",
       notes ? `- Notas: ${notes}` : "",
       "",
       mode === "propio"
         ? (uploaded ? "Adjunto mi diseño / logo en el chat." : "Todavía no subí el diseño, se los envío por aquí.")
-        : "No tengo diseño listo — quisiera que ustedes se encarguen (entiendo que tiene un costo adicional).",
+        : "No tengo diseño listo — quisiera que ustedes se encarguen (entiendo que el diseño tiene un costo adicional).",
     ].filter(Boolean).join("\n");
     return { href: `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`, text: lines };
   };
 
+  const canSubmit = totalQty > 0 || !!size;
+
   return (
     <div className="animate-step-in space-y-6">
-      <SectionTitle icon={<PencilRuler className="h-5 w-5" />} title="Contanos tu idea y cotizá" />
+      <SectionTitle icon={<PencilRuler className="h-5 w-5" />} title="Armá tu prenda y cotizá" />
 
-      {/* Galería de fotos reales */}
-      <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-6">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div>
-            <Label className="text-sm font-semibold">Así se ve la prenda</Label>
-            <p className="mt-0.5 text-xs text-muted-foreground">Fotos reales de nuestro taller. Elegí el color abajo.</p>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+        {/* ============ IZQUIERDA: mockup + miniaturas ============ */}
+        <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-5">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <Label className="text-sm font-semibold">Vista previa de la prenda</Label>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Fotos reales del taller · área imprimible en talla M
+              </p>
+            </div>
+            <span className="hidden rounded-full bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground sm:inline">
+              {fabricData?.name} · {sleeve === "corta" ? "Manga corta" : "Manga larga"}
+            </span>
           </div>
-          <span className="hidden rounded-full bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground sm:inline">
-            {fabricData?.name} · {sleeve === "corta" ? "Manga corta" : "Manga larga"}
-          </span>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {TX_GALLERY.map((g) => (
-            <figure key={g.src} className="overflow-hidden rounded-2xl border border-border bg-neutral-50">
-              <div className="relative aspect-[4/5] w-full">
-                <SmartImage src={g.src} alt={`Prenda personalizada Idealo — ${g.label}`} fit="cover" loading="lazy" />
-              </div>
-              <figcaption className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                {g.label}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
 
-      {/* Técnica + color */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl border border-border bg-background p-4">
-          <Label className="mb-2 block text-sm font-semibold">Técnica de estampado</Label>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {availableTechniques.map((t) => (
+          <TextilesMockupStage
+            photoSrc={stagePhoto.src}
+            photoAlt={`Prenda personalizada Idealo — ${stagePhoto.label}`}
+            view={zoneView}
+            design={showDesignOnStage ? uploaded : null}
+            layer={layer}
+            onLayerChange={setLayer}
+          />
+
+          {/* Miniaturas */}
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {TX_STAGE_VIEWS.map((v) => (
               <button
-                key={t}
-                onClick={() => onTechniqueChange(t)}
+                key={v.id}
+                onClick={() => setView(v.id)}
                 className={cn(
-                  "rounded-xl border-2 px-3 py-3 text-left text-sm font-semibold transition",
-                  technique === t ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                  "overflow-hidden rounded-xl border-2 bg-neutral-50 text-left transition",
+                  view === v.id ? "border-[color:var(--brand-magenta)]" : "border-border hover:border-foreground/20",
                 )}
               >
-                {t === "sublimacion" ? "Sublimación" : "Estampado DTF"}
-                <span className="mt-0.5 block text-[11px] font-normal text-muted-foreground">
-                  {t === "sublimacion" ? "Solo prendas blancas · tacto cero" : "Cualquier color de prenda"}
+                <div className="relative aspect-[4/5] w-full">
+                  <SmartImage src={v.src} alt={`Vista ${v.label}`} fit="cover" loading="lazy" />
+                </div>
+                <span className="block px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  {v.label}
                 </span>
               </button>
             ))}
           </div>
+
+          {/* Leyenda */}
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--brand-cyan)" }} />
+              Área segura — todo lo importante va aquí
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+              Sangrado — puede recortarse en producción
+            </span>
+          </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-background p-4">
-          <Label className="mb-2 block text-sm font-semibold">Color de la prenda</Label>
-          <div className="flex flex-wrap gap-2">
-            {TX_COLORS.map((c) => {
-              const locked = colorLock ? c.name !== colorLock : false;
-              const active = color === c.name;
-              return (
+        {/* ============ DERECHA: panel de opciones ============ */}
+        <div className="space-y-4">
+          {/* 1. Color */}
+          <div className="rounded-2xl border border-border bg-background p-4">
+            <Label className="mb-2 block text-sm font-semibold">1. Color de la camisa</Label>
+            <div className="flex flex-wrap gap-2">
+              {TX_COLORS.map((c) => {
+                const locked = colorLock ? c.name !== colorLock : false;
+                const active = color === c.name;
+                return (
+                  <button
+                    key={c.name}
+                    disabled={locked}
+                    onClick={() => onColorChange(c.name)}
+                    title={locked ? `La sublimación solo aplica en ${colorLock}` : c.name}
+                    className={cn(
+                      "grid h-10 w-10 place-items-center rounded-full transition",
+                      locked && "cursor-not-allowed opacity-30",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-8 w-8 rounded-full border-2 transition",
+                        active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border hover:scale-110",
+                        c.border && "border-neutral-300",
+                      )}
+                      style={{ backgroundColor: c.hex }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              Seleccionado: <span className="font-semibold text-foreground">{color}</span>
+            </p>
+
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {availableTechniques.map((t) => (
                 <button
-                  key={c.name}
-                  disabled={locked}
-                  onClick={() => onColorChange(c.name)}
-                  title={locked ? `La sublimación solo aplica en ${colorLock}` : c.name}
+                  key={t}
+                  onClick={() => onTechniqueChange(t)}
                   className={cn(
-                    "grid h-10 w-10 place-items-center rounded-full transition",
-                    locked && "cursor-not-allowed opacity-30",
+                    "rounded-xl border-2 px-3 py-2.5 text-left text-sm font-semibold transition",
+                    technique === t ? "rainbow-border-active" : "border-border hover:border-foreground/20",
                   )}
                 >
-                  <span
-                    className={cn(
-                      "h-8 w-8 rounded-full border-2 transition",
-                      active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border hover:scale-110",
-                      c.border && "border-neutral-300",
-                    )}
-                    style={{ backgroundColor: c.hex }}
-                  />
+                  {t === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+                  <span className="mt-0.5 block text-[11px] font-normal text-muted-foreground">
+                    {t === "sublimacion" ? "Solo prendas blancas" : "Cualquier color"}
+                  </span>
                 </button>
-              );
-            })}
-          </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">Seleccionado: <span className="font-semibold text-foreground">{color}</span></p>
-        </div>
-      </div>
-
-      {/* Subir diseño */}
-      <div className="rounded-2xl border border-border bg-background p-4">
-        <Label className="mb-2 block text-sm font-semibold">Tu diseño o logo</Label>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => onUpload(e.target.files?.[0] ?? null)}
-        />
-        <button
-          onClick={() => fileRef.current?.click()}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-card px-4 py-8 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
-        >
-          <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
-          {uploaded ? "Cambiar mi diseño / logo" : "Subir mi diseño / logo"}
-        </button>
-
-        {uploaded && (
-          <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
-            <img src={uploaded} alt="Diseño subido" className="h-16 w-16 rounded-xl object-contain" />
-            <div className="min-w-0 flex-1 text-xs text-muted-foreground">
-              Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""}. Lo revisamos y te confirmamos si necesita ajustes.
+              ))}
             </div>
+          </div>
+
+          {/* 2. Parte trasera */}
+          <div className="rounded-2xl border border-border bg-background p-4">
+            <Label className="mb-2 block text-sm font-semibold">2. Parte trasera</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {([
+                { id: "blank", title: "En blanco", desc: "Sin impresión atrás" },
+                { id: "design", title: "Con diseño", desc: "Impresión también atrás" },
+              ] as const).map((o) => (
+                <button
+                  key={o.id}
+                  onClick={() => { setBackMode(o.id); if (o.id === "design") setView("back"); }}
+                  className={cn(
+                    "rounded-xl border-2 px-3 py-3 text-left transition",
+                    backMode === o.id ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                  )}
+                >
+                  <span className="block text-sm font-semibold">{o.title}</span>
+                  <span className="mt-0.5 block text-[11px] text-muted-foreground">{o.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 3. Tallas y cantidad */}
+          <div className="rounded-2xl border border-border bg-background p-4">
+            <Label className="mb-2 block text-sm font-semibold">3. Tallas y cantidad</Label>
+            <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+              {TX_SIZES.map((s) => (
+                <div key={s} className="flex items-center justify-between gap-3 bg-card px-3 py-2">
+                  <span className="text-sm font-bold">{s}</span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setQtyFor(s, (sizeQty[s] || 0) - 1)}
+                      className="grid h-8 w-8 place-items-center rounded-lg border border-border text-sm font-bold transition hover:bg-muted"
+                      aria-label={`Quitar una talla ${s}`}
+                    >
+                      −
+                    </button>
+                    <Input
+                      type="number"
+                      min={0}
+                      value={sizeQty[s] || 0}
+                      onChange={(e) => setQtyFor(s, +e.target.value)}
+                      className="h-8 w-16 text-center"
+                      aria-label={`Cantidad talla ${s}`}
+                    />
+                    <button
+                      onClick={() => setQtyFor(s, (sizeQty[s] || 0) + 1)}
+                      className="grid h-8 w-8 place-items-center rounded-lg border border-border text-sm font-bold transition hover:bg-muted"
+                      aria-label={`Agregar una talla ${s}`}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Total: <span className="font-semibold text-foreground">{totalQty} prenda{totalQty === 1 ? "" : "s"}</span>
+              {" · "}Mínimo {TX_MIN_QTY}.
+            </p>
+          </div>
+
+          {/* 4. Acciones */}
+          <div className="rounded-2xl border border-border bg-background p-4">
+            <Label className="mb-2 block text-sm font-semibold">4. Tu diseño</Label>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => onUpload(e.target.files?.[0] ?? null)}
+            />
+            <div className="grid gap-2">
+              <Link
+                to="/portafolio"
+                target="_blank"
+                className="flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-4 py-3 text-sm font-semibold transition hover:border-foreground/20"
+              >
+                <Eye className="h-4 w-4" style={{ color: "var(--brand-cyan-deep)" }} />
+                Ver plantillas y ejemplos
+              </Link>
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card px-4 py-3 text-sm font-semibold transition hover:border-transparent hover:shadow-elegant"
+              >
+                <Upload className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />
+                {uploaded ? "Cambiar tu diseño" : "Subir tu diseño"}
+              </button>
+              <button
+                onClick={() => onSubmitted(buildMessage("disenanmelo"))}
+                className="flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-4 py-3 text-sm font-semibold transition hover:border-foreground/20"
+              >
+                <Palette className="h-4 w-4" style={{ color: "var(--brand-magenta)" }} />
+                Que lo diseñemos nosotros
+              </button>
+            </div>
+
+            {uploaded && (
+              <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
+                <img src={uploaded} alt="Diseño subido" className="h-14 w-14 rounded-xl object-contain" />
+                <div className="min-w-0 flex-1 text-xs text-muted-foreground">
+                  Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""} · ≈ {measureLabel(zoneView, layer.w, layer.h)}
+                </div>
+                <button
+                  onClick={() => onUpload(null)}
+                  className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                  aria-label="Quitar diseño"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+
+            {uploaded && dims && (
+              <div className="mt-3">
+                <ResolutionWarning
+                  naturalW={dims.w}
+                  naturalH={dims.h}
+                  width={roundHalf((layer.w / 100) * ZONE_CM[zoneView].w)}
+                  height={roundHalf((layer.h / 100) * ZONE_CM[zoneView].h)}
+                  unit="cm"
+                />
+              </div>
+            )}
+
+            <div className="mt-3">
+              <Label htmlFor="txnotes" className="mb-1.5 block text-sm font-semibold">Contanos qué querés</Label>
+              <Textarea
+                id="txnotes"
+                rows={4}
+                placeholder="Colores, ubicación del diseño, fecha de entrega, etc."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant">
             <button
-              onClick={() => onUpload(null)}
-              className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
-              aria-label="Quitar diseño"
+              onClick={() => onSubmitted(buildMessage("propio"))}
+              disabled={!canSubmit}
+              className={cn(
+                "flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-lg font-semibold text-white shadow-md transition",
+                canSubmit ? "hover:brightness-95" : "cursor-not-allowed opacity-50",
+              )}
+              style={{ background: "#25D366" }}
             >
-              <Trash2 className="h-4 w-4" />
+              <MessageCircle className="h-6 w-6" />
+              {canSubmit ? "Enviar solicitud por WhatsApp" : "Elegí tallas y cantidad"}
             </button>
-          </div>
-        )}
-
-        {uploaded && dims && (
-          <div className="mt-3">
-            <ResolutionWarning naturalW={dims.w} naturalH={dims.h} width={25} height={30} unit="cm" />
-          </div>
-        )}
-
-        <p className="mt-2 text-[11px] text-muted-foreground">
-          ¿No tenés diseño? No hay problema — usá el botón de abajo y nosotros lo creamos por vos.
-        </p>
-      </div>
-
-      {/* Talla + cantidad + notas */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl border border-border bg-background p-4">
-          <Label className="mb-2 block text-sm font-semibold">Talla</Label>
-          <div className="grid grid-cols-5 gap-2">
-            {TX_SIZES.map((s) => (
-              <button
-                key={s}
-                onClick={() => onSizeChange(s)}
-                className={cn(
-                  "rounded-xl border-2 py-2.5 text-center text-sm font-bold transition",
-                  size === s ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                )}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-
-          <Label htmlFor="txqty" className="mb-2 mt-4 block text-sm font-semibold">Cantidad</Label>
-          <Input
-            id="txqty"
-            type="number"
-            min={TX_MIN_QTY}
-            value={qty}
-            onChange={(e) => onQtyChange(Math.max(TX_MIN_QTY, +e.target.value || TX_MIN_QTY))}
-          />
-          <div className="mt-2 grid grid-cols-4 gap-2">
-            {TX_QTY_PRESETS.map((n) => (
-              <button
-                key={n}
-                onClick={() => onQtyChange(n)}
-                className={cn(
-                  "rounded-xl border-2 py-2 text-center text-sm font-bold transition",
-                  qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                )}
-              >
-                {n}
-              </button>
-            ))}
+            <p className="mt-3 text-center text-[11px] text-muted-foreground">
+              Te respondemos con precio y tiempo de entrega el mismo día.
+            </p>
           </div>
         </div>
-
-        <div className="rounded-2xl border border-border bg-background p-4">
-          <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Contanos qué querés</Label>
-          <Textarea
-            id="txnotes"
-            rows={8}
-            placeholder="Contanos qué querés: colores, ubicación del diseño, cantidad, etc."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* CTA */}
-      <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-6">
-        <button
-          onClick={() => onSubmitted(buildMessage("propio"))}
-          disabled={!size}
-          className={cn(
-            "flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-lg font-semibold text-white shadow-md transition",
-            size ? "hover:brightness-95" : "cursor-not-allowed opacity-50",
-          )}
-          style={{ background: "#25D366" }}
-        >
-          <MessageCircle className="h-6 w-6" />
-          {size ? "Enviar solicitud por WhatsApp" : "Elegí una talla primero"}
-        </button>
-        <button
-          onClick={() => onSubmitted(buildMessage("disenanmelo"))}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-border bg-background px-6 py-3 text-sm font-semibold transition hover:border-foreground/20"
-        >
-          <Palette className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />
-          Quiero que ustedes me lo diseñen
-        </button>
-        <p className="mt-3 text-center text-[11px] text-muted-foreground">
-          Te respondemos con precio y tiempo de entrega el mismo día.
-        </p>
       </div>
 
       <NavRow onBack={onBack} />
     </div>
   );
 }
-
