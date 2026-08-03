@@ -63,6 +63,45 @@ const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }>
   "sleeve-right":{ x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
 };
 
+// Real-world size of each print zone (cm), measured on a size M garment.
+// Used only to show an approximate reference to the customer.
+const ZONE_CM: Record<ViewId, { w: number; h: number }> = {
+  front:          { w: 30, h: 38 },
+  back:           { w: 32, h: 42 },
+  "sleeve-left":  { w: 9,  h: 30 },
+  "sleeve-right": { w: 9,  h: 30 },
+};
+
+// Predefined placements, expressed in % of the existing print zone
+// (so the clipping / print-zone logic stays untouched).
+type PositionPreset = { id: string; label: string; hint: string; x: number; y: number; w: number; h: number };
+const POSITION_PRESETS: Record<ViewId, PositionPreset[]> = {
+  front: [
+    { id: "left-chest",   label: "Pecho izquierdo", hint: "chico",   x: 6,  y: 8,  w: 30, h: 22 },
+    { id: "center-chest", label: "Centro del pecho", hint: "mediano", x: 22, y: 20, w: 56, h: 42 },
+    { id: "full-front",   label: "Pecho completo",  hint: "grande",  x: 6,  y: 10, w: 88, h: 76 },
+  ],
+  back: [
+    { id: "under-collar", label: "Bajo el cuello",   hint: "chico",   x: 30, y: 2,  w: 40, h: 16 },
+    { id: "upper-back",   label: "Espalda centro-alto", hint: "mediano", x: 20, y: 14, w: 60, h: 44 },
+    { id: "full-back",    label: "Espalda completa", hint: "grande",  x: 5,  y: 8,  w: 90, h: 80 },
+  ],
+  "sleeve-left": [
+    { id: "sleeve-high",   label: "Manga alta",     hint: "chico", x: 15, y: 8,  w: 70, h: 20 },
+    { id: "sleeve-center", label: "Manga centrada", hint: "chico", x: 15, y: 40, w: 70, h: 20 },
+  ],
+  "sleeve-right": [
+    { id: "sleeve-high",   label: "Manga alta",     hint: "chico", x: 15, y: 8,  w: 70, h: 20 },
+    { id: "sleeve-center", label: "Manga centrada", hint: "chico", x: 15, y: 40, w: 70, h: 20 },
+  ],
+};
+
+const roundHalf = (n: number) => Math.round(n * 2) / 2;
+function cmLabelFor(view: ViewId, w: number, h: number) {
+  const z = ZONE_CM[view];
+  return `${roundHalf((w / 100) * z.w)} cm x ${roundHalf((h / 100) * z.h)} cm`;
+}
+
 const VIEWS: { id: ViewId; label: string; line: string; fill: string }[] = [
   { id: "front",         label: "Frente",         line: viewFrontLine.url,   fill: viewFrontFill.url },
   { id: "back",          label: "Espalda",        line: viewBackLine.url,    fill: viewBackFill.url },
