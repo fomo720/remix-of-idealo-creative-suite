@@ -1,7 +1,8 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
-import TextilesEditor2D from "@/components/TextilesEditor2D";
+// NOTE: el editor 2D y el visor 3D (TextilesEditor2D / TextilesShirt3D) siguen en el
+// repositorio pero están desconectados del flujo del cliente (fase futura).
+
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
@@ -29,6 +30,10 @@ import { MessageCircle as WA } from "lucide-react";
 import { AlertTriangle } from "lucide-react";
 import stickerAltaEx from "@/assets/sticker-alta-resolucion.jpg.asset.json";
 import stickerBajaEx from "@/assets/sticker-baja-resolucion.jpg.asset.json";
+import txPhotoFront from "@/assets/tx-white-front.jpg.asset.json";
+import txPhotoBack from "@/assets/tx-white-back.jpg.asset.json";
+import txPhotoFolded from "@/assets/tx-white-folded.jpg.asset.json";
+
 
 
 
@@ -205,6 +210,13 @@ const getSleevesFor = (shirtType: TxShirtType | null, fabric: TxFabric | null): 
   return s.options.find((o) => o.fabric === fabric)?.sleeves ?? [];
 };
 
+
+// Fotos reales de prendas (galería del paso de diseño)
+const TX_GALLERY: { src: string; label: string }[] = [
+  { src: txPhotoFront.url, label: "Frente" },
+  { src: txPhotoBack.url, label: "Espalda" },
+  { src: txPhotoFolded.url, label: "Doblada" },
+];
 
 const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
   { name: "Negro",    hex: "#111111" },
@@ -1132,12 +1144,6 @@ export function Configurator() {
               uploaded={uploaded}
               onUpload={handleFile}
               fileRef={fileRef}
-              scale={scale}
-              setScale={setScale}
-              offsetX={offsetX}
-              setOffsetX={setOffsetX}
-              offsetY={offsetY}
-              setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
               onBack={() => goTo(4)}
@@ -5125,7 +5131,6 @@ function TextilesDesignStep({
   fabricData, sleeve, technique, onTechniqueChange, colorLock,
   color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
-  scale, setScale, offsetX, setOffsetX, offsetY, setOffsetY,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
@@ -5139,240 +5144,113 @@ function TextilesDesignStep({
   uploaded: string | null;
   onUpload: (f: File | null) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
-  scale: number; setScale: (n: number) => void;
-  offsetX: number; setOffsetX: (n: number) => void;
-  offsetY: number; setOffsetY: (n: number) => void;
   notes: string; setNotes: (v: string) => void;
   onBack: () => void;
   onSubmitted: (m: TxWaModal) => void;
 }) {
   const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
-  const colorHex = TX_COLORS.find((c) => c.name === color)?.hex ?? "#ffffff";
-  const isLight = ["Blanco", "Amarillo"].includes(color);
-  const strokeColor = isLight ? "#111827" : "#ffffff";
+  const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
 
-  const [rotation, setRotation] = useState(0);
-  const [canvasBg, setCanvasBg] = useState<TxCanvasBg>("checker");
-  const [busy, setBusy] = useState(false);
-  const [viewMode, setViewMode] = useState<"2d" | "3d" | "both">("both");
-  const [scaleX, setScaleX] = useState(100);
-  const [side, setSide] = useState<"front" | "back">("front");
-
-  const previewRef = useRef<HTMLDivElement | null>(null);
-  const printAreaRef = useRef<HTMLDivElement | null>(null);
-  const dragState = useRef<{ startX: number; startY: number; ox: number; oy: number; rectW: number; rectH: number } | null>(null);
-  type HandleId = "tl" | "tr" | "bl" | "br" | "ml" | "mr";
-  const handleDrag = useRef<
-    | { h: HandleId; sx: number; sy: number; scale: number; scaleX: number; rectW: number; rectH: number }
-    | null
-  >(null);
-  const [selected, setSelected] = useState(false);
-
-  // Auto-select on new upload so handles appear immediately.
   useEffect(() => {
-    if (uploaded) setSelected(true);
-    else setSelected(false);
+    if (!uploaded) { setDims(null); return; }
+    const img = new Image();
+    img.onload = () => setDims({ w: img.naturalWidth, h: img.naturalHeight });
+    img.src = uploaded;
   }, [uploaded]);
 
-  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
-  const rotateLeft = () => setRotation((r) => (r - 90) % 360);
-  const zoomIn = () => setScale(clamp(scale + 10, 30, 200));
-  const zoomOut = () => setScale(clamp(scale - 10, 30, 200));
-  const deleteArt = () => { onUpload(null); setSelected(false); };
-
-  const bgStyle: React.CSSProperties =
-    canvasBg === "white"
-      ? { backgroundColor: "#ffffff" }
-      : canvasBg === "gray"
-      ? { backgroundColor: "#e5e7eb" }
-      : {
-          backgroundColor: "#ffffff",
-          backgroundImage:
-            "linear-gradient(45deg,#e5e7eb 25%,transparent 25%),linear-gradient(-45deg,#e5e7eb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e5e7eb 75%),linear-gradient(-45deg,transparent 75%,#e5e7eb 75%)",
-          backgroundSize: "16px 16px",
-          backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
-        };
-
-  // Pointer drag on the print area (move the design)
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!uploaded || !printAreaRef.current) return;
-    const parent = printAreaRef.current.parentElement as HTMLElement | null;
-    if (!parent) return;
-    const rect = parent.getBoundingClientRect();
-    setSelected(true);
-    dragState.current = {
-      startX: e.clientX, startY: e.clientY,
-      ox: offsetX, oy: offsetY,
-      rectW: rect.width, rectH: rect.height,
-    };
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const h = handleDrag.current;
-    if (h) {
-      const dx = ((e.clientX - h.sx) / h.rectW) * 100;
-      const dy = ((e.clientY - h.sy) / h.rectH) * 100;
-      const signX = h.h.endsWith("l") ? -1 : h.h.endsWith("r") ? 1 : 0;
-      const signY = h.h.startsWith("t") ? -1 : h.h.startsWith("b") ? 1 : 0;
-      if (h.h === "ml" || h.h === "mr") {
-        setScaleX(clamp(h.scaleX + signX * dx * 3, 50, 200));
-      } else {
-        const delta = ((signX * dx) + (signY * dy)) / 2;
-        setScale(clamp(h.scale + delta * 3, 30, 200));
-      }
-      return;
-    }
-    const s = dragState.current;
-    if (!s) return;
-    const dx = ((e.clientX - s.startX) / s.rectW) * 100;
-    const dy = ((e.clientY - s.startY) / s.rectH) * 100;
-    setOffsetX(clamp(s.ox + dx, -45, 45));
-    setOffsetY(clamp(s.oy + dy, -45, 45));
-  };
-  const onPointerUp = () => { dragState.current = null; handleDrag.current = null; };
-
-  const onHandleDown = (h: HandleId) => (e: React.PointerEvent) => {
-    e.stopPropagation();
-    if (!printAreaRef.current) return;
-    const parent = printAreaRef.current.parentElement as HTMLElement | null;
-    if (!parent) return;
-    const rect = parent.getBoundingClientRect();
-    setSelected(true);
-    handleDrag.current = {
-      h, sx: e.clientX, sy: e.clientY,
-      scale, scaleX,
-      rectW: rect.width, rectH: rect.height,
-    };
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-  };
-
-
-  const composeFilename = () =>
-    `idealo-textil-${(fabricData?.id ?? "camisa")}-${color.toLowerCase()}-${size ?? "talla"}-${Date.now()}.png`;
-
-  const onSubmit = async () => {
-    if (!uploaded || !size || busy) return;
-    setBusy(true);
+  const buildMessage = (mode: "propio" | "disenanmelo") => {
     const lines = [
-      "Hola! Quiero cotizar una Camiseta Personalizada:",
-      `- Material: ${fabricData?.name ?? "-"}`,
+      mode === "propio"
+        ? "Hola! Quiero cotizar una prenda personalizada:"
+        : "Hola! Quiero que ustedes me diseñen una prenda personalizada:",
+      `- Prenda: ${fabricData?.name ?? "-"}`,
       `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
       `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
-      `- Color de la camisa: ${color}`,
-      `- Talla: ${size}`,
+      `- Color: ${color}`,
+      size ? `- Talla: ${size}` : "",
       `- Cantidad: ${qty}`,
-      `- Arte: zoom ${scale}%, escala horizontal ${scaleX}%, X ${Math.round(offsetX)}%, Y ${Math.round(offsetY)}%, rotación ${rotation}°, lado ${side === "front" ? "frente" : "atrás"}`,
       notes ? `- Notas: ${notes}` : "",
       "",
-      "Adjunto la vista previa (PNG) en el chat.",
+      mode === "propio"
+        ? (uploaded ? "Adjunto mi diseño / logo en el chat." : "Todavía no subí el diseño, se los envío por aquí.")
+        : "No tengo diseño listo — quisiera que ustedes se encarguen (entiendo que tiene un costo adicional).",
     ].filter(Boolean).join("\n");
-
-    // Try to render PNG of the preview; download it so the user can attach.
-    try {
-      if (previewRef.current) {
-        const blob = await toBlob(previewRef.current, { pixelRatio: 2, cacheBust: true, backgroundColor: canvasBg === "gray" ? "#e5e7eb" : "#ffffff" });
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = composeFilename();
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(() => URL.revokeObjectURL(url), 1500);
-        }
-      }
-    } catch {
-      // silent — WhatsApp still opens
-    }
-
-    const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
-    window.open(href, "_blank", "noopener,noreferrer");
-    onSubmitted({ href, text: lines });
-    setBusy(false);
+    return { href: `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`, text: lines };
   };
 
   return (
     <div className="animate-step-in space-y-6">
-      {/* TOP ROW: technique + color */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* Technique */}
-        <div className="rounded-2xl border border-border bg-gradient-soft p-5">
-          <div className="mb-3 flex items-center gap-2">
-            <div className="grid h-8 w-8 place-items-center rounded-lg bg-background text-[color:var(--brand-pink)]">
-              <Info className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Técnica de impresión</div>
-              <div className="font-bold leading-tight">
-                {technique === "sublimacion" ? "Sublimación" : "Estampado DTF"}
-              </div>
-            </div>
+      <SectionTitle icon={<PencilRuler className="h-5 w-5" />} title="Contanos tu idea y cotizá" />
+
+      {/* Galería de fotos reales */}
+      <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-6">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <Label className="text-sm font-semibold">Así se ve la prenda</Label>
+            <p className="mt-0.5 text-xs text-muted-foreground">Fotos reales de nuestro taller. Elegí el color abajo.</p>
           </div>
-          {availableTechniques.length > 1 ? (
-            <div className="mb-3 grid grid-cols-2 gap-2">
-              {availableTechniques.map((t) => {
-                const active = technique === t;
-                return (
-                  <button
-                    key={t}
-                    onClick={() => onTechniqueChange(t)}
-                    className={cn(
-                      "rounded-xl border-2 px-3 py-2 text-left text-xs transition",
-                      active ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                    )}
-                  >
-                    <div className="text-sm font-bold">
-                      {t === "sublimacion" ? "Sublimación" : "Estampado DTF"}
-                    </div>
-                    <div className="text-[10px] text-muted-foreground">
-                      {t === "sublimacion" ? "Solo tela blanca" : "Cualquier color"}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="mb-3 text-[11px] font-medium text-muted-foreground">
-              Con {fabricData?.name} solo está disponible {technique === "sublimacion" ? "sublimación" : "estampado DTF"}.
-            </div>
-          )}
-          <p className="text-xs leading-snug text-muted-foreground">
-            {technique === "sublimacion"
-              ? "El diseño se integra en las fibras de la tela. Tacto cero y máxima durabilidad — requiere tela blanca."
-              : "Impresión de alta definición y colores vibrantes sobre cualquier color de tela."}
-          </p>
+          <span className="hidden rounded-full bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground sm:inline">
+            {fabricData?.name} · {sleeve === "corta" ? "Manga corta" : "Manga larga"}
+          </span>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {TX_GALLERY.map((g) => (
+            <figure key={g.src} className="overflow-hidden rounded-2xl border border-border bg-neutral-50">
+              <div className="relative aspect-[4/5] w-full">
+                <SmartImage src={g.src} alt={`Prenda personalizada Idealo — ${g.label}`} fit="cover" loading="lazy" />
+              </div>
+              <figcaption className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {g.label}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      {/* Técnica + color */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-background p-4">
+          <Label className="mb-2 block text-sm font-semibold">Técnica de estampado</Label>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {availableTechniques.map((t) => (
+              <button
+                key={t}
+                onClick={() => onTechniqueChange(t)}
+                className={cn(
+                  "rounded-xl border-2 px-3 py-3 text-left text-sm font-semibold transition",
+                  technique === t ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                )}
+              >
+                {t === "sublimacion" ? "Sublimación" : "Estampado DTF"}
+                <span className="mt-0.5 block text-[11px] font-normal text-muted-foreground">
+                  {t === "sublimacion" ? "Solo prendas blancas · tacto cero" : "Cualquier color de prenda"}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Color picker */}
         <div className="rounded-2xl border border-border bg-background p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Color de la camisa</div>
-            {colorLock && (
-              <div className="text-[10px] font-medium text-[color:var(--brand-magenta)]">Bloqueado en {colorLock}</div>
-            )}
-          </div>
-          <div className="grid grid-cols-9 gap-1.5 sm:gap-2">
+          <Label className="mb-2 block text-sm font-semibold">Color de la prenda</Label>
+          <div className="flex flex-wrap gap-2">
             {TX_COLORS.map((c) => {
-              const disabled = colorLock !== null && c.name !== colorLock;
+              const locked = colorLock ? c.name !== colorLock : false;
               const active = color === c.name;
               return (
                 <button
                   key={c.name}
-                  type="button"
-                  disabled={disabled}
+                  disabled={locked}
                   onClick={() => onColorChange(c.name)}
-                  title={c.name}
-                  aria-label={`Color ${c.name}`}
+                  title={locked ? `La sublimación solo aplica en ${colorLock}` : c.name}
                   className={cn(
-                    "flex items-center justify-center transition touch-manipulation",
-                    disabled && "opacity-30 cursor-not-allowed",
+                    "grid h-10 w-10 place-items-center rounded-full transition",
+                    locked && "cursor-not-allowed opacity-30",
                   )}
                 >
                   <span
                     className={cn(
                       "h-8 w-8 rounded-full border-2 transition",
-                      active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border active:scale-95 hover:scale-110",
+                      active ? "ring-2 ring-offset-2 ring-[color:var(--brand-pink)]" : "border-border hover:scale-110",
                       c.border && "border-neutral-300",
                     )}
                     style={{ backgroundColor: c.hex }}
@@ -5381,58 +5259,56 @@ function TextilesDesignStep({
               );
             })}
           </div>
-          <p className="mt-2 text-[10px] text-muted-foreground">Solo se colorea la prenda del editor y los mockups. El fondo permanece limpio.</p>
+          <p className="mt-2 text-[11px] text-muted-foreground">Seleccionado: <span className="font-semibold text-foreground">{color}</span></p>
         </div>
       </div>
 
-      {/* EDITOR 2D (full width) */}
-      <div className="rounded-3xl border border-border bg-gradient-soft p-4 sm:p-6">
-        <div className="mb-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
-          <span>Editor 2D · Mockups fotorrealistas</span>
-          <span className="rounded-full bg-background px-2 py-0.5">{fabricData?.name} · {color}{size ? ` · ${size}` : ""}</span>
-        </div>
-        <TextilesEditor2D
-          shirtColor={colorHex}
-          disabled={!size}
-          ctaLabel={!size ? "Elige una talla primero" : "Cotizar por WhatsApp"}
-          onDesignForMe={() => {
-            const lines = [
-              "Hola! Quiero que ustedes me diseñen una Camiseta Personalizada:",
-              `- Material: ${fabricData?.name ?? "-"}`,
-              `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
-              `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
-              `- Color: ${color}`,
-              size ? `- Talla: ${size}` : "",
-              `- Cantidad: ${qty}`,
-              notes ? `- Notas: ${notes}` : "",
-              "",
-              "No tengo diseño listo — quisiera que ustedes se encarguen del diseño (entiendo que tiene un costo adicional).",
-            ].filter(Boolean).join("\n");
-            const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
-            onSubmitted({ href, text: lines });
-          }}
-          onWhatsApp={({ viewsSummary }) => {
-            if (!size) return;
-            const lines = [
-              "Hola! Quiero cotizar una Camiseta Personalizada:",
-              `- Material: ${fabricData?.name ?? "-"}`,
-              `- Manga: ${sleeve === "corta" ? "Manga Corta" : "Manga Larga"}`,
-              `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
-              `- Color: ${color}`,
-              `- Talla: ${size}`,
-              `- Cantidad: ${qty}`,
-              `- Diseño (vistas): ${viewsSummary}`,
-              notes ? `- Notas: ${notes}` : "",
-              "",
-              "Adjunto la vista previa (PNG) en el chat.",
-            ].filter(Boolean).join("\n");
-            const href = `https://wa.me/50433635666?text=${encodeURIComponent(lines)}`;
-            onSubmitted({ href, text: lines });
-          }}
+      {/* Subir diseño */}
+      <div className="rounded-2xl border border-border bg-background p-4">
+        <Label className="mb-2 block text-sm font-semibold">Tu diseño o logo</Label>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => onUpload(e.target.files?.[0] ?? null)}
         />
+        <button
+          onClick={() => fileRef.current?.click()}
+          className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-card px-4 py-8 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+        >
+          <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
+          {uploaded ? "Cambiar mi diseño / logo" : "Subir mi diseño / logo"}
+        </button>
+
+        {uploaded && (
+          <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
+            <img src={uploaded} alt="Diseño subido" className="h-16 w-16 rounded-xl object-contain" />
+            <div className="min-w-0 flex-1 text-xs text-muted-foreground">
+              Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""}. Lo revisamos y te confirmamos si necesita ajustes.
+            </div>
+            <button
+              onClick={() => onUpload(null)}
+              className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
+              aria-label="Quitar diseño"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+
+        {uploaded && dims && (
+          <div className="mt-3">
+            <ResolutionWarning naturalW={dims.w} naturalH={dims.h} width={25} height={30} unit="cm" />
+          </div>
+        )}
+
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          ¿No tenés diseño? No hay problema — usá el botón de abajo y nosotros lo creamos por vos.
+        </p>
       </div>
 
-      {/* BOTTOM: talla + cantidad + notas */}
+      {/* Talla + cantidad + notas */}
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-background p-4">
           <Label className="mb-2 block text-sm font-semibold">Talla</Label>
@@ -5473,16 +5349,48 @@ function TextilesDesignStep({
               </button>
             ))}
           </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">Mínimo 1. Para más de 50, escribe la cantidad manualmente.</p>
         </div>
 
         <div className="rounded-2xl border border-border bg-background p-4">
-          <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Notas adicionales</Label>
-          <Textarea id="txnotes" rows={6} placeholder="Ej: colores específicos, ubicación del logo, referencia visual..." value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <Label htmlFor="txnotes" className="mb-2 block text-sm font-semibold">Contanos qué querés</Label>
+          <Textarea
+            id="txnotes"
+            rows={8}
+            placeholder="Contanos qué querés: colores, ubicación del diseño, cantidad, etc."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
         </div>
+      </div>
+
+      {/* CTA */}
+      <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-6">
+        <button
+          onClick={() => onSubmitted(buildMessage("propio"))}
+          disabled={!size}
+          className={cn(
+            "flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-lg font-semibold text-white shadow-md transition",
+            size ? "hover:brightness-95" : "cursor-not-allowed opacity-50",
+          )}
+          style={{ background: "#25D366" }}
+        >
+          <MessageCircle className="h-6 w-6" />
+          {size ? "Enviar solicitud por WhatsApp" : "Elegí una talla primero"}
+        </button>
+        <button
+          onClick={() => onSubmitted(buildMessage("disenanmelo"))}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-border bg-background px-6 py-3 text-sm font-semibold transition hover:border-foreground/20"
+        >
+          <Palette className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />
+          Quiero que ustedes me lo diseñen
+        </button>
+        <p className="mt-3 text-center text-[11px] text-muted-foreground">
+          Te respondemos con precio y tiempo de entrega el mismo día.
+        </p>
       </div>
 
       <NavRow onBack={onBack} />
     </div>
   );
 }
+
