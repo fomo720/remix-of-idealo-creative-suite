@@ -5234,7 +5234,7 @@ function TextilesDesignStep({
     <div className="animate-step-in space-y-6">
       <SectionTitle icon={<PencilRuler className="h-5 w-5" />} title="Armá tu prenda y cotizá" />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
         {/* ============ IZQUIERDA: mockup + miniaturas ============ */}
         <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-5">
           <div className="mb-3 flex items-center justify-between gap-3">
