@@ -32,10 +32,10 @@ const KITS: Record<string, KitDetail> = {
     description:
       "Producción completa para que tu restaurante o café luzca profesional en cada punto de contacto con el cliente: la carta, el empaque de delivery, la fachada y las redes.",
     includes: [
-      { title: "Menús impresos", desc: "Diseño editorial, materiales resistentes, opciones plastificadas o con laca UV." },
-      { title: "Stickers para empaques", desc: "Sellos de marca, etiquetas para bolsas, cajas y vasos take-away." },
-      { title: "Branding y arte", desc: "Identidad visual coherente para local, delivery y redes sociales." },
-      { title: "Banners y rótulos", desc: "Impresión gran formato para fachada, terraza o eventos temporales." },
+      { title: "Menús impresos", desc: "Diseño editorial, materiales resistentes, opciones plastificadas o con laca UV.", image: restMenusImg.url },
+      { title: "Stickers para empaques", desc: "Sellos de marca, etiquetas para bolsas, cajas y vasos take-away.", image: restStickersImg.url },
+      { title: "Branding y arte", desc: "Identidad visual coherente para local, delivery y redes sociales.", image: restBrandingImg.url },
+      { title: "Banners y rótulos", desc: "Impresión gran formato para fachada, terraza o eventos temporales.", image: restBannerAranaImg.url },
     ],
     ideal: ["Cafeterías", "Restaurantes casuales y fine dining", "Food trucks", "Dark kitchens y delivery"],
     image: kitRestaurantesImg.url,
