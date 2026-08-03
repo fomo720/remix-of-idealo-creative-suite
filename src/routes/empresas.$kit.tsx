@@ -205,19 +205,22 @@ function KitPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="rounded-3xl border border-border bg-gradient-to-br from-foreground to-slate-800 p-10 text-background sm:p-14">
-          <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Solicitá tu cotización</h2>
-          <p className="mt-3 max-w-2xl text-sm text-background/70">
-            Contanos volumen aproximado, tiempos y referencias. Te respondemos con una propuesta a la medida.
-          </p>
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-6 py-3 text-sm font-semibold text-foreground transition hover:scale-[1.02]"
-          >
-            <MessageCircle className="h-4 w-4" /> Cotizar por WhatsApp
-          </a>
+        <div className="idealo-cta-gradient relative overflow-hidden rounded-3xl p-10 text-white shadow-elegant sm:p-14">
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/15" />
+          <div className="relative">
+            <h2 className="max-w-2xl text-3xl font-bold tracking-tight drop-shadow-sm sm:text-4xl">Solicitá tu cotización</h2>
+            <p className="mt-3 max-w-2xl text-sm text-white/85">
+              Contanos volumen aproximado, tiempos y referencias. Te respondemos con una propuesta a la medida.
+            </p>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-foreground shadow-lg transition hover:scale-[1.02]"
+            >
+              <MessageCircle className="h-4 w-4" /> Cotizar por WhatsApp
+            </a>
+          </div>
         </div>
       </section>
     </>
