@@ -1,54 +1,55 @@
-## Dónde vive hoy la personalización de camisas
+## Antes de nada
 
-Todo el flujo textil está dentro de **un solo archivo**, `src/components/Configurator.tsx` (5.488 líneas), que se monta en la home:
+Ojo: en el turno pasado desconectamos `TextilesEditor2D` del flujo del cliente (el paso 4 de camisas hoy es galería + subir logo + notas). El archivo sigue en el repo. Puedo aplicar estas dos mejoras igual (queda listo para cuando lo reconectemos), o reconectarlo. Decime.
+
+## 1. Botones de posición predefinida
+
+Barra nueva en el panel de la izquierda, arriba de "Capas", solo visible cuando hay un diseño seleccionado. Mismo estilo que los chips existentes (pill, borde `border-border`, activo con ring rosa de marca).
 
 ```text
-src/routes/index.tsx  ->  <Configurator />
-                            ├── TextilesShirtTypeStep   (línea ~4861)  tipo de prenda (fotos reales)
-                            ├── TextilesFabricStep      (~4912)        material
-                            ├── TextilesSleeveStep      (~4964)        manga
-                            ├── TextilesColorStep       (~5011)        color (TX_COLORS, línea 209)
-                            ├── TextilesSizeQtyStep     (~5064)        talla / cantidad
-                            └── TextilesDesignStep      (~5124)  <-- lo que se reemplaza
-                                  ├── canvas interactivo (drag, 6 handles, rotación, escala)
-                                  ├── <TextilesEditor2D />  (línea 5394)
-                                  │      └── lazy <TextilesShirt3D />  (vistas 3D + html-to-image)
-                                  └── botones WhatsApp / "que me lo diseñen"
+UBICACIÓN RÁPIDA
+┌──────────────────────┐ ┌──────────────────────┐
+│ Pecho izquierdo      │ │ Centro del pecho     │
+│ chico · ≈8 x 8 cm    │ │ mediano · ≈25x25 cm  │
+└──────────────────────┘ └──────────────────────┘
+┌──────────────────────┐
+│ Pecho completo       │
+│ grande · ≈30 x 38 cm │
+└──────────────────────┘
+Podés seguir arrastrando y ajustando a mano.
 ```
 
-Ningún otro route importa `TextilesEditor2D` ni `TextilesShirt3D`: solo se llegan a ver a través del paso 4 del configurador. Desconectarlos es un cambio local.
+Presets por vista (valores en % de la zona de impresión que ya existe, así **no se toca `PRINT_ZONE` ni la lógica de recorte**):
 
-## Qué cambiaría
+| Vista | Presets |
+|---|---|
+| Frente | Pecho izquierdo (chico), Centro del pecho (mediano), Pecho completo (grande) |
+| Espalda | Espalda centro-alto (mediano), Espalda completa (grande), Bajo el cuello (chico) |
+| Mangas | Manga alta (chico), Manga centrada (chico) |
 
-### 1. `TextilesDesignStep` se reescribe (mismo nombre, misma posición en el flujo)
+Al hacer clic se hace un `updateLayer` sobre la capa seleccionada con `x/y/w/h` del preset, respetando la relación de aspecto de la imagen (se ajusta el lado que sobra, igual que hace hoy `addImageLayer`). Nada se bloquea: arrastre y handles siguen igual.
 
-Nuevo contenido, en el estilo del resto del sitio (tarjetas redondeadas, `bg-card`, gradiente de marca en el CTA):
+## 2. Medida aproximada en cm
 
-- **Galería de color** con las fotos reales que ya existen en `src/assets` (`tx-photo-front/back/folded`, `tx-white-*`, `tx-tipo-*`), en grid de tarjetas seleccionables — sin canvas, sin 3D.
-- **Subir diseño**: un botón grande con dropzone (reutiliza el `fileRef`/`onUpload` que ya existe), muestra miniatura y botón de quitar. Se mantiene `ResolutionWarning` porque es informativo y no bloquea.
-- **Notas**: `<textarea>` con placeholder "Contanos qué querés: colores, ubicación del diseño, cantidad, etc." (ya existe estado `notes`).
-- **CTA WhatsApp**: mismo patrón que el resto del sitio — arma el mensaje con tipo, material, manga, color, talla, cantidad y notas, y pasa por `onSubmitted({ href, text })` para que siga apareciendo el modal de preparación ya existente.
-- Se mantiene el botón "Quiero que ustedes me lo diseñen".
+Debajo del bloque de la capa seleccionada, junto a los controles de tamaño:
 
-Se eliminan de este paso: canvas interactivo, handles de resize, rotación/escala/offsets, selector 2D/3D/ambos, fondo checker y la exportación de imagen.
+```text
+Tamaño aprox. impreso
+≈ 10 cm x 10 cm
+Medida referencial sobre talla M
+```
 
-### 2. Se desconectan (no se borran) los archivos 3D/2D
+Cálculo: se agrega una tabla `ZONE_CM` con el tamaño real de cada zona de impresión (frente 30x38 cm, espalda 32x42 cm, manga 9x30 cm, valores estándar de serigrafía sobre talla M). Como las capas ya guardan `w`/`h` en % de la zona, la medida es `w% × ancho_cm_de_la_zona`, redondeado a 0.5 cm. Se actualiza en vivo mientras se arrastra un handle.
 
-- `src/components/TextilesEditor2D.tsx` — se queda en el repo, ya sin importadores.
-- `src/components/TextilesShirt3D.tsx` — igual.
-- `src/components/ErrorBoundary.tsx` — se queda (uso genérico).
-- Se quitan solo los `import` / `lazy(...)` en `Configurator.tsx` (líneas 3 y 4).
-
-### 3. Pasos previos sin cambios
-
-Tipo, material, manga, color, talla y cantidad siguen igual, con el auto-avance al primer clic que ya pediste. El gating en `goTo` (línea ~877) no se toca.
+La misma medida aparece como etiqueta flotante sobre el diseño mientras se está redimensionando, y desaparece al soltar.
 
 ## Detalles técnicos
 
-- Estados que quedan obsoletos en `Configurator` (`scale`, `offsetX`, `offsetY`, `rotation`, `scaleX`) se dejan de pasar al paso de diseño; los que dejan de usarse por completo se eliminan de la firma del componente.
-- Las deps `three`, `@react-three/fiber`, `@react-three/drei`, `html-to-image` quedan sin uso en el bundle del cliente porque el `lazy()` desaparece — no se desinstalan, por si vuelve la fase 3D.
-- No hay cambios de backend, rutas ni datos.
+- Solo se edita `src/components/TextilesEditor2D.tsx`.
+- Nuevas constantes: `ZONE_CM: Record<ViewId, {w:number;h:number}>` y `POSITION_PRESETS: Record<ViewId, {id,label,hint,x,y,w,h}[]>`.
+- Sin cambios en `PRINT_ZONE`, en el clipping, en los mockups ni en el composite para WhatsApp/3D.
+- El resumen que se manda por WhatsApp puede incluir la medida en cm por vista (útil para producción) — lo agrego salvo que prefieras que no.
 
 ## Alcance
 
-Archivos tocados: **solo `src/components/Configurator.tsx`**. Cero borrados.
+1 archivo tocado, cero borrados, cero cambios de backend.
