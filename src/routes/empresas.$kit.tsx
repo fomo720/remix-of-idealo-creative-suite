@@ -7,13 +7,17 @@ import kitEmprendimientoCompletoImg from "@/assets/kit-emprendimiento-completo.j
 import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 import serviciosClinicaImg from "@/assets/servicios-clinica.jpg.asset.json";
 import serviciosRestauranteImg from "@/assets/servicios-restaurante.jpg.asset.json";
+import restMenusImg from "@/assets/kit-rest-menus.jpg.asset.json";
+import restStickersImg from "@/assets/kit-rest-stickers.jpg.asset.json";
+import restBrandingImg from "@/assets/kit-rest-branding.jpg.asset.json";
+import restBannerAranaImg from "@/assets/kit-rest-banner-arana.jpg.asset.json";
 
 type KitDetail = {
   slug: string;
   title: string;
   tagline: string;
   description: string;
-  includes: { title: string; desc: string }[];
+  includes: { title: string; desc: string; image?: string }[];
   ideal: string[];
   image: string;
   showcaseImage?: string;
@@ -28,10 +32,10 @@ const KITS: Record<string, KitDetail> = {
     description:
       "Producción completa para que tu restaurante o café luzca profesional en cada punto de contacto con el cliente: la carta, el empaque de delivery, la fachada y las redes.",
     includes: [
-      { title: "Menús impresos", desc: "Diseño editorial, materiales resistentes, opciones plastificadas o con laca UV." },
-      { title: "Stickers para empaques", desc: "Sellos de marca, etiquetas para bolsas, cajas y vasos take-away." },
-      { title: "Branding y arte", desc: "Identidad visual coherente para local, delivery y redes sociales." },
-      { title: "Banners y rótulos", desc: "Impresión gran formato para fachada, terraza o eventos temporales." },
+      { title: "Menús impresos", desc: "Diseño editorial, materiales resistentes, opciones plastificadas o con laca UV.", image: restMenusImg.url },
+      { title: "Stickers para empaques", desc: "Sellos de marca, etiquetas para bolsas, cajas y vasos take-away.", image: restStickersImg.url },
+      { title: "Branding y arte", desc: "Identidad visual coherente para local, delivery y redes sociales.", image: restBrandingImg.url },
+      { title: "Banners y rótulos", desc: "Impresión gran formato para fachada, terraza o eventos temporales.", image: restBannerAranaImg.url },
     ],
     ideal: ["Cafeterías", "Restaurantes casuales y fine dining", "Food trucks", "Dark kitchens y delivery"],
     image: kitRestaurantesImg.url,
@@ -154,8 +158,16 @@ function KitPage() {
         <h2 className="mt-2 text-3xl font-bold tracking-tight">Todo esto, coordinado</h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {kit.includes.map((it) => (
-            <div key={it.title} className="rounded-2xl border border-border bg-card p-6">
-              <div className="flex items-start gap-3">
+            <div key={it.title} className="overflow-hidden rounded-2xl border border-border bg-card">
+              {it.image && (
+                <img
+                  src={it.image}
+                  alt={it.title}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full bg-muted object-cover"
+                />
+              )}
+              <div className="flex items-start gap-3 p-6">
                 <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-foreground" />
                 <div>
                   <h3 className="text-lg font-bold">{it.title}</h3>
