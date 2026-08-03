@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 const WA = "50433635666";
 
-const clientLogos: { imageUrl: string }[] = [
+const clientLogos: { imageUrl: string; large?: boolean }[] = [
   { imageUrl: "/__l5e/assets-v1/26cf497f-a2d1-44dc-a7d2-87a74825f41f/client-logo-01.png" },
   { imageUrl: "/__l5e/assets-v1/7839ef73-2c11-4a21-89cf-4c997f8458b1/client-logo-02.png" },
   { imageUrl: "/__l5e/assets-v1/f8a3ed29-fb1e-4a34-832a-374fb61e0ab2/client-logo-03.png" },
@@ -39,7 +39,7 @@ const clientLogos: { imageUrl: string }[] = [
   { imageUrl: "/__l5e/assets-v1/c5561c5b-6e18-484f-983c-005ad2a46020/client-logo-38.png" },
   { imageUrl: "/__l5e/assets-v1/543672e8-d56c-4acb-8f54-e65768a26d1c/client-logo-39.png" },
   { imageUrl: "/__l5e/assets-v1/555a9589-2314-4554-8974-da4ba97524a2/client-logo-40.png" },
-  { imageUrl: "/__l5e/assets-v1/cd1e5fde-ee2d-4d6e-aecc-32139aa16596/client-logo-41.png" },
+  { imageUrl: "/__l5e/assets-v1/cd1e5fde-ee2d-4d6e-aecc-32139aa16596/client-logo-41.png", large: true },
 ];
 
 const stats = [
@@ -111,7 +111,7 @@ export function ClientsSection() {
               <img
                 src={c.imageUrl}
                 alt=""
-                className="max-h-full max-w-full object-contain"
+                className={`max-h-full max-w-full object-contain transition-transform ${c.large ? "scale-125" : ""}`}
                 loading="lazy"
               />
             </div>
