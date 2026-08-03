@@ -30,6 +30,10 @@ import { MessageCircle as WA } from "lucide-react";
 import { AlertTriangle } from "lucide-react";
 import stickerAltaEx from "@/assets/sticker-alta-resolucion.jpg.asset.json";
 import stickerBajaEx from "@/assets/sticker-baja-resolucion.jpg.asset.json";
+import txPhotoFront from "@/assets/tx-white-front.jpg.asset.json";
+import txPhotoBack from "@/assets/tx-white-back.jpg.asset.json";
+import txPhotoFolded from "@/assets/tx-white-folded.jpg.asset.json";
+
 
 
 
