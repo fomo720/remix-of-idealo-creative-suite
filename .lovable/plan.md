@@ -1,55 +1,61 @@
-## Antes de nada
+## Qué cambia
 
-Ojo: en el turno pasado desconectamos `TextilesEditor2D` del flujo del cliente (el paso 4 de camisas hoy es galería + subir logo + notas). El archivo sigue en el repo. Puedo aplicar estas dos mejoras igual (queda listo para cuando lo reconectemos), o reconectarlo. Decime.
+Solo el paso de diseño de camisas (`TextilesDesignStep` dentro de `Configurator.tsx`). No se toca la lógica del editor (`TextilesEditor2D.tsx`): de ahí solo se **leen** las constantes `PRINT_ZONE` y `ZONE_CM` que ya existen, exportándolas.
 
-## 1. Botones de posición predefinida
-
-Barra nueva en el panel de la izquierda, arriba de "Capas", solo visible cuando hay un diseño seleccionado. Mismo estilo que los chips existentes (pill, borde `border-border`, activo con ring rosa de marca).
+## Layout propuesto
 
 ```text
-UBICACIÓN RÁPIDA
-┌──────────────────────┐ ┌──────────────────────┐
-│ Pecho izquierdo      │ │ Centro del pecho     │
-│ chico · ≈8 x 8 cm    │ │ mediano · ≈25x25 cm  │
-└──────────────────────┘ └──────────────────────┘
-┌──────────────────────┐
-│ Pecho completo       │
-│ grande · ≈30 x 38 cm │
-└──────────────────────┘
-Podés seguir arrastrando y ajustando a mano.
+DESKTOP (2 columnas)
+┌──────────────────────────────┬───────────────────────────────┐
+│  MOCKUP GRANDE (4:5)         │  1. COLOR DE LA CAMISA        │
+│  ┌────────────────────────┐  │     ● ● ● ● ● ● ● ●  (swatch) │
+│  │      camisa + zona     │  │     Negro                     │
+│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌┐ ▲     │  │                               │
+│  │   ┆ [Área segura]┆ 38  │  │  2. PARTE TRASERA             │
+│  │   ┆  diseño      ┆ cm  │  │   ┌───────────┐ ┌───────────┐ │
+│  │   ┆ [Sangrado]   ┆ ▼   │  │   │ En blanco │ │Con diseño │ │
+│  │   └╌╌╌╌╌╌╌╌╌╌╌╌┘       │  │   └───────────┘ └───────────┘ │
+│  │     ◄── 30 cm ──►      │  │                               │
+│  └────────────────────────┘  │  3. TALLAS Y CANTIDAD         │
+│  ┌──┐┌──┐┌──┐                │   S [0] M [2] L [3] XL [0]... │
+│  │Fr││Es││Do│  miniaturas    │   Total: 5 prendas            │
+│  └──┘└──┘└──┘                │                               │
+│                              │  4. ACCIONES                  │
+│                              │  [Ver plantillas]             │
+│                              │  [Subir tu diseño]            │
+│                              │  [Que lo diseñemos nosotros]  │
+└──────────────────────────────┴───────────────────────────────┘
+
+MOBILE: mockup arriba (full width) → miniaturas en fila →
+panel de opciones apilado en el mismo orden 1-2-3-4.
 ```
 
-Presets por vista (valores en % de la zona de impresión que ya existe, así **no se toca `PRINT_ZONE` ni la lógica de recorte**):
+## Zona de impresión sobre el mockup
 
-| Vista | Presets |
+- Caja punteada posicionada con los % de `PRINT_ZONE[view]` (frente / espalda / manga), en overlay absoluto sobre la foto del mockup.
+- Dos pills pequeñas, esquina superior izquierda y esquina inferior derecha de la caja:
+  - **Área segura** — pill cyan de marca, borde punteado interior al 92% de la caja.
+  - **Sangrado** — pill ámbar, corresponde al borde exterior de la caja.
+- Reglas de medida: línea vertical a la izquierda con la altura y línea horizontal debajo con el ancho, con marcas en los extremos. Los números salen de `ZONE_CM` (frente 30 × 38 cm, espalda 32 × 42 cm, manga 9 × 30 cm), con la conversión a pulgadas entre paréntesis: `30 cm (11.8")`.
+- Sin diseño subido: la caja se ve tenue, como referencia ("Esta es el área imprimible").
+- Con diseño subido: la imagen se ajusta dentro de la caja (contain), es **arrastrable y redimensionable** con los 6 handles ya conocidos, siempre recortada a la caja, y arriba de ella aparece en vivo `≈ 18 cm x 14 cm (7.1" x 5.5")` calculado con la misma fórmula `% × ZONE_CM` que ya usás.
+
+## Los tres caminos
+
+| Botón | Acción |
 |---|---|
-| Frente | Pecho izquierdo (chico), Centro del pecho (mediano), Pecho completo (grande) |
-| Espalda | Espalda centro-alto (mediano), Espalda completa (grande), Bajo el cuello (chico) |
-| Mangas | Manga alta (chico), Manga centrada (chico) |
-
-Al hacer clic se hace un `updateLayer` sobre la capa seleccionada con `x/y/w/h` del preset, respetando la relación de aspecto de la imagen (se ajusta el lado que sobra, igual que hace hoy `addImageLayer`). Nada se bloquea: arrastre y handles siguen igual.
-
-## 2. Medida aproximada en cm
-
-Debajo del bloque de la capa seleccionada, junto a los controles de tamaño:
-
-```text
-Tamaño aprox. impreso
-≈ 10 cm x 10 cm
-Medida referencial sobre talla M
-```
-
-Cálculo: se agrega una tabla `ZONE_CM` con el tamaño real de cada zona de impresión (frente 30x38 cm, espalda 32x42 cm, manga 9x30 cm, valores estándar de serigrafía sobre talla M). Como las capas ya guardan `w`/`h` en % de la zona, la medida es `w% × ancho_cm_de_la_zona`, redondeado a 0.5 cm. Se actualiza en vivo mientras se arrastra un handle.
-
-La misma medida aparece como etiqueta flotante sobre el diseño mientras se está redimensionando, y desaparece al soltar.
+| Ver plantillas | Link interno a `/portafolio` filtrado por textiles (abre en pestaña nueva, no pierde el configurador) |
+| Subir tu diseño | Abre el file picker actual, mantiene `ResolutionWarning` con el DPI real ya calculado sobre el tamaño en cm de la zona |
+| Que lo diseñemos nosotros | Va al flujo de cotización/WhatsApp con la nota "diseño incluido (costo adicional)", igual que hoy |
 
 ## Detalles técnicos
 
-- Solo se edita `src/components/TextilesEditor2D.tsx`.
-- Nuevas constantes: `ZONE_CM: Record<ViewId, {w:number;h:number}>` y `POSITION_PRESETS: Record<ViewId, {id,label,hint,x,y,w,h}[]>`.
-- Sin cambios en `PRINT_ZONE`, en el clipping, en los mockups ni en el composite para WhatsApp/3D.
-- El resumen que se manda por WhatsApp puede incluir la medida en cm por vista (útil para producción) — lo agrego salvo que prefieras que no.
+- `TextilesEditor2D.tsx`: se agrega `export` a `PRINT_ZONE` y `ZONE_CM` (y el tipo `ViewId`). Cero cambios de comportamiento.
+- Nuevo componente `src/components/TextilesMockupStage.tsx`: mockup + overlay de zona + reglas + capa arrastrable. Aísla toda la parte visual nueva.
+- `Configurator.tsx`: `TextilesDesignStep` se reescribe con el layout de dos columnas; se conserva estado existente (color, técnica, upload, notas) y se agrega estado nuevo para tallas por cantidad y "parte trasera".
+- El mensaje de WhatsApp pasa a incluir el desglose por talla, la vista elegida y la medida en cm del diseño.
+- Tokens semánticos existentes (`brand-magenta`, `brand-cyan`, `border`, `muted-foreground`); nada hardcodeado.
 
 ## Alcance
 
-1 archivo tocado, cero borrados, cero cambios de backend.
+2 archivos tocados (1 nuevo), sin backend, sin borrar nada.
