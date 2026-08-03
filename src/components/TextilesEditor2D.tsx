@@ -548,6 +548,30 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
                 </div>
               </>
             )}
+            <div className="rounded-lg border border-border/70 bg-background px-2 py-1.5">
+              <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Tamaño aprox. impreso</div>
+              <div className="text-sm font-semibold text-foreground">≈ {cmLabelFor(selected.view, selected.w, selected.h)}</div>
+              <div className="text-[9px] text-muted-foreground">Medida referencial sobre talla M</div>
+            </div>
+            <div className="space-y-1.5">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Ubicación rápida</div>
+              <div className="grid grid-cols-1 gap-1.5">
+                {POSITION_PRESETS[view].map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => applyPreset(p)}
+                    className="rounded-xl border border-border bg-background px-2.5 py-1.5 text-left text-[11px] font-semibold transition hover:border-[color:var(--brand-pink)]/60 hover:bg-[color:var(--brand-pink)]/5"
+                  >
+                    {p.label}
+                    <span className="block text-[9px] font-medium text-muted-foreground">
+                      {p.hint} · ≈ {cmLabelFor(view, p.w, p.h)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <p className="text-[9px] leading-snug text-muted-foreground">Podés seguir arrastrando y ajustando a mano.</p>
+            </div>
             <div className="text-[10px] text-muted-foreground">Arrastra las esquinas para redimensionar. Lo que sale del recuadro no se imprime.</div>
           </div>
         )}
