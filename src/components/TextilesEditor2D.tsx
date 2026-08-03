@@ -168,6 +168,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   const stageRef = useRef<HTMLDivElement | null>(null);
   const printRef = useRef<HTMLDivElement | null>(null);
   const [busy, setBusy] = useState(false);
+  const [resizing, setResizing] = useState(false);
   const [composite, setComposite] = useState<{ front: string | null; back: string | null }>({ front: null, back: null });
 
   const currentView = VIEWS.find((v) => v.id === view)!;
@@ -180,6 +181,24 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   const removeLayer = (id: string) => {
     setLayers((ls) => ls.filter((l) => l.id !== id));
     if (selectedId === id) setSelectedId(null);
+  };
+
+  // Places the selected layer into a predefined spot, keeping its aspect ratio.
+  const applyPreset = (preset: PositionPreset) => {
+    if (!selected) return;
+    let w = preset.w;
+    let h = preset.h;
+    if (selected.type === "image" && selected.naturalW && selected.naturalH) {
+      const zoneRatio = zone.w / zone.h;
+      const imgRatio = selected.naturalW / selected.naturalH;
+      h = (w / imgRatio) * zoneRatio;
+      if (h > preset.h) { h = preset.h; w = (h * imgRatio) / zoneRatio; }
+    }
+    updateLayer(selected.id, {
+      x: preset.x + (preset.w - w) / 2,
+      y: preset.y + (preset.h - h) / 2,
+      w, h,
+    });
   };
 
   const addImageLayer = (src: string, natW: number, natH: number) => {
@@ -249,7 +268,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
         updateLayer(cur.id, { x: ox, y: oy, w: ow, h: oh });
       }
     };
-    const up = () => { op.current = null; };
+    const up = () => { op.current = null; setResizing(false); };
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
     return () => {
@@ -299,6 +318,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     setSelectedId(l.id);
     const p = pctFromEvent(e);
     op.current = { kind: "resize", id: l.id, handle, sx: p.x, sy: p.y, ox: l.x, oy: l.y, ow: l.w, oh: l.h };
+    setResizing(true);
   };
 
   // MOCKUPS
@@ -348,7 +368,11 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     } catch { /* ignore */ }
     const parts = VIEWS.map((v) => {
       const n = layers.filter((l) => l.view === v.id).length;
-      return n ? `${v.label}: ${n} elemento(s)` : null;
+      if (!n) return null;
+      const big = layers
+        .filter((l) => l.view === v.id)
+        .reduce((a, l) => (l.w * l.h > a.w * a.h ? l : a));
+      return `${v.label}: ${n} elemento(s) (aprox. ${cmLabelFor(v.id, big.w, big.h)})`;
     }).filter(Boolean) as string[];
     onWhatsApp({ viewsSummary: parts.join(" · ") || "sin elementos", blob });
     setBusy(false);
