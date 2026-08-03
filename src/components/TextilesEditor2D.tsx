@@ -410,6 +410,14 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
         {isSel && (
           <>
             <div className="pointer-events-none absolute -inset-1 rounded border-2 border-dashed border-[color:var(--brand-pink)]" />
+            {resizing && (
+              <div
+                data-composite-skip="true"
+                className="pointer-events-none absolute left-1/2 top-0 z-50 -translate-x-1/2 -translate-y-[130%] whitespace-nowrap rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background shadow-md"
+              >
+                ≈ {cmLabelFor(l.view, l.w, l.h)}
+              </div>
+            )}
             {["tl","tr","bl","br","tm","bm","ml","mr"].map((h) => {
               const style: React.CSSProperties = {
                 position: "absolute", width: 12, height: 12, borderRadius: 999,
