@@ -211,6 +211,13 @@ const getSleevesFor = (shirtType: TxShirtType | null, fabric: TxFabric | null): 
 };
 
 
+// Fotos reales de prendas (galería del paso de diseño)
+const TX_GALLERY: { src: string; label: string }[] = [
+  { src: txPhotoFront.url, label: "Frente" },
+  { src: txPhotoBack.url, label: "Espalda" },
+  { src: txPhotoFolded.url, label: "Doblada" },
+];
+
 const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
   { name: "Negro",    hex: "#111111" },
   { name: "Blanco",   hex: "#ffffff", border: true },
@@ -1137,12 +1144,6 @@ export function Configurator() {
               uploaded={uploaded}
               onUpload={handleFile}
               fileRef={fileRef}
-              scale={scale}
-              setScale={setScale}
-              offsetX={offsetX}
-              setOffsetX={setOffsetX}
-              offsetY={offsetY}
-              setOffsetY={setOffsetY}
               notes={notes}
               setNotes={setNotes}
               onBack={() => goTo(4)}
