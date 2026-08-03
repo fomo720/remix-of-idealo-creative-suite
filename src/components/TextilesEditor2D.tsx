@@ -38,7 +38,9 @@ import mockFront from "@/assets/tx-white-front.jpg.asset.json";
 import mockBack from "@/assets/tx-white-back.jpg.asset.json";
 import mockFolded from "@/assets/tx-white-folded.jpg.asset.json";
 
-export type ViewId = "front" | "back" | "sleeve-left" | "sleeve-right";
+import { PRINT_ZONE, ZONE_CM, type ViewId } from "@/lib/print-zones";
+export type { ViewId };
+export { PRINT_ZONE, ZONE_CM };
 
 type Layer = {
   id: string;
@@ -53,23 +55,6 @@ type Layer = {
   font?: string;
   color?: string;
   weight?: number;
-};
-
-// Print zones measured from the source vector artworks (% of full view image).
-const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }> = {
-  front:         { x: 37.7, y: 30.0, w: 27.1, h: 38.0 },
-  back:          { x: 42.0, y: 26.0, w: 22.0, h: 40.0 },
-  "sleeve-left": { x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
-  "sleeve-right":{ x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
-};
-
-// Real-world size of each print zone (cm), measured on a size M garment.
-// Used only to show an approximate reference to the customer.
-const ZONE_CM: Record<ViewId, { w: number; h: number }> = {
-  front:          { w: 30, h: 38 },
-  back:           { w: 32, h: 42 },
-  "sleeve-left":  { w: 9,  h: 30 },
-  "sleeve-right": { w: 9,  h: 30 },
 };
 
 // Predefined placements, expressed in % of the existing print zone
