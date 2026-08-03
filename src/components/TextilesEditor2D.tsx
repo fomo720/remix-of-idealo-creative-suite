@@ -56,7 +56,7 @@ type Layer = {
 };
 
 // Print zones measured from the source vector artworks (% of full view image).
-const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }> = {
+export const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }> = {
   front:         { x: 37.7, y: 30.0, w: 27.1, h: 38.0 },
   back:          { x: 42.0, y: 26.0, w: 22.0, h: 40.0 },
   "sleeve-left": { x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
@@ -65,7 +65,7 @@ const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }>
 
 // Real-world size of each print zone (cm), measured on a size M garment.
 // Used only to show an approximate reference to the customer.
-const ZONE_CM: Record<ViewId, { w: number; h: number }> = {
+export const ZONE_CM: Record<ViewId, { w: number; h: number }> = {
   front:          { w: 30, h: 38 },
   back:           { w: 32, h: 42 },
   "sleeve-left":  { w: 9,  h: 30 },
