@@ -1,7 +1,8 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-const TextilesShirt3D = lazy(() => import("@/components/TextilesShirt3D"));
-import TextilesEditor2D from "@/components/TextilesEditor2D";
+// NOTE: el editor 2D y el visor 3D (TextilesEditor2D / TextilesShirt3D) siguen en el
+// repositorio pero están desconectados del flujo del cliente (fase futura).
+
 import {
   Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
