@@ -7,13 +7,17 @@ import kitEmprendimientoCompletoImg from "@/assets/kit-emprendimiento-completo.j
 import kitFlotaImg from "@/assets/kit-flota-avion.jpg.asset.json";
 import serviciosClinicaImg from "@/assets/servicios-clinica.jpg.asset.json";
 import serviciosRestauranteImg from "@/assets/servicios-restaurante.jpg.asset.json";
+import restMenusImg from "@/assets/kit-rest-menus.jpg.asset.json";
+import restStickersImg from "@/assets/kit-rest-stickers.jpg.asset.json";
+import restBrandingImg from "@/assets/kit-rest-branding.jpg.asset.json";
+import restBannerAranaImg from "@/assets/kit-rest-banner-arana.jpg.asset.json";
 
 type KitDetail = {
   slug: string;
   title: string;
   tagline: string;
   description: string;
-  includes: { title: string; desc: string }[];
+  includes: { title: string; desc: string; image?: string }[];
   ideal: string[];
   image: string;
   showcaseImage?: string;
