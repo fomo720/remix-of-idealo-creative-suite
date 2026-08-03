@@ -158,8 +158,16 @@ function KitPage() {
         <h2 className="mt-2 text-3xl font-bold tracking-tight">Todo esto, coordinado</h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {kit.includes.map((it) => (
-            <div key={it.title} className="rounded-2xl border border-border bg-card p-6">
-              <div className="flex items-start gap-3">
+            <div key={it.title} className="overflow-hidden rounded-2xl border border-border bg-card">
+              {it.image && (
+                <img
+                  src={it.image}
+                  alt={it.title}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full bg-muted object-cover"
+                />
+              )}
+              <div className="flex items-start gap-3 p-6">
                 <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-foreground" />
                 <div>
                   <h3 className="text-lg font-bold">{it.title}</h3>
