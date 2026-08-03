@@ -63,6 +63,45 @@ const PRINT_ZONE: Record<ViewId, { x: number; y: number; w: number; h: number }>
   "sleeve-right":{ x: 46.0, y: 28.0, w: 11.0, h: 50.0 },
 };
 
+// Real-world size of each print zone (cm), measured on a size M garment.
+// Used only to show an approximate reference to the customer.
+const ZONE_CM: Record<ViewId, { w: number; h: number }> = {
+  front:          { w: 30, h: 38 },
+  back:           { w: 32, h: 42 },
+  "sleeve-left":  { w: 9,  h: 30 },
+  "sleeve-right": { w: 9,  h: 30 },
+};
+
+// Predefined placements, expressed in % of the existing print zone
+// (so the clipping / print-zone logic stays untouched).
+type PositionPreset = { id: string; label: string; hint: string; x: number; y: number; w: number; h: number };
+const POSITION_PRESETS: Record<ViewId, PositionPreset[]> = {
+  front: [
+    { id: "left-chest",   label: "Pecho izquierdo", hint: "chico",   x: 6,  y: 8,  w: 30, h: 22 },
+    { id: "center-chest", label: "Centro del pecho", hint: "mediano", x: 22, y: 20, w: 56, h: 42 },
+    { id: "full-front",   label: "Pecho completo",  hint: "grande",  x: 6,  y: 10, w: 88, h: 76 },
+  ],
+  back: [
+    { id: "under-collar", label: "Bajo el cuello",   hint: "chico",   x: 30, y: 2,  w: 40, h: 16 },
+    { id: "upper-back",   label: "Espalda centro-alto", hint: "mediano", x: 20, y: 14, w: 60, h: 44 },
+    { id: "full-back",    label: "Espalda completa", hint: "grande",  x: 5,  y: 8,  w: 90, h: 80 },
+  ],
+  "sleeve-left": [
+    { id: "sleeve-high",   label: "Manga alta",     hint: "chico", x: 15, y: 8,  w: 70, h: 20 },
+    { id: "sleeve-center", label: "Manga centrada", hint: "chico", x: 15, y: 40, w: 70, h: 20 },
+  ],
+  "sleeve-right": [
+    { id: "sleeve-high",   label: "Manga alta",     hint: "chico", x: 15, y: 8,  w: 70, h: 20 },
+    { id: "sleeve-center", label: "Manga centrada", hint: "chico", x: 15, y: 40, w: 70, h: 20 },
+  ],
+};
+
+const roundHalf = (n: number) => Math.round(n * 2) / 2;
+function cmLabelFor(view: ViewId, w: number, h: number) {
+  const z = ZONE_CM[view];
+  return `${roundHalf((w / 100) * z.w)} cm x ${roundHalf((h / 100) * z.h)} cm`;
+}
+
 const VIEWS: { id: ViewId; label: string; line: string; fill: string }[] = [
   { id: "front",         label: "Frente",         line: viewFrontLine.url,   fill: viewFrontFill.url },
   { id: "back",          label: "Espalda",        line: viewBackLine.url,    fill: viewBackFill.url },
@@ -129,6 +168,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   const stageRef = useRef<HTMLDivElement | null>(null);
   const printRef = useRef<HTMLDivElement | null>(null);
   const [busy, setBusy] = useState(false);
+  const [resizing, setResizing] = useState(false);
   const [composite, setComposite] = useState<{ front: string | null; back: string | null }>({ front: null, back: null });
 
   const currentView = VIEWS.find((v) => v.id === view)!;
@@ -141,6 +181,24 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
   const removeLayer = (id: string) => {
     setLayers((ls) => ls.filter((l) => l.id !== id));
     if (selectedId === id) setSelectedId(null);
+  };
+
+  // Places the selected layer into a predefined spot, keeping its aspect ratio.
+  const applyPreset = (preset: PositionPreset) => {
+    if (!selected) return;
+    let w = preset.w;
+    let h = preset.h;
+    if (selected.type === "image" && selected.naturalW && selected.naturalH) {
+      const zoneRatio = zone.w / zone.h;
+      const imgRatio = selected.naturalW / selected.naturalH;
+      h = (w / imgRatio) * zoneRatio;
+      if (h > preset.h) { h = preset.h; w = (h * imgRatio) / zoneRatio; }
+    }
+    updateLayer(selected.id, {
+      x: preset.x + (preset.w - w) / 2,
+      y: preset.y + (preset.h - h) / 2,
+      w, h,
+    });
   };
 
   const addImageLayer = (src: string, natW: number, natH: number) => {
@@ -210,7 +268,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
         updateLayer(cur.id, { x: ox, y: oy, w: ow, h: oh });
       }
     };
-    const up = () => { op.current = null; };
+    const up = () => { op.current = null; setResizing(false); };
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
     return () => {
@@ -260,6 +318,7 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     setSelectedId(l.id);
     const p = pctFromEvent(e);
     op.current = { kind: "resize", id: l.id, handle, sx: p.x, sy: p.y, ox: l.x, oy: l.y, ow: l.w, oh: l.h };
+    setResizing(true);
   };
 
   // MOCKUPS
@@ -309,7 +368,11 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
     } catch { /* ignore */ }
     const parts = VIEWS.map((v) => {
       const n = layers.filter((l) => l.view === v.id).length;
-      return n ? `${v.label}: ${n} elemento(s)` : null;
+      if (!n) return null;
+      const big = layers
+        .filter((l) => l.view === v.id)
+        .reduce((a, l) => (l.w * l.h > a.w * a.h ? l : a));
+      return `${v.label}: ${n} elemento(s) (aprox. ${cmLabelFor(v.id, big.w, big.h)})`;
     }).filter(Boolean) as string[];
     onWhatsApp({ viewsSummary: parts.join(" · ") || "sin elementos", blob });
     setBusy(false);
@@ -347,6 +410,14 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
         {isSel && (
           <>
             <div className="pointer-events-none absolute -inset-1 rounded border-2 border-dashed border-[color:var(--brand-pink)]" />
+            {resizing && (
+              <div
+                data-composite-skip="true"
+                className="pointer-events-none absolute left-1/2 top-0 z-50 -translate-x-1/2 -translate-y-[130%] whitespace-nowrap rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background shadow-md"
+              >
+                ≈ {cmLabelFor(l.view, l.w, l.h)}
+              </div>
+            )}
             {["tl","tr","bl","br","tm","bm","ml","mr"].map((h) => {
               const style: React.CSSProperties = {
                 position: "absolute", width: 12, height: 12, borderRadius: 999,
@@ -485,6 +556,30 @@ export default function TextilesEditor2D({ shirtColor, onWhatsApp, onDesignForMe
                 </div>
               </>
             )}
+            <div className="rounded-lg border border-border/70 bg-background px-2 py-1.5">
+              <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Tamaño aprox. impreso</div>
+              <div className="text-sm font-semibold text-foreground">≈ {cmLabelFor(selected.view, selected.w, selected.h)}</div>
+              <div className="text-[9px] text-muted-foreground">Medida referencial sobre talla M</div>
+            </div>
+            <div className="space-y-1.5">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Ubicación rápida</div>
+              <div className="grid grid-cols-1 gap-1.5">
+                {POSITION_PRESETS[view].map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => applyPreset(p)}
+                    className="rounded-xl border border-border bg-background px-2.5 py-1.5 text-left text-[11px] font-semibold transition hover:border-[color:var(--brand-pink)]/60 hover:bg-[color:var(--brand-pink)]/5"
+                  >
+                    {p.label}
+                    <span className="block text-[9px] font-medium text-muted-foreground">
+                      {p.hint} · ≈ {cmLabelFor(view, p.w, p.h)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <p className="text-[9px] leading-snug text-muted-foreground">Podés seguir arrastrando y ajustando a mano.</p>
+            </div>
             <div className="text-[10px] text-muted-foreground">Arrastra las esquinas para redimensionar. Lo que sale del recuadro no se imprime.</div>
           </div>
         )}
