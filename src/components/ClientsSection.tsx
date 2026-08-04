@@ -111,7 +111,7 @@ export function ClientsSection() {
               <img
                 src={c.imageUrl}
                 alt=""
-                className={`max-h-full max-w-full object-contain transition-transform ${c.large ? "scale-125" : ""}`}
+                className={`max-h-full max-w-full object-contain transition-transform ${c.large ? "scale-[1.56]" : ""}`}
                 loading="lazy"
               />
             </div>
