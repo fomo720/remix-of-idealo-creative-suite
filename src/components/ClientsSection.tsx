@@ -29,8 +29,6 @@ const clientLogos: { imageUrl: string; large?: boolean }[] = [
   { imageUrl: "/__l5e/assets-v1/15bc66ba-ebd5-401d-bf34-b9a52911c0d4/client-logo-28.png" },
   { imageUrl: "/__l5e/assets-v1/bf075d2c-9748-4fca-b18b-00c42b771ce6/client-logo-29.png" },
   { imageUrl: "/__l5e/assets-v1/87749a35-8047-43e5-8188-a7f39ba2ec7d/client-logo-30.png" },
-  { imageUrl: "/__l5e/assets-v1/22fceb43-b9dc-425c-884b-0bcc883ba82a/client-logo-31.png" },
-  { imageUrl: "/__l5e/assets-v1/42393029-2a9e-4bf6-89b3-aac5bd7e89a2/client-logo-35.png" },
   { imageUrl: "/__l5e/assets-v1/42393029-2a9e-4bf6-89b3-aac5bd7e89a2/client-logo-35.png" },
   { imageUrl: "/__l5e/assets-v1/1a3d5517-125a-49ec-831e-e3a3d5b6d9d2/client-logo-36.png" },
   { imageUrl: "/__l5e/assets-v1/cd24ed10-ac89-4b4b-86cf-0bf95fba673d/client-logo-37.png" },
