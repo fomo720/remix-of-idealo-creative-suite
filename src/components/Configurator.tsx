@@ -1462,7 +1462,7 @@ export function Configurator() {
                     material={m}
                     active={material === m.id}
                     isBestSeller={idx === 0}
-                    onClick={() => { setMaterial(m.id); setGateMsg(null); setStep(4); }}
+                    onClick={() => { setMaterial(m.id); setGateMsg(null); goTo(4); }}
                   />
                 ))}
               </div>
