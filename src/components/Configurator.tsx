@@ -1210,27 +1210,40 @@ export function Configurator() {
             <div className="animate-step-in">
               <SectionTitle icon={<Flame className="h-5 w-5" />} title="¿Qué producto vamos a grabar?" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {laserProducts.map((p) => (
-                  <LaserProductCard
-                    key={p.id}
-                    product={p}
-                    active={laserProduct === p.id}
-                    onClick={() => {
-                      setLaserProduct(p.id);
-                      // reset variant + byob selection when the product changes
-                      const first = p.variants?.[0]?.id ?? null;
-                      setLaserVariantId(first);
-                      setLaserColorIdx(0);
-                      setLaserByob(false);
-                      if (p.id === "cadena") {
-                        // Advance to Step 3 for "cadena" variants, don't auto-redirect yet
-                        goTo(3);
-                      } else {
-                        goTo(3);
-                      }
-                    }}
-                  />
-                ))}
+                {laserProducts.map((p) => {
+                  // Special logic for "coco": it should skip to WhatsApp if possible,
+                  // or at least handle the auto-advance logic if it has no variants.
+                  const isCoco = p.id === "coco";
+                  return (
+                    <LaserProductCard
+                      key={p.id}
+                      product={p}
+                      active={laserProduct === p.id}
+                      onClick={() => {
+                        setLaserProduct(p.id);
+                        if (isCoco) {
+                          // Cocoa has no Step 3 variants, so direct to WA from Step 2
+                          const summary = [
+                            "Hola Idealo, estoy interesado en grabado láser:",
+                            "- Producto: Coco Grabado",
+                            "- Me gustaría personalizarlo con mi logo/diseño.",
+                            "",
+                            "Solicito una cotización, gracias 🙌",
+                          ].join("\n");
+                          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(summary)}`;
+                          window.open(waHref, "_blank", "noreferrer");
+                        } else {
+                          // Other laser products go to Step 3
+                          const first = p.variants?.[0]?.id ?? null;
+                          setLaserVariantId(first);
+                          setLaserColorIdx(0);
+                          setLaserByob(false);
+                          goTo(3);
+                        }
+                      }}
+                    />
+                  );
+                })}
               </div>
 
               {/* Bring-your-own-product option (per product) */}
