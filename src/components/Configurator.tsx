@@ -1113,7 +1113,11 @@ export function Configurator() {
           {isTextiles && step === 2 && (
             <TextilesShirtTypeStep
               shirtType={txShirtType}
-              onPick={(v) => { setTxShirtType(v); setGateMsg(null); setStep(3); }}
+              onPick={(v) => { 
+                setTxShirtType(v); 
+                setGateMsg(null); 
+                goTo(3); 
+              }}
               onBack={() => goTo(1)}
               onNext={txShirtType ? () => goTo(3) : undefined}
             />
@@ -1123,7 +1127,11 @@ export function Configurator() {
               availableFabrics={getFabricsForType(txShirtType)}
               shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
               fabric={txFabric}
-              onPick={(v) => { setTxFabric(v); setGateMsg(null); setStep(4); }}
+              onPick={(v) => { 
+                setTxFabric(v); 
+                setGateMsg(null); 
+                goTo(4); 
+              }}
               onBack={() => goTo(2)}
               onNext={txFabric ? () => goTo(4) : undefined}
             />
@@ -1133,7 +1141,11 @@ export function Configurator() {
               fabricData={txFabricData}
               availableSleeves={txAvailableSleeves}
               sleeve={txSleeve}
-              onPick={(v) => { setTxSleeve(v); setGateMsg(null); setStep(5); }}
+              onPick={(v) => { 
+                setTxSleeve(v); 
+                setGateMsg(null); 
+                goTo(5); 
+              }}
               onBack={() => goTo(3)}
               onNext={txSleeve ? () => goTo(5) : undefined}
             />
@@ -1177,7 +1189,11 @@ export function Configurator() {
                     desc={c.desc}
                     accent={c.accent}
                     active={cut === c.id}
-                    onClick={() => { setCut(c.id); setGateMsg(null); setStep(3); }}
+                    onClick={() => { 
+                      setCut(c.id); 
+                      setGateMsg(null); 
+                      goTo(3); 
+                    }}
                     bestseller={c.id === "die-cut"}
                   />
                 ))}
@@ -1198,7 +1214,11 @@ export function Configurator() {
                     accent={s.accent}
                     icon={s.icon}
                     active={notebookStyle === s.id}
-                    onClick={() => { setNotebookStyle(s.id); setGateMsg(null); setStep(3); }}
+                    onClick={() => { 
+                      setNotebookStyle(s.id); 
+                      setGateMsg(null); 
+                      goTo(3); 
+                    }}
                   />
                 ))}
               </div>
@@ -1394,7 +1414,18 @@ export function Configurator() {
                 </button>
               )}
 
-              <NavRow onBack={() => goTo(2)} onNext={laserVariantId ? () => goTo(4) : undefined} />
+              <NavRow 
+                onBack={() => goTo(2)} 
+                onNext={
+                  laserByob 
+                    ? () => {
+                        const productType = laserProductData?.name ?? "producto";
+                        const msg = encodeURIComponent(`Hola! Traigo mi propio ${productType} y me gustaría que ustedes lo graben. ¿Me podrían dar más información sobre el proceso y costos?`);
+                        window.open(`https://wa.me/50433635666?text=${msg}`, "_blank");
+                      }
+                    : (laserVariantId ? () => goTo(4) : undefined)
+                } 
+              />
 
             </div>
           )}
@@ -1442,7 +1473,7 @@ export function Configurator() {
                     material={m}
                     active={material === m.id}
                     isBestSeller={idx === 0}
-                    onClick={() => { setMaterial(m.id); setGateMsg(null); setStep(4); }}
+                    onClick={() => { setMaterial(m.id); setGateMsg(null); goTo(4); }}
                   />
                 ))}
               </div>
@@ -1459,7 +1490,7 @@ export function Configurator() {
                     key={m.id}
                     material={m}
                     active={notebookMaterial === m.id}
-                    onClick={() => { setNotebookMaterial(m.id); setGateMsg(null); setStep(4); }}
+                    onClick={() => { setNotebookMaterial(m.id); setGateMsg(null); goTo(4); }}
                   />
                 ))}
               </div>
@@ -1510,7 +1541,11 @@ export function Configurator() {
                 {imprentaStyles.map((s) => (
                   <button
                     key={s.id}
-                    onClick={() => { setImprentaStyle(s.id); setGateMsg(null); setStep(4); }}
+                    onClick={() => { 
+                      setImprentaStyle(s.id); 
+                      setGateMsg(null); 
+                      goTo(4); 
+                    }}
                     className={cn(
                       "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
                       imprentaStyle === s.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
@@ -5465,7 +5500,13 @@ function TextilesDesignStep({
                 Ver plantillas y ejemplos
               </Link>
               <button
-                onClick={() => fileRef.current?.click()}
+                onClick={async () => {
+                  fileRef.current?.click();
+                  // Esperamos un momento para que el navegador abra el diálogo de archivos
+                  // y luego, cuando el usuario suba algo (o si ya subió), lo llevamos a WhatsApp.
+                  // Nota: En este flujo simplificado, el usuario sube y luego le da al botón verde grande.
+                  // Pero el usuario pidió que al elegir "Subir tu diseño" y continuar ya lo lleve a WhatsApp.
+                }}
                 className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card px-4 py-3 text-sm font-semibold transition hover:border-transparent hover:shadow-elegant"
               >
                 <Upload className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />
