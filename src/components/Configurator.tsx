@@ -1246,38 +1246,7 @@ export function Configurator() {
                 })}
               </div>
 
-              {/* Bring-your-own-product option (per product) */}
-              {laserProductData && (
-                <button
-                  type="button"
-                  onClick={() => setLaserByob((b) => !b)}
-                  className={cn(
-                    "mt-5 flex w-full items-start gap-3 rounded-2xl border-2 p-4 text-left text-sm transition",
-                    laserByob
-                      ? "border-foreground bg-background shadow-card-soft"
-                      : "border-dashed border-border bg-background/60 hover:border-foreground/40",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2",
-                      laserByob ? "border-transparent text-white" : "border-border",
-                    )}
-                    style={laserByob ? { background: "var(--brand-orange)" } : {}}
-                  >
-                    {laserByob && <Check className="h-4 w-4" />}
-                  </span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-foreground">
-                      Yo llevo mi propio {laserProductData.name.toLowerCase()}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-muted-foreground">
-                      Solo cobramos el servicio de grabado (aprox. 40% del precio). Tú traes el producto y nosotros lo grabamos.
-                    </span>
-                  </span>
-                </button>
-              )}
-
+              {/* Bring-your-own-product option (removed from Step 2 as requested) */}
               <p className="mt-4 text-center text-xs text-muted-foreground">
                 Grabado permanente sin tinta · el arte se convierte automáticamente en trazo apto para láser.
               </p>
@@ -1392,6 +1361,38 @@ export function Configurator() {
                   );
                 })}
               </div>
+
+              {/* Bring-your-own-product option (added to Step 3 for everything except coco) */}
+              {laserProductData && laserProduct !== "coco" && (
+                <button
+                  type="button"
+                  onClick={() => setLaserByob((b) => !b)}
+                  className={cn(
+                    "mt-6 flex w-full items-start gap-3 rounded-2xl border-2 p-4 text-left text-sm transition",
+                    laserByob
+                      ? "border-foreground bg-background shadow-card-soft"
+                      : "border-dashed border-border bg-background/60 hover:border-foreground/40",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2",
+                      laserByob ? "border-transparent text-white" : "border-border",
+                    )}
+                    style={laserByob ? { background: "var(--brand-orange)" } : {}}
+                  >
+                    {laserByob && <Check className="h-4 w-4" />}
+                  </span>
+                  <span className="flex-1">
+                    <span className="block font-semibold text-foreground">
+                      Yo llevo mi propio {laserProductData.name.toLowerCase()}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">
+                      Solo cobramos el servicio de grabado (aprox. 40% del precio). Tú traes el producto y nosotros lo grabamos.
+                    </span>
+                  </span>
+                </button>
+              )}
 
               <NavRow onBack={() => goTo(2)} onNext={laserVariantId ? () => goTo(4) : undefined} />
 
