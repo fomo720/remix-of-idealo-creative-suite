@@ -1388,7 +1388,7 @@ export function Configurator() {
                       Yo llevo mi propio {laserProductData.name.toLowerCase()}
                     </span>
                     <span className="mt-0.5 block text-xs text-muted-foreground">
-                      Solo cobramos el servicio de grabado (aprox. 40% del precio). Tú traes el producto y nosotros lo grabamos.
+                      Si traes tu propio producto nosotros lo grabamos. ¡Cotiza ya!
                     </span>
                   </span>
                 </button>
