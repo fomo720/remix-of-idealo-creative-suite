@@ -1141,7 +1141,11 @@ export function Configurator() {
               fabricData={txFabricData}
               availableSleeves={txAvailableSleeves}
               sleeve={txSleeve}
-              onPick={(v) => { setTxSleeve(v); setGateMsg(null); setStep(5); }}
+              onPick={(v) => { 
+                setTxSleeve(v); 
+                setGateMsg(null); 
+                goTo(5); 
+              }}
               onBack={() => goTo(3)}
               onNext={txSleeve ? () => goTo(5) : undefined}
             />
