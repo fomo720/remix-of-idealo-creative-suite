@@ -1414,7 +1414,18 @@ export function Configurator() {
                 </button>
               )}
 
-              <NavRow onBack={() => goTo(2)} onNext={laserVariantId ? () => goTo(4) : undefined} />
+              <NavRow 
+                onBack={() => goTo(2)} 
+                onNext={
+                  laserByob 
+                    ? () => {
+                        const productType = laserProductData?.name ?? "producto";
+                        const msg = encodeURIComponent(`Hola! Traigo mi propio ${productType} y me gustaría que ustedes lo graben. ¿Me podrían dar más información sobre el proceso y costos?`);
+                        window.open(`https://wa.me/50433635666?text=${msg}`, "_blank");
+                      }
+                    : (laserVariantId ? () => goTo(4) : undefined)
+                } 
+              />
 
             </div>
           )}
