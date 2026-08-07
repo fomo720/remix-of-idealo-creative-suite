@@ -1292,7 +1292,23 @@ export function Configurator() {
                         setLaserVariantId(v.id);
                         setLaserColorIdx(0);
                         requestAnimationFrame(() => window.scrollTo({ top: y }));
-                        goTo(4);
+
+                        if (laserProduct === "cadena") {
+                          // Quick-quote logic for "cadenas" to WhatsApp (Step 4 equivalent)
+                          const summary = [
+                            "Hola Idealo, estoy interesado en grabado láser:",
+                            "- Producto: Cadenas & Dijes",
+                            `- Tipo de dije: ${v.name}`,
+                            "- Grabado fotográfico: Sí",
+                            "- Me gustaría comenzar a platicar con ustedes sobre mi diseño.",
+                            "",
+                            "Solicito una cotización, gracias 🙌",
+                          ].join("\n");
+                          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(summary)}`;
+                          window.open(waHref, "_blank", "noreferrer");
+                        } else {
+                          goTo(4);
+                        }
                       }}
                       className={cn(
                         "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
