@@ -1223,20 +1223,8 @@ export function Configurator() {
                       setLaserColorIdx(0);
                       setLaserByob(false);
                       if (p.id === "cadena") {
-                        // Quick-quote logic for "cadenas" to WhatsApp (Step 4)
-                        setLaserProduct(p.id);
-                        const variant = p.variants?.[0]; // Dije Redondo con Foto
-                        const summary = [
-                          "Hola Idealo, estoy interesado en grabado láser:",
-                          "- Producto: Cadenas & Dijes",
-                          "- Tipo de dije: Dije Redondo con Foto",
-                          "- Grabado fotográfico: Sí",
-                          "- Me gustaría comenzar a platicar con ustedes sobre mi diseño.",
-                          "",
-                          "Solicito una cotización, gracias 🙌"
-                        ].join("\n");
-                        const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(summary)}`;
-                        window.open(waHref, "_blank", "noreferrer");
+                        // Advance to Step 3 for "cadena" variants, don't auto-redirect yet
+                        goTo(3);
                       } else {
                         goTo(3);
                       }
