@@ -1214,7 +1214,11 @@ export function Configurator() {
                     accent={s.accent}
                     icon={s.icon}
                     active={notebookStyle === s.id}
-                    onClick={() => { setNotebookStyle(s.id); setGateMsg(null); setStep(3); }}
+                    onClick={() => { 
+                      setNotebookStyle(s.id); 
+                      setGateMsg(null); 
+                      goTo(3); 
+                    }}
                   />
                 ))}
               </div>
