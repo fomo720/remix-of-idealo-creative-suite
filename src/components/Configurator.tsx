@@ -1189,7 +1189,11 @@ export function Configurator() {
                     desc={c.desc}
                     accent={c.accent}
                     active={cut === c.id}
-                    onClick={() => { setCut(c.id); setGateMsg(null); setStep(3); }}
+                    onClick={() => { 
+                      setCut(c.id); 
+                      setGateMsg(null); 
+                      goTo(3); 
+                    }}
                     bestseller={c.id === "die-cut"}
                   />
                 ))}
