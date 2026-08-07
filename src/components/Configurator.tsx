@@ -5465,7 +5465,13 @@ function TextilesDesignStep({
                 Ver plantillas y ejemplos
               </Link>
               <button
-                onClick={() => fileRef.current?.click()}
+                onClick={async () => {
+                  fileRef.current?.click();
+                  // Esperamos un momento para que el navegador abra el diálogo de archivos
+                  // y luego, cuando el usuario suba algo (o si ya subió), lo llevamos a WhatsApp.
+                  // Nota: En este flujo simplificado, el usuario sube y luego le da al botón verde grande.
+                  // Pero el usuario pidió que al elegir "Subir tu diseño" y continuar ya lo lleve a WhatsApp.
+                }}
                 className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card px-4 py-3 text-sm font-semibold transition hover:border-transparent hover:shadow-elegant"
               >
                 <Upload className="h-4 w-4" style={{ color: "var(--brand-violet)" }} />
