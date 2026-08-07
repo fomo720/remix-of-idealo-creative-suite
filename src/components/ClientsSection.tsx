@@ -24,10 +24,15 @@ const clientLogos: { imageUrl: string; large?: boolean }[] = [
   { imageUrl: "/__l5e/assets-v1/079ad994-3938-4b49-954b-815052402faa/client-logo-21.png" },
   { imageUrl: "/__l5e/assets-v1/0bb77a98-2197-42a8-a2ec-edf58987e188/client-logo-22.png" },
   { imageUrl: "/__l5e/assets-v1/24ddf52e-0bb2-4b2b-8c33-b5bd883ea6ad/client-logo-23.png" },
-  { imageUrl: "/__l5e/assets-v1/6966113b-18a7-47b7-bce4-28b981297e68/client-logo-25.png" },
-  { imageUrl: "/__l5e/assets-v1/6c3c7886-f76d-4950-86d1-cd34c062c95e/client-logo-26.png" },
-  { imageUrl: "/__l5e/assets-v1/8a688a2e-3367-426c-847e-8c37d6e499d1/client-logo-27.png" },
+  { imageUrl: "/__l5e/assets-v1/2600c1c9-e314-4b9b-9abd-139facaac3c3/client-logo-26.png" },
+  { imageUrl: "/__l5e/assets-v1/6a63cf06-e601-4431-b7da-9d6a4ff58ad1/client-logo-27.png" },
   { imageUrl: "/__l5e/assets-v1/15bc66ba-ebd5-401d-bf34-b9a52911c0d4/client-logo-28.png" },
+  { imageUrl: "/__l5e/assets-v1/bf075d2c-9748-4fca-b18b-00c42b771ce6/client-logo-29.png" },
+  { imageUrl: "/__l5e/assets-v1/87749a35-8047-43e5-8188-a7f39ba2ec7d/client-logo-30.png" },
+  { imageUrl: "/__l5e/assets-v1/22fceb43-b9dc-425c-884b-0bcc883ba82a/client-logo-31.png" },
+  { imageUrl: "/__l5e/assets-v1/9bc00715-a1f8-4ac7-baa8-81919696ef57/client-logo-32.png" },
+  { imageUrl: "/__l5e/assets-v1/a73f05d9-e5de-45a6-a903-29ecb4d4622e/client-logo-33.png" },
+  { imageUrl: "/__l5e/assets-v1/c4072a0b-336c-47d5-b193-4a80b492d2a3/client-logo-34.png" },
   { imageUrl: "/__l5e/assets-v1/42393029-2a9e-4bf6-89b3-aac5bd7e89a2/client-logo-35.png" },
   { imageUrl: "/__l5e/assets-v1/1a3d5517-125a-49ec-831e-e3a3d5b6d9d2/client-logo-36.png" },
   { imageUrl: "/__l5e/assets-v1/cd24ed10-ac89-4b4b-86cf-0bf95fba673d/client-logo-37.png" },
@@ -106,7 +111,7 @@ export function ClientsSection() {
               <img
                 src={c.imageUrl}
                 alt=""
-                className={`max-h-full max-w-full object-contain transition-transform ${c.large ? "scale-[1.33]" : ""}`}
+                className={`max-h-full max-w-full object-contain transition-transform ${c.large ? "scale-[1.56]" : ""}`}
                 loading="lazy"
               />
             </div>
