@@ -38,8 +38,6 @@ const clientLogos: { imageUrl: string; large?: boolean }[] = [
   { imageUrl: "/__l5e/assets-v1/cd24ed10-ac89-4b4b-86cf-0bf95fba673d/client-logo-37.png" },
   { imageUrl: "/__l5e/assets-v1/c5561c5b-6e18-484f-983c-005ad2a46020/client-logo-38.png" },
   { imageUrl: "/__l5e/assets-v1/543672e8-d56c-4acb-8f54-e65768a26d1c/client-logo-39.png" },
-  { imageUrl: "/__l5e/assets-v1/555a9589-2314-4554-8974-da4ba97524a2/client-logo-40.png" },
-  { imageUrl: "/__l5e/assets-v1/cd1e5fde-ee2d-4d6e-aecc-32139aa16596/client-logo-41.png", large: true },
 ];
 
 const stats = [
