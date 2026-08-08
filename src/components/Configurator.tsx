@@ -1109,9 +1109,6 @@ export function Configurator() {
           )}
 
 
-          {/* 
-              Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
-          */}
           {/* ============ TEXTILES FLOW ============ */}
           {isTextiles && step === 2 && (
             <TextilesShirtTypeStep
@@ -2134,7 +2131,7 @@ export function Configurator() {
                   <div className="mt-4 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
-                    {/* Precio estimado eliminado */}
+                    <Stat label="Precio estimado" value={currency(price)} highlight />
                   </div>
 
                   <p className="mt-3 text-center text-[11px] text-muted-foreground">
@@ -3557,13 +3554,10 @@ function NotebookDesigner({
   qty: number;
   setQty: (n: number) => void;
   notes: string;
-  setNotes: (s: string) => void;
+  setNotes: (v: string) => void;
   price: number;
   onBack: () => void;
 }) {
-  const [designs, setDesigns] = useState<number[]>([1]);
-  const [activeDesignIdx, setActiveDesignIdx] = useState(0);
-
   const size = notebookSizes[sizeIdx];
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
@@ -3705,73 +3699,29 @@ function NotebookDesigner({
 
 
 
-        {/* Upload cover art - Multiple Designs Support */}
+        {/* Upload cover art */}
         <div>
-          <Label className="mb-3 block text-sm font-semibold">Tus diseños de portada</Label>
-          <div className="space-y-4">
-            {designs.map((dId, idx) => (
-              <div 
-                key={dId} 
-                className={cn(
-                  "relative rounded-2xl border-2 p-4 transition-all",
-                  activeDesignIdx === idx ? "border-foreground bg-background shadow-md" : "border-border bg-background/40 hover:border-foreground/20"
-                )}
-                onClick={() => setActiveDesignIdx(idx)}
-              >
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Diseño #{idx + 1}</span>
-                  {designs.length > 1 && (
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const newDesigns = designs.filter((_, i) => i !== idx);
-                        setDesigns(newDesigns);
-                        if (activeDesignIdx >= newDesigns.length) setActiveDesignIdx(Math.max(0, newDesigns.length - 1));
-                      }}
-                      className="rounded-full p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  )}
-                </div>
+          <Label className="mb-2 block text-sm font-semibold">Arte para la portada</Label>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+          >
+            <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
+            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
+          </button>
 
-                <input
-                  id={`file-input-${dId}`}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    // Logic to handle multiple file uploads would go here.
-                    // For now, let's just use the current handleFile-like logic for the active one.
-                    onFile(e.target.files?.[0] ?? null);
-                  }}
-                />
-                
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    document.getElementById(`file-input-${dId}`)?.click();
-                  }}
-                  className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border bg-background/50 py-4 text-sm font-medium transition hover:border-foreground/30"
-                >
-                  <Upload className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
-                  {activeDesignIdx === idx && uploaded ? "Cambiar arte / logo" : "Subir Arte / Logo"}
-                </button>
-              </div>
-            ))}
-
-            <button
-              onClick={() => {
-                const nextId = Math.max(...designs, 0) + 1;
-                setDesigns([...designs, nextId]);
-                setActiveDesignIdx(designs.length);
-              }}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border py-4 text-sm font-bold text-muted-foreground transition hover:border-foreground/40 hover:text-foreground hover:bg-background/40"
-            >
-              <ImagePlus className="h-5 w-5" />
-              Agregar otro diseño de libreta
+          {hasArt && (
+            <button onClick={onClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
+              <Trash2 className="h-3.5 w-3.5" /> Quitar arte
             </button>
-          </div>
+          )}
         </div>
 
         {/* Page count */}
@@ -3873,9 +3823,10 @@ function NotebookDesigner({
           />
 
 
-          <div className="mt-8 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+          <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
             <Stat label="Tamaño" value={`${size.label} · ${size.cm}`} />
             <Stat label="Cantidad" value={`${qty}`} />
+            <Stat label="Precio estimado" value={currency(price)} highlight />
           </div>
           <p className="mt-3 text-center text-[11px] text-muted-foreground">
             {showPages
@@ -3895,7 +3846,6 @@ function NotebookDesigner({
             `Páginas: ${pageCount}`,
             extraLabels.length ? `Extras: ${extraLabels.join(", ")}` : "",
             hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
-            `Cantidad de diseños: ${designs.length}`,
             `Cantidad de libretas: ${qty}`,
             notes ? `Notas: ${notes}` : "",
             uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
