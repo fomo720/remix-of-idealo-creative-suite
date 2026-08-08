@@ -3856,11 +3856,17 @@ function NotebookDesigner({
       {/* RIGHT: preview */}
       <div className="lg:sticky lg:top-6 lg:self-start">
         <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
-          <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
-            <span>Vista previa en vivo</span>
-            <span className="rounded-full bg-background px-2 py-0.5">
-              Libreta {size.label}
-            </span>
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Vista Previa</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-2 rounded-xl text-xs"
+              onClick={() => setIsPreviewOpen(true)}
+            >
+              <Eye className="h-3.5 w-3.5" />
+              Vista previa
+            </Button>
           </div>
 
           <NotebookPreview
@@ -3875,36 +3881,35 @@ function NotebookDesigner({
             pageArtOpacity={pageArtOpacity}
           />
 
-
-          <div className="mt-8 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
-            <Stat label="Tamaño" value={`${size.label} · ${size.cm}`} />
+          <div className="mt-6 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+            <Stat label="Tamaño" value={size.label} />
             <Stat label="Cantidad" value={`${qty}`} />
           </div>
-          <p className="mt-3 text-center text-[11px] text-muted-foreground">
-            {showPages
-              ? `Interior ${pageTypes.find((p) => p.id === pageType)?.name.toLowerCase()} con logo sutil en cada hoja.`
-              : "Interior en blanco. Solo se imprime la portada."}
+
+          <p className="mt-3 text-center text-[10px] text-muted-foreground">
+            {hasArt
+              ? "Diseño cargado. Verificá que el logo esté centrado y sea legible."
+              : "Subí tu logo o arte para ver cómo quedará tu libreta."}
           </p>
         </div>
 
         {(() => {
-          const extraLabels = extras.map((id) => notebookExtras.find((x) => x.id === id)?.name).filter(Boolean);
           const summary = [
             `Producto: Libreta Personalizada`,
-            `Material portada: ${material.name}`,
+            `Estilo: ${material.name} · ${styleId === "cover-only" ? "Solo Portada" : "Portada + Páginas"}`,
             `Tamaño: ${size.label} (${size.cm})`,
-            `Estilo: ${styleId === "cover-only" ? "Solo portada" : "Portada + páginas"}`,
-            showPages ? `Interior: ${pageTypes.find((p) => p.id === pageType)?.name}` : "",
-            `Páginas: ${pageCount}`,
-            extraLabels.length ? `Extras: ${extraLabels.join(", ")}` : "",
-            hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
-            `Cantidad de libretas: ${qty}`,
+            showPages ? `Interiores: ${pageType} · ${pageCount} páginas` : "",
+            extras.length > 0 ? `Extras: ${extras.map(e => notebookExtras.find(x => x.id === e)?.name).join(", ")}` : "",
+            `Cantidad: ${qty}`,
             notes ? `Notas: ${notes}` : "",
-            uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
+            uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente",
+            backUploaded ? "Contraportada: Arte personalizado 📎" : backPreset ? `Contraportada: Preset "${backPreset}"` : "",
+            pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : pageArtPreset ? "Marca de agua: Preset" : "",
             "",
             "Solicito una cotización, gracias 🙌",
           ].filter(Boolean).join("\n");
-          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar una libreta:\n\n${summary}`)}`;
+
+          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar libretas:\n\n${summary}`)}`;
           return (
             <a
               href={waHref}
@@ -3916,13 +3921,155 @@ function NotebookDesigner({
             </a>
           );
         })()}
-        {(uploaded || pageArtUploaded) && (
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
-          </p>
-        )}
         <NavRow onBack={onBack} />
       </div>
+
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <DialogContent className="max-w-3xl overflow-hidden rounded-3xl p-0">
+          <div className="flex h-[80vh] flex-col bg-background">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <DialogTitle className="text-xl font-bold">Vista previa</DialogTitle>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center rounded-xl bg-muted p-1">
+                  <button
+                    onClick={() => setPreviewMode("realistic")}
+                    className={cn(
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
+                      previewMode === "realistic" ? "bg-background shadow-sm" : "text-muted-foreground"
+                    )}
+                  >
+                    Vista realista
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode("technical")}
+                    className={cn(
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
+                      previewMode === "technical" ? "bg-background shadow-sm" : "text-muted-foreground"
+                    )}
+                  >
+                    Vista técnica
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative flex-1 overflow-auto bg-gradient-soft p-8">
+              <div
+                className="mx-auto flex h-full items-center justify-center transition-transform duration-200"
+                style={{ transform: `scale(${zoom / 100})` }}
+              >
+                {previewMode === "realistic" ? (
+                  <div className="w-full max-w-md">
+                    <NotebookPreview
+                      size={size}
+                      material={material}
+                      showPages={showPages}
+                      pageType={pageType}
+                      uploaded={previewView === "front" ? uploaded : backUploaded}
+                      preset={previewView === "front" ? preset : backPreset}
+                      pageArtUploaded={pageArtUploaded}
+                      pageArtPreset={pageArtPreset}
+                      pageArtOpacity={pageArtOpacity}
+                    />
+                  </div>
+                ) : (
+                  <div className="relative border-4 border-brand-blue bg-white shadow-2xl"
+                    style={{
+                      width: `${size.w * 40}px`,
+                      height: `${size.h * 40}px`,
+                      padding: "0.125in" // Bleed area
+                    }}
+                  >
+                    {/* Bleed Badge */}
+                    <div className="absolute -top-10 left-0 flex items-center gap-2">
+                      <span className="rounded-full bg-brand-blue px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider">Bleed</span>
+                      <span className="rounded-full bg-brand-green px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider">Safety Area</span>
+                    </div>
+
+                    {/* Dimensions */}
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-muted-foreground">
+                      {size.w}"
+                    </div>
+                    <div className="absolute -left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] font-bold text-muted-foreground">
+                      {size.h}"
+                    </div>
+
+                    {/* Interior Area */}
+                    <div className="relative h-full w-full border border-dashed border-brand-green bg-slate-50/50">
+                      {/* Safety Area line */}
+                      <div className="absolute inset-4 border border-dashed border-brand-green/30 pointer-events-none" />
+
+                      <div className="flex h-full w-full items-center justify-center p-8">
+                        {previewView === "front" ? (
+                          uploaded ? (
+                            <img src={uploaded} alt="" className="max-h-full max-w-full object-contain drop-shadow-lg" />
+                          ) : preset ? (
+                            <span className="text-[8rem] leading-none drop-shadow-lg">{preset}</span>
+                          ) : null
+                        ) : (
+                          backUploaded ? (
+                            <img src={backUploaded} alt="" className="max-h-full max-w-full object-contain drop-shadow-lg" />
+                          ) : backPreset ? (
+                            <span className="text-[8rem] leading-none drop-shadow-lg">{backPreset}</span>
+                          ) : null
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between border-t bg-background px-6 py-4">
+              <div className="flex items-center gap-2 rounded-2xl bg-muted p-1">
+                <button
+                  onClick={() => setPreviewView("front")}
+                  className={cn(
+                    "rounded-xl px-4 py-2 text-xs font-bold transition",
+                    previewView === "front" ? "bg-background shadow-sm" : "text-muted-foreground"
+                  )}
+                >
+                  Portada
+                </button>
+                <button
+                  onClick={() => setPreviewView("back")}
+                  className={cn(
+                    "rounded-xl px-4 py-2 text-xs font-bold transition",
+                    previewView === "back" ? "bg-background shadow-sm" : "text-muted-foreground"
+                  )}
+                >
+                  Contraportada
+                </button>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 rounded-lg"
+                    onClick={() => setZoom(prev => Math.max(50, prev - 10))}
+                  >
+                    −
+                  </Button>
+                  <span className="w-12 text-center text-xs font-bold">{zoom}%</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 rounded-lg"
+                    onClick={() => setZoom(prev => Math.min(200, prev + 10))}
+                  >
+                    +
+                  </Button>
+                </div>
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground">
+                  <RotateCcw className="h-4 w-4" onClick={() => setZoom(100)} />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
