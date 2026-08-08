@@ -3892,6 +3892,7 @@ function NotebookDesigner({
             `Páginas: ${pageCount}`,
             extraLabels.length ? `Extras: ${extraLabels.join(", ")}` : "",
             hasPageArt ? `Marca de agua interior: sí (opacidad ${pageArtOpacity}%)` : "",
+            `Cantidad de diseños: ${designs.length}`,
             `Cantidad de libretas: ${qty}`,
             notes ? `Notas: ${notes}` : "",
             uploaded ? "Diseño de portada: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño de portada: preset "${preset}"` : "Diseño de portada: pendiente de enviar",
