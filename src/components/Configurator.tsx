@@ -4120,12 +4120,12 @@ function NotebookDesigner({
                       {/* DRAGGABLE DESIGN SURFACE */}
                       {(() => {
                         const currentArt = 
-                          previewView === "front" ? { uploaded: uploaded, preset: preset } :
-                          previewView === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
-                          previewView === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+                          activeSurface === "front" ? { uploaded: uploaded, preset: preset } :
+                          activeSurface === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+                          activeSurface === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
                           { uploaded: backUploaded, preset: backPreset };
                         
-                        const placement = surfacePlacements[previewView];
+                        const placement = surfacePlacements[activeSurface];
 
                         if (!currentArt.uploaded && !currentArt.preset) return null;
 
