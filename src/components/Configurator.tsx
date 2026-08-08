@@ -3815,35 +3815,7 @@ function NotebookDesigner({
 
 
 
-        {/* Tabbed Design Surface Picker */}
-        <div className="flex flex-wrap gap-2">
-          {(["front", "insideFront", "insideBack", "back"] as const).map((tab) => {
-            const hasData = 
-              tab === "front" ? (uploaded || preset) :
-              tab === "insideFront" ? (insideFrontUploaded || insideFrontPreset) :
-              tab === "insideBack" ? (insideBackUploaded || insideBackPreset) :
-              (backUploaded || backPreset);
-
-            
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={cn(
-                  "relative rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition",
-                  activeTab === tab ? "bg-primary text-primary-foreground shadow-md" : "bg-muted hover:bg-muted/80 text-muted-foreground"
-                )}
-              >
-                {tab === "front" ? "Portada" : tab === "insideFront" ? "Int. Portada" : tab === "insideBack" ? "Int. Contra" : "Contra"}
-                {hasData && (
-                  <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-brand-green text-[8px] text-white">
-                    <Check className="h-2 w-2" strokeWidth={4} />
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
+        {/* Tabbed Design Surface Picker - Moved below size selector later */}
 
         {/* Dynamic Upload Section */}
         <div className="rounded-2xl border-2 border-dashed border-border bg-background/50 p-6">
