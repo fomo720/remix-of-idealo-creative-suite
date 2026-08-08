@@ -1414,18 +1414,6 @@ export function Configurator() {
                 </button>
               )}
 
-              {/* Libretas quantity override - only visible in designer step */}
-              {isNotebook && step === 4 && (
-                <div className="mt-4">
-                  <Label className="mb-2 block text-sm font-semibold">Cantidad de libretas</Label>
-                  <Input 
-                    type="number" 
-                    min={1} 
-                    value={qty} 
-                    onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} 
-                  />
-                </div>
-              )}
 
               <NavRow 
                 onBack={() => goTo(2)} 
