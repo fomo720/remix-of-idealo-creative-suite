@@ -4451,12 +4451,16 @@ function NotebookPreview({
               "absolute flex items-center justify-center overflow-hidden",
               !interactive && "pointer-events-none"
             )}
-            style={
-              activeSurface === "front" ? { top: "11%", left: "21.5%", right: "22%", bottom: "11%" } :
-              activeSurface === "back" ? { top: "10%", left: "15%", right: "25%", bottom: "10%" } :
-              activeSurface === "insideFront" ? { top: "19%", left: "8.5%", right: "52.5%", bottom: "17%" } :
-              { top: "18%", left: "52%", right: "8.5%", bottom: "16%" }
-            }
+            style={{
+              ...(() => {
+                if (activeSurface === "front") return { top: "11%", left: "21.5%", right: "22%", bottom: "11%" };
+                if (activeSurface === "back") return { top: "10%", left: "15%", right: "25%", bottom: "10%" };
+                if (activeSurface === "insideFront") return { top: "19%", left: "8.5%", right: "52.5%", bottom: "17%" };
+                return { top: "18%", left: "52%", right: "8.5%", bottom: "16%" };
+              })(),
+              maskImage: "url(#notebookHolesMask)",
+              WebkitMaskImage: "url(#notebookHolesMask)", // Cross-browser support
+            }}
           >
           {(() => {
             const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
