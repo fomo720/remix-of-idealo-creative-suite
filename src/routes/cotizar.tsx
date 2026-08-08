@@ -25,7 +25,7 @@ function CotizarPage() {
       ? "Hola Idealo 👋 Quiero cotizar un proyecto. ¿Me pueden ayudar?"
       : `Hola Idealo 👋 Quiero cotizar lo siguiente:\n\n${items
           .map((i) => `- ${i.title} x${i.quantity}`)
-          .join("\n")}\n\n¿Me pueden ayudar con precios y tiempos?`;
+          .join("\n")}\n\n¿Me pueden ayudar con el presupuesto y tiempos?`;
   const waHref = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
   const isEmpty = items.length === 0;

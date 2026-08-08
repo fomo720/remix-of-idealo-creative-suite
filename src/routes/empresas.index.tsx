@@ -147,8 +147,7 @@ function EmpresasIndex() {
                 ))}
               </div>
               <div className="mt-8 flex items-baseline gap-3">
-                <span className="text-5xl font-bold">L 600</span>
-                <span className="text-sm text-white/80">precio total</span>
+                <span className="text-sm text-white/80">presupuesto personalizado</span>
               </div>
               <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
               <a
@@ -180,8 +179,7 @@ function EmpresasIndex() {
                 ))}
               </div>
               <div className="mt-8 flex items-baseline gap-3">
-                <span className="text-5xl font-bold">L 1,600</span>
-                <span className="text-sm text-white/80">precio total</span>
+                <span className="text-sm text-white/80">presupuesto personalizado</span>
               </div>
               <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
               <a

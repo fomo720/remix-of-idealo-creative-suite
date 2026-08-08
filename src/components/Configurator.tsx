@@ -2129,16 +2129,15 @@ export function Configurator() {
                     </span>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+                  <div className="mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
                     <Stat label="Tamaño" value={`${width}×${height} ${unit}`} />
                     <Stat label="Cantidad" value={`${qty}`} />
-                    <Stat label="Precio estimado" value={currency(price)} highlight />
                   </div>
 
                   <p className="mt-3 text-center text-[11px] text-muted-foreground">
                     {hasArt
                       ? "Arrastra la imagen para moverla · usa las esquinas para redimensionar · toca los iconos para editar."
-                      : "Precio estimado en Lempiras. Cotización final tras revisión de arte."}
+                      : "Cotización final tras revisión de arte."}
                   </p>
                 </div>
 
@@ -3824,10 +3823,9 @@ function NotebookDesigner({
           />
 
 
-          <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+          <div className="mt-8 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
             <Stat label="Tamaño" value={`${size.label} · ${size.cm}`} />
             <Stat label="Cantidad" value={`${qty}`} />
-            <Stat label="Precio estimado" value={currency(price)} highlight />
           </div>
           <p className="mt-3 text-center text-[11px] text-muted-foreground">
             {showPages
@@ -4530,10 +4528,9 @@ function LaserDesigner({
             </ProductMockup>
           </div>
 
-          <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
+          <div className="mt-6 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
             <Stat label="Producto" value={product.name.split(" ")[0]} />
             <Stat label="Cantidad" value={`${qty}`} />
-            <Stat label="Precio estimado" value={currency(price)} highlight />
           </div>
 
           <p className="mt-3 text-center text-[11px] text-muted-foreground">
@@ -5577,7 +5574,7 @@ function TextilesDesignStep({
               {canSubmit ? "Enviar solicitud por WhatsApp" : "Elegí tallas y cantidad"}
             </button>
             <p className="mt-3 text-center text-[11px] text-muted-foreground">
-              Te respondemos con precio y tiempo de entrega el mismo día.
+              Te respondemos con el presupuesto y tiempo de entrega el mismo día.
             </p>
           </div>
         </div>
