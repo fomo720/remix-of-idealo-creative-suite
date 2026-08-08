@@ -738,7 +738,7 @@ export function Configurator() {
   const [sizeCategory, setSizeCategory] = useState<StickerSizeCategory>("small");
   const [stickerMount, setStickerMount] = useState<StickerMount>("vinyl");
 
-  const [qty, setQty] = useState(MIN_QTY);
+  const [qty, setQty] = useState(1);
   const [notes, setNotes] = useState("");
 
   // notebook state
