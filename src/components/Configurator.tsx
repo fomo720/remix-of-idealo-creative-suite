@@ -755,8 +755,8 @@ export function Configurator() {
   const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
   const [pageType, setPageType] = useState<PageType>("blank");
   // notebook design surfaces
-  const [uploaded, setUploaded] = useState<string | null>(null);
-  const [preset, setPreset] = useState<string | null>(null);
+  const [nbUploaded, setNbUploaded] = useState<string | null>(null);
+  const [nbPreset, setNbPreset] = useState<string | null>(null);
   const [backUploaded, setBackUploaded] = useState<string | null>(null);
   const [backPreset, setBackPreset] = useState<string | null>(null);
   const [insideFrontUploaded, setInsideFrontUploaded] = useState<string | null>(null);
