@@ -3930,7 +3930,7 @@ function NotebookDesigner({
                 {activeArt.uploaded ? "Cambiar diseño" : "Subir Diseño / Logo"}
               </div>
               <div className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
-                {activeSurface === "front" ? "Portada" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada"}
+                Para: {activeSurface === "front" ? "Portada (Frente)" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada (Atrás)"}
               </div>
             </div>
           </button>
