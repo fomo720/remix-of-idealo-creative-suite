@@ -4289,6 +4289,20 @@ function NotebookDesigner({
                   ))}
                 </div>
 
+                <button
+                  onClick={() => {
+                    setSurfacePlacements(prev => ({
+                      ...prev,
+                      [activeSurface]: { x: 50, y: 50, scale: 100, rotation: 0 }
+                    }));
+                  }}
+                  className="rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 flex items-center gap-1.5"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                  Reiniciar Posición
+                </button>
+
+
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
