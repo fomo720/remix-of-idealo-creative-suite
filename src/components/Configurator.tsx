@@ -1661,13 +1661,13 @@ export function Configurator() {
               setPageType={setPageType}
               uploaded={nbUploaded}
               preset={nbPreset}
-              onFile={handleFile}
-              onPreset={(p) => { setNbPreset(p); setNbUploaded(null); }}
-              surfacePlacements={surfacePlacements}
-              setSurfacePlacements={setSurfacePlacements}
+               onFile={handleNbFile}
+               onPreset={(p) => { setNbPreset(p); setNbUploaded(null); }}
+               surfacePlacements={surfacePlacements}
+               setSurfacePlacements={setSurfacePlacements}
 
 
-              onClear={clearImage}
+               onClear={clearNbImage}
               fileRef={fileRef}
               backUploaded={backUploaded}
               backPreset={backPreset}
