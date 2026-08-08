@@ -4076,17 +4076,18 @@ function NotebookDesigner({
                       showPages={showPages}
                       pageType={pageType}
                       uploaded={
-                        previewView === "front" ? nbUploaded :
+                        previewView === "front" ? uploaded :
                         previewView === "insideFront" ? insideFrontUploaded :
                         previewView === "insideBack" ? insideBackUploaded :
                         backUploaded
                       }
                       preset={
-                        previewView === "front" ? nbPreset :
+                        previewView === "front" ? preset :
                         previewView === "insideFront" ? insideFrontPreset :
                         previewView === "insideBack" ? insideBackPreset :
                         backPreset
                       }
+
                       pageArtUploaded={pageArtUploaded}
                       pageArtPreset={pageArtPreset}
                       pageArtOpacity={pageArtOpacity}
