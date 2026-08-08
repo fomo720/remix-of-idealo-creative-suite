@@ -4000,9 +4000,9 @@ function NotebookDesigner({
           </div>
 
           <p className="mt-3 text-center text-[10px] text-muted-foreground">
-            {hasArt
-              ? "Diseño cargado. Verificá que el logo esté centrado y sea legible."
-              : "Subí tu logo o arte para ver cómo quedará tu libreta."}
+            {activeArt.uploaded || activeArt.preset
+              ? "Diseño cargado en esta superficie. Verificá que el logo esté centrado y sea legible."
+              : "Subí tu logo o arte para ver cómo quedará esta superficie de tu libreta."}
           </p>
         </div>
 
