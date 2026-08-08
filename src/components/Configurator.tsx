@@ -738,7 +738,7 @@ export function Configurator() {
   const [sizeCategory, setSizeCategory] = useState<StickerSizeCategory>("small");
   const [stickerMount, setStickerMount] = useState<StickerMount>("vinyl");
 
-  const [qty, setQty] = useState(MIN_QTY);
+  const [qty, setQty] = useState(1);
   const [notes, setNotes] = useState("");
 
   // notebook state
@@ -1414,6 +1414,7 @@ export function Configurator() {
                 </button>
               )}
 
+
               <NavRow 
                 onBack={() => goTo(2)} 
                 onNext={
@@ -2052,9 +2053,9 @@ export function Configurator() {
                   <Input
                     id="qty"
                     type="number"
-                    min={MIN_QTY}
+                    min={1}
                     value={qty}
-                    onChange={(e) => setQty(Math.max(MIN_QTY, +e.target.value || MIN_QTY))}
+                    onChange={(e) => setQty(Math.max(1, +e.target.value || 1))}
                   />
                   <div className="mt-2 grid grid-cols-5 gap-2">
                     {[25, 50, 100, 250, 500].map((n) => (
@@ -2071,7 +2072,7 @@ export function Configurator() {
                     ))}
                   </div>
                   <p className="mt-2 text-[11px] text-muted-foreground">
-                    Cantidad mínima: {MIN_QTY} stickers. Podés escribir cualquier cantidad manualmente arriba de {MIN_QTY}.
+                    Podés escribir cualquier cantidad manualmente arriba.
                   </p>
                 </div>
 
