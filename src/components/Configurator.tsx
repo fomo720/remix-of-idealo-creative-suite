@@ -4582,72 +4582,71 @@ function NotebookPreview({
           })()}
           </div>
 
-          {/* SPIRALS OVERLAY - Must be ON TOP of the design and photo holes */}
+          {/* SPIRALS OVERLAY - Realistic physical spiral holes logic */}
           <div className="absolute inset-0 pointer-events-none">
-            <svg viewBox="0 0 1000 1000" className="w-full h-full drop-shadow-sm">
+            {/* 
+              We use a mask to "punch holes" in the design layer where the spirals are.
+              In SVG, mask-type: luminance where black = transparent and white = opaque.
+            */}
+            <svg viewBox="0 0 1000 1000" className="w-full h-full">
               <defs>
-                <filter id="spiralHoleShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
-                  <feOffset dx="0.5" dy="0.5" result="offsetblur" />
-                  <feComponentTransfer>
-                    <feFuncA type="linear" slope="0.4" />
-                  </feComponentTransfer>
-                  <feMerge>
-                    <feMergeNode />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
+                {/* 
+                  The mask definition: 
+                  Everything white is visible. 
+                  The black rectangles are the "holes" where we want the design to BE CUT (transparent).
+                */}
+                <mask id="notebookHolesMask">
+                  <rect x="0" y="0" width="1000" height="1000" fill="white" />
+                  {activeSurface === "front" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="160" y={115 + i * 55} 
+                          width="6" height="42" 
+                          rx="2"
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {activeSurface === "back" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="834" y={105 + i * 55} 
+                          width="6" height="42" 
+                          rx="2"
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {activeSurface === "insideFront" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="482" y={185 + i * 42} 
+                          width="4" height="32" 
+                          rx="1"
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {activeSurface === "insideBack" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="514" y={182 + i * 42} 
+                          width="4" height="32" 
+                          rx="1"
+                        />
+                      ))}
+                    </g>
+                  )}
+                </mask>
               </defs>
-              
-              {/* Vertical array of black spiral holes/elements that stay on TOP of the design */}
-              {activeSurface === "front" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="160" y={115 + i * 55} 
-                      width="6" height="42" 
-                      rx="2" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
-              {activeSurface === "back" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="834" y={105 + i * 55} 
-                      width="6" height="42" 
-                      rx="2" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
-              {activeSurface === "insideFront" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="482" y={185 + i * 42} 
-                      width="4" height="32" 
-                      rx="1" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
-              {activeSurface === "insideBack" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="514" y={182 + i * 42} 
-                      width="4" height="32" 
-                      rx="1" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
             </svg>
           </div>
         </div>
