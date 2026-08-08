@@ -2052,9 +2052,9 @@ export function Configurator() {
                   <Input
                     id="qty"
                     type="number"
-                    min={MIN_QTY}
+                    min={1}
                     value={qty}
-                    onChange={(e) => setQty(Math.max(MIN_QTY, +e.target.value || MIN_QTY))}
+                    onChange={(e) => setQty(Math.max(1, +e.target.value || 1))}
                   />
                   <div className="mt-2 grid grid-cols-5 gap-2">
                     {[25, 50, 100, 250, 500].map((n) => (
