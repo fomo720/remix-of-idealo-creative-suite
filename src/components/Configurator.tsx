@@ -13,7 +13,7 @@ import {
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
   HandCoins, Eye, PaintBucket, Anchor, Tag,
-  BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
+  BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote, List, Grid2x2,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem, Settings,
   FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper, ShoppingBag,
   Palette, PencilRuler, MessageCircle, Download,
