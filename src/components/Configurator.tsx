@@ -4554,7 +4554,9 @@ function NotebookPreview({
               </div>
             );
           })()}
+          </div>
         </div>
+
 
         {/* Glossy sheen for realistic feel */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30" />
