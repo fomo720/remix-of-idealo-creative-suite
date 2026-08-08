@@ -750,6 +750,8 @@ export function Configurator() {
   const [pageArtUploaded, setPageArtUploaded] = useState<string | null>(null);
   const [pageArtPreset, setPageArtPreset] = useState<string | null>(null);
   const [pageArtOpacity, setPageArtOpacity] = useState(35); // 0-100
+  const [backUploaded, setBackUploaded] = useState<string | null>(null);
+  const [backPreset, setBackPreset] = useState<string | null>(null);
 
 
   // laser state
@@ -783,6 +785,7 @@ export function Configurator() {
   const [selected, setSelected] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const backFileRef = useRef<HTMLInputElement>(null);
   const pageFileRef = useRef<HTMLInputElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const isNotebook = category === "libretas";
@@ -965,6 +968,18 @@ export function Configurator() {
     setPageArtUploaded(null);
     setPageArtPreset(null);
     if (pageFileRef.current) pageFileRef.current.value = "";
+  };
+
+  const handleBackFile = (f: File | null) => {
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    setBackUploaded(url);
+    setBackPreset(null);
+  };
+  const clearBackImage = () => {
+    setBackUploaded(null);
+    setBackPreset(null);
+    if (backFileRef.current) backFileRef.current.value = "";
   };
 
 
@@ -1598,6 +1613,12 @@ export function Configurator() {
               onPreset={(p) => { setPreset(p); setUploaded(null); }}
               onClear={clearImage}
               fileRef={fileRef}
+              backUploaded={backUploaded}
+              backPreset={backPreset}
+              onBackFile={handleBackFile}
+              onBackPreset={(p) => { setBackPreset(p); setBackUploaded(null); }}
+              onBackClear={clearBackImage}
+              backFileRef={backFileRef}
               pageArtUploaded={pageArtUploaded}
               pageArtPreset={pageArtPreset}
               pageArtOpacity={pageArtOpacity}
@@ -3522,6 +3543,7 @@ function NotebookMaterialCard({
 function NotebookDesigner({
   styleId, material, sizeIdx, setSizeIdx, pageType, setPageType,
   uploaded, preset, onFile, onPreset, onClear, fileRef,
+  backUploaded, backPreset, onBackFile, onBackPreset, onBackClear, backFileRef,
   pageArtUploaded, pageArtPreset, pageArtOpacity, setPageArtOpacity,
   onPageArtFile, onPageArtPreset, onPageArtClear, pageFileRef,
   qty, setQty, notes, setNotes, price, onBack,
@@ -3538,6 +3560,12 @@ function NotebookDesigner({
   onPreset: (p: string) => void;
   onClear: () => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
+  backUploaded: string | null;
+  backPreset: string | null;
+  onBackFile: (f: File | null) => void;
+  onBackPreset: (p: string) => void;
+  onBackClear: () => void;
+  backFileRef: React.RefObject<HTMLInputElement | null>;
   pageArtUploaded: string | null;
   pageArtPreset: string | null;
   pageArtOpacity: number;
@@ -3560,6 +3588,11 @@ function NotebookDesigner({
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
   const [pageCount, setPageCount] = useState<number>(80);
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previewView, setPreviewView] = useState<"front" | "back">("front");
+  const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
+  const [zoom, setZoom] = useState(100);
+
   const toggleExtra = (id: NotebookExtra) =>
     setExtras((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
@@ -3714,6 +3747,31 @@ function NotebookDesigner({
 
           {hasArt && (
             <button onClick={onClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
+              <Trash2 className="h-3.5 w-3.5" /> Quitar arte
+            </button>
+          )}
+        </div>
+
+        {/* Upload back cover art */}
+        <div>
+          <Label className="mb-2 block text-sm font-semibold">Arte para la contraportada</Label>
+          <input
+            ref={backFileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onBackFile(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => backFileRef.current?.click()}
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+          >
+            <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
+            {backUploaded ? "Cambiar arte contraportada" : "Subir Arte Contraportada"}
+          </button>
+
+          {(backUploaded || backPreset) && (
+            <button onClick={onBackClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
               <Trash2 className="h-3.5 w-3.5" /> Quitar arte
             </button>
           )}
