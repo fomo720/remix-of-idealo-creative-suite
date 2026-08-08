@@ -3658,9 +3658,8 @@ function NotebookDesigner({
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
   const [pageCount, setPageCount] = useState<number>(80);
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
-  const [activeTab, setActiveTab] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
+  const [activeSurface, setActiveSurface] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [previewView, setPreviewView] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
   const [zoom, setZoom] = useState(100);
 
