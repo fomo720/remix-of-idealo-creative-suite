@@ -4124,6 +4124,9 @@ function NotebookDesigner({
                       pageArtOpacity={pageArtOpacity}
                       isBack={activeSurface === "back" || activeSurface === "insideBack"}
                       activeSurface={activeSurface}
+                      surfacePlacements={surfacePlacements}
+                      setSurfacePlacements={setSurfacePlacements}
+                      interactive={true}
                     />
                   </div>
                 ) : (
