@@ -4215,7 +4215,7 @@ function NotebookDesigner({
                       onClick={() => setActiveSurface(v)}
                       className={cn(
                         "rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition",
-                        previewView === v ? "bg-background shadow-sm" : "text-muted-foreground hover:bg-background/40"
+                        activeSurface === v ? "bg-background shadow-sm" : "text-muted-foreground hover:bg-background/40"
                       )}
                     >
                       {v === "front" ? "Portada" : v === "insideFront" ? "Int. Portada" : v === "insideBack" ? "Int. Contra" : "Contra"}
