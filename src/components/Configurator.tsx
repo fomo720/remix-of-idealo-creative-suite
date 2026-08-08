@@ -4264,6 +4264,7 @@ function NotebookPreview({
   size, material, showPages, pageType, uploaded, preset,
   pageArtUploaded, pageArtPreset, pageArtOpacity,
   isBack = false,
+  activeSurface = "front",
 }: {
   size: (typeof notebookSizes)[number];
   material: (typeof notebookMaterials)[number];
@@ -4275,6 +4276,7 @@ function NotebookPreview({
   pageArtPreset?: string | null;
   pageArtOpacity?: number;
   isBack?: boolean;
+  activeSurface?: "front" | "insideFront" | "insideBack" | "back";
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
