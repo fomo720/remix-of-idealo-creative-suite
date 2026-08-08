@@ -4082,22 +4082,23 @@ function NotebookDesigner({
                       showPages={showPages}
                       pageType={pageType}
                       uploaded={
-                        previewView === "front" ? uploaded :
-                        previewView === "insideFront" ? insideFrontUploaded :
-                        previewView === "insideBack" ? insideBackUploaded :
+                        activeSurface === "front" ? uploaded :
+                        activeSurface === "insideFront" ? insideFrontUploaded :
+                        activeSurface === "insideBack" ? insideBackUploaded :
                         backUploaded
                       }
                       preset={
-                        previewView === "front" ? preset :
-                        previewView === "insideFront" ? insideFrontPreset :
-                        previewView === "insideBack" ? insideBackPreset :
+                        activeSurface === "front" ? preset :
+                        activeSurface === "insideFront" ? insideFrontPreset :
+                        activeSurface === "insideBack" ? insideBackPreset :
                         backPreset
                       }
 
                       pageArtUploaded={pageArtUploaded}
                       pageArtPreset={pageArtPreset}
                       pageArtOpacity={pageArtOpacity}
-                      isBack={previewView === "back" || previewView === "insideBack"}
+                      isBack={activeSurface === "back" || activeSurface === "insideBack"}
+                      activeSurface={activeSurface}
                     />
                   </div>
                 ) : (
