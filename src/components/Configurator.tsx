@@ -1414,7 +1414,7 @@ export function Configurator() {
                 </button>
               )}
 
-              {/* Libretas quantity override - added here for safety since I couldn't find where it was defined elsewhere */}
+              {/* Libretas quantity override - only visible in designer step */}
               {isNotebook && step === 4 && (
                 <div className="mt-4">
                   <Label className="mb-2 block text-sm font-semibold">Cantidad de libretas</Label>
