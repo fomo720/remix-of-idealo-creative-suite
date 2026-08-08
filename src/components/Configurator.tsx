@@ -3720,6 +3720,33 @@ function NotebookDesigner({
           </div>
         </div>
 
+        {/* Paper Type Selector */}
+        <div>
+          <Label className="mb-3 block text-sm font-semibold">Tipo de hojas interiores</Label>
+          <div className="grid grid-cols-2 gap-2">
+            {(["blank", "ruled", "dotted", "grid"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setPageType(t)}
+                className={cn(
+                  "flex items-center gap-2 rounded-xl border-2 px-4 py-2.5 text-xs font-bold transition-all",
+                  pageType === t 
+                    ? "rainbow-border-active bg-background" 
+                    : "border-border hover:border-border/80 hover:bg-muted/50 text-muted-foreground"
+                )}
+              >
+                <div className="h-4 w-4 opacity-60">
+                  {t === "blank" ? <File className="h-4 w-4" /> : 
+                   t === "ruled" ? <List className="h-4 w-4" /> : 
+                   t === "dotted" ? <Grid2X2 className="h-4 w-4" /> : 
+                   <Grid3X3 className="h-4 w-4" />}
+                </div>
+                {t === "blank" ? "Blancas" : t === "ruled" ? "Rayadas" : t === "dotted" ? "Puntos" : "Cuadriculadas"}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Size */}
         <div>
           <Label className="mb-3 block text-sm font-semibold">Tamaño de la libreta</Label>
