@@ -953,6 +953,17 @@ export function Configurator() {
     return () => window.removeEventListener("idealo:configure", handler as EventListener);
   }, []);
 
+  const handleNbFile = (f: File | null) => {
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    setNbUploaded(url);
+    setNbPreset(null);
+  };
+  const clearNbImage = () => {
+    setNbUploaded(null);
+    setNbPreset(null);
+  };
+
   const handleFile = (f: File | null) => {
     if (!f) return;
     const url = URL.createObjectURL(f);
