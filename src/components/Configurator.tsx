@@ -3646,6 +3646,7 @@ function NotebookDesigner({
 }) {
   const size = notebookSizes[sizeIdx];
   const printRef = useRef<HTMLDivElement>(null);
+  const activeFileInputRef = useRef<HTMLInputElement>(null);
 
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
