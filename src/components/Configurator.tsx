@@ -8,12 +8,12 @@ import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
 // repositorio pero están desconectados del flujo del cliente (fase futura).
 
 import {
-  Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors,
+  Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors, File,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
   HandCoins, Eye, PaintBucket, Anchor, Tag,
-  BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote,
+  BookOpen, NotebookPen, Grid3x3, AlignJustify, Dot, StickyNote, List, Grid2x2,
   Flame, Wallet, KeyRound, Coffee, Wine, TreePalm, RotateCcw, Move, Gem, Settings,
   FileCheck2, Printer, Truck, CreditCard, FileText, FolderOpen, Newspaper, ShoppingBag,
   Palette, PencilRuler, MessageCircle, Download,
@@ -3720,6 +3720,33 @@ function NotebookDesigner({
           </div>
         </div>
 
+        {/* Paper Type Selector */}
+        <div>
+          <Label className="mb-3 block text-sm font-semibold">Tipo de hojas interiores</Label>
+          <div className="grid grid-cols-2 gap-2">
+            {(["blank", "ruled", "dotted", "grid"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setPageType(t)}
+                className={cn(
+                  "flex items-center gap-2 rounded-xl border-2 px-4 py-2.5 text-xs font-bold transition-all",
+                  pageType === t 
+                    ? "rainbow-border-active bg-background" 
+                    : "border-border hover:border-border/80 hover:bg-muted/50 text-muted-foreground"
+                )}
+              >
+                <div className="h-4 w-4 opacity-60">
+                  {t === "blank" ? <File className="h-4 w-4" /> : 
+                   t === "ruled" ? <List className="h-4 w-4" /> : 
+                   t === "dotted" ? <Grid2x2 className="h-4 w-4" /> : 
+                   <Grid3x3 className="h-4 w-4" />}
+                </div>
+                {t === "blank" ? "Blancas" : t === "ruled" ? "Rayadas" : t === "dotted" ? "Puntos" : "Cuadriculadas"}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Size */}
         <div>
           <Label className="mb-3 block text-sm font-semibold">Tamaño de la libreta</Label>
@@ -4384,26 +4411,28 @@ function NotebookPreview({
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
 
       <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl">
-        {/* Background Real Photo */}
-        <img 
-          src={mockups[activeSurface]} 
-          alt="" 
-          className="w-full h-auto block"
-        />
+        {/* Background Real Photo (Now with full Bleed logic) */}
+        <div className="relative w-full">
+          {/* Base paper/product photo */}
+          <img 
+            src={mockups[activeSurface]} 
+            alt="" 
+            className="w-full h-auto block"
+          />
 
-        {/* Design Overlay */}
-        <div 
-          className={cn(
-            "absolute flex items-center justify-center overflow-hidden",
-            !interactive && "pointer-events-none"
-          )}
-          style={
-            activeSurface === "front" ? { top: "12.6%", left: "20.1%", right: "24.1%", bottom: "12.8%" } :
-            activeSurface === "back" ? { top: "11.8%", left: "17.5%", right: "24.9%", bottom: "12.6%" } :
-            activeSurface === "insideFront" ? { top: "20.9%", left: "10.5%", right: "52.3%", bottom: "19.1%" } :
-            { top: "19.9%", left: "52.5%", right: "10.5%", bottom: "17.6%" }
-          }
-        >
+          {/* Design Overlay - CLIP TO EDGES of the notebook in photo */}
+          <div 
+            className={cn(
+              "absolute flex items-center justify-center overflow-hidden",
+              !interactive && "pointer-events-none"
+            )}
+            style={
+              activeSurface === "front" ? { top: "11%", left: "18%", right: "22%", bottom: "11%" } :
+              activeSurface === "back" ? { top: "10%", left: "15%", right: "23%", bottom: "10%" } :
+              activeSurface === "insideFront" ? { top: "19%", left: "8%", right: "50%", bottom: "17%" } :
+              { top: "18%", left: "50%", right: "8%", bottom: "16%" }
+            }
+          >
           {(() => {
             const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
             
@@ -4525,6 +4554,48 @@ function NotebookPreview({
               </div>
             );
           })()}
+          </div>
+        </div>
+
+
+        {/* Spirals / Rings overlay - must be ON TOP of the design */}
+        <div className="absolute inset-0 pointer-events-none">
+          {activeSurface === "front" && (
+            <svg viewBox="0 0 1000 1000" className="w-full h-full">
+              <defs>
+                <filter id="spiralShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+                  <feOffset dx="2" dy="2" result="offsetblur" />
+                  <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.3" />
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              {/* Vertical array of spiral rings for front cover */}
+              {[...Array(15)].map((_, i) => (
+                <g key={i} filter="url(#spiralShadow)">
+                   <path 
+                     d={`M 155 ${120 + i * 55} Q 165 ${120 + i * 55} 175 ${125 + i * 55} L 185 ${145 + i * 55} Q 175 ${155 + i * 55} 165 ${155 + i * 55} Z`} 
+                     fill="#94a3b8" 
+                     stroke="#475569" 
+                     strokeWidth="1"
+                   />
+                   <rect x="150" y={115 + i * 55} width="8" height="45" rx="2" fill="url(#metalGrad)" />
+                </g>
+              ))}
+              <defs>
+                <linearGradient id="metalGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#cbd5e1" />
+                  <stop offset="50%" stopColor="#f8fafc" />
+                  <stop offset="100%" stopColor="#94a3b8" />
+                </linearGradient>
+              </defs>
+            </svg>
+          )}
         </div>
 
         {/* Glossy sheen for realistic feel */}
