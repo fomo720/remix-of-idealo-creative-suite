@@ -4317,19 +4317,21 @@ function NotebookPreview({
         />
 
         {/* Design Overlay */}
-        <div className={cn(
-          "absolute pointer-events-none flex items-center justify-center overflow-hidden",
-          activeSurface === "front" ? "inset-[5%] right-[2%]" :
-          activeSurface === "back" ? "inset-[5%] left-[2%]" :
-          activeSurface === "insideFront" ? "inset-0 right-[50%]" : // Left page
-          "inset-0 left-[50%]" // Right page for insideBack
-        )}>
+        <div 
+          className="absolute pointer-events-none flex items-center justify-center overflow-hidden"
+          style={
+            activeSurface === "front" ? { top: "12.6%", left: "20.1%", right: "24.1%", bottom: "12.8%" } :
+            activeSurface === "back" ? { top: "11.8%", left: "17.5%", right: "24.9%", bottom: "12.6%" } :
+            activeSurface === "insideFront" ? { top: "20.9%", left: "10.5%", right: "52.3%", bottom: "19.1%" } :
+            { top: "19.9%", left: "52.5%", right: "10.5%", bottom: "17.6%" }
+          }
+        >
           {uploaded ? (
             <img 
               src={uploaded} 
               alt="" 
               className={cn(
-                "max-h-[85%] max-w-[85%] object-contain drop-shadow-md transition-all duration-300",
+                "max-h-full max-w-full object-contain drop-shadow-md transition-all duration-300",
                 (activeSurface === "front" || activeSurface === "back") && "scale-105"
               )} 
             />
