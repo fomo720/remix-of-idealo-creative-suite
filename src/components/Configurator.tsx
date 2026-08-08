@@ -1648,6 +1648,7 @@ export function Configurator() {
               preset={nbPreset}
               onFile={handleFile}
               onPreset={(p) => { setNbPreset(p); setNbUploaded(null); }}
+
               onClear={clearImage}
               fileRef={fileRef}
               backUploaded={backUploaded}
@@ -3604,6 +3605,7 @@ function NotebookDesigner({
   setPageType: (p: PageType) => void;
   uploaded: string | null;
   preset: string | null;
+
   onFile: (f: File | null) => void;
   onPreset: (p: string) => void;
   onClear: () => void;
@@ -3810,10 +3812,11 @@ function NotebookDesigner({
         <div className="flex flex-wrap gap-2">
           {(["front", "insideFront", "insideBack", "back"] as const).map((tab) => {
             const hasData = 
-              tab === "front" ? (nbUploaded || nbPreset) :
+              tab === "front" ? (uploaded || preset) :
               tab === "insideFront" ? (insideFrontUploaded || insideFrontPreset) :
               tab === "insideBack" ? (insideBackUploaded || insideBackPreset) :
               (backUploaded || backPreset);
+
             
             return (
               <button
@@ -3976,8 +3979,9 @@ function NotebookDesigner({
             material={material}
             showPages={showPages}
             pageType={pageType}
-            uploaded={nbUploaded}
-            preset={nbPreset}
+            uploaded={uploaded}
+            preset={preset}
+
             pageArtUploaded={pageArtUploaded}
             pageArtPreset={pageArtPreset}
             pageArtOpacity={pageArtOpacity}
@@ -4005,7 +4009,7 @@ function NotebookDesigner({
             extras.length > 0 ? `Extras: ${extras.map(e => notebookExtras.find(x => x.id === e)?.name).join(", ")}` : "",
             `Cantidad: ${qty}`,
             notes ? `Notas: ${notes}` : "",
-            nbUploaded ? "Portada: Arte personalizado 📎" : nbPreset ? `Portada: Preset "${nbPreset}"` : "Portada: Pendiente",
+            uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente",
             backUploaded ? "Contraportada: Arte personalizado 📎" : backPreset ? `Contraportada: Preset "${backPreset}"` : "",
             insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : insideFrontPreset ? "Interior Portada: Preset" : "",
             insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : insideBackPreset ? "Interior Contra: Preset" : "",
@@ -4108,7 +4112,7 @@ function NotebookDesigner({
                       {/* DRAGGABLE DESIGN SURFACE */}
                       {(() => {
                         const currentArt = 
-                          previewView === "front" ? { uploaded: nbUploaded, preset: nbPreset } :
+                          previewView === "front" ? { uploaded: uploaded, preset: preset } :
                           previewView === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
                           previewView === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
                           { uploaded: backUploaded, preset: backPreset };
