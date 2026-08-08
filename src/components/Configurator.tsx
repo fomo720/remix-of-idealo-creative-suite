@@ -3878,7 +3878,7 @@ function NotebookDesigner({
           {!!(activeArt.uploaded || activeArt.preset) && (
             <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
               <span className="text-[10px] font-bold text-brand-green uppercase tracking-wider flex items-center gap-1">
-                <Check className="h-3 w-3" /> Diseño cargado
+                <Check className="h-3 w-3" /> Diseño en {activeSurface === "front" ? "Portada" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada"} cargado
               </span>
               <button onClick={activeClear} className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-destructive transition-colors">
                 <Trash2 className="h-3.5 w-3.5" /> Borrar
