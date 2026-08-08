@@ -3807,7 +3807,7 @@ function NotebookDesigner({
                       : "bg-background text-foreground border-border hover:border-foreground/30"
                   )}
                 >
-                  {surface === "front" ? "Portada" : surface === "insideFront" ? "Int. Portada" : surface === "insideBack" ? "Int. Contra" : "Contra"}
+                  {surface === "front" ? "Portada (Frente)" : surface === "insideFront" ? "Int. Portada" : surface === "insideBack" ? "Int. Contra" : "Contra (Atrás)"}
                   {hasData && (
                     <span className={cn(
                       "absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm",
@@ -3930,7 +3930,7 @@ function NotebookDesigner({
                 {activeArt.uploaded ? "Cambiar diseño" : "Subir Diseño / Logo"}
               </div>
               <div className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
-                {activeSurface === "front" ? "Portada" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada"}
+                Para: {activeSurface === "front" ? "Portada (Frente)" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada (Atrás)"}
               </div>
             </div>
           </button>
@@ -4451,12 +4451,16 @@ function NotebookPreview({
               "absolute flex items-center justify-center overflow-hidden",
               !interactive && "pointer-events-none"
             )}
-            style={
-              activeSurface === "front" ? { top: "11%", left: "21.5%", right: "22%", bottom: "11%" } :
-              activeSurface === "back" ? { top: "10%", left: "15%", right: "25%", bottom: "10%" } :
-              activeSurface === "insideFront" ? { top: "19%", left: "8.5%", right: "52.5%", bottom: "17%" } :
-              { top: "18%", left: "52%", right: "8.5%", bottom: "16%" }
-            }
+            style={{
+              ...(() => {
+                if (activeSurface === "front") return { top: "11%", left: "21.5%", right: "22%", bottom: "11%" };
+                if (activeSurface === "back") return { top: "10%", left: "15%", right: "25%", bottom: "10%" };
+                if (activeSurface === "insideFront") return { top: "19%", left: "8.5%", right: "52.5%", bottom: "17%" };
+                return { top: "18%", left: "52%", right: "8.5%", bottom: "16%" };
+              })(),
+              maskImage: "url(#notebookHolesMask)",
+              WebkitMaskImage: "url(#notebookHolesMask)", // Cross-browser support
+            }}
           >
           {(() => {
             const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
@@ -4582,72 +4586,71 @@ function NotebookPreview({
           })()}
           </div>
 
-          {/* SPIRALS OVERLAY - Must be ON TOP of the design and photo holes */}
+          {/* SPIRALS OVERLAY - Realistic physical spiral holes logic */}
           <div className="absolute inset-0 pointer-events-none">
-            <svg viewBox="0 0 1000 1000" className="w-full h-full drop-shadow-sm">
+            {/* 
+              We use a mask to "punch holes" in the design layer where the spirals are.
+              In SVG, mask-type: luminance where black = transparent and white = opaque.
+            */}
+            <svg viewBox="0 0 1000 1000" className="w-full h-full">
               <defs>
-                <filter id="spiralHoleShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
-                  <feOffset dx="0.5" dy="0.5" result="offsetblur" />
-                  <feComponentTransfer>
-                    <feFuncA type="linear" slope="0.4" />
-                  </feComponentTransfer>
-                  <feMerge>
-                    <feMergeNode />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
+                {/* 
+                  The mask definition: 
+                  Everything white is visible. 
+                  The black rectangles are the "holes" where we want the design to BE CUT (transparent).
+                */}
+                <mask id="notebookHolesMask">
+                  <rect x="0" y="0" width="1000" height="1000" fill="white" />
+                  {activeSurface === "front" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="160" y={115 + i * 55} 
+                          width="6" height="42" 
+                          rx="2"
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {activeSurface === "back" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="834" y={105 + i * 55} 
+                          width="6" height="42" 
+                          rx="2"
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {activeSurface === "insideFront" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="482" y={185 + i * 42} 
+                          width="4" height="32" 
+                          rx="1"
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {activeSurface === "insideBack" && (
+                    <g fill="black">
+                      {[...Array(15)].map((_, i) => (
+                        <rect 
+                          key={i} 
+                          x="514" y={182 + i * 42} 
+                          width="4" height="32" 
+                          rx="1"
+                        />
+                      ))}
+                    </g>
+                  )}
+                </mask>
               </defs>
-              
-              {/* Vertical array of black spiral holes/elements that stay on TOP of the design */}
-              {activeSurface === "front" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="160" y={115 + i * 55} 
-                      width="6" height="42" 
-                      rx="2" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
-              {activeSurface === "back" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="834" y={105 + i * 55} 
-                      width="6" height="42" 
-                      rx="2" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
-              {activeSurface === "insideFront" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="482" y={185 + i * 42} 
-                      width="4" height="32" 
-                      rx="1" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
-              {activeSurface === "insideBack" && (
-                <g filter="url(#spiralHoleShadow)">
-                  {[...Array(15)].map((_, i) => (
-                    <rect 
-                      key={i} 
-                      x="514" y={182 + i * 42} 
-                      width="4" height="32" 
-                      rx="1" fill="#1e293b" 
-                    />
-                  ))}
-                </g>
-              )}
             </svg>
           </div>
         </div>
