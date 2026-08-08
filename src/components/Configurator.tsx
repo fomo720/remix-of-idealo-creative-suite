@@ -3845,6 +3845,7 @@ function NotebookDesigner({
         {/* Dynamic Upload Section */}
         <div className="rounded-2xl border-2 border-dashed border-border bg-background/50 p-6">
           <input
+            ref={activeFileInputRef}
             type="file"
             accept="image/*"
             className="hidden"
