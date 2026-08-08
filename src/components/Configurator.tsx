@@ -953,15 +953,32 @@ export function Configurator() {
     return () => window.removeEventListener("idealo:configure", handler as EventListener);
   }, []);
 
+  const autoScaleImage = (url: string, surface: string) => {
+    const img = new Image();
+    img.onload = () => {
+      let recommendedScale = 100;
+      if (img.width > 2000 || img.height > 2000) recommendedScale = 50;
+      if (img.width > 4000 || img.height > 4000) recommendedScale = 25;
+
+      setSurfacePlacements(prev => ({
+        ...prev,
+        [surface]: { x: 50, y: 50, scale: recommendedScale, rotation: 0 }
+      }));
+    };
+    img.src = url;
+  };
+
   const handleNbFile = (f: File | null) => {
     if (!f) return;
     const url = URL.createObjectURL(f);
+    autoScaleImage(url, "front");
     setNbUploaded(url);
     setNbPreset(null);
   };
   const clearNbImage = () => {
     setNbUploaded(null);
     setNbPreset(null);
+    if (fileRef.current) fileRef.current.value = "";
   };
 
   const handleFile = (f: File | null) => {
@@ -1004,6 +1021,7 @@ export function Configurator() {
   const handleBackFile = (f: File | null) => {
     if (!f) return;
     const url = URL.createObjectURL(f);
+    autoScaleImage(url, "back");
     setBackUploaded(url);
     setBackPreset(null);
   };
@@ -1015,7 +1033,9 @@ export function Configurator() {
 
   const handleInsideFrontFile = (f: File | null) => {
     if (!f) return;
-    setInsideFrontUploaded(URL.createObjectURL(f));
+    const url = URL.createObjectURL(f);
+    autoScaleImage(url, "insideFront");
+    setInsideFrontUploaded(url);
     setInsideFrontPreset(null);
   };
   const clearInsideFrontImage = () => {
@@ -1025,7 +1045,9 @@ export function Configurator() {
 
   const handleInsideBackFile = (f: File | null) => {
     if (!f) return;
-    setInsideBackUploaded(URL.createObjectURL(f));
+    const url = URL.createObjectURL(f);
+    autoScaleImage(url, "insideBack");
+    setInsideBackUploaded(url);
     setInsideBackPreset(null);
   };
   const clearInsideBackImage = () => {
@@ -4267,7 +4289,10 @@ function NotebookDesigner({
                                   const origScale = placement.scale;
                                   const move = (moveEv: PointerEvent) => {
                                     const dy = (moveEv.clientY - startY) * h.y;
-                                    const newScale = Math.max(10, Math.min(300, origScale - dy * 0.5));
+                                    // REVERSED: outward (positive dy if h.y is 1) should INCREASE scale.
+                                    // Original logic: newScale = Math.max(10, Math.min(300, origScale - dy * 0.5))
+                                    // Correct logic: + dy * 0.5
+                                    const newScale = Math.max(10, Math.min(300, origScale + dy * 0.5));
                                     setSurfacePlacements(prev => ({
                                       ...prev,
                                       [activeSurface]: { ...prev[activeSurface], scale: newScale }
@@ -4427,10 +4452,10 @@ function NotebookPreview({
               !interactive && "pointer-events-none"
             )}
             style={
-              activeSurface === "front" ? { top: "11%", left: "21%", right: "22%", bottom: "11%" } :
+              activeSurface === "front" ? { top: "11%", left: "21.5%", right: "22%", bottom: "11%" } :
               activeSurface === "back" ? { top: "10%", left: "15%", right: "25%", bottom: "10%" } :
-              activeSurface === "insideFront" ? { top: "19%", left: "8%", right: "52%", bottom: "17%" } :
-              { top: "18%", left: "52%", right: "8%", bottom: "16%" }
+              activeSurface === "insideFront" ? { top: "19%", left: "8.5%", right: "52.5%", bottom: "17%" } :
+              { top: "18%", left: "52%", right: "8.5%", bottom: "16%" }
             }
           >
           {(() => {
@@ -4532,7 +4557,8 @@ function NotebookPreview({
                           const origScale = placement.scale;
                           const move = (moveEv: PointerEvent) => {
                             const dy = (moveEv.clientY - startY) * h.y;
-                            const newScale = Math.max(10, Math.min(300, origScale - dy * 0.5));
+                            // REVERSED for correct UX
+                            const newScale = Math.max(10, Math.min(300, origScale + dy * 0.5));
                             setSurfacePlacements(prev => ({
                               ...prev,
                               [activeSurface]: { ...prev[activeSurface], scale: newScale }
@@ -4554,6 +4580,75 @@ function NotebookPreview({
               </div>
             );
           })()}
+          </div>
+
+          {/* SPIRALS OVERLAY - Must be ON TOP of the design and photo holes */}
+          <div className="absolute inset-0 pointer-events-none">
+            <svg viewBox="0 0 1000 1000" className="w-full h-full drop-shadow-sm">
+              <defs>
+                <filter id="spiralHoleShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
+                  <feOffset dx="0.5" dy="0.5" result="offsetblur" />
+                  <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.4" />
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              
+              {/* Vertical array of black spiral holes/elements that stay on TOP of the design */}
+              {activeSurface === "front" && (
+                <g filter="url(#spiralHoleShadow)">
+                  {[...Array(15)].map((_, i) => (
+                    <rect 
+                      key={i} 
+                      x="160" y={115 + i * 55} 
+                      width="6" height="42" 
+                      rx="2" fill="#1e293b" 
+                    />
+                  ))}
+                </g>
+              )}
+              {activeSurface === "back" && (
+                <g filter="url(#spiralHoleShadow)">
+                  {[...Array(15)].map((_, i) => (
+                    <rect 
+                      key={i} 
+                      x="834" y={105 + i * 55} 
+                      width="6" height="42" 
+                      rx="2" fill="#1e293b" 
+                    />
+                  ))}
+                </g>
+              )}
+              {activeSurface === "insideFront" && (
+                <g filter="url(#spiralHoleShadow)">
+                  {[...Array(15)].map((_, i) => (
+                    <rect 
+                      key={i} 
+                      x="482" y={185 + i * 42} 
+                      width="4" height="32" 
+                      rx="1" fill="#1e293b" 
+                    />
+                  ))}
+                </g>
+              )}
+              {activeSurface === "insideBack" && (
+                <g filter="url(#spiralHoleShadow)">
+                  {[...Array(15)].map((_, i) => (
+                    <rect 
+                      key={i} 
+                      x="514" y={182 + i * 42} 
+                      width="4" height="32" 
+                      rx="1" fill="#1e293b" 
+                    />
+                  ))}
+                </g>
+              )}
+            </svg>
           </div>
         </div>
 
