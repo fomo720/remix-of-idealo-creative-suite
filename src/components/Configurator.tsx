@@ -3538,6 +3538,29 @@ function NotebookDesigner({
   pageType: PageType;
   setPageType: (p: PageType) => void;
   uploaded: string | null;
+  preset: string | null;
+  onFile: (f: File | null) => void;
+  onPreset: (p: string) => void;
+  onClear: () => void;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  pageArtUploaded: string | null;
+  pageArtPreset: string | null;
+  pageArtOpacity: number;
+  setPageArtOpacity: (n: number) => void;
+  onPageArtFile: (f: File | null) => void;
+  onPageArtPreset: (p: string) => void;
+  onPageArtClear: () => void;
+  pageFileRef: React.RefObject<HTMLInputElement | null>;
+  qty: number;
+  setQty: (n: number) => void;
+  notes: string;
+  setNotes: (s: string) => void;
+  price: number;
+  onBack: () => void;
+}) {
+  const [designs, setDesigns] = useState<number[]>([1]);
+  const [activeDesignIdx, setActiveDesignIdx] = useState(0);
+
 
   preset: string | null;
   onFile: (f: File | null) => void;
