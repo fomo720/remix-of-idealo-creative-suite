@@ -3807,7 +3807,7 @@ function NotebookDesigner({
                       : "bg-background text-foreground border-border hover:border-foreground/30"
                   )}
                 >
-                  {surface === "front" ? "Portada" : surface === "insideFront" ? "Int. Portada" : surface === "insideBack" ? "Int. Contra" : "Contra"}
+                  {surface === "front" ? "Portada (Frente)" : surface === "insideFront" ? "Int. Portada" : surface === "insideBack" ? "Int. Contra" : "Contra (Atrás)"}
                   {hasData && (
                     <span className={cn(
                       "absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm",
