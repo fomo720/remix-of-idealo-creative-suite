@@ -4558,45 +4558,6 @@ function NotebookPreview({
         </div>
 
 
-        {/* Spirals / Rings overlay - must be ON TOP of the design */}
-        <div className="absolute inset-0 pointer-events-none">
-          {activeSurface === "front" && (
-            <svg viewBox="0 0 1000 1000" className="w-full h-full">
-              <defs>
-                <filter id="spiralShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
-                  <feOffset dx="2" dy="2" result="offsetblur" />
-                  <feComponentTransfer>
-                    <feFuncA type="linear" slope="0.3" />
-                  </feComponentTransfer>
-                  <feMerge>
-                    <feMergeNode />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              {/* Vertical array of spiral rings for front cover */}
-              {[...Array(15)].map((_, i) => (
-                <g key={i} filter="url(#spiralShadow)">
-                   <path 
-                     d={`M 155 ${120 + i * 55} Q 165 ${120 + i * 55} 175 ${125 + i * 55} L 185 ${145 + i * 55} Q 175 ${155 + i * 55} 165 ${155 + i * 55} Z`} 
-                     fill="#94a3b8" 
-                     stroke="#475569" 
-                     strokeWidth="1"
-                   />
-                   <rect x="150" y={115 + i * 55} width="8" height="45" rx="2" fill="url(#metalGrad)" />
-                </g>
-              ))}
-              <defs>
-                <linearGradient id="metalGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#cbd5e1" />
-                  <stop offset="50%" stopColor="#f8fafc" />
-                  <stop offset="100%" stopColor="#94a3b8" />
-                </linearGradient>
-              </defs>
-            </svg>
-          )}
-        </div>
 
         {/* Glossy sheen for realistic feel */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30" />
