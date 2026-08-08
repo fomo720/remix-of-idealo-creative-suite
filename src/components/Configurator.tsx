@@ -3728,6 +3728,38 @@ function NotebookDesigner({
               </button>
             ))}
           </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(["front", "insideFront", "insideBack", "back"] as const).map((surface) => {
+              const hasData = 
+                surface === "front" ? (uploaded || preset) :
+                surface === "insideFront" ? (insideFrontUploaded || insideFrontPreset) :
+                surface === "insideBack" ? (insideBackUploaded || insideBackPreset) :
+                (backUploaded || backPreset);
+
+              return (
+                <button
+                  key={surface}
+                  onClick={() => setActiveSurface(surface)}
+                  className={cn(
+                    "relative flex-1 min-w-[120px] rounded-xl border-2 px-4 py-3 text-[10px] font-bold uppercase tracking-wider transition-all",
+                    activeSurface === surface 
+                      ? "bg-foreground text-background border-foreground shadow-lg" 
+                      : "bg-background text-foreground border-border hover:border-foreground/30"
+                  )}
+                >
+                  {surface === "front" ? "Portada" : surface === "insideFront" ? "Int. Portada" : surface === "insideBack" ? "Int. Contra" : "Contra"}
+                  {hasData && (
+                    <span className={cn(
+                      "absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm",
+                      activeSurface === surface ? "bg-background text-foreground" : "bg-brand-green text-white"
+                    )}>
+                      <Check className="h-3 w-3" strokeWidth={4} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Page type — only when cover+pages */}
