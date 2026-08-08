@@ -1648,6 +1648,9 @@ export function Configurator() {
               preset={nbPreset}
               onFile={handleFile}
               onPreset={(p) => { setNbPreset(p); setNbUploaded(null); }}
+              surfacePlacements={surfacePlacements}
+              setSurfacePlacements={setSurfacePlacements}
+
 
               onClear={clearImage}
               fileRef={fileRef}
