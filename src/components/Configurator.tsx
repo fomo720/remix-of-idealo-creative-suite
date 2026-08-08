@@ -2071,7 +2071,7 @@ export function Configurator() {
                     ))}
                   </div>
                   <p className="mt-2 text-[11px] text-muted-foreground">
-                    Cantidad mínima: {MIN_QTY} stickers. Podés escribir cualquier cantidad manualmente arriba de {MIN_QTY}.
+                    Podés escribir cualquier cantidad manualmente arriba.
                   </p>
                 </div>
 
