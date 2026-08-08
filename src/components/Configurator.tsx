@@ -1623,10 +1623,10 @@ export function Configurator() {
               setSizeIdx={setNotebookSizeIdx}
               pageType={pageType}
               setPageType={setPageType}
-              uploaded={uploaded}
-              preset={preset}
+              uploaded={nbUploaded}
+              preset={nbPreset}
               onFile={handleFile}
-              onPreset={(p) => { setPreset(p); setUploaded(null); }}
+              onPreset={(p) => { setNbPreset(p); setNbUploaded(null); }}
               onClear={clearImage}
               fileRef={fileRef}
               backUploaded={backUploaded}
@@ -1635,6 +1635,14 @@ export function Configurator() {
               onBackPreset={(p) => { setBackPreset(p); setBackUploaded(null); }}
               onBackClear={clearBackImage}
               backFileRef={backFileRef}
+              insideFrontUploaded={insideFrontUploaded}
+              insideFrontPreset={insideFrontPreset}
+              handleInsideFrontFile={handleInsideFrontFile}
+              clearInsideFrontImage={clearInsideFrontImage}
+              insideBackUploaded={insideBackUploaded}
+              insideBackPreset={insideBackPreset}
+              handleInsideBackFile={handleInsideBackFile}
+              clearInsideBackImage={clearInsideBackImage}
               pageArtUploaded={pageArtUploaded}
               pageArtPreset={pageArtPreset}
               pageArtOpacity={pageArtOpacity}
@@ -3560,6 +3568,8 @@ function NotebookDesigner({
   styleId, material, sizeIdx, setSizeIdx, pageType, setPageType,
   uploaded, preset, onFile, onPreset, onClear, fileRef,
   backUploaded, backPreset, onBackFile, onBackPreset, onBackClear, backFileRef,
+  insideFrontUploaded, insideFrontPreset, handleInsideFrontFile, clearInsideFrontImage,
+  insideBackUploaded, insideBackPreset, handleInsideBackFile, clearInsideBackImage,
   pageArtUploaded, pageArtPreset, pageArtOpacity, setPageArtOpacity,
   onPageArtFile, onPageArtPreset, onPageArtClear, pageFileRef,
   qty, setQty, notes, setNotes, price, onBack,
@@ -3582,6 +3592,14 @@ function NotebookDesigner({
   onBackPreset: (p: string) => void;
   onBackClear: () => void;
   backFileRef: React.RefObject<HTMLInputElement | null>;
+  insideFrontUploaded: string | null;
+  insideFrontPreset: string | null;
+  handleInsideFrontFile: (f: File | null) => void;
+  clearInsideFrontImage: () => void;
+  insideBackUploaded: string | null;
+  insideBackPreset: string | null;
+  handleInsideBackFile: (f: File | null) => void;
+  clearInsideBackImage: () => void;
   pageArtUploaded: string | null;
   pageArtPreset: string | null;
   pageArtOpacity: number;
