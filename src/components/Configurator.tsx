@@ -953,15 +953,32 @@ export function Configurator() {
     return () => window.removeEventListener("idealo:configure", handler as EventListener);
   }, []);
 
+  const autoScaleImage = (url: string, surface: string) => {
+    const img = new Image();
+    img.onload = () => {
+      let recommendedScale = 100;
+      if (img.width > 2000 || img.height > 2000) recommendedScale = 50;
+      if (img.width > 4000 || img.height > 4000) recommendedScale = 25;
+
+      setSurfacePlacements(prev => ({
+        ...prev,
+        [surface]: { x: 50, y: 50, scale: recommendedScale, rotation: 0 }
+      }));
+    };
+    img.src = url;
+  };
+
   const handleNbFile = (f: File | null) => {
     if (!f) return;
     const url = URL.createObjectURL(f);
+    autoScaleImage(url, "front");
     setNbUploaded(url);
     setNbPreset(null);
   };
   const clearNbImage = () => {
     setNbUploaded(null);
     setNbPreset(null);
+    if (fileRef.current) fileRef.current.value = "";
   };
 
   const handleFile = (f: File | null) => {
@@ -1004,6 +1021,7 @@ export function Configurator() {
   const handleBackFile = (f: File | null) => {
     if (!f) return;
     const url = URL.createObjectURL(f);
+    autoScaleImage(url, "back");
     setBackUploaded(url);
     setBackPreset(null);
   };
