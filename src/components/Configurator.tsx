@@ -4427,10 +4427,10 @@ function NotebookPreview({
               !interactive && "pointer-events-none"
             )}
             style={
-              activeSurface === "front" ? { top: "11%", left: "18%", right: "22%", bottom: "11%" } :
-              activeSurface === "back" ? { top: "10%", left: "15%", right: "23%", bottom: "10%" } :
-              activeSurface === "insideFront" ? { top: "19%", left: "8%", right: "50%", bottom: "17%" } :
-              { top: "18%", left: "50%", right: "8%", bottom: "16%" }
+              activeSurface === "front" ? { top: "11%", left: "21%", right: "22%", bottom: "11%" } :
+              activeSurface === "back" ? { top: "10%", left: "15%", right: "25%", bottom: "10%" } :
+              activeSurface === "insideFront" ? { top: "19%", left: "8%", right: "52%", bottom: "17%" } :
+              { top: "18%", left: "52%", right: "8%", bottom: "16%" }
             }
           >
           {(() => {
