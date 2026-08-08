@@ -3650,8 +3650,8 @@ function NotebookDesigner({
   onPageArtPreset: (p: string) => void;
   onPageArtClear: () => void;
   pageFileRef: React.RefObject<HTMLInputElement | null>;
-  surfacePlacements: Record<string, { x: number; y: number; scale: number }>;
-  setSurfacePlacements: React.Dispatch<React.SetStateAction<Record<string, { x: number; y: number; scale: number }>>>;
+  surfacePlacements: Record<string, { x: number; y: number; scale: number; rotation: number }>;
+  setSurfacePlacements: React.Dispatch<React.SetStateAction<Record<string, { x: number; y: number; scale: number; rotation: number }>>>;
   qty: number;
   setQty: (n: number) => void;
   notes: string;
