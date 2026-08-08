@@ -3970,6 +3970,7 @@ function NotebookDesigner({
                       pageArtUploaded={pageArtUploaded}
                       pageArtPreset={pageArtPreset}
                       pageArtOpacity={pageArtOpacity}
+                      isBack={previewView === "back"}
                     />
                   </div>
                 ) : (
@@ -4078,6 +4079,7 @@ function NotebookDesigner({
 function NotebookPreview({
   size, material, showPages, pageType, uploaded, preset,
   pageArtUploaded, pageArtPreset, pageArtOpacity,
+  isBack = false,
 }: {
   size: (typeof notebookSizes)[number];
   material: (typeof notebookMaterials)[number];
@@ -4088,6 +4090,7 @@ function NotebookPreview({
   pageArtUploaded?: string | null;
   pageArtPreset?: string | null;
   pageArtOpacity?: number;
+  isBack?: boolean;
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
@@ -4113,10 +4116,13 @@ function NotebookPreview({
         {showPages && (
           <>
             <div
-              className="absolute overflow-hidden rounded-r-md border border-border bg-white"
+              className={cn(
+                "absolute overflow-hidden border border-border bg-white",
+                isBack ? "rounded-l-md" : "rounded-r-md"
+              )}
               style={{
-                inset: "3% -6% 3% 4%",
-                boxShadow: "2px 4px 12px rgba(0,0,0,0.1)",
+                inset: isBack ? "3% 4% 3% -6%" : "3% -6% 3% 4%",
+                boxShadow: isBack ? "-2px 4px 12px rgba(0,0,0,0.1)" : "2px 4px 12px rgba(0,0,0,0.1)",
                 ...pageBackground(pageType),
                 backgroundColor: "#ffffff",
               }}
@@ -4135,8 +4141,11 @@ function NotebookPreview({
               )}
             </div>
             <div
-              className="absolute rounded-r-sm border border-border bg-white/95"
-              style={{ inset: "1.5% -3% 1.5% 6%" }}
+              className={cn(
+                "absolute border border-border bg-white/95",
+                isBack ? "rounded-l-sm" : "rounded-r-sm"
+              )}
+              style={{ inset: isBack ? "1.5% 6% 1.5% -3%" : "1.5% -3% 1.5% 6%" }}
             />
           </>
         )}
@@ -4145,11 +4154,14 @@ function NotebookPreview({
 
         {/* Cover */}
         <div
-          className="absolute inset-0 overflow-hidden rounded-md rounded-l-none shadow-2xl"
+          className={cn(
+            "absolute inset-0 overflow-hidden shadow-2xl",
+            isBack ? "rounded-md rounded-r-none" : "rounded-md rounded-l-none"
+          )}
           style={{
             background: coverGradient,
-            transform: "rotateY(-4deg)",
-            transformOrigin: "left center",
+            transform: isBack ? "rotateY(4deg)" : "rotateY(-4deg)",
+            transformOrigin: isBack ? "right center" : "left center",
           }}
         >
           {/* Glossy sheen */}
@@ -4183,8 +4195,11 @@ function NotebookPreview({
           </div>
         </div>
 
-        {/* Spiral binding on the left */}
-        <div className="absolute -left-2 top-0 flex h-full flex-col items-center justify-around py-3">
+        {/* Spiral binding */}
+        <div className={cn(
+          "absolute top-0 flex h-full flex-col items-center justify-around py-3",
+          isBack ? "-right-2" : "-left-2"
+        )}>
           {Array.from({ length: 14 }).map((_, i) => (
             <span
               key={i}
