@@ -3593,6 +3593,7 @@ function NotebookDesigner({
   insideBackUploaded, insideBackPreset, handleInsideBackFile, clearInsideBackImage,
   pageArtUploaded, pageArtPreset, pageArtOpacity, setPageArtOpacity,
   onPageArtFile, onPageArtPreset, onPageArtClear, pageFileRef,
+  surfacePlacements, setSurfacePlacements,
   qty, setQty, notes, setNotes, price, onBack,
 }: {
   styleId: NotebookStyle;
@@ -3629,6 +3630,8 @@ function NotebookDesigner({
   onPageArtPreset: (p: string) => void;
   onPageArtClear: () => void;
   pageFileRef: React.RefObject<HTMLInputElement | null>;
+  surfacePlacements: Record<string, { x: number; y: number; scale: number }>;
+  setSurfacePlacements: React.Dispatch<React.SetStateAction<Record<string, { x: number; y: number; scale: number }>>>;
   qty: number;
   setQty: (n: number) => void;
   notes: string;
@@ -3637,6 +3640,8 @@ function NotebookDesigner({
   onBack: () => void;
 }) {
   const size = notebookSizes[sizeIdx];
+  const printRef = useRef<HTMLDivElement>(null);
+
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
   const showPageArt = showPages;
