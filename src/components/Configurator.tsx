@@ -3850,13 +3850,7 @@ function NotebookDesigner({
             onChange={(e) => activeHandleFile(e.target.files?.[0] ?? null)}
           />
           <button
-            onClick={() => {
-              if (activeTab === "front") fileRef.current?.click();
-              else if (activeTab === "back") backFileRef.current?.click();
-              else if (activeTab === "insideFront") /* Create and use ref or just click hidden input logic */ ({} as any);
-              // Simplified for now, we'll use a single ref or handle dynamically
-              fileRef.current?.click(); 
-            }}
+            onClick={() => activeFileInputRef.current?.click()}
             className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-8 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
           >
             <div className="grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
