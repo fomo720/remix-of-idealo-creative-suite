@@ -4000,12 +4000,12 @@ function NotebookDesigner({
             extras.length > 0 ? `Extras: ${extras.map(e => notebookExtras.find(x => x.id === e)?.name).join(", ")}` : "",
             `Cantidad: ${qty}`,
             notes ? `Notas: ${notes}` : "",
-            uploaded={nbUploaded ? "Portada: Arte personalizado 📎" : nbPreset ? `Portada: Preset "${nbPreset}"` : "Portada: Pendiente"},
+            nbUploaded ? "Portada: Arte personalizado 📎" : nbPreset ? `Portada: Preset "${nbPreset}"` : "Portada: Pendiente",
             backUploaded ? "Contraportada: Arte personalizado 📎" : backPreset ? `Contraportada: Preset "${backPreset}"` : "",
             insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : insideFrontPreset ? "Interior Portada: Preset" : "",
             insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : insideBackPreset ? "Interior Contra: Preset" : "",
-
             pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : pageArtPreset ? "Marca de agua: Preset" : "",
+
             "",
             "Solicito una cotización, gracias 🙌",
           ].filter(Boolean).join("\n");
