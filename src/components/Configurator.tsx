@@ -3738,8 +3738,8 @@ function NotebookDesigner({
                 <div className="h-4 w-4 opacity-60">
                   {t === "blank" ? <File className="h-4 w-4" /> : 
                    t === "ruled" ? <List className="h-4 w-4" /> : 
-                   t === "dotted" ? <Grid2X2 className="h-4 w-4" /> : 
-                   <Grid3X3 className="h-4 w-4" />}
+                   t === "dotted" ? <Grid2x2 className="h-4 w-4" /> : 
+                   <Grid3x3 className="h-4 w-4" />}
                 </div>
                 {t === "blank" ? "Blancas" : t === "ruled" ? "Rayadas" : t === "dotted" ? "Puntos" : "Cuadriculadas"}
               </button>
