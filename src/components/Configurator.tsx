@@ -4142,10 +4142,10 @@ function NotebookDesigner({
                               const move = (moveEv: PointerEvent) => {
                                 const dx = ((moveEv.clientX - rect.left) / rect.width) * 100 - startX;
                                 const dy = ((moveEv.clientY - rect.top) / rect.height) * 100 - startY;
-                                setSurfacePlacements(prev => ({
-                                  ...prev,
-                                  [previewView]: { ...prev[previewView], x: origX + dx, y: origY + dy }
-                                }));
+                                  setSurfacePlacements(prev => ({
+                                    ...prev,
+                                    [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
+                                  }));
                               };
                               const up = () => {
                                 window.removeEventListener("pointermove", move);
