@@ -3604,13 +3604,32 @@ function NotebookDesigner({
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
   const [pageCount, setPageCount] = useState<number>(80);
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
+  const [activeTab, setActiveTab] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [previewView, setPreviewView] = useState<"front" | "back">("front");
+  const [previewView, setPreviewView] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
   const [zoom, setZoom] = useState(100);
 
+  const activeArt = 
+    activeTab === "front" ? { uploaded, preset } :
+    activeTab === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+    activeTab === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+    { uploaded: backUploaded, preset: backPreset };
+
+  const activeHandleFile = 
+    activeTab === "front" ? onFile :
+    activeTab === "insideFront" ? handleInsideFrontFile :
+    activeTab === "insideBack" ? handleInsideBackFile :
+    onBackFile;
+  const activeClear =
+    activeTab === "front" ? onClear :
+    activeTab === "insideFront" ? clearInsideFrontImage :
+    activeTab === "insideBack" ? clearInsideBackImage :
+    onBackClear;
+
   const toggleExtra = (id: NotebookExtra) =>
     setExtras((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
 
 
 
