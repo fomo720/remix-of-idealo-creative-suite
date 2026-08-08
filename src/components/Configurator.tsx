@@ -733,12 +733,12 @@ export function Configurator() {
   const [uploaded, setUploaded] = useState<string | null>(null);
   const [uploadedDims, setUploadedDims] = useState<{ w: number; h: number } | null>(null);
 
-  // Surface placement states (x, y, scale)
-  const [surfacePlacements, setSurfacePlacements] = useState<Record<string, { x: number; y: number; scale: number }>>({
-    front: { x: 50, y: 50, scale: 100 },
-    back: { x: 50, y: 50, scale: 100 },
-    insideFront: { x: 50, y: 50, scale: 100 },
-    insideBack: { x: 50, y: 50, scale: 100 },
+  // Surface placement states (x, y, scale, rotation)
+  const [surfacePlacements, setSurfacePlacements] = useState<Record<string, { x: number; y: number; scale: number; rotation: number }>>({
+    front: { x: 50, y: 50, scale: 100, rotation: 0 },
+    back: { x: 50, y: 50, scale: 100, rotation: 0 },
+    insideFront: { x: 50, y: 50, scale: 100, rotation: 0 },
+    insideBack: { x: 50, y: 50, scale: 100, rotation: 0 },
   });
 
   // size
