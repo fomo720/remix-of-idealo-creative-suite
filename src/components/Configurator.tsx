@@ -4494,7 +4494,7 @@ function NotebookPreview({
                 } : undefined}
                 className={cn(
                   "absolute flex items-center justify-center",
-                  interactive && "cursor-move touch-none select-none border border-dashed border-white/20 hover:border-white/40"
+                  interactive && "cursor-move touch-none select-none"
                 )}
                 style={{
                   left: `${placement.x}%`,
