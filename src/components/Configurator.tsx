@@ -1372,11 +1372,6 @@ export function Configurator() {
                         })}
                         <span className="ml-1 text-[10px] text-muted-foreground">{v.colors.length} color{v.colors.length === 1 ? "" : "es"}</span>
                       </div>
-                      {typeof v.priceDelta === "number" && v.priceDelta !== 0 && (
-                        <span className="mt-1 text-[11px] font-semibold" style={{ color: "var(--brand-orange)" }}>
-                          {v.priceDelta > 0 ? "+" : ""}{currency(v.priceDelta)} por unidad
-                        </span>
-                      )}
                     </button>
                   );
                 })}
