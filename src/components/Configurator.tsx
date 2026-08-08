@@ -4411,26 +4411,28 @@ function NotebookPreview({
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
 
       <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl">
-        {/* Background Real Photo */}
-        <img 
-          src={mockups[activeSurface]} 
-          alt="" 
-          className="w-full h-auto block"
-        />
+        {/* Background Real Photo (Now with full Bleed logic) */}
+        <div className="relative w-full">
+          {/* Base paper/product photo */}
+          <img 
+            src={mockups[activeSurface]} 
+            alt="" 
+            className="w-full h-auto block"
+          />
 
-        {/* Design Overlay */}
-        <div 
-          className={cn(
-            "absolute flex items-center justify-center overflow-hidden",
-            !interactive && "pointer-events-none"
-          )}
-          style={
-            activeSurface === "front" ? { top: "12.6%", left: "20.1%", right: "24.1%", bottom: "12.8%" } :
-            activeSurface === "back" ? { top: "11.8%", left: "17.5%", right: "24.9%", bottom: "12.6%" } :
-            activeSurface === "insideFront" ? { top: "20.9%", left: "10.5%", right: "52.3%", bottom: "19.1%" } :
-            { top: "19.9%", left: "52.5%", right: "10.5%", bottom: "17.6%" }
-          }
-        >
+          {/* Design Overlay - CLIP TO EDGES of the notebook in photo */}
+          <div 
+            className={cn(
+              "absolute flex items-center justify-center overflow-hidden",
+              !interactive && "pointer-events-none"
+            )}
+            style={
+              activeSurface === "front" ? { top: "11%", left: "18%", right: "22%", bottom: "11%" } :
+              activeSurface === "back" ? { top: "10%", left: "15%", right: "23%", bottom: "10%" } :
+              activeSurface === "insideFront" ? { top: "19%", left: "8%", right: "50%", bottom: "17%" } :
+              { top: "18%", left: "50%", right: "8%", bottom: "16%" }
+            }
+          >
           {(() => {
             const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
             
