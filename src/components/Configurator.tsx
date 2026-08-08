@@ -4341,7 +4341,10 @@ function NotebookPreview({
 
         {/* Design Overlay */}
         <div 
-          className="absolute pointer-events-none flex items-center justify-center overflow-hidden"
+          className={cn(
+            "absolute flex items-center justify-center overflow-hidden",
+            !interactive && "pointer-events-none"
+          )}
           style={
             activeSurface === "front" ? { top: "12.6%", left: "20.1%", right: "24.1%", bottom: "12.8%" } :
             activeSurface === "back" ? { top: "11.8%", left: "17.5%", right: "24.9%", bottom: "12.6%" } :
@@ -4349,18 +4352,127 @@ function NotebookPreview({
             { top: "19.9%", left: "52.5%", right: "10.5%", bottom: "17.6%" }
           }
         >
-          {uploaded ? (
-            <img 
-              src={uploaded} 
-              alt="" 
-              className={cn(
-                "max-h-full max-w-full object-contain drop-shadow-md transition-all duration-300",
-                (activeSurface === "front" || activeSurface === "back") && "scale-105"
-              )} 
-            />
-          ) : preset ? (
-            <span className="text-[5rem] leading-none drop-shadow-lg opacity-80">{preset}</span>
-          ) : null}
+          {(() => {
+            const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
+            
+            if (!uploaded && !preset) return null;
+
+            return (
+              <div
+                onPointerDown={interactive ? (e) => {
+                  const rect = e.currentTarget.parentElement?.getBoundingClientRect();
+                  if (!rect || !setSurfacePlacements) return;
+                  const startX = e.clientX;
+                  const startY = e.clientY;
+                  const origX = placement.x;
+                  const origY = placement.y;
+
+                  const move = (moveEv: PointerEvent) => {
+                    const dx = ((moveEv.clientX - startX) / rect.width) * 100;
+                    const dy = ((moveEv.clientY - startY) / rect.height) * 100;
+                    setSurfacePlacements(prev => ({
+                      ...prev,
+                      [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
+                    }));
+                  };
+                  const up = () => {
+                    window.removeEventListener("pointermove", move);
+                    window.removeEventListener("pointerup", up);
+                  };
+                  window.addEventListener("pointermove", move);
+                  window.addEventListener("pointerup", up);
+                } : undefined}
+                className={cn(
+                  "absolute flex items-center justify-center",
+                  interactive && "cursor-move touch-none select-none border border-dashed border-white/20 hover:border-white/40"
+                )}
+                style={{
+                  left: `${placement.x}%`,
+                  top: `${placement.y}%`,
+                  transform: `translate(-50%, -50%) rotate(${placement.rotation || 0}deg) scale(${placement.scale / 100})`,
+                  width: "100%", // The parent container already defines the design area
+                  height: "100%",
+                }}
+              >
+                {uploaded ? (
+                  <img 
+                    src={uploaded} 
+                    alt="" 
+                    className={cn(
+                      "max-h-full max-w-full object-contain drop-shadow-md transition-all duration-300 pointer-events-none"
+                    )} 
+                  />
+                ) : (
+                  <span className="text-[5rem] leading-none drop-shadow-lg opacity-80 pointer-events-none">{preset}</span>
+                )}
+
+                {interactive && setSurfacePlacements && (
+                  <>
+                    {/* Rotation Handle */}
+                    <div
+                      onPointerDown={(e) => {
+                        e.stopPropagation();
+                        const rect = e.currentTarget.parentElement?.getBoundingClientRect();
+                        if (!rect) return;
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+
+                        const move = (moveEv: PointerEvent) => {
+                          const angle = Math.atan2(moveEv.clientY - centerY, moveEv.clientX - centerX) * (180 / Math.PI) + 90;
+                          setSurfacePlacements(prev => ({
+                            ...prev,
+                            [activeSurface]: { ...prev[activeSurface], rotation: angle }
+                          }));
+                        };
+                        const up = () => {
+                          window.removeEventListener("pointermove", move);
+                          window.removeEventListener("pointerup", up);
+                        };
+                        window.addEventListener("pointermove", move);
+                        window.addEventListener("pointerup", up);
+                      }}
+                      className="absolute -top-6 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center cursor-alias"
+                    >
+                      <RotateCcw className="h-2.5 w-2.5 text-brand-violet" />
+                    </div>
+
+                    {/* 4 Corner Resize Handles */}
+                    {[
+                      { pos: "-top-1.5 -left-1.5", cursor: "nwse-resize", x: -1, y: -1 },
+                      { pos: "-top-1.5 -right-1.5", cursor: "nesw-resize", x: 1, y: -1 },
+                      { pos: "-bottom-1.5 -left-1.5", cursor: "nesw-resize", x: -1, y: 1 },
+                      { pos: "-bottom-1.5 -right-1.5", cursor: "nwse-resize", x: 1, y: 1 },
+                    ].map((h, i) => (
+                      <div
+                        key={i}
+                        onPointerDown={(e) => {
+                          e.stopPropagation();
+                          const startY = e.clientY;
+                          const origScale = placement.scale;
+                          const move = (moveEv: PointerEvent) => {
+                            const dy = (moveEv.clientY - startY) * h.y;
+                            const newScale = Math.max(10, Math.min(300, origScale - dy * 0.5));
+                            setSurfacePlacements(prev => ({
+                              ...prev,
+                              [activeSurface]: { ...prev[activeSurface], scale: newScale }
+                            }));
+                          };
+                          const up = () => {
+                            window.removeEventListener("pointermove", move);
+                            window.removeEventListener("pointerup", up);
+                          };
+                          window.addEventListener("pointermove", move);
+                          window.addEventListener("pointerup", up);
+                        }}
+                        className={cn("absolute w-3 h-3 rounded-full bg-white shadow-sm border border-brand-blue", h.pos)}
+                        style={{ cursor: h.cursor }}
+                      />
+                    ))}
+                  </>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Glossy sheen for realistic feel */}
