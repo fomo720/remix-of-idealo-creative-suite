@@ -4179,7 +4179,7 @@ function NotebookDesigner({
                                   const dy = moveEv.clientY - startY;
                                   setSurfacePlacements(prev => ({
                                     ...prev,
-                                    [previewView]: { ...prev[previewView], scale: Math.max(20, Math.min(300, startScale + dy / 2)) }
+                                    [activeSurface]: { ...prev[activeSurface], scale: Math.max(20, Math.min(300, startScale + dy / 2)) }
                                   }));
                                 };
                                 const up = () => {
