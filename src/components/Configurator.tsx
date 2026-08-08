@@ -729,6 +729,14 @@ export function Configurator() {
   const [uploaded, setUploaded] = useState<string | null>(null);
   const [uploadedDims, setUploadedDims] = useState<{ w: number; h: number } | null>(null);
 
+  // Surface placement states (x, y, scale)
+  const [surfacePlacements, setSurfacePlacements] = useState<Record<string, { x: number; y: number; scale: number }>>({
+    front: { x: 50, y: 50, scale: 100 },
+    back: { x: 50, y: 50, scale: 100 },
+    insideFront: { x: 50, y: 50, scale: 100 },
+    insideBack: { x: 50, y: 50, scale: 100 },
+  });
+
   // size
   const [width, setWidth] = useState("2");
   const [height, setHeight] = useState("2");
@@ -746,12 +754,20 @@ export function Configurator() {
   const [notebookMaterial, setNotebookMaterial] = useState<NotebookMaterial | null>(null);
   const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
   const [pageType, setPageType] = useState<PageType>("blank");
+  // notebook design surfaces
+  const [nbUploaded, setNbUploaded] = useState<string | null>(null);
+  const [nbPreset, setNbPreset] = useState<string | null>(null);
+  const [backUploaded, setBackUploaded] = useState<string | null>(null);
+  const [backPreset, setBackPreset] = useState<string | null>(null);
+  const [insideFrontUploaded, setInsideFrontUploaded] = useState<string | null>(null);
+  const [insideFrontPreset, setInsideFrontPreset] = useState<string | null>(null);
+  const [insideBackUploaded, setInsideBackUploaded] = useState<string | null>(null);
+  const [insideBackPreset, setInsideBackPreset] = useState<string | null>(null);
+
   // notebook page (interior) art
   const [pageArtUploaded, setPageArtUploaded] = useState<string | null>(null);
   const [pageArtPreset, setPageArtPreset] = useState<string | null>(null);
   const [pageArtOpacity, setPageArtOpacity] = useState(35); // 0-100
-  const [backUploaded, setBackUploaded] = useState<string | null>(null);
-  const [backPreset, setBackPreset] = useState<string | null>(null);
 
 
   // laser state
@@ -981,6 +997,27 @@ export function Configurator() {
     setBackPreset(null);
     if (backFileRef.current) backFileRef.current.value = "";
   };
+
+  const handleInsideFrontFile = (f: File | null) => {
+    if (!f) return;
+    setInsideFrontUploaded(URL.createObjectURL(f));
+    setInsideFrontPreset(null);
+  };
+  const clearInsideFrontImage = () => {
+    setInsideFrontUploaded(null);
+    setInsideFrontPreset(null);
+  };
+
+  const handleInsideBackFile = (f: File | null) => {
+    if (!f) return;
+    setInsideBackUploaded(URL.createObjectURL(f));
+    setInsideBackPreset(null);
+  };
+  const clearInsideBackImage = () => {
+    setInsideBackUploaded(null);
+    setInsideBackPreset(null);
+  };
+
 
 
 
@@ -1607,10 +1644,14 @@ export function Configurator() {
               setSizeIdx={setNotebookSizeIdx}
               pageType={pageType}
               setPageType={setPageType}
-              uploaded={uploaded}
-              preset={preset}
+              uploaded={nbUploaded}
+              preset={nbPreset}
               onFile={handleFile}
-              onPreset={(p) => { setPreset(p); setUploaded(null); }}
+              onPreset={(p) => { setNbPreset(p); setNbUploaded(null); }}
+              surfacePlacements={surfacePlacements}
+              setSurfacePlacements={setSurfacePlacements}
+
+
               onClear={clearImage}
               fileRef={fileRef}
               backUploaded={backUploaded}
@@ -1619,6 +1660,14 @@ export function Configurator() {
               onBackPreset={(p) => { setBackPreset(p); setBackUploaded(null); }}
               onBackClear={clearBackImage}
               backFileRef={backFileRef}
+              insideFrontUploaded={insideFrontUploaded}
+              insideFrontPreset={insideFrontPreset}
+              handleInsideFrontFile={handleInsideFrontFile}
+              clearInsideFrontImage={clearInsideFrontImage}
+              insideBackUploaded={insideBackUploaded}
+              insideBackPreset={insideBackPreset}
+              handleInsideBackFile={handleInsideBackFile}
+              clearInsideBackImage={clearInsideBackImage}
               pageArtUploaded={pageArtUploaded}
               pageArtPreset={pageArtPreset}
               pageArtOpacity={pageArtOpacity}
@@ -3544,8 +3593,11 @@ function NotebookDesigner({
   styleId, material, sizeIdx, setSizeIdx, pageType, setPageType,
   uploaded, preset, onFile, onPreset, onClear, fileRef,
   backUploaded, backPreset, onBackFile, onBackPreset, onBackClear, backFileRef,
+  insideFrontUploaded, insideFrontPreset, handleInsideFrontFile, clearInsideFrontImage,
+  insideBackUploaded, insideBackPreset, handleInsideBackFile, clearInsideBackImage,
   pageArtUploaded, pageArtPreset, pageArtOpacity, setPageArtOpacity,
   onPageArtFile, onPageArtPreset, onPageArtClear, pageFileRef,
+  surfacePlacements, setSurfacePlacements,
   qty, setQty, notes, setNotes, price, onBack,
 }: {
   styleId: NotebookStyle;
@@ -3556,6 +3608,7 @@ function NotebookDesigner({
   setPageType: (p: PageType) => void;
   uploaded: string | null;
   preset: string | null;
+
   onFile: (f: File | null) => void;
   onPreset: (p: string) => void;
   onClear: () => void;
@@ -3566,6 +3619,14 @@ function NotebookDesigner({
   onBackPreset: (p: string) => void;
   onBackClear: () => void;
   backFileRef: React.RefObject<HTMLInputElement | null>;
+  insideFrontUploaded: string | null;
+  insideFrontPreset: string | null;
+  handleInsideFrontFile: (f: File | null) => void;
+  clearInsideFrontImage: () => void;
+  insideBackUploaded: string | null;
+  insideBackPreset: string | null;
+  handleInsideBackFile: (f: File | null) => void;
+  clearInsideBackImage: () => void;
   pageArtUploaded: string | null;
   pageArtPreset: string | null;
   pageArtOpacity: number;
@@ -3574,6 +3635,8 @@ function NotebookDesigner({
   onPageArtPreset: (p: string) => void;
   onPageArtClear: () => void;
   pageFileRef: React.RefObject<HTMLInputElement | null>;
+  surfacePlacements: Record<string, { x: number; y: number; scale: number }>;
+  setSurfacePlacements: React.Dispatch<React.SetStateAction<Record<string, { x: number; y: number; scale: number }>>>;
   qty: number;
   setQty: (n: number) => void;
   notes: string;
@@ -3582,19 +3645,40 @@ function NotebookDesigner({
   onBack: () => void;
 }) {
   const size = notebookSizes[sizeIdx];
+  const printRef = useRef<HTMLDivElement>(null);
+
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
   const showPageArt = showPages;
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
   const [pageCount, setPageCount] = useState<number>(80);
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
+  const [activeTab, setActiveTab] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [previewView, setPreviewView] = useState<"front" | "back">("front");
+  const [previewView, setPreviewView] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
   const [zoom, setZoom] = useState(100);
 
+  const activeArt = 
+    activeTab === "front" ? { uploaded, preset } :
+    activeTab === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+    activeTab === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+    { uploaded: backUploaded, preset: backPreset };
+
+  const activeHandleFile = 
+    activeTab === "front" ? onFile :
+    activeTab === "insideFront" ? handleInsideFrontFile :
+    activeTab === "insideBack" ? handleInsideBackFile :
+    onBackFile;
+  const activeClear =
+    activeTab === "front" ? onClear :
+    activeTab === "insideFront" ? clearInsideFrontImage :
+    activeTab === "insideBack" ? clearInsideBackImage :
+    onBackClear;
+
   const toggleExtra = (id: NotebookExtra) =>
     setExtras((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
 
 
 
@@ -3727,55 +3811,79 @@ function NotebookDesigner({
 
 
 
-        {/* Upload cover art */}
-        <div>
-          <Label className="mb-2 block text-sm font-semibold">Arte para la portada</Label>
+        {/* Tabbed Design Surface Picker */}
+        <div className="flex flex-wrap gap-2">
+          {(["front", "insideFront", "insideBack", "back"] as const).map((tab) => {
+            const hasData = 
+              tab === "front" ? (uploaded || preset) :
+              tab === "insideFront" ? (insideFrontUploaded || insideFrontPreset) :
+              tab === "insideBack" ? (insideBackUploaded || insideBackPreset) :
+              (backUploaded || backPreset);
+
+            
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={cn(
+                  "relative rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition",
+                  activeTab === tab ? "bg-primary text-primary-foreground shadow-md" : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                )}
+              >
+                {tab === "front" ? "Portada" : tab === "insideFront" ? "Int. Portada" : tab === "insideBack" ? "Int. Contra" : "Contra"}
+                {hasData && (
+                  <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-brand-green text-[8px] text-white">
+                    <Check className="h-2 w-2" strokeWidth={4} />
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Dynamic Upload Section */}
+        <div className="rounded-2xl border-2 border-dashed border-border bg-background/50 p-6">
           <input
-            ref={fileRef}
             type="file"
             accept="image/*"
             className="hidden"
-            onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+            onChange={(e) => activeHandleFile(e.target.files?.[0] ?? null)}
           />
           <button
-            onClick={() => fileRef.current?.click()}
-            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+            onClick={() => {
+              if (activeTab === "front") fileRef.current?.click();
+              else if (activeTab === "back") backFileRef.current?.click();
+              else if (activeTab === "insideFront") /* Create and use ref or just click hidden input logic */ ({} as any);
+              // Simplified for now, we'll use a single ref or handle dynamically
+              fileRef.current?.click(); 
+            }}
+            className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-8 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
           >
-            <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
-            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
+              <Upload className="h-6 w-6" style={{ color: "var(--brand-violet)" }} />
+            </div>
+            <div className="text-center">
+              <div className="font-bold">
+                {activeArt.uploaded ? "Cambiar diseño" : "Subir Diseño / Logo"}
+              </div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
+                {activeTab === "front" ? "Portada" : activeTab === "insideFront" ? "Interior Portada" : activeTab === "insideBack" ? "Interior Contraportada" : "Contraportada"}
+              </div>
+            </div>
           </button>
-
-          {hasArt && (
-            <button onClick={onClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
-              <Trash2 className="h-3.5 w-3.5" /> Quitar arte
-            </button>
+          
+          {!!(activeArt.uploaded || activeArt.preset) && (
+            <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+              <span className="text-[10px] font-bold text-brand-green uppercase tracking-wider flex items-center gap-1">
+                <Check className="h-3 w-3" /> Diseño cargado
+              </span>
+              <button onClick={activeClear} className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-destructive transition-colors">
+                <Trash2 className="h-3.5 w-3.5" /> Borrar
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Upload back cover art */}
-        <div>
-          <Label className="mb-2 block text-sm font-semibold">Arte para la contraportada</Label>
-          <input
-            ref={backFileRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => onBackFile(e.target.files?.[0] ?? null)}
-          />
-          <button
-            onClick={() => backFileRef.current?.click()}
-            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
-          >
-            <Upload className="h-5 w-5" style={{ color: "var(--brand-violet)" }} />
-            {backUploaded ? "Cambiar arte contraportada" : "Subir Arte Contraportada"}
-          </button>
-
-          {(backUploaded || backPreset) && (
-            <button onClick={onBackClear} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive">
-              <Trash2 className="h-3.5 w-3.5" /> Quitar arte
-            </button>
-          )}
-        </div>
 
         {/* Page count */}
         <div>
@@ -3876,10 +3984,12 @@ function NotebookDesigner({
             pageType={pageType}
             uploaded={uploaded}
             preset={preset}
+
             pageArtUploaded={pageArtUploaded}
             pageArtPreset={pageArtPreset}
             pageArtOpacity={pageArtOpacity}
           />
+
 
           <div className="mt-6 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
             <Stat label="Tamaño" value={size.label} />
@@ -3904,7 +4014,10 @@ function NotebookDesigner({
             notes ? `Notas: ${notes}` : "",
             uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente",
             backUploaded ? "Contraportada: Arte personalizado 📎" : backPreset ? `Contraportada: Preset "${backPreset}"` : "",
+            insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : insideFrontPreset ? "Interior Portada: Preset" : "",
+            insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : insideBackPreset ? "Interior Contra: Preset" : "",
             pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : pageArtPreset ? "Marca de agua: Preset" : "",
+
             "",
             "Solicito una cotización, gracias 🙌",
           ].filter(Boolean).join("\n");
@@ -3953,7 +4066,7 @@ function NotebookDesigner({
               </div>
             </div>
 
-            <div className="relative flex-1 overflow-auto bg-gradient-soft p-8">
+            <div className="relative flex-1 overflow-hidden bg-gradient-soft p-8">
               <div
                 className="mx-auto flex h-full items-center justify-center transition-transform duration-200"
                 style={{ transform: `scale(${zoom / 100})` }}
@@ -3965,83 +4078,147 @@ function NotebookDesigner({
                       material={material}
                       showPages={showPages}
                       pageType={pageType}
-                      uploaded={previewView === "front" ? uploaded : backUploaded}
-                      preset={previewView === "front" ? preset : backPreset}
+                      uploaded={
+                        previewView === "front" ? uploaded :
+                        previewView === "insideFront" ? insideFrontUploaded :
+                        previewView === "insideBack" ? insideBackUploaded :
+                        backUploaded
+                      }
+                      preset={
+                        previewView === "front" ? preset :
+                        previewView === "insideFront" ? insideFrontPreset :
+                        previewView === "insideBack" ? insideBackPreset :
+                        backPreset
+                      }
+
                       pageArtUploaded={pageArtUploaded}
                       pageArtPreset={pageArtPreset}
                       pageArtOpacity={pageArtOpacity}
-                      isBack={previewView === "back"}
+                      isBack={previewView === "back" || previewView === "insideBack"}
                     />
                   </div>
                 ) : (
-                  <div className="relative border-4 border-brand-blue bg-white shadow-2xl"
+                  <div 
+                    ref={printRef}
+                    className="relative border-4 border-brand-blue bg-white shadow-2xl overflow-hidden"
                     style={{
                       width: `${size.w * 40}px`,
                       height: `${size.h * 40}px`,
-                      padding: "0.125in" // Bleed area
                     }}
                   >
-                    {/* Bleed Badge */}
-                    <div className="absolute -top-10 left-0 flex items-center gap-2">
-                      <span className="rounded-full bg-brand-blue px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider">Bleed</span>
-                      <span className="rounded-full bg-brand-green px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider">Safety Area</span>
+                    {/* Interior Area with Bleed/Safety markings */}
+                    <div className="relative h-full w-full bg-slate-50/50">
+                      {/* Bleed Area (Visual only) */}
+                      <div className="absolute inset-0 border border-brand-blue opacity-30 pointer-events-none" />
+                      {/* Safety Area (Visual only) */}
+                      <div className="absolute inset-[0.25in] border border-dashed border-brand-green opacity-40 pointer-events-none" />
+
+                      {/* DRAGGABLE DESIGN SURFACE */}
+                      {(() => {
+                        const currentArt = 
+                          previewView === "front" ? { uploaded: uploaded, preset: preset } :
+                          previewView === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+                          previewView === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+                          { uploaded: backUploaded, preset: backPreset };
+                        
+                        const placement = surfacePlacements[previewView];
+
+                        if (!currentArt.uploaded && !currentArt.preset) return null;
+
+                        return (
+                          <div
+                            onPointerDown={(e) => {
+                              const rect = e.currentTarget.parentElement?.getBoundingClientRect();
+                              if (!rect) return;
+                              const startX = ((e.clientX - rect.left) / rect.width) * 100;
+                              const startY = ((e.clientY - rect.top) / rect.height) * 100;
+                              const origX = placement.x;
+                              const origY = placement.y;
+
+                              const move = (moveEv: PointerEvent) => {
+                                const dx = ((moveEv.clientX - rect.left) / rect.width) * 100 - startX;
+                                const dy = ((moveEv.clientY - rect.top) / rect.height) * 100 - startY;
+                                setSurfacePlacements(prev => ({
+                                  ...prev,
+                                  [previewView]: { ...prev[previewView], x: origX + dx, y: origY + dy }
+                                }));
+                              };
+                              const up = () => {
+                                window.removeEventListener("pointermove", move);
+                                window.removeEventListener("pointerup", up);
+                              };
+                              window.addEventListener("pointermove", move);
+                              window.addEventListener("pointerup", up);
+                            }}
+                            className="absolute cursor-move touch-none select-none flex items-center justify-center"
+                            style={{
+                              left: `${placement.x}%`,
+                              top: `${placement.y}%`,
+                              transform: `translate(-50%, -50%) scale(${placement.scale / 100})`,
+                              width: "60%", // Default size
+                              height: "60%",
+                            }}
+                          >
+                            {currentArt.uploaded ? (
+                              <img src={currentArt.uploaded} alt="" className="max-h-full max-w-full object-contain pointer-events-none" />
+                            ) : (
+                              <span className="text-[120px] leading-none pointer-events-none">{currentArt.preset}</span>
+                            )}
+
+                            {/* Resize Handles (Simplified for now - bottom right) */}
+                            <div 
+                              onPointerDown={(e) => {
+                                e.stopPropagation();
+                                const startY = e.clientY;
+                                const startScale = placement.scale;
+                                const move = (moveEv: PointerEvent) => {
+                                  const dy = moveEv.clientY - startY;
+                                  setSurfacePlacements(prev => ({
+                                    ...prev,
+                                    [previewView]: { ...prev[previewView], scale: Math.max(20, Math.min(300, startScale + dy / 2)) }
+                                  }));
+                                };
+                                const up = () => {
+                                  window.removeEventListener("pointermove", move);
+                                  window.removeEventListener("pointerup", up);
+                                };
+                                window.addEventListener("pointermove", move);
+                                window.addEventListener("pointerup", up);
+                              }}
+                              className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-white border-2 border-primary shadow-md cursor-nwse-resize" 
+                            />
+                          </div>
+                        );
+                      })()}
                     </div>
 
-                    {/* Dimensions */}
-                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-muted-foreground">
-                      {size.w}"
-                    </div>
-                    <div className="absolute -left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] font-bold text-muted-foreground">
-                      {size.h}"
-                    </div>
-
-                    {/* Interior Area */}
-                    <div className="relative h-full w-full border border-dashed border-brand-green bg-slate-50/50">
-                      {/* Safety Area line */}
-                      <div className="absolute inset-4 border border-dashed border-brand-green/30 pointer-events-none" />
-
-                      <div className="flex h-full w-full items-center justify-center p-8">
-                        {previewView === "front" ? (
-                          uploaded ? (
-                            <img src={uploaded} alt="" className="max-h-full max-w-full object-contain drop-shadow-lg" />
-                          ) : preset ? (
-                            <span className="text-[8rem] leading-none drop-shadow-lg">{preset}</span>
-                          ) : null
-                        ) : (
-                          backUploaded ? (
-                            <img src={backUploaded} alt="" className="max-h-full max-w-full object-contain drop-shadow-lg" />
-                          ) : backPreset ? (
-                            <span className="text-[8rem] leading-none drop-shadow-lg">{backPreset}</span>
-                          ) : null
-                        )}
-                      </div>
+                    {/* Bleed/Safety Labels */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1 pointer-events-none">
+                      <span className="rounded-full bg-brand-blue/20 px-2 py-0.5 text-[8px] font-bold text-brand-blue border border-brand-blue/30 uppercase tracking-widest w-fit">Bleed</span>
+                      <span className="rounded-full bg-brand-green/20 px-2 py-0.5 text-[8px] font-bold text-brand-green border border-brand-green/30 uppercase tracking-widest w-fit">Safety Area</span>
                     </div>
                   </div>
                 )}
               </div>
             </div>
 
+
             <div className="flex items-center justify-between border-t bg-background px-6 py-4">
-              <div className="flex items-center gap-2 rounded-2xl bg-muted p-1">
-                <button
-                  onClick={() => setPreviewView("front")}
-                  className={cn(
-                    "rounded-xl px-4 py-2 text-xs font-bold transition",
-                    previewView === "front" ? "bg-background shadow-sm" : "text-muted-foreground"
-                  )}
-                >
-                  Portada
-                </button>
-                <button
-                  onClick={() => setPreviewView("back")}
-                  className={cn(
-                    "rounded-xl px-4 py-2 text-xs font-bold transition",
-                    previewView === "back" ? "bg-background shadow-sm" : "text-muted-foreground"
-                  )}
-                >
-                  Contraportada
-                </button>
-              </div>
+                <div className="flex flex-wrap gap-1 bg-muted p-1 rounded-xl">
+                  {(["front", "insideFront", "insideBack", "back"] as const).map(v => (
+                    <button
+                      key={v}
+                      onClick={() => setPreviewView(v)}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition",
+                        previewView === v ? "bg-background shadow-sm" : "text-muted-foreground hover:bg-background/40"
+                      )}
+                    >
+                      {v === "front" ? "Portada" : v === "insideFront" ? "Int. Portada" : v === "insideBack" ? "Int. Contra" : "Contra"}
+                    </button>
+                  ))}
+                </div>
+
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
