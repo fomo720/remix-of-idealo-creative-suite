@@ -3664,20 +3664,20 @@ function NotebookDesigner({
   const [zoom, setZoom] = useState(100);
 
   const activeArt = 
-    activeTab === "front" ? { uploaded, preset } :
-    activeTab === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
-    activeTab === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+    activeSurface === "front" ? { uploaded, preset } :
+    activeSurface === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+    activeSurface === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
     { uploaded: backUploaded, preset: backPreset };
-
+    
   const activeHandleFile = 
-    activeTab === "front" ? onFile :
-    activeTab === "insideFront" ? handleInsideFrontFile :
-    activeTab === "insideBack" ? handleInsideBackFile :
+    activeSurface === "front" ? onFile :
+    activeSurface === "insideFront" ? handleInsideFrontFile :
+    activeSurface === "insideBack" ? handleInsideBackFile :
     onBackFile;
   const activeClear =
-    activeTab === "front" ? onClear :
-    activeTab === "insideFront" ? clearInsideFrontImage :
-    activeTab === "insideBack" ? clearInsideBackImage :
+    activeSurface === "front" ? onClear :
+    activeSurface === "insideFront" ? clearInsideFrontImage :
+    activeSurface === "insideBack" ? clearInsideBackImage :
     onBackClear;
 
   const toggleExtra = (id: NotebookExtra) =>
