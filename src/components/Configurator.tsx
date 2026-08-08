@@ -998,6 +998,27 @@ export function Configurator() {
     if (backFileRef.current) backFileRef.current.value = "";
   };
 
+  const handleInsideFrontFile = (f: File | null) => {
+    if (!f) return;
+    setInsideFrontUploaded(URL.createObjectURL(f));
+    setInsideFrontPreset(null);
+  };
+  const clearInsideFrontImage = () => {
+    setInsideFrontUploaded(null);
+    setInsideFrontPreset(null);
+  };
+
+  const handleInsideBackFile = (f: File | null) => {
+    if (!f) return;
+    setInsideBackUploaded(URL.createObjectURL(f));
+    setInsideBackPreset(null);
+  };
+  const clearInsideBackImage = () => {
+    setInsideBackUploaded(null);
+    setInsideBackPreset(null);
+  };
+
+
 
 
   const applyPreset = (i: number) => {
