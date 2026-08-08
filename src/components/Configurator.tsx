@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import nbPhoto1 from "@/assets/1-portada.png.asset.json";
+import nbPhoto2 from "@/assets/2-interior-portada.png.asset.json";
+import nbPhoto3 from "@/assets/3-interior-contraportada.png.asset.json";
+import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
 
 // NOTE: el editor 2D y el visor 3D (TextilesEditor2D / TextilesShirt3D) siguen en el
 // repositorio pero están desconectados del flujo del cliente (fase futura).
@@ -3646,6 +3650,7 @@ function NotebookDesigner({
 }) {
   const size = notebookSizes[sizeIdx];
   const printRef = useRef<HTMLDivElement>(null);
+  const activeFileInputRef = useRef<HTMLInputElement>(null);
 
   const hasArt = !!(uploaded || preset);
   const showPages = styleId === "cover-pages";
@@ -3653,27 +3658,26 @@ function NotebookDesigner({
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
   const [pageCount, setPageCount] = useState<number>(80);
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
-  const [activeTab, setActiveTab] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
+  const [activeSurface, setActiveSurface] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [previewView, setPreviewView] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
   const [zoom, setZoom] = useState(100);
 
   const activeArt = 
-    activeTab === "front" ? { uploaded, preset } :
-    activeTab === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
-    activeTab === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+    activeSurface === "front" ? { uploaded, preset } :
+    activeSurface === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+    activeSurface === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
     { uploaded: backUploaded, preset: backPreset };
-
+    
   const activeHandleFile = 
-    activeTab === "front" ? onFile :
-    activeTab === "insideFront" ? handleInsideFrontFile :
-    activeTab === "insideBack" ? handleInsideBackFile :
+    activeSurface === "front" ? onFile :
+    activeSurface === "insideFront" ? handleInsideFrontFile :
+    activeSurface === "insideBack" ? handleInsideBackFile :
     onBackFile;
   const activeClear =
-    activeTab === "front" ? onClear :
-    activeTab === "insideFront" ? clearInsideFrontImage :
-    activeTab === "insideBack" ? clearInsideBackImage :
+    activeSurface === "front" ? onClear :
+    activeSurface === "insideFront" ? clearInsideFrontImage :
+    activeSurface === "insideBack" ? clearInsideBackImage :
     onBackClear;
 
   const toggleExtra = (id: NotebookExtra) =>
@@ -3723,6 +3727,38 @@ function NotebookDesigner({
                 <div className="mt-0.5 text-[10px] leading-tight text-muted-foreground">{s.hint}</div>
               </button>
             ))}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(["front", "insideFront", "insideBack", "back"] as const).map((surface) => {
+              const hasData = 
+                surface === "front" ? (uploaded || preset) :
+                surface === "insideFront" ? (insideFrontUploaded || insideFrontPreset) :
+                surface === "insideBack" ? (insideBackUploaded || insideBackPreset) :
+                (backUploaded || backPreset);
+
+              return (
+                <button
+                  key={surface}
+                  onClick={() => setActiveSurface(surface)}
+                  className={cn(
+                    "relative flex-1 min-w-[120px] rounded-xl border-2 px-4 py-3 text-[10px] font-bold uppercase tracking-wider transition-all",
+                    activeSurface === surface 
+                      ? "bg-foreground text-background border-foreground shadow-lg" 
+                      : "bg-background text-foreground border-border hover:border-foreground/30"
+                  )}
+                >
+                  {surface === "front" ? "Portada" : surface === "insideFront" ? "Int. Portada" : surface === "insideBack" ? "Int. Contra" : "Contra"}
+                  {hasData && (
+                    <span className={cn(
+                      "absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm",
+                      activeSurface === surface ? "bg-background text-foreground" : "bg-brand-green text-white"
+                    )}>
+                      <Check className="h-3 w-3" strokeWidth={4} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -3811,52 +3847,19 @@ function NotebookDesigner({
 
 
 
-        {/* Tabbed Design Surface Picker */}
-        <div className="flex flex-wrap gap-2">
-          {(["front", "insideFront", "insideBack", "back"] as const).map((tab) => {
-            const hasData = 
-              tab === "front" ? (uploaded || preset) :
-              tab === "insideFront" ? (insideFrontUploaded || insideFrontPreset) :
-              tab === "insideBack" ? (insideBackUploaded || insideBackPreset) :
-              (backUploaded || backPreset);
-
-            
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={cn(
-                  "relative rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition",
-                  activeTab === tab ? "bg-primary text-primary-foreground shadow-md" : "bg-muted hover:bg-muted/80 text-muted-foreground"
-                )}
-              >
-                {tab === "front" ? "Portada" : tab === "insideFront" ? "Int. Portada" : tab === "insideBack" ? "Int. Contra" : "Contra"}
-                {hasData && (
-                  <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-brand-green text-[8px] text-white">
-                    <Check className="h-2 w-2" strokeWidth={4} />
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
+        {/* Tabbed Design Surface Picker - Moved below size selector later */}
 
         {/* Dynamic Upload Section */}
         <div className="rounded-2xl border-2 border-dashed border-border bg-background/50 p-6">
           <input
+            ref={activeFileInputRef}
             type="file"
             accept="image/*"
             className="hidden"
             onChange={(e) => activeHandleFile(e.target.files?.[0] ?? null)}
           />
           <button
-            onClick={() => {
-              if (activeTab === "front") fileRef.current?.click();
-              else if (activeTab === "back") backFileRef.current?.click();
-              else if (activeTab === "insideFront") /* Create and use ref or just click hidden input logic */ ({} as any);
-              // Simplified for now, we'll use a single ref or handle dynamically
-              fileRef.current?.click(); 
-            }}
+            onClick={() => activeFileInputRef.current?.click()}
             className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-8 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
           >
             <div className="grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
@@ -3867,7 +3870,7 @@ function NotebookDesigner({
                 {activeArt.uploaded ? "Cambiar diseño" : "Subir Diseño / Logo"}
               </div>
               <div className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
-                {activeTab === "front" ? "Portada" : activeTab === "insideFront" ? "Interior Portada" : activeTab === "insideBack" ? "Interior Contraportada" : "Contraportada"}
+                {activeSurface === "front" ? "Portada" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada"}
               </div>
             </div>
           </button>
@@ -3875,7 +3878,7 @@ function NotebookDesigner({
           {!!(activeArt.uploaded || activeArt.preset) && (
             <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
               <span className="text-[10px] font-bold text-brand-green uppercase tracking-wider flex items-center gap-1">
-                <Check className="h-3 w-3" /> Diseño cargado
+                <Check className="h-3 w-3" /> Diseño en {activeSurface === "front" ? "Portada" : activeSurface === "insideFront" ? "Interior Portada" : activeSurface === "insideBack" ? "Interior Contraportada" : "Contraportada"} cargado
               </span>
               <button onClick={activeClear} className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-destructive transition-colors">
                 <Trash2 className="h-3.5 w-3.5" /> Borrar
@@ -3997,9 +4000,9 @@ function NotebookDesigner({
           </div>
 
           <p className="mt-3 text-center text-[10px] text-muted-foreground">
-            {hasArt
-              ? "Diseño cargado. Verificá que el logo esté centrado y sea legible."
-              : "Subí tu logo o arte para ver cómo quedará tu libreta."}
+            {activeArt.uploaded || activeArt.preset
+              ? "Diseño cargado en esta superficie. Verificá que el logo esté centrado y sea legible."
+              : "Subí tu logo o arte para ver cómo quedará esta superficie de tu libreta."}
           </p>
         </div>
 
@@ -4079,22 +4082,23 @@ function NotebookDesigner({
                       showPages={showPages}
                       pageType={pageType}
                       uploaded={
-                        previewView === "front" ? uploaded :
-                        previewView === "insideFront" ? insideFrontUploaded :
-                        previewView === "insideBack" ? insideBackUploaded :
+                        activeSurface === "front" ? uploaded :
+                        activeSurface === "insideFront" ? insideFrontUploaded :
+                        activeSurface === "insideBack" ? insideBackUploaded :
                         backUploaded
                       }
                       preset={
-                        previewView === "front" ? preset :
-                        previewView === "insideFront" ? insideFrontPreset :
-                        previewView === "insideBack" ? insideBackPreset :
+                        activeSurface === "front" ? preset :
+                        activeSurface === "insideFront" ? insideFrontPreset :
+                        activeSurface === "insideBack" ? insideBackPreset :
                         backPreset
                       }
 
                       pageArtUploaded={pageArtUploaded}
                       pageArtPreset={pageArtPreset}
                       pageArtOpacity={pageArtOpacity}
-                      isBack={previewView === "back" || previewView === "insideBack"}
+                      isBack={activeSurface === "back" || activeSurface === "insideBack"}
+                      activeSurface={activeSurface}
                     />
                   </div>
                 ) : (
@@ -4116,12 +4120,12 @@ function NotebookDesigner({
                       {/* DRAGGABLE DESIGN SURFACE */}
                       {(() => {
                         const currentArt = 
-                          previewView === "front" ? { uploaded: uploaded, preset: preset } :
-                          previewView === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
-                          previewView === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
+                          activeSurface === "front" ? { uploaded: uploaded, preset: preset } :
+                          activeSurface === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
+                          activeSurface === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
                           { uploaded: backUploaded, preset: backPreset };
                         
-                        const placement = surfacePlacements[previewView];
+                        const placement = surfacePlacements[activeSurface];
 
                         if (!currentArt.uploaded && !currentArt.preset) return null;
 
@@ -4138,10 +4142,10 @@ function NotebookDesigner({
                               const move = (moveEv: PointerEvent) => {
                                 const dx = ((moveEv.clientX - rect.left) / rect.width) * 100 - startX;
                                 const dy = ((moveEv.clientY - rect.top) / rect.height) * 100 - startY;
-                                setSurfacePlacements(prev => ({
-                                  ...prev,
-                                  [previewView]: { ...prev[previewView], x: origX + dx, y: origY + dy }
-                                }));
+                                  setSurfacePlacements(prev => ({
+                                    ...prev,
+                                    [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
+                                  }));
                               };
                               const up = () => {
                                 window.removeEventListener("pointermove", move);
@@ -4175,7 +4179,7 @@ function NotebookDesigner({
                                   const dy = moveEv.clientY - startY;
                                   setSurfacePlacements(prev => ({
                                     ...prev,
-                                    [previewView]: { ...prev[previewView], scale: Math.max(20, Math.min(300, startScale + dy / 2)) }
+                                    [activeSurface]: { ...prev[activeSurface], scale: Math.max(20, Math.min(300, startScale + dy / 2)) }
                                   }));
                                 };
                                 const up = () => {
@@ -4208,10 +4212,10 @@ function NotebookDesigner({
                   {(["front", "insideFront", "insideBack", "back"] as const).map(v => (
                     <button
                       key={v}
-                      onClick={() => setPreviewView(v)}
+                      onClick={() => setActiveSurface(v)}
                       className={cn(
                         "rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition",
-                        previewView === v ? "bg-background shadow-sm" : "text-muted-foreground hover:bg-background/40"
+                        activeSurface === v ? "bg-background shadow-sm" : "text-muted-foreground hover:bg-background/40"
                       )}
                     >
                       {v === "front" ? "Portada" : v === "insideFront" ? "Int. Portada" : v === "insideBack" ? "Int. Contra" : "Contra"}
@@ -4260,6 +4264,7 @@ function NotebookPreview({
   size, material, showPages, pageType, uploaded, preset,
   pageArtUploaded, pageArtPreset, pageArtOpacity,
   isBack = false,
+  activeSurface = "front",
 }: {
   size: (typeof notebookSizes)[number];
   material: (typeof notebookMaterials)[number];
@@ -4271,6 +4276,7 @@ function NotebookPreview({
   pageArtPreset?: string | null;
   pageArtOpacity?: number;
   isBack?: boolean;
+  activeSurface?: "front" | "insideFront" | "insideBack" | "back";
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
@@ -4280,113 +4286,49 @@ function NotebookPreview({
   const pageArtOpacityPct = (pageArtOpacity ?? 35) / 100;
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
 
+  const mockups = {
+    front: nbPhoto1.url,
+    insideFront: nbPhoto2.url,
+    insideBack: nbPhoto3.url,
+    back: nbPhoto4.url,
+  };
+
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
 
-      <div
-        className="relative"
-        style={{
-          height: "85%",
-          aspectRatio: `${aspect} / 1`,
-          perspective: "1200px",
-        }}
-      >
-        {/* Pages sticking out behind */}
-        {showPages && (
-          <>
-            <div
-              className={cn(
-                "absolute overflow-hidden border border-border bg-white",
-                isBack ? "rounded-l-md" : "rounded-r-md"
-              )}
-              style={{
-                inset: isBack ? "3% 4% 3% -6%" : "3% -6% 3% 4%",
-                boxShadow: isBack ? "-2px 4px 12px rgba(0,0,0,0.1)" : "2px 4px 12px rgba(0,0,0,0.1)",
-                ...pageBackground(pageType),
-                backgroundColor: "#ffffff",
-              }}
-            >
-              {hasPageArt && (
-                <div
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                  style={{ opacity: pageArtOpacityPct }}
-                >
-                  {pageArtUploaded ? (
-                    <img src={pageArtUploaded} alt="" className="max-h-[60%] max-w-[60%] object-contain" />
-                  ) : (
-                    <span className="text-[3rem] leading-none">{pageArtPreset}</span>
-                  )}
-                </div>
-              )}
-            </div>
-            <div
-              className={cn(
-                "absolute border border-border bg-white/95",
-                isBack ? "rounded-l-sm" : "rounded-r-sm"
-              )}
-              style={{ inset: isBack ? "1.5% 6% 1.5% -3%" : "1.5% -3% 1.5% 6%" }}
-            />
-          </>
-        )}
+      <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl">
+        {/* Background Real Photo */}
+        <img 
+          src={mockups[activeSurface]} 
+          alt="" 
+          className="w-full h-auto block"
+        />
 
-
-
-        {/* Cover */}
-        <div
-          className={cn(
-            "absolute inset-0 overflow-hidden shadow-2xl",
-            isBack ? "rounded-md rounded-r-none" : "rounded-md rounded-l-none"
-          )}
-          style={{
-            background: coverGradient,
-            transform: isBack ? "rotateY(4deg)" : "rotateY(-4deg)",
-            transformOrigin: isBack ? "right center" : "left center",
-          }}
-        >
-          {/* Glossy sheen */}
-          {material.id === "cover-carton" && (
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(115deg, transparent 45%, rgba(255,255,255,0.28) 52%, transparent 60%)",
-              }}
-            />
-          )}
-
-          {/* Art placed on cover */}
-          <div className="absolute inset-0 flex items-center justify-center p-6">
-            {uploaded ? (
-              <img src={uploaded} alt="" className="max-h-[70%] max-w-[80%] object-contain drop-shadow-lg" />
-            ) : preset ? (
-              <span className="text-[5rem] leading-none drop-shadow-lg">{preset}</span>
-            ) : (
-              <div className="text-center text-white/60">
-                <BookOpen className="mx-auto mb-2 h-10 w-10" />
-                <div className="text-xs font-medium">Sube tu diseño de portada</div>
-              </div>
-            )}
-          </div>
-
-          {/* Bottom brand line */}
-          <div className="absolute inset-x-0 bottom-3 text-center text-[10px] font-semibold tracking-widest text-white/40">
-            IDEALO · {size.label}
-          </div>
-        </div>
-
-        {/* Spiral binding */}
+        {/* Design Overlay */}
         <div className={cn(
-          "absolute top-0 flex h-full flex-col items-center justify-around py-3",
-          isBack ? "-right-2" : "-left-2"
+          "absolute pointer-events-none flex items-center justify-center overflow-hidden",
+          activeSurface === "front" ? "inset-[5%] right-[2%]" :
+          activeSurface === "back" ? "inset-[5%] left-[2%]" :
+          activeSurface === "insideFront" ? "inset-0 right-[50%]" : // Left page
+          "inset-0 left-[50%]" // Right page for insideBack
         )}>
-          {Array.from({ length: 14 }).map((_, i) => (
-            <span
-              key={i}
-              className="block h-3 w-3 rounded-full border-2 border-slate-400/80 bg-slate-200 shadow-inner"
+          {uploaded ? (
+            <img 
+              src={uploaded} 
+              alt="" 
+              className={cn(
+                "max-h-[85%] max-w-[85%] object-contain drop-shadow-md transition-all duration-300",
+                (activeSurface === "front" || activeSurface === "back") && "scale-105"
+              )} 
             />
-          ))}
+          ) : preset ? (
+            <span className="text-[5rem] leading-none drop-shadow-lg opacity-80">{preset}</span>
+          ) : null}
         </div>
+
+        {/* Glossy sheen for realistic feel */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30" />
       </div>
     </div>
   );
