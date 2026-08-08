@@ -4162,18 +4162,18 @@ function NotebookDesigner({
                             onPointerDown={(e) => {
                               const rect = e.currentTarget.parentElement?.getBoundingClientRect();
                               if (!rect) return;
-                              const startX = ((e.clientX - rect.left) / rect.width) * 100;
-                              const startY = ((e.clientY - rect.top) / rect.height) * 100;
+                              const startX = e.clientX;
+                              const startY = e.clientY;
                               const origX = placement.x;
                               const origY = placement.y;
 
                               const move = (moveEv: PointerEvent) => {
-                                const dx = ((moveEv.clientX - rect.left) / rect.width) * 100 - startX;
-                                const dy = ((moveEv.clientY - rect.top) / rect.height) * 100 - startY;
-                                  setSurfacePlacements(prev => ({
-                                    ...prev,
-                                    [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
-                                  }));
+                                const dx = ((moveEv.clientX - startX) / rect.width) * 100;
+                                const dy = ((moveEv.clientY - startY) / rect.height) * 100;
+                                setSurfacePlacements(prev => ({
+                                  ...prev,
+                                  [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
+                                }));
                               };
                               const up = () => {
                                 window.removeEventListener("pointermove", move);
@@ -4182,12 +4182,12 @@ function NotebookDesigner({
                               window.addEventListener("pointermove", move);
                               window.addEventListener("pointerup", up);
                             }}
-                            className="absolute cursor-move touch-none select-none flex items-center justify-center"
+                            className="absolute cursor-move touch-none select-none flex items-center justify-center border border-dashed border-brand-blue/30 hover:border-brand-blue/60"
                             style={{
                               left: `${placement.x}%`,
                               top: `${placement.y}%`,
-                              transform: `translate(-50%, -50%) scale(${placement.scale / 100})`,
-                              width: "60%", // Default size
+                              transform: `translate(-50%, -50%) rotate(${placement.rotation || 0}deg) scale(${placement.scale / 100})`,
+                              width: "60%",
                               height: "60%",
                             }}
                           >
@@ -4197,17 +4197,20 @@ function NotebookDesigner({
                               <span className="text-[120px] leading-none pointer-events-none">{currentArt.preset}</span>
                             )}
 
-                            {/* Resize Handles (Simplified for now - bottom right) */}
-                            <div 
+                            {/* Rotation Handle */}
+                            <div
                               onPointerDown={(e) => {
                                 e.stopPropagation();
-                                const startY = e.clientY;
-                                const startScale = placement.scale;
+                                const rect = e.currentTarget.parentElement?.getBoundingClientRect();
+                                if (!rect) return;
+                                const centerX = rect.left + rect.width / 2;
+                                const centerY = rect.top + rect.height / 2;
+
                                 const move = (moveEv: PointerEvent) => {
-                                  const dy = moveEv.clientY - startY;
+                                  const angle = Math.atan2(moveEv.clientY - centerY, moveEv.clientX - centerX) * (180 / Math.PI) + 90;
                                   setSurfacePlacements(prev => ({
                                     ...prev,
-                                    [activeSurface]: { ...prev[activeSurface], scale: Math.max(20, Math.min(300, startScale + dy / 2)) }
+                                    [activeSurface]: { ...prev[activeSurface], rotation: angle }
                                   }));
                                 };
                                 const up = () => {
@@ -4217,8 +4220,43 @@ function NotebookDesigner({
                                 window.addEventListener("pointermove", move);
                                 window.addEventListener("pointerup", up);
                               }}
-                              className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-white border-2 border-primary shadow-md cursor-nwse-resize" 
-                            />
+                              className="absolute -top-10 left-1/2 -translate-x-1/2 cursor-alias w-6 h-6 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center"
+                            >
+                              <RotateCcw className="h-3 w-3 text-brand-violet" />
+                            </div>
+
+                            {/* 4 Corner Resize Handles */}
+                            {[
+                              { pos: "-top-2 -left-2", cursor: "nwse-resize", x: -1, y: -1 },
+                              { pos: "-top-2 -right-2", cursor: "nesw-resize", x: 1, y: -1 },
+                              { pos: "-bottom-2 -left-2", cursor: "nesw-resize", x: -1, y: 1 },
+                              { pos: "-bottom-2 -right-2", cursor: "nwse-resize", x: 1, y: 1 },
+                            ].map((h, i) => (
+                              <div
+                                key={i}
+                                onPointerDown={(e) => {
+                                  e.stopPropagation();
+                                  const startY = e.clientY;
+                                  const origScale = placement.scale;
+                                  const move = (moveEv: PointerEvent) => {
+                                    const dy = (moveEv.clientY - startY) * h.y;
+                                    const newScale = Math.max(10, Math.min(300, origScale - dy * 0.5));
+                                    setSurfacePlacements(prev => ({
+                                      ...prev,
+                                      [activeSurface]: { ...prev[activeSurface], scale: newScale }
+                                    }));
+                                  };
+                                  const up = () => {
+                                    window.removeEventListener("pointermove", move);
+                                    window.removeEventListener("pointerup", up);
+                                  };
+                                  window.addEventListener("pointermove", move);
+                                  window.addEventListener("pointerup", up);
+                                }}
+                                className={cn("absolute w-4 h-4 rounded-full bg-white shadow-md border-2 border-brand-blue", h.pos)}
+                                style={{ cursor: h.cursor }}
+                              />
+                            ))}
                           </div>
                         );
                       })()}
