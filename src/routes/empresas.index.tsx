@@ -147,12 +147,11 @@ function EmpresasIndex() {
                 ))}
               </div>
               <div className="mt-8 flex items-baseline gap-3">
-                <span className="text-5xl font-bold">L 600</span>
-                <span className="text-sm text-white/80">precio total</span>
+                <span className="text-sm text-white/80">presupuesto personalizado</span>
               </div>
               <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
               <a
-                href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #1 para Emprendedores (L 600).")}`}
+                href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #1 para Emprendedores.")}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-orange-600 transition hover:scale-[1.02]"
@@ -180,12 +179,11 @@ function EmpresasIndex() {
                 ))}
               </div>
               <div className="mt-8 flex items-baseline gap-3">
-                <span className="text-5xl font-bold">L 1,600</span>
-                <span className="text-sm text-white/80">precio total</span>
+                <span className="text-sm text-white/80">presupuesto personalizado</span>
               </div>
               <p className="mt-3 text-xs text-white/70">*Aplican restricciones</p>
               <a
-                href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #2 para Emprendedores (L 1,600).")}`}
+                href={`https://wa.me/50433635666?text=${encodeURIComponent("Hola Idealo, quiero cotizar el Combo #2 para Emprendedores.")}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-indigo-600 transition hover:scale-[1.02]"
