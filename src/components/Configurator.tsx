@@ -729,6 +729,14 @@ export function Configurator() {
   const [uploaded, setUploaded] = useState<string | null>(null);
   const [uploadedDims, setUploadedDims] = useState<{ w: number; h: number } | null>(null);
 
+  // Surface placement states (x, y, scale)
+  const [surfacePlacements, setSurfacePlacements] = useState<Record<string, { x: number; y: number; scale: number }>>({
+    front: { x: 50, y: 50, scale: 100 },
+    back: { x: 50, y: 50, scale: 100 },
+    insideFront: { x: 50, y: 50, scale: 100 },
+    insideBack: { x: 50, y: 50, scale: 100 },
+  });
+
   // size
   const [width, setWidth] = useState("2");
   const [height, setHeight] = useState("2");
@@ -746,12 +754,20 @@ export function Configurator() {
   const [notebookMaterial, setNotebookMaterial] = useState<NotebookMaterial | null>(null);
   const [notebookSizeIdx, setNotebookSizeIdx] = useState(1); // A5
   const [pageType, setPageType] = useState<PageType>("blank");
+  // notebook design surfaces
+  const [uploaded, setUploaded] = useState<string | null>(null);
+  const [preset, setPreset] = useState<string | null>(null);
+  const [backUploaded, setBackUploaded] = useState<string | null>(null);
+  const [backPreset, setBackPreset] = useState<string | null>(null);
+  const [insideFrontUploaded, setInsideFrontUploaded] = useState<string | null>(null);
+  const [insideFrontPreset, setInsideFrontPreset] = useState<string | null>(null);
+  const [insideBackUploaded, setInsideBackUploaded] = useState<string | null>(null);
+  const [insideBackPreset, setInsideBackPreset] = useState<string | null>(null);
+
   // notebook page (interior) art
   const [pageArtUploaded, setPageArtUploaded] = useState<string | null>(null);
   const [pageArtPreset, setPageArtPreset] = useState<string | null>(null);
   const [pageArtOpacity, setPageArtOpacity] = useState(35); // 0-100
-  const [backUploaded, setBackUploaded] = useState<string | null>(null);
-  const [backPreset, setBackPreset] = useState<string | null>(null);
 
 
   // laser state
