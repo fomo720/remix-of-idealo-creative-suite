@@ -4287,6 +4287,9 @@ function NotebookPreview({
   pageArtUploaded, pageArtPreset, pageArtOpacity,
   isBack = false,
   activeSurface = "front",
+  surfacePlacements,
+  setSurfacePlacements,
+  interactive = false,
 }: {
   size: (typeof notebookSizes)[number];
   material: (typeof notebookMaterials)[number];
@@ -4298,7 +4301,10 @@ function NotebookPreview({
   pageArtPreset?: string | null;
   pageArtOpacity?: number;
   isBack?: boolean;
-  activeSurface?: "front" | "insideFront" | "insideBack" | "back";
+  activeSurface: "front" | "insideFront" | "insideBack" | "back";
+  surfacePlacements?: Record<string, { x: number; y: number; scale: number; rotation: number }>;
+  setSurfacePlacements?: React.Dispatch<React.SetStateAction<Record<string, { x: number; y: number; scale: number; rotation: number }>>>;
+  interactive?: boolean;
 }) {
   const aspect = size.w / size.h; // portrait ~0.71
   const coverGradient =
