@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import nbPhoto1 from "@/assets/1-portada.png.asset.json";
+import nbPhoto2 from "@/assets/2-interior-portada.png.asset.json";
+import nbPhoto3 from "@/assets/3-interior-contraportada.png.asset.json";
+import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
 
 // NOTE: el editor 2D y el visor 3D (TextilesEditor2D / TextilesShirt3D) siguen en el
 // repositorio pero están desconectados del flujo del cliente (fase futura).
