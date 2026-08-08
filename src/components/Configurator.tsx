@@ -4064,6 +4064,9 @@ function NotebookDesigner({
                   </Button>
                 </div>
                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground">
                   <RotateCcw className="h-4 w-4" onClick={() => setZoom(100)} />
                 </Button>
               </div>
