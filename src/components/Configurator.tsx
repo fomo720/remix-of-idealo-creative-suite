@@ -4286,116 +4286,53 @@ function NotebookPreview({
   const pageArtOpacityPct = (pageArtOpacity ?? 35) / 100;
   const hasPageArt = !!(pageArtUploaded || pageArtPreset);
 
+  const mockups = {
+    front: nbPhoto1.url,
+    insideFront: nbPhoto2.url,
+    insideBack: nbPhoto3.url,
+    back: nbPhoto4.url,
+  };
+
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
 
-      <div
-        className="relative"
-        style={{
-          height: "85%",
-          aspectRatio: `${aspect} / 1`,
-          perspective: "1200px",
-        }}
-      >
-        {/* Pages sticking out behind */}
-        {showPages && (
-          <>
-            <div
-              className={cn(
-                "absolute overflow-hidden border border-border bg-white",
-                isBack ? "rounded-l-md" : "rounded-r-md"
-              )}
-              style={{
-                inset: isBack ? "3% 4% 3% -6%" : "3% -6% 3% 4%",
-                boxShadow: isBack ? "-2px 4px 12px rgba(0,0,0,0.1)" : "2px 4px 12px rgba(0,0,0,0.1)",
-                ...pageBackground(pageType),
-                backgroundColor: "#ffffff",
-              }}
-            >
-              {hasPageArt && (
-                <div
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                  style={{ opacity: pageArtOpacityPct }}
-                >
-                  {pageArtUploaded ? (
-                    <img src={pageArtUploaded} alt="" className="max-h-[60%] max-w-[60%] object-contain" />
-                  ) : (
-                    <span className="text-[3rem] leading-none">{pageArtPreset}</span>
-                  )}
-                </div>
-              )}
-            </div>
-            <div
-              className={cn(
-                "absolute border border-border bg-white/95",
-                isBack ? "rounded-l-sm" : "rounded-r-sm"
-              )}
-              style={{ inset: isBack ? "1.5% 6% 1.5% -3%" : "1.5% -3% 1.5% 6%" }}
-            />
-          </>
-        )}
+      <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl">
+        {/* Background Real Photo */}
+        <img 
+          src={mockups[activeSurface]} 
+          alt="" 
+          className="w-full h-auto block"
+        />
 
-
-
-        {/* Cover */}
-        <div
-          className={cn(
-            "absolute inset-0 overflow-hidden shadow-2xl",
-            isBack ? "rounded-md rounded-r-none" : "rounded-md rounded-l-none"
-          )}
-          style={{
-            background: coverGradient,
-            transform: isBack ? "rotateY(4deg)" : "rotateY(-4deg)",
-            transformOrigin: isBack ? "right center" : "left center",
-          }}
-        >
-          {/* Glossy sheen */}
-          {material.id === "cover-carton" && (
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(115deg, transparent 45%, rgba(255,255,255,0.28) 52%, transparent 60%)",
-              }}
-            />
-          )}
-
-          {/* Art placed on cover */}
-          <div className="absolute inset-0 flex items-center justify-center p-6">
-            {uploaded ? (
-              <img src={uploaded} alt="" className="max-h-[70%] max-w-[80%] object-contain drop-shadow-lg" />
-            ) : preset ? (
-              <span className="text-[5rem] leading-none drop-shadow-lg">{preset}</span>
-            ) : (
-              <div className="text-center text-white/60">
-                <BookOpen className="mx-auto mb-2 h-10 w-10" />
-                <div className="text-xs font-medium">Sube tu diseño de portada</div>
-              </div>
-            )}
-          </div>
-
-          {/* Bottom brand line */}
-          <div className="absolute inset-x-0 bottom-3 text-center text-[10px] font-semibold tracking-widest text-white/40">
-            IDEALO · {size.label}
-          </div>
-        </div>
-
-        {/* Spiral binding */}
+        {/* Design Overlay */}
         <div className={cn(
-          "absolute top-0 flex h-full flex-col items-center justify-around py-3",
-          isBack ? "-right-2" : "-left-2"
+          "absolute pointer-events-none flex items-center justify-center overflow-hidden",
+          activeSurface === "front" ? "inset-[5%] right-[2%]" :
+          activeSurface === "back" ? "inset-[5%] left-[2%]" :
+          activeSurface === "insideFront" ? "inset-0 right-[50%]" : // Left page
+          "inset-0 left-[50%]" // Right page for insideBack
         )}>
-          {Array.from({ length: 14 }).map((_, i) => (
-            <span
-              key={i}
-              className="block h-3 w-3 rounded-full border-2 border-slate-400/80 bg-slate-200 shadow-inner"
+          {uploaded ? (
+            <img 
+              src={uploaded} 
+              alt="" 
+              className={cn(
+                "max-h-[85%] max-w-[85%] object-contain drop-shadow-md transition-all duration-300",
+                (activeSurface === "front" || activeSurface === "back") && "scale-105"
+              )} 
             />
-          ))}
+          ) : preset ? (
+            <span className="text-[5rem] leading-none drop-shadow-lg opacity-80">{preset}</span>
+          ) : null}
         </div>
+
+        {/* Glossy sheen for realistic feel */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30" />
       </div>
     </div>
   );
+}
 }
 
 
