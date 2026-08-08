@@ -3985,12 +3985,23 @@ function NotebookDesigner({
             material={material}
             showPages={showPages}
             pageType={pageType}
-            uploaded={uploaded}
-            preset={preset}
-
+            uploaded={
+              activeSurface === "front" ? uploaded :
+              activeSurface === "insideFront" ? insideFrontUploaded :
+              activeSurface === "insideBack" ? insideBackUploaded :
+              backUploaded
+            }
+            preset={
+              activeSurface === "front" ? preset :
+              activeSurface === "insideFront" ? insideFrontPreset :
+              activeSurface === "insideBack" ? insideBackPreset :
+              backPreset
+            }
             pageArtUploaded={pageArtUploaded}
             pageArtPreset={pageArtPreset}
             pageArtOpacity={pageArtOpacity}
+            isBack={activeSurface === "back" || activeSurface === "insideBack"}
+            activeSurface={activeSurface}
           />
 
 
