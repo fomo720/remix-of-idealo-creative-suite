@@ -8,7 +8,7 @@ import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
 // repositorio pero están desconectados del flujo del cliente (fase futura).
 
 import {
-  Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors, File,
+  Upload, Check, ArrowRight, ArrowLeft, Sparkles, Package, Layers, Scissors, File,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
@@ -3695,6 +3695,7 @@ function NotebookDesigner({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
   const [zoom, setZoom] = useState(100);
+  const [designMode, setDesignMode] = useState<"us" | "self" | null>(null);
 
   const activeArt = 
     activeSurface === "front" ? { uploaded, preset } :
@@ -3719,10 +3720,59 @@ function NotebookDesigner({
 
 
 
+  if (!designMode) {
+    return (
+      <div className="animate-step-in mx-auto max-w-3xl">
+        <div className="mb-8 text-center">
+          <h3 className="text-2xl font-bold tracking-tight">¿Cómo querés tu libreta?</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Elegí una opción para continuar con tu cotización.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <button
+            onClick={() => setDesignMode("us")}
+            className="group rounded-3xl border-2 border-border bg-background p-6 text-left transition hover:-translate-y-1 hover:border-transparent hover:shadow-elegant"
+          >
+            <div className="mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
+              <Sparkles className="h-6 w-6" style={{ color: "var(--brand-violet)" }} />
+            </div>
+            <div className="text-lg font-bold">Quiero que me hagan mi propio diseño</div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Vos elegís tamaño, tipo de papel y cantidad. Nuestro equipo se encarga del arte
+              (tiene costo adicional de diseño).
+            </p>
+          </button>
+          <button
+            onClick={() => setDesignMode("self")}
+            className="group rounded-3xl border-2 border-border bg-background p-6 text-left transition hover:-translate-y-1 hover:border-transparent hover:shadow-elegant"
+          >
+            <div className="mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
+              <Upload className="h-6 w-6" style={{ color: "var(--brand-magenta)" }} />
+            </div>
+            <div className="text-lg font-bold">Personalizá la mía</div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Subí tu arte y acomodalo en portada, contraportada e interiores con vista previa
+              en vivo.
+            </p>
+          </button>
+        </div>
+        <NavRow onBack={onBack} />
+      </div>
+    );
+  }
+
   return (
-    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
+    <div className={cn("animate-step-in grid gap-8", designMode === "self" && "lg:grid-cols-2")}>
       {/* LEFT: controls */}
       <div className="space-y-6">
+        <button
+          onClick={() => setDesignMode(null)}
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          {designMode === "us" ? "Nosotros diseñamos tu libreta" : "Estás subiendo tu propio diseño"} · Cambiar
+        </button>
         {/* Material info */}
         <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-soft p-5">
           <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-rainbow opacity-10 blur-2xl" />
@@ -3788,6 +3838,7 @@ function NotebookDesigner({
               </button>
             ))}
           </div>
+          {designMode === "self" && (
           <div className="mt-4 flex flex-wrap gap-2">
             {(["front", "insideFront", "insideBack", "back"] as const).map((surface) => {
               const hasData = 
@@ -3820,6 +3871,7 @@ function NotebookDesigner({
               );
             })}
           </div>
+          )}
         </div>
 
         {/* Page type — only when cover+pages */}
@@ -3849,7 +3901,7 @@ function NotebookDesigner({
         )}
 
         {/* Page interior art (A5 + cover-pages only) */}
-        {showPageArt && (
+        {showPageArt && designMode === "self" && (
           <div className="rounded-2xl border-2 border-dashed border-border/80 bg-gradient-soft/50 p-4">
             <div className="mb-2 flex items-center justify-between">
               <Label className="text-sm font-semibold">Diseño de la página interior</Label>
@@ -3910,6 +3962,7 @@ function NotebookDesigner({
         {/* Tabbed Design Surface Picker - Moved below size selector later */}
 
         {/* Dynamic Upload Section */}
+        {designMode === "self" && (
         <div className="rounded-2xl border-2 border-dashed border-border bg-background/50 p-6">
           <input
             ref={activeFileInputRef}
@@ -3946,6 +3999,7 @@ function NotebookDesigner({
             </div>
           )}
         </div>
+        )}
 
 
         {/* Page count */}
@@ -4026,6 +4080,7 @@ function NotebookDesigner({
 
       {/* RIGHT: preview */}
       <div className="lg:sticky lg:top-6 lg:self-start">
+        {designMode === "self" && (
         <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Vista Previa</h3>
@@ -4079,21 +4134,23 @@ function NotebookDesigner({
               : "Subí tu logo o arte para ver cómo quedará esta superficie de tu libreta."}
           </p>
         </div>
+        )}
 
         {(() => {
           const summary = [
             `Producto: Libreta Personalizada`,
+            designMode === "us" ? "Diseño: Quiero que Idealo lo diseñe (costo adicional)" : "Diseño: Yo subo mi propio arte",
             `Estilo: ${material.name} · ${styleId === "cover-only" ? "Solo Portada" : "Portada + Páginas"}`,
             `Tamaño: ${size.label} (${size.cm})`,
             showPages ? `Interiores: ${pageType} · ${pageCount} páginas` : "",
             extras.length > 0 ? `Extras: ${extras.map(e => notebookExtras.find(x => x.id === e)?.name).join(", ")}` : "",
             `Cantidad: ${qty}`,
             notes ? `Notas: ${notes}` : "",
-            uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente",
-            backUploaded ? "Contraportada: Arte personalizado 📎" : backPreset ? `Contraportada: Preset "${backPreset}"` : "",
-            insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : insideFrontPreset ? "Interior Portada: Preset" : "",
-            insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : insideBackPreset ? "Interior Contra: Preset" : "",
-            pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : pageArtPreset ? "Marca de agua: Preset" : "",
+            designMode === "self" ? (uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente") : "",
+            designMode === "self" && backUploaded ? "Contraportada: Arte personalizado 📎" : designMode === "self" && backPreset ? `Contraportada: Preset "${backPreset}"` : "",
+            designMode === "self" && insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : designMode === "self" && insideFrontPreset ? "Interior Portada: Preset" : "",
+            designMode === "self" && insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : designMode === "self" && insideBackPreset ? "Interior Contra: Preset" : "",
+            designMode === "self" && pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : designMode === "self" && pageArtPreset ? "Marca de agua: Preset" : "",
 
             "",
             "Solicito una cotización, gracias 🙌",
