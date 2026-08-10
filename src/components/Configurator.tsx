@@ -3948,6 +3948,7 @@ function NotebookDesigner({
             </div>
           )}
         </div>
+        )}
 
 
         {/* Page count */}
