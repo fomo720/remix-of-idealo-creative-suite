@@ -3822,6 +3822,7 @@ function NotebookDesigner({
               );
             })}
           </div>
+          )}
         </div>
 
         {/* Page type — only when cover+pages */}
