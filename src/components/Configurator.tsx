@@ -3850,7 +3850,7 @@ function NotebookDesigner({
         )}
 
         {/* Page interior art (A5 + cover-pages only) */}
-        {showPageArt && (
+        {showPageArt && designMode === "self" && (
           <div className="rounded-2xl border-2 border-dashed border-border/80 bg-gradient-soft/50 p-4">
             <div className="mb-2 flex items-center justify-between">
               <Label className="text-sm font-semibold">Diseño de la página interior</Label>
