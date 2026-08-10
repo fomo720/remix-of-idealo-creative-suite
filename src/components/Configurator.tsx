@@ -4027,6 +4027,7 @@ function NotebookDesigner({
 
       {/* RIGHT: preview */}
       <div className="lg:sticky lg:top-6 lg:self-start">
+        {designMode === "self" && (
         <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Vista Previa</h3>
