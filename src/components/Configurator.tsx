@@ -3695,6 +3695,7 @@ function NotebookDesigner({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
   const [zoom, setZoom] = useState(100);
+  const [designMode, setDesignMode] = useState<"us" | "self" | null>(null);
 
   const activeArt = 
     activeSurface === "front" ? { uploaded, preset } :
