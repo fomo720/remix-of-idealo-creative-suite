@@ -3693,7 +3693,7 @@ function NotebookDesigner({
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
   const [activeSurface, setActiveSurface] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
+  
   const [zoom, setZoom] = useState(100);
   const [designMode, setDesignMode] = useState<"us" | "self" | null>(null);
 
@@ -4224,28 +4224,8 @@ function NotebookDesigner({
           <div className="flex h-[80vh] flex-col bg-background">
             <div className="flex items-center justify-between border-b px-6 py-4">
               <DialogTitle className="text-xl font-bold">Vista previa</DialogTitle>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center rounded-xl bg-muted p-1">
-                  <button
-                    onClick={() => setPreviewMode("realistic")}
-                    className={cn(
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
-                      previewMode === "realistic" ? "bg-background shadow-sm" : "text-muted-foreground"
-                    )}
-                  >
-                    Vista realista
-                  </button>
-                  <button
-                    onClick={() => setPreviewMode("technical")}
-                    className={cn(
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
-                      previewMode === "technical" ? "bg-background shadow-sm" : "text-muted-foreground"
-                    )}
-                  >
-                    Vista técnica
-                  </button>
-                </div>
-              </div>
+              <div />
+
             </div>
 
             <div className="relative flex-1 overflow-hidden bg-gradient-soft p-8">
@@ -4253,7 +4233,7 @@ function NotebookDesigner({
                 className="mx-auto flex h-full items-center justify-center transition-transform duration-200"
                 style={{ transform: `scale(${zoom / 100})` }}
               >
-                {previewMode === "realistic" ? (
+                {(
                   <div className="w-full max-w-md">
                     <NotebookPreview
                       size={size}
@@ -4283,149 +4263,8 @@ function NotebookDesigner({
                       interactive={true}
                     />
                   </div>
-                ) : (
-                  <div 
-                    ref={printRef}
-                    className="relative border-4 border-brand-blue bg-white shadow-2xl overflow-hidden"
-                    style={{
-                      width: `${size.w * 40}px`,
-                      height: `${size.h * 40}px`,
-                    }}
-                  >
-                    {/* Interior Area with Bleed/Safety markings */}
-                    <div className="relative h-full w-full bg-slate-50/50">
-                      {/* Bleed Area (Visual only) */}
-                      <div className="absolute inset-0 border border-brand-blue opacity-30 pointer-events-none" />
-                      {/* Safety Area (Visual only) */}
-                      <div className="absolute inset-[0.25in] border border-dashed border-brand-green opacity-40 pointer-events-none" />
-
-                      {/* DRAGGABLE DESIGN SURFACE */}
-                      {(() => {
-                        const currentArt = 
-                          activeSurface === "front" ? { uploaded: uploaded, preset: preset } :
-                          activeSurface === "insideFront" ? { uploaded: insideFrontUploaded, preset: insideFrontPreset } :
-                          activeSurface === "insideBack" ? { uploaded: insideBackUploaded, preset: insideBackPreset } :
-                          { uploaded: backUploaded, preset: backPreset };
-                        
-                        const placement = surfacePlacements[activeSurface];
-
-                        if (!currentArt.uploaded && !currentArt.preset) return null;
-
-                        return (
-                          <div
-                            onPointerDown={(e) => {
-                              const rect = e.currentTarget.parentElement?.getBoundingClientRect();
-                              if (!rect) return;
-                              const startX = e.clientX;
-                              const startY = e.clientY;
-                              const origX = placement.x;
-                              const origY = placement.y;
-
-                              const move = (moveEv: PointerEvent) => {
-                                const dx = ((moveEv.clientX - startX) / rect.width) * 100;
-                                const dy = ((moveEv.clientY - startY) / rect.height) * 100;
-                                setSurfacePlacements(prev => ({
-                                  ...prev,
-                                  [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
-                                }));
-                              };
-                              const up = () => {
-                                window.removeEventListener("pointermove", move);
-                                window.removeEventListener("pointerup", up);
-                              };
-                              window.addEventListener("pointermove", move);
-                              window.addEventListener("pointerup", up);
-                            }}
-                            className="absolute cursor-move touch-none select-none flex items-center justify-center border border-dashed border-brand-blue/30 hover:border-brand-blue/60"
-                            style={{
-                              left: `${placement.x}%`,
-                              top: `${placement.y}%`,
-                              transform: `translate(-50%, -50%) rotate(${placement.rotation || 0}deg) scale(${placement.scale / 100})`,
-                              width: "60%",
-                              height: "60%",
-                            }}
-                          >
-                            {currentArt.uploaded ? (
-                              <img src={currentArt.uploaded} alt="" className="max-h-full max-w-full object-contain pointer-events-none" />
-                            ) : (
-                              <span className="text-[120px] leading-none pointer-events-none">{currentArt.preset}</span>
-                            )}
-
-                            {/* Rotation Handle */}
-                            <div
-                              onPointerDown={(e) => {
-                                e.stopPropagation();
-                                const rect = e.currentTarget.parentElement?.getBoundingClientRect();
-                                if (!rect) return;
-                                const centerX = rect.left + rect.width / 2;
-                                const centerY = rect.top + rect.height / 2;
-
-                                const move = (moveEv: PointerEvent) => {
-                                  const angle = Math.atan2(moveEv.clientY - centerY, moveEv.clientX - centerX) * (180 / Math.PI) + 90;
-                                  setSurfacePlacements(prev => ({
-                                    ...prev,
-                                    [activeSurface]: { ...prev[activeSurface], rotation: angle }
-                                  }));
-                                };
-                                const up = () => {
-                                  window.removeEventListener("pointermove", move);
-                                  window.removeEventListener("pointerup", up);
-                                };
-                                window.addEventListener("pointermove", move);
-                                window.addEventListener("pointerup", up);
-                              }}
-                              className="absolute -top-10 left-1/2 -translate-x-1/2 cursor-alias w-6 h-6 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center"
-                            >
-                              <RotateCcw className="h-3 w-3 text-brand-violet" />
-                            </div>
-
-                            {/* 4 Corner Resize Handles */}
-                            {[
-                              { pos: "-top-2 -left-2", cursor: "nwse-resize", x: -1, y: -1 },
-                              { pos: "-top-2 -right-2", cursor: "nesw-resize", x: 1, y: -1 },
-                              { pos: "-bottom-2 -left-2", cursor: "nesw-resize", x: -1, y: 1 },
-                              { pos: "-bottom-2 -right-2", cursor: "nwse-resize", x: 1, y: 1 },
-                            ].map((h, i) => (
-                              <div
-                                key={i}
-                                onPointerDown={(e) => {
-                                  e.stopPropagation();
-                                  const startY = e.clientY;
-                                  const origScale = placement.scale;
-                                  const move = (moveEv: PointerEvent) => {
-                                    const dy = (moveEv.clientY - startY) * h.y;
-                                    // REVERSED: outward (positive dy if h.y is 1) should INCREASE scale.
-                                    // Original logic: newScale = Math.max(10, Math.min(300, origScale - dy * 0.5))
-                                    // Correct logic: + dy * 0.5
-                                    const newScale = Math.max(10, Math.min(300, origScale + dy * 0.5));
-                                    setSurfacePlacements(prev => ({
-                                      ...prev,
-                                      [activeSurface]: { ...prev[activeSurface], scale: newScale }
-                                    }));
-                                  };
-                                  const up = () => {
-                                    window.removeEventListener("pointermove", move);
-                                    window.removeEventListener("pointerup", up);
-                                  };
-                                  window.addEventListener("pointermove", move);
-                                  window.addEventListener("pointerup", up);
-                                }}
-                                className={cn("absolute w-4 h-4 rounded-full bg-white shadow-md border-2 border-brand-blue", h.pos)}
-                                style={{ cursor: h.cursor }}
-                              />
-                            ))}
-                          </div>
-                        );
-                      })()}
-                    </div>
-
-                    {/* Bleed/Safety Labels */}
-                    <div className="absolute top-2 left-2 flex flex-col gap-1 pointer-events-none">
-                      <span className="rounded-full bg-brand-blue/20 px-2 py-0.5 text-[8px] font-bold text-brand-blue border border-brand-blue/30 uppercase tracking-widest w-fit">Bleed</span>
-                      <span className="rounded-full bg-brand-green/20 px-2 py-0.5 text-[8px] font-bold text-brand-green border border-brand-green/30 uppercase tracking-widest w-fit">Safety Area</span>
-                    </div>
-                  </div>
                 )}
+
               </div>
             </div>
 
@@ -4536,6 +4375,17 @@ function NotebookPreview({
     back: nbPhoto4.url,
   };
 
+  // Selección por toque: 1er clic muestra las esquinas, 2do las oculta.
+  const [selected, setSelected] = useState(false);
+  useEffect(() => { setSelected(false); }, [activeSurface]);
+  const placementRef = useRef({ x: 50, y: 50, scale: 100, rotation: 0 });
+  const pointersRef = useRef(new Map<number, { x: number; y: number }>());
+  const pinchRef = useRef<{ dist: number; scale: number } | null>(null);
+  const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number; w: number; h: number } | null>(null);
+  const movedRef = useRef(false);
+
+
+
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
@@ -4569,34 +4419,81 @@ function NotebookPreview({
           >
           {(() => {
             const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
-            
+            placementRef.current = placement;
+
             if (!uploaded && !preset) return null;
+
+            const onDown = (e: React.PointerEvent) => {
+              if (!interactive || !setSurfacePlacements) return;
+              const rect = e.currentTarget.parentElement?.getBoundingClientRect();
+              if (!rect) return;
+              pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+              movedRef.current = false;
+
+              if (pointersRef.current.size === 2) {
+                const [a, b] = [...pointersRef.current.values()];
+                pinchRef.current = {
+                  dist: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+                  scale: placementRef.current.scale,
+                };
+                dragRef.current = null;
+                return;
+              }
+
+              pinchRef.current = null;
+              dragRef.current = {
+                startX: e.clientX,
+                startY: e.clientY,
+                origX: placement.x,
+                origY: placement.y,
+                w: rect.width,
+                h: rect.height,
+              };
+
+              const move = (ev: PointerEvent) => {
+                if (pointersRef.current.has(ev.pointerId)) {
+                  pointersRef.current.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+                }
+                if (pointersRef.current.size >= 2 && pinchRef.current) {
+                  const [a, b] = [...pointersRef.current.values()];
+                  const d = Math.hypot(a.x - b.x, a.y - b.y);
+                  const next = Math.max(10, Math.min(300, pinchRef.current.scale * (d / pinchRef.current.dist)));
+                  movedRef.current = true;
+                  setSurfacePlacements(prev => ({
+                    ...prev,
+                    [activeSurface]: { ...prev[activeSurface], scale: next },
+                  }));
+                  return;
+                }
+                const d = dragRef.current;
+                if (!d) return;
+                const dx = ((ev.clientX - d.startX) / d.w) * 100;
+                const dy = ((ev.clientY - d.startY) / d.h) * 100;
+                if (Math.abs(ev.clientX - d.startX) > 4 || Math.abs(ev.clientY - d.startY) > 4) movedRef.current = true;
+                setSurfacePlacements(prev => ({
+                  ...prev,
+                  [activeSurface]: { ...prev[activeSurface], x: d.origX + dx, y: d.origY + dy },
+                }));
+              };
+              const up = (ev: PointerEvent) => {
+                pointersRef.current.delete(ev.pointerId);
+                if (pointersRef.current.size < 2) pinchRef.current = null;
+                if (pointersRef.current.size === 0) {
+                  dragRef.current = null;
+                  window.removeEventListener("pointermove", move);
+                  window.removeEventListener("pointerup", up);
+                  window.removeEventListener("pointercancel", up);
+                  if (!movedRef.current) setSelected(s => !s);
+                }
+              };
+              window.addEventListener("pointermove", move);
+              window.addEventListener("pointerup", up);
+              window.addEventListener("pointercancel", up);
+            };
 
             return (
               <div
-                onPointerDown={interactive ? (e) => {
-                  const rect = e.currentTarget.parentElement?.getBoundingClientRect();
-                  if (!rect || !setSurfacePlacements) return;
-                  const startX = e.clientX;
-                  const startY = e.clientY;
-                  const origX = placement.x;
-                  const origY = placement.y;
-
-                  const move = (moveEv: PointerEvent) => {
-                    const dx = ((moveEv.clientX - startX) / rect.width) * 100;
-                    const dy = ((moveEv.clientY - startY) / rect.height) * 100;
-                    setSurfacePlacements(prev => ({
-                      ...prev,
-                      [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
-                    }));
-                  };
-                  const up = () => {
-                    window.removeEventListener("pointermove", move);
-                    window.removeEventListener("pointerup", up);
-                  };
-                  window.addEventListener("pointermove", move);
-                  window.addEventListener("pointerup", up);
-                } : undefined}
+                onPointerDown={interactive ? onDown : undefined}
                 className={cn(
                   "absolute flex items-center justify-center",
                   interactive && "cursor-move touch-none select-none"
@@ -4621,7 +4518,7 @@ function NotebookPreview({
                   <span className="text-[5rem] leading-none drop-shadow-lg opacity-80 pointer-events-none">{preset}</span>
                 )}
 
-                {interactive && setSurfacePlacements && (
+                {interactive && setSurfacePlacements && selected && (
                   <>
                     {/* Rotation Handle */}
                     <div
@@ -4646,7 +4543,7 @@ function NotebookPreview({
                         window.addEventListener("pointermove", move);
                         window.addEventListener("pointerup", up);
                       }}
-                      className="absolute -top-6 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center cursor-alias"
+                      className="absolute -top-6 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center cursor-alias touch-none"
                     >
                       <RotateCcw className="h-2.5 w-2.5 text-brand-violet" />
                     </div>
@@ -4680,7 +4577,7 @@ function NotebookPreview({
                           window.addEventListener("pointermove", move);
                           window.addEventListener("pointerup", up);
                         }}
-                        className={cn("absolute w-3 h-3 rounded-full bg-white shadow-sm border border-brand-blue", h.pos)}
+                        className={cn("absolute w-3 h-3 rounded-full bg-white shadow-sm border border-brand-blue touch-none", h.pos)}
                         style={{ cursor: h.cursor }}
                       />
                     ))}
@@ -4689,6 +4586,7 @@ function NotebookPreview({
               </div>
             );
           })()}
+
           </div>
 
           {/* SPIRALS OVERLAY - Realistic physical spiral holes logic */}
