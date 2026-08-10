@@ -3720,10 +3720,59 @@ function NotebookDesigner({
 
 
 
+  if (!designMode) {
+    return (
+      <div className="animate-step-in mx-auto max-w-3xl">
+        <div className="mb-8 text-center">
+          <h3 className="text-2xl font-bold tracking-tight">¿Cómo querés tu libreta?</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Elegí una opción para continuar con tu cotización.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <button
+            onClick={() => setDesignMode("us")}
+            className="group rounded-3xl border-2 border-border bg-background p-6 text-left transition hover:-translate-y-1 hover:border-transparent hover:shadow-elegant"
+          >
+            <div className="mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
+              <Sparkles className="h-6 w-6" style={{ color: "var(--brand-violet)" }} />
+            </div>
+            <div className="text-lg font-bold">Quiero que me hagan mi propio diseño</div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Vos elegís tamaño, tipo de papel y cantidad. Nuestro equipo se encarga del arte
+              (tiene costo adicional de diseño).
+            </p>
+          </button>
+          <button
+            onClick={() => setDesignMode("self")}
+            className="group rounded-3xl border-2 border-border bg-background p-6 text-left transition hover:-translate-y-1 hover:border-transparent hover:shadow-elegant"
+          >
+            <div className="mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
+              <Upload className="h-6 w-6" style={{ color: "var(--brand-magenta)" }} />
+            </div>
+            <div className="text-lg font-bold">Personalizá la mía</div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Subí tu arte y acomodalo en portada, contraportada e interiores con vista previa
+              en vivo.
+            </p>
+          </button>
+        </div>
+        <NavRow onBack={onBack} />
+      </div>
+    );
+  }
+
   return (
-    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
+    <div className={cn("animate-step-in grid gap-8", designMode === "self" && "lg:grid-cols-2")}>
       {/* LEFT: controls */}
       <div className="space-y-6">
+        <button
+          onClick={() => setDesignMode(null)}
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          {designMode === "us" ? "Nosotros diseñamos tu libreta" : "Estás subiendo tu propio diseño"} · Cambiar
+        </button>
         {/* Material info */}
         <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-soft p-5">
           <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-rainbow opacity-10 blur-2xl" />
