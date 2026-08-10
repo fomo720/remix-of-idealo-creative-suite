@@ -4139,17 +4139,18 @@ function NotebookDesigner({
         {(() => {
           const summary = [
             `Producto: Libreta Personalizada`,
+            designMode === "us" ? "Diseño: Quiero que Idealo lo diseñe (costo adicional)" : "Diseño: Yo subo mi propio arte",
             `Estilo: ${material.name} · ${styleId === "cover-only" ? "Solo Portada" : "Portada + Páginas"}`,
             `Tamaño: ${size.label} (${size.cm})`,
             showPages ? `Interiores: ${pageType} · ${pageCount} páginas` : "",
             extras.length > 0 ? `Extras: ${extras.map(e => notebookExtras.find(x => x.id === e)?.name).join(", ")}` : "",
             `Cantidad: ${qty}`,
             notes ? `Notas: ${notes}` : "",
-            uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente",
-            backUploaded ? "Contraportada: Arte personalizado 📎" : backPreset ? `Contraportada: Preset "${backPreset}"` : "",
-            insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : insideFrontPreset ? "Interior Portada: Preset" : "",
-            insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : insideBackPreset ? "Interior Contra: Preset" : "",
-            pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : pageArtPreset ? "Marca de agua: Preset" : "",
+            designMode === "self" ? (uploaded ? "Portada: Arte personalizado 📎" : preset ? `Portada: Preset "${preset}"` : "Portada: Pendiente") : "",
+            designMode === "self" && backUploaded ? "Contraportada: Arte personalizado 📎" : designMode === "self" && backPreset ? `Contraportada: Preset "${backPreset}"` : "",
+            designMode === "self" && insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : designMode === "self" && insideFrontPreset ? "Interior Portada: Preset" : "",
+            designMode === "self" && insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : designMode === "self" && insideBackPreset ? "Interior Contra: Preset" : "",
+            designMode === "self" && pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : designMode === "self" && pageArtPreset ? "Marca de agua: Preset" : "",
 
             "",
             "Solicito una cotización, gracias 🙌",
