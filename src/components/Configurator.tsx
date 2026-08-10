@@ -4001,6 +4001,52 @@ function NotebookDesigner({
         </div>
         )}
 
+        {/* Reference upload (optional) — only when Idealo designs it */}
+        {designMode === "us" && (
+        <div className="rounded-2xl border-2 border-dashed border-border bg-background/50 p-6">
+          <input
+            ref={activeFileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => activeHandleFile(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => activeFileInputRef.current?.click()}
+            className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-8 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+          >
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-muted transition-transform group-hover:scale-110">
+              <Upload className="h-6 w-6" style={{ color: "var(--brand-violet)" }} />
+            </div>
+            <div className="text-center">
+              <div className="font-bold">
+                {activeArt.uploaded ? "Cambiar arte de referencia" : "Subir diseño de referencia"}
+              </div>
+              <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+                Opcional · solo como inspiración
+              </div>
+            </div>
+          </button>
+          <p className="mt-3 text-center text-[11px] text-muted-foreground">
+            No necesitás arte final. Si tenés un logo o una idea, subila; si no, seguí y lo
+            conversamos por WhatsApp.
+          </p>
+
+          {!!activeArt.uploaded && (
+            <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+              <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-brand-green">
+                <Check className="h-3 w-3" /> Referencia cargada
+              </span>
+              <button onClick={activeClear} className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground transition-colors hover:text-destructive">
+                <Trash2 className="h-3.5 w-3.5" /> Borrar
+              </button>
+            </div>
+          )}
+        </div>
+        )}
+
+
+
 
         {/* Page count */}
         <div>
