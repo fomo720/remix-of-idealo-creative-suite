@@ -8,7 +8,7 @@ import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
 // repositorio pero están desconectados del flujo del cliente (fase futura).
 
 import {
-  Upload, Check, ArrowRight, Sparkles, Package, Layers, Scissors, File,
+  Upload, Check, ArrowRight, ArrowLeft, Sparkles, Package, Layers, Scissors, File,
   FileImage, ImagePlus, Circle, Square, RectangleHorizontal, Squircle,
   Cloud, Heart, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter,
   Copy, Trash2, ZoomIn, Sun, Contrast, Info, ShieldCheck, Droplets, MousePointer2,
