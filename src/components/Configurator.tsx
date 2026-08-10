@@ -3696,6 +3696,7 @@ function NotebookDesigner({
   
   const [zoom, setZoom] = useState(100);
   const [designMode, setDesignMode] = useState<"us" | "self" | null>(null);
+  const [waPrep, setWaPrep] = useState<string | null>(null);
 
   const activeArt = 
     activeSurface === "front" ? { uploaded, preset } :
