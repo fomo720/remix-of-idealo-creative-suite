@@ -4375,6 +4375,17 @@ function NotebookPreview({
     back: nbPhoto4.url,
   };
 
+  // Selección por toque: 1er clic muestra las esquinas, 2do las oculta.
+  const [selected, setSelected] = useState(false);
+  useEffect(() => { setSelected(false); }, [activeSurface]);
+  const placementRef = useRef({ x: 50, y: 50, scale: 100, rotation: 0 });
+  const pointersRef = useRef(new Map<number, { x: number; y: number }>());
+  const pinchRef = useRef<{ dist: number; scale: number } | null>(null);
+  const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number; w: number; h: number } | null>(null);
+  const movedRef = useRef(false);
+
+
+
   return (
     <div className="relative mx-auto flex aspect-square max-w-sm items-center justify-center">
       <div className="absolute inset-0 rounded-full bg-gradient-rainbow opacity-10 blur-3xl" />
@@ -4408,34 +4419,81 @@ function NotebookPreview({
           >
           {(() => {
             const placement = surfacePlacements?.[activeSurface] || { x: 50, y: 50, scale: 100, rotation: 0 };
-            
+            placementRef.current = placement;
+
             if (!uploaded && !preset) return null;
+
+            const onDown = (e: React.PointerEvent) => {
+              if (!interactive || !setSurfacePlacements) return;
+              const rect = e.currentTarget.parentElement?.getBoundingClientRect();
+              if (!rect) return;
+              pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+              movedRef.current = false;
+
+              if (pointersRef.current.size === 2) {
+                const [a, b] = [...pointersRef.current.values()];
+                pinchRef.current = {
+                  dist: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+                  scale: placementRef.current.scale,
+                };
+                dragRef.current = null;
+                return;
+              }
+
+              pinchRef.current = null;
+              dragRef.current = {
+                startX: e.clientX,
+                startY: e.clientY,
+                origX: placement.x,
+                origY: placement.y,
+                w: rect.width,
+                h: rect.height,
+              };
+
+              const move = (ev: PointerEvent) => {
+                if (pointersRef.current.has(ev.pointerId)) {
+                  pointersRef.current.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+                }
+                if (pointersRef.current.size >= 2 && pinchRef.current) {
+                  const [a, b] = [...pointersRef.current.values()];
+                  const d = Math.hypot(a.x - b.x, a.y - b.y);
+                  const next = Math.max(10, Math.min(300, pinchRef.current.scale * (d / pinchRef.current.dist)));
+                  movedRef.current = true;
+                  setSurfacePlacements(prev => ({
+                    ...prev,
+                    [activeSurface]: { ...prev[activeSurface], scale: next },
+                  }));
+                  return;
+                }
+                const d = dragRef.current;
+                if (!d) return;
+                const dx = ((ev.clientX - d.startX) / d.w) * 100;
+                const dy = ((ev.clientY - d.startY) / d.h) * 100;
+                if (Math.abs(ev.clientX - d.startX) > 4 || Math.abs(ev.clientY - d.startY) > 4) movedRef.current = true;
+                setSurfacePlacements(prev => ({
+                  ...prev,
+                  [activeSurface]: { ...prev[activeSurface], x: d.origX + dx, y: d.origY + dy },
+                }));
+              };
+              const up = (ev: PointerEvent) => {
+                pointersRef.current.delete(ev.pointerId);
+                if (pointersRef.current.size < 2) pinchRef.current = null;
+                if (pointersRef.current.size === 0) {
+                  dragRef.current = null;
+                  window.removeEventListener("pointermove", move);
+                  window.removeEventListener("pointerup", up);
+                  window.removeEventListener("pointercancel", up);
+                  if (!movedRef.current) setSelected(s => !s);
+                }
+              };
+              window.addEventListener("pointermove", move);
+              window.addEventListener("pointerup", up);
+              window.addEventListener("pointercancel", up);
+            };
 
             return (
               <div
-                onPointerDown={interactive ? (e) => {
-                  const rect = e.currentTarget.parentElement?.getBoundingClientRect();
-                  if (!rect || !setSurfacePlacements) return;
-                  const startX = e.clientX;
-                  const startY = e.clientY;
-                  const origX = placement.x;
-                  const origY = placement.y;
-
-                  const move = (moveEv: PointerEvent) => {
-                    const dx = ((moveEv.clientX - startX) / rect.width) * 100;
-                    const dy = ((moveEv.clientY - startY) / rect.height) * 100;
-                    setSurfacePlacements(prev => ({
-                      ...prev,
-                      [activeSurface]: { ...prev[activeSurface], x: origX + dx, y: origY + dy }
-                    }));
-                  };
-                  const up = () => {
-                    window.removeEventListener("pointermove", move);
-                    window.removeEventListener("pointerup", up);
-                  };
-                  window.addEventListener("pointermove", move);
-                  window.addEventListener("pointerup", up);
-                } : undefined}
+                onPointerDown={interactive ? onDown : undefined}
                 className={cn(
                   "absolute flex items-center justify-center",
                   interactive && "cursor-move touch-none select-none"
@@ -4460,7 +4518,7 @@ function NotebookPreview({
                   <span className="text-[5rem] leading-none drop-shadow-lg opacity-80 pointer-events-none">{preset}</span>
                 )}
 
-                {interactive && setSurfacePlacements && (
+                {interactive && setSurfacePlacements && selected && (
                   <>
                     {/* Rotation Handle */}
                     <div
@@ -4485,7 +4543,7 @@ function NotebookPreview({
                         window.addEventListener("pointermove", move);
                         window.addEventListener("pointerup", up);
                       }}
-                      className="absolute -top-6 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center cursor-alias"
+                      className="absolute -top-6 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white shadow-md border-2 border-brand-violet flex items-center justify-center cursor-alias touch-none"
                     >
                       <RotateCcw className="h-2.5 w-2.5 text-brand-violet" />
                     </div>
@@ -4519,7 +4577,7 @@ function NotebookPreview({
                           window.addEventListener("pointermove", move);
                           window.addEventListener("pointerup", up);
                         }}
-                        className={cn("absolute w-3 h-3 rounded-full bg-white shadow-sm border border-brand-blue", h.pos)}
+                        className={cn("absolute w-3 h-3 rounded-full bg-white shadow-sm border border-brand-blue touch-none", h.pos)}
                         style={{ cursor: h.cursor }}
                       />
                     ))}
@@ -4528,6 +4586,7 @@ function NotebookPreview({
               </div>
             );
           })()}
+
           </div>
 
           {/* SPIRALS OVERLAY - Realistic physical spiral holes logic */}
