@@ -3693,7 +3693,7 @@ function NotebookDesigner({
   const [extras, setExtras] = useState<NotebookExtra[]>([]);
   const [activeSurface, setActiveSurface] = useState<"front" | "insideFront" | "insideBack" | "back">("front");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [previewMode, setPreviewMode] = useState<"realistic" | "technical">("realistic");
+  
   const [zoom, setZoom] = useState(100);
   const [designMode, setDesignMode] = useState<"us" | "self" | null>(null);
 
