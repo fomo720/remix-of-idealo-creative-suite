@@ -4206,6 +4206,18 @@ function NotebookDesigner({
           ].filter(Boolean).join("\n");
 
           const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar libretas:\n\n${summary}`)}`;
+          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar libretas:\n\n${summary}`)}`;
+          if (designMode === "self") {
+            return (
+              <button
+                type="button"
+                onClick={() => setWaPrep(waHref)}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
+              >
+                <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
+              </button>
+            );
+          }
           return (
             <a
               href={waHref}
@@ -4217,6 +4229,45 @@ function NotebookDesigner({
             </a>
           );
         })()}
+        <Dialog open={!!waPrep} onOpenChange={(o) => !o && setWaPrep(null)}>
+          <DialogContent className="max-w-md overflow-visible">
+            <div className="pointer-events-none absolute -bottom-6 -right-6 z-10">
+              <Mascot pose="thumbsup" size={96} animation="none" className="mascot-anim-bounce drop-shadow-2xl" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-2xl">
+                <span className="bg-gradient-cta bg-clip-text text-transparent">¡Excelente elección!</span>
+              </DialogTitle>
+              <DialogDescription>
+                Vamos a preparar tu mensaje de WhatsApp con todos los detalles. Como vos subís tu
+                propio arte, necesitamos que lo adjuntes en el chat:
+              </DialogDescription>
+            </DialogHeader>
+            <ol className="mt-2 space-y-3 text-sm">
+              <li className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">1</span>
+                <span>Envía el mensaje que ya viene escrito (no borres nada, lleva todos los detalles de tu libreta).</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">2</span>
+                <span>En el mismo chat, tocá el <b>clip 📎</b> y adjuntá tu diseño (PNG, JPG, PDF o AI) de portada, contraportada e interiores.</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gradient-cta text-xs font-bold text-white">3</span>
+                <span>¡Listo! Te respondemos con tu cotización el mismo día.</span>
+              </li>
+            </ol>
+            <a
+              href={waPrep ?? "#"}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setWaPrep(null)}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+            >
+              <MessageCircle className="h-5 w-5" /> Entendido, ir a WhatsApp
+            </a>
+          </DialogContent>
+        </Dialog>
         <NavRow onBack={onBack} />
       </div>
 
