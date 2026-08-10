@@ -3789,6 +3789,7 @@ function NotebookDesigner({
               </button>
             ))}
           </div>
+          {designMode === "self" && (
           <div className="mt-4 flex flex-wrap gap-2">
             {(["front", "insideFront", "insideBack", "back"] as const).map((surface) => {
               const hasData = 
