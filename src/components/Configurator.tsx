@@ -4081,6 +4081,7 @@ function NotebookDesigner({
               : "Subí tu logo o arte para ver cómo quedará esta superficie de tu libreta."}
           </p>
         </div>
+        )}
 
         {(() => {
           const summary = [
