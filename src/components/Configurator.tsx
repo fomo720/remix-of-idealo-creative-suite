@@ -4197,6 +4197,8 @@ function NotebookDesigner({
             designMode === "self" && insideFrontUploaded ? "Interior Portada: Arte personalizado 📎" : designMode === "self" && insideFrontPreset ? "Interior Portada: Preset" : "",
             designMode === "self" && insideBackUploaded ? "Interior Contra: Arte personalizado 📎" : designMode === "self" && insideBackPreset ? "Interior Contra: Preset" : "",
             designMode === "self" && pageArtUploaded ? "Marca de agua: Arte personalizado 📎" : designMode === "self" && pageArtPreset ? "Marca de agua: Preset" : "",
+            designMode === "us" && uploaded ? "Referencia: Adjunto arte de referencia 📎" : "",
+
 
             "",
             "Solicito una cotización, gracias 🙌",
