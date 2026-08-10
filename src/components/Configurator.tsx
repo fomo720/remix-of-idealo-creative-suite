@@ -4206,7 +4206,6 @@ function NotebookDesigner({
           ].filter(Boolean).join("\n");
 
           const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar libretas:\n\n${summary}`)}`;
-          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar libretas:\n\n${summary}`)}`;
           if (designMode === "self") {
             return (
               <button
