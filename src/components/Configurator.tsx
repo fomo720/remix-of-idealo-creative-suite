@@ -6008,65 +6008,7 @@ function TextilesDesignStep({
     <div className="animate-step-in space-y-6">
       <SectionTitle icon={<PencilRuler className="h-5 w-5" />} title="Armá tu prenda y cotizá" />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-        {/* ============ IZQUIERDA: mockup + miniaturas ============ */}
-        <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-5">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div>
-              <Label className="text-sm font-semibold">Vista previa de la prenda</Label>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Fotos reales del taller · área imprimible en talla M
-              </p>
-            </div>
-            <span className="hidden rounded-full bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground sm:inline">
-              {fabricData?.name} · {sleeve === "corta" ? "Manga corta" : "Manga larga"}
-            </span>
-          </div>
-
-          <TextilesMockupStage
-            photoSrc={stagePhoto.src}
-            photoAlt={`Prenda personalizada Idealo — ${stagePhoto.label}`}
-            view={zoneView}
-            design={showDesignOnStage ? uploaded : null}
-            layer={layer}
-            onLayerChange={setLayer}
-          />
-
-          {/* Miniaturas */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {TX_STAGE_VIEWS.map((v) => (
-              <button
-                key={v.id}
-                onClick={() => setView(v.id)}
-                className={cn(
-                  "overflow-hidden rounded-xl border-2 bg-neutral-50 text-left transition",
-                  view === v.id ? "border-[color:var(--brand-magenta)]" : "border-border hover:border-foreground/20",
-                )}
-              >
-                <div className="relative aspect-[4/5] w-full">
-                  <SmartImage src={v.src} alt={`Vista ${v.label}`} fit="cover" loading="lazy" />
-                </div>
-                <span className="block px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  {v.label}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Leyenda */}
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--brand-cyan)" }} />
-              Área segura — todo lo importante va aquí
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-              Sangrado — puede recortarse en producción
-            </span>
-          </div>
-        </div>
-
-        {/* ============ DERECHA: panel de opciones ============ */}
+      <div className="mx-auto max-w-xl">
         <div className="space-y-4">
           {/* 1. Color */}
           <div className="rounded-2xl border border-border bg-background p-4">
