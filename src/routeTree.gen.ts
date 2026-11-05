@@ -9,39 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as EventosRouteImport } from './routes/eventos'
-import { Route as EmpresasRouteImport } from './routes/empresas'
-import { Route as CotizarRouteImport } from './routes/cotizar'
-import { Route as ContactoRouteImport } from './routes/contacto'
-import { Route as ClientesRouteImport } from './routes/clientes'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PortafolioIndexRouteImport } from './routes/portafolio.index'
-import { Route as EventosIndexRouteImport } from './routes/eventos.index'
+import { Route as ClientesRouteImport } from './routes/clientes'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CotizarRouteImport } from './routes/cotizar'
+import { Route as EmpresasRouteImport } from './routes/empresas'
+import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as EmpresasIndexRouteImport } from './routes/empresas.index'
-import { Route as PortafolioSlugRouteImport } from './routes/portafolio.$slug'
-import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
 import { Route as EmpresasKitRouteImport } from './routes/empresas.$kit'
+import { Route as EventosIndexRouteImport } from './routes/eventos.index'
+import { Route as EventosCategoriaRouteImport } from './routes/eventos.$categoria'
+import { Route as PortafolioIndexRouteImport } from './routes/portafolio.index'
+import { Route as PortafolioSlugRouteImport } from './routes/portafolio.$slug'
 import { Route as EventosCategoriaIndexRouteImport } from './routes/eventos.$categoria.index'
 import { Route as EventosCategoriaProductoRouteImport } from './routes/eventos.$categoria.$producto'
 
-const EventosRoute = EventosRouteImport.update({
-  id: '/eventos',
-  path: '/eventos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmpresasRoute = EmpresasRouteImport.update({
-  id: '/empresas',
-  path: '/empresas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CotizarRoute = CotizarRouteImport.update({
-  id: '/cotizar',
-  path: '/cotizar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactoRoute = ContactoRouteImport.update({
-  id: '/contacto',
-  path: '/contacto',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientesRoute = ClientesRouteImport.update({
@@ -49,40 +34,55 @@ const ClientesRoute = ClientesRouteImport.update({
   path: '/clientes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortafolioIndexRoute = PortafolioIndexRouteImport.update({
-  id: '/portafolio/',
-  path: '/portafolio/',
+const CotizarRoute = CotizarRouteImport.update({
+  id: '/cotizar',
+  path: '/cotizar',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EventosIndexRoute = EventosIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => EventosRoute,
+const EmpresasRoute = EmpresasRouteImport.update({
+  id: '/empresas',
+  path: '/empresas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventosRoute = EventosRouteImport.update({
+  id: '/eventos',
+  path: '/eventos',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EmpresasIndexRoute = EmpresasIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => EmpresasRoute,
 } as any)
-const PortafolioSlugRoute = PortafolioSlugRouteImport.update({
-  id: '/portafolio/$slug',
-  path: '/portafolio/$slug',
-  getParentRoute: () => rootRouteImport,
+const EmpresasKitRoute = EmpresasKitRouteImport.update({
+  id: '/$kit',
+  path: '/$kit',
+  getParentRoute: () => EmpresasRoute,
+} as any)
+const EventosIndexRoute = EventosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventosRoute,
 } as any)
 const EventosCategoriaRoute = EventosCategoriaRouteImport.update({
   id: '/$categoria',
   path: '/$categoria',
   getParentRoute: () => EventosRoute,
 } as any)
-const EmpresasKitRoute = EmpresasKitRouteImport.update({
-  id: '/$kit',
-  path: '/$kit',
-  getParentRoute: () => EmpresasRoute,
+const PortafolioIndexRoute = PortafolioIndexRouteImport.update({
+  id: '/portafolio/',
+  path: '/portafolio/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortafolioSlugRoute = PortafolioSlugRouteImport.update({
+  id: '/portafolio/$slug',
+  path: '/portafolio/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EventosCategoriaIndexRoute = EventosCategoriaIndexRouteImport.update({
   id: '/',
@@ -203,32 +203,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/eventos': {
-      id: '/eventos'
-      path: '/eventos'
-      fullPath: '/eventos'
-      preLoaderRoute: typeof EventosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/empresas': {
-      id: '/empresas'
-      path: '/empresas'
-      fullPath: '/empresas'
-      preLoaderRoute: typeof EmpresasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cotizar': {
-      id: '/cotizar'
-      path: '/cotizar'
-      fullPath: '/cotizar'
-      preLoaderRoute: typeof CotizarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacto': {
-      id: '/contacto'
-      path: '/contacto'
-      fullPath: '/contacto'
-      preLoaderRoute: typeof ContactoRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clientes': {
@@ -238,26 +217,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portafolio/': {
-      id: '/portafolio/'
-      path: '/portafolio'
-      fullPath: '/portafolio/'
-      preLoaderRoute: typeof PortafolioIndexRouteImport
+    '/cotizar': {
+      id: '/cotizar'
+      path: '/cotizar'
+      fullPath: '/cotizar'
+      preLoaderRoute: typeof CotizarRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/eventos/': {
-      id: '/eventos/'
-      path: '/'
-      fullPath: '/eventos/'
-      preLoaderRoute: typeof EventosIndexRouteImport
-      parentRoute: typeof EventosRoute
+    '/empresas': {
+      id: '/empresas'
+      path: '/empresas'
+      fullPath: '/empresas'
+      preLoaderRoute: typeof EmpresasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eventos': {
+      id: '/eventos'
+      path: '/eventos'
+      fullPath: '/eventos'
+      preLoaderRoute: typeof EventosRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/empresas/': {
       id: '/empresas/'
@@ -266,12 +252,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmpresasIndexRouteImport
       parentRoute: typeof EmpresasRoute
     }
-    '/portafolio/$slug': {
-      id: '/portafolio/$slug'
-      path: '/portafolio/$slug'
-      fullPath: '/portafolio/$slug'
-      preLoaderRoute: typeof PortafolioSlugRouteImport
-      parentRoute: typeof rootRouteImport
+    '/empresas/$kit': {
+      id: '/empresas/$kit'
+      path: '/$kit'
+      fullPath: '/empresas/$kit'
+      preLoaderRoute: typeof EmpresasKitRouteImport
+      parentRoute: typeof EmpresasRoute
+    }
+    '/eventos/': {
+      id: '/eventos/'
+      path: '/'
+      fullPath: '/eventos/'
+      preLoaderRoute: typeof EventosIndexRouteImport
+      parentRoute: typeof EventosRoute
     }
     '/eventos/$categoria': {
       id: '/eventos/$categoria'
@@ -280,12 +273,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventosCategoriaRouteImport
       parentRoute: typeof EventosRoute
     }
-    '/empresas/$kit': {
-      id: '/empresas/$kit'
-      path: '/$kit'
-      fullPath: '/empresas/$kit'
-      preLoaderRoute: typeof EmpresasKitRouteImport
-      parentRoute: typeof EmpresasRoute
+    '/portafolio/': {
+      id: '/portafolio/'
+      path: '/portafolio'
+      fullPath: '/portafolio/'
+      preLoaderRoute: typeof PortafolioIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portafolio/$slug': {
+      id: '/portafolio/$slug'
+      path: '/portafolio/$slug'
+      fullPath: '/portafolio/$slug'
+      preLoaderRoute: typeof PortafolioSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/eventos/$categoria/': {
       id: '/eventos/$categoria/'
