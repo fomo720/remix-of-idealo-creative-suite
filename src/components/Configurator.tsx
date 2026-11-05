@@ -6183,18 +6183,6 @@ function TextilesDesignStep({
               </div>
             )}
 
-            {uploaded && dims && (
-              <div className="mt-3">
-                <ResolutionWarning
-                  naturalW={dims.w}
-                  naturalH={dims.h}
-                  width={roundHalf((layer.w / 100) * ZONE_CM[zoneView].w)}
-                  height={roundHalf((layer.h / 100) * ZONE_CM[zoneView].h)}
-                  unit="cm"
-                />
-              </div>
-            )}
-
             <div className="mt-3">
               <Label htmlFor="txnotes" className="mb-1.5 block text-sm font-semibold">Contanos qué querés</Label>
               <Textarea
