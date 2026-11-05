@@ -5951,17 +5951,12 @@ function TextilesDesignStep({
 }) {
   const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
-  const [view, setView] = useState<TxStageView>("front");
   const [backMode, setBackMode] = useState<"blank" | "design">("blank");
-  const [layer, setLayer] = useState<StageLayer>({ x: 22, y: 20, w: 56, h: 42 });
   const [sizeQty, setSizeQty] = useState<Record<TxSize, number>>(
     () => Object.fromEntries(TX_SIZES.map((s) => [s, 0])) as Record<TxSize, number>,
   );
 
   const totalQty = TX_SIZES.reduce((a, s) => a + (sizeQty[s] || 0), 0);
-  const zoneView: ViewId = view === "back" ? "back" : "front";
-  const stagePhoto = TX_STAGE_VIEWS.find((v) => v.id === view) ?? TX_STAGE_VIEWS[0];
-  const showDesignOnStage = view === "front" || (view === "back" && backMode === "design");
 
   // Mantiene el estado del padre en sync con la tabla de tallas.
   useEffect(() => {
@@ -5975,18 +5970,8 @@ function TextilesDesignStep({
   useEffect(() => {
     if (!uploaded) { setDims(null); return; }
     const img = new Image();
-    img.onload = () => {
-      setDims({ w: img.naturalWidth, h: img.naturalHeight });
-      // Ajusta la capa inicial al aspecto real de la imagen, dentro de la zona.
-      const zone = ZONE_CM[zoneView];
-      const ar = img.naturalWidth / img.naturalHeight;
-      const zoneAr = zone.w / zone.h;
-      let w = 60, h = 60;
-      if (ar > zoneAr) { w = 60; h = (60 * zoneAr) / ar; } else { h = 60; w = (60 * ar) / zoneAr; }
-      setLayer({ x: (100 - w) / 2, y: (100 - h) / 2, w, h });
-    };
+    img.onload = () => setDims({ w: img.naturalWidth, h: img.naturalHeight });
     img.src = uploaded;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploaded]);
 
   const setQtyFor = (s: TxSize, n: number) =>
