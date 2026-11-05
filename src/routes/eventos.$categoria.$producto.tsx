@@ -22,7 +22,11 @@ export const Route = createFileRoute("/eventos/$categoria/$producto")({
     return {
       meta: [
         { title: `${loaderData.prod.title} — Diseñar | Idealo` },
-        { name: "description", content: loaderData.prod.desc },
+        { name: "description", content: loaderData.prod.desc }
+        { property: "og:title", content: `${loaderData.prod.title} — Diseñar | Idealo` },
+        { property: "og:description", content: loaderData.prod.desc },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },,
       ],
     };
   },

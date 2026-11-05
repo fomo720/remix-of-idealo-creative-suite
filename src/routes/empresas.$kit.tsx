@@ -102,7 +102,11 @@ export const Route = createFileRoute("/empresas/$kit")({
   head: ({ loaderData }) => ({
     meta: [
       { title: loaderData ? `${loaderData.kit.title} — Idealo` : "Kit — Idealo" },
-      { name: "description", content: loaderData?.kit.tagline ?? "Kit corporativo Idealo." },
+      { name: "description", content: loaderData?.kit.tagline ?? "Kit corporativo Idealo." }
+        { property: "og:title", content: loaderData ? `${loaderData.kit.title} — Idealo` : "Kit — Idealo" },
+        { property: "og:description", content: loaderData?.kit.tagline ?? "Kit corporativo Idealo." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },,
     ],
   }),
   component: KitPage,

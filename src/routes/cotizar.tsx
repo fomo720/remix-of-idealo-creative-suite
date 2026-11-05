@@ -10,7 +10,11 @@ export const Route = createFileRoute("/cotizar")({
   head: () => ({
     meta: [
       { title: "Mi cotización — Idealo" },
-      { name: "description", content: "Revisa los productos que agregaste y envíanos tu cotización completa por WhatsApp." },
+      { name: "description", content: "Revisa los productos que agregaste y envíanos tu cotización completa por WhatsApp." }
+        { property: "og:title", content: "Mi cotización — Idealo" },
+        { property: "og:description", content: "Revisa los productos que agregaste y envíanos tu cotización completa por WhatsApp." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },,
     ],
   }),
 });

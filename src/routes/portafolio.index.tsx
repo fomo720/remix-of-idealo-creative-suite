@@ -11,6 +11,8 @@ export const Route = createFileRoute("/portafolio/")({
       { name: "description", content: "Explora nuestro portafolio completo: stickers, banderines, iron-ons, PVC, impresos, rotulación, regalos y servicios en Honduras." },
       { property: "og:title", content: "Portafolio — Idealo.hn" },
       { property: "og:description", content: "Trabajos reales para marcas, restaurantes y eventos en Honduras." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PortafolioPage,
