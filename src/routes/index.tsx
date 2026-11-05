@@ -11,6 +11,14 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 export const Route = createFileRoute("/")({
+  head: () => ({ meta: [
+    { title: "Idealo Honduras | Productos personalizados e impresión" },
+    { name: "description", content: "Cotizá libretas, textiles, stickers y grabados personalizados con Idealo Honduras." },
+    { property: "og:title", content: "Idealo Honduras | Productos personalizados e impresión" },
+    { property: "og:description", content: "Elegí tus productos personalizados y solicitá una cotización con Idealo Honduras." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: Index,
 });
 
