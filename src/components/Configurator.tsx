@@ -29,8 +29,6 @@ import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Link } from "@tanstack/react-router";
-import { TextilesMockupStage, type StageLayer } from "@/components/TextilesMockupStage";
-import { ZONE_CM, measureLabel, roundHalf, type ViewId } from "@/lib/print-zones";
 import { Mascot } from "@/components/Mascot";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
@@ -219,13 +217,6 @@ const getSleevesFor = (shirtType: TxShirtType | null, fabric: TxFabric | null): 
 
 
 // Fotos reales de prendas (galería del paso de diseño)
-type TxStageView = "front" | "back" | "folded";
-const TX_STAGE_VIEWS: { id: TxStageView; src: string; label: string }[] = [
-  { id: "front", src: txPhotoFront.url, label: "Frente" },
-  { id: "back", src: txPhotoBack.url, label: "Espalda" },
-  { id: "folded", src: txPhotoFolded.url, label: "Detalle" },
-];
-
 const TX_GALLERY: { src: string; label: string }[] = [
   { src: txPhotoFront.url, label: "Frente" },
   { src: txPhotoBack.url, label: "Espalda" },
