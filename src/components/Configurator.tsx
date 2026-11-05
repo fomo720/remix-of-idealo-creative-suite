@@ -6171,7 +6171,7 @@ function TextilesDesignStep({
               <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
                 <img src={uploaded} alt="Diseño subido" className="h-14 w-14 rounded-xl object-contain" />
                 <div className="min-w-0 flex-1 text-xs text-muted-foreground">
-                  Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""} · ≈ {measureLabel(zoneView, layer.w, layer.h)}
+                  Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""}
                 </div>
                 <button
                   onClick={() => onUpload(null)}
