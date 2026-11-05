@@ -6064,7 +6064,7 @@ function TextilesDesignStep({
               ] as const).map((o) => (
                 <button
                   key={o.id}
-                  onClick={() => { setBackMode(o.id); if (o.id === "design") setView("back"); }}
+                  onClick={() => setBackMode(o.id)}
                   className={cn(
                     "rounded-xl border-2 px-3 py-3 text-left transition",
                     backMode === o.id ? "rainbow-border-active" : "border-border hover:border-foreground/20",
