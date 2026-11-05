@@ -5993,7 +5993,6 @@ function TextilesDesignStep({
       `- Parte trasera: ${backMode === "blank" ? "En blanco" : "Con diseño"}`,
       sizeBreakdown ? `- Tallas: ${sizeBreakdown}` : (size ? `- Talla: ${size}` : ""),
       `- Cantidad total: ${totalQty || qty}`,
-      uploaded ? `- Tamaño del diseño (frente): ≈ ${measureLabel(zoneView, layer.w, layer.h)}` : "",
       notes ? `- Notas: ${notes}` : "",
       "",
       mode === "propio"
