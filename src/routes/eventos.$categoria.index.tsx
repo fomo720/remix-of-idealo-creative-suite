@@ -32,11 +32,11 @@ export const Route = createFileRoute("/eventos/$categoria/")({
     return {
       meta: [
         { title: `${cat.title} — Eventos Idealo` },
-        { name: "description", content: cat.intro }
+        { name: "description", content: cat.intro },
         { property: "og:title", content: `${cat.title} — Eventos Idealo` },
         { property: "og:description", content: cat.intro },
         { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },,
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
