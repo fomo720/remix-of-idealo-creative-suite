@@ -5,6 +5,10 @@ export const Route = createFileRoute("/eventos/")({
     meta: [
       { title: "Eventos — Idealo" },
       { name: "description", content: "Cumpleaños, bodas, baby showers y más. Diseño 360° para tu evento." },
+        { property: "og:title", content: "Eventos — Idealo" },
+        { property: "og:description", content: "Cumpleaños, bodas, baby showers y más. Diseño 360° para tu evento." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EventosIndex,

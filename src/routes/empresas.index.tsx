@@ -12,6 +12,10 @@ export const Route = createFileRoute("/empresas/")({
     meta: [
       { title: "Soluciones para Empresas — Idealo" },
       { name: "description", content: "Kits llave en mano por perfil de negocio: restaurantes, oficinas, emprendedores y flotas." },
+        { property: "og:title", content: "Soluciones para Empresas — Idealo" },
+        { property: "og:description", content: "Kits llave en mano por perfil de negocio: restaurantes, oficinas, emprendedores y flotas." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EmpresasIndex,

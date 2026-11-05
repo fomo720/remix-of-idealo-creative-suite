@@ -9,6 +9,8 @@ export const Route = createFileRoute("/empresas")({
       { name: "description", content: "Kits corporativos para restaurantes, oficinas, emprendedores y flotas. Producción gráfica profesional en Honduras." },
       { property: "og:title", content: "Soluciones para Empresas — Idealo" },
       { property: "og:description", content: "Kits de identidad y branding llave en mano para tu negocio." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EmpresasLayout,

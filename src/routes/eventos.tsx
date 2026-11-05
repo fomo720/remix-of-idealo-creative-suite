@@ -9,6 +9,8 @@ export const Route = createFileRoute("/eventos")({
       { name: "description", content: "Diseño 360° para cumpleaños, bodas, baby showers, fiestas patrias y más. Contanos qué fecha querés celebrar y lo creamos." },
       { property: "og:title", content: "Eventos & Fechas Especiales — Idealo" },
       { property: "og:description", content: "PVC de bienvenida, banners, cake toppers, menús, cajitas, etiquetas y más para tu evento." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EventosLayout,
