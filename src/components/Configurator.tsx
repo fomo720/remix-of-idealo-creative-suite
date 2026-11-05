@@ -1193,10 +1193,10 @@ export function Configurator() {
           {isTextiles && step === 2 && (
             <TextilesShirtTypeStep
               shirtType={txShirtType}
-              onPick={(v) => { 
-                setTxShirtType(v); 
-                setGateMsg(null); 
-                goTo(3); 
+              onPick={(v) => {
+                setTxShirtType(v);
+                setGateMsg(null);
+                setStep(3);
               }}
               onBack={() => goTo(1)}
               onNext={txShirtType ? () => goTo(3) : undefined}
@@ -1207,10 +1207,10 @@ export function Configurator() {
               availableFabrics={getFabricsForType(txShirtType)}
               shirtTypeName={getShirtTypeData(txShirtType)?.name ?? ""}
               fabric={txFabric}
-              onPick={(v) => { 
-                setTxFabric(v); 
-                setGateMsg(null); 
-                goTo(4); 
+              onPick={(v) => {
+                setTxFabric(v);
+                setGateMsg(null);
+                setStep(4);
               }}
               onBack={() => goTo(2)}
               onNext={txFabric ? () => goTo(4) : undefined}
@@ -1221,10 +1221,10 @@ export function Configurator() {
               fabricData={txFabricData}
               availableSleeves={txAvailableSleeves}
               sleeve={txSleeve}
-              onPick={(v) => { 
-                setTxSleeve(v); 
-                setGateMsg(null); 
-                goTo(5); 
+              onPick={(v) => {
+                setTxSleeve(v);
+                setGateMsg(null);
+                setStep(5);
               }}
               onBack={() => goTo(3)}
               onNext={txSleeve ? () => goTo(5) : undefined}
@@ -6130,6 +6130,7 @@ function TextilesDesignStep({
             <div className="grid gap-2">
               <Link
                 to="/portafolio"
+                search={{ tipo: "iron-ons" }}
                 target="_blank"
                 className="flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-4 py-3 text-sm font-semibold transition hover:border-foreground/20"
               >
