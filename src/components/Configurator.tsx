@@ -29,8 +29,6 @@ import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Link } from "@tanstack/react-router";
-import { TextilesMockupStage, type StageLayer } from "@/components/TextilesMockupStage";
-import { ZONE_CM, measureLabel, roundHalf, type ViewId } from "@/lib/print-zones";
 import { Mascot } from "@/components/Mascot";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MessageCircle as WA } from "lucide-react";
@@ -219,13 +217,6 @@ const getSleevesFor = (shirtType: TxShirtType | null, fabric: TxFabric | null): 
 
 
 // Fotos reales de prendas (galería del paso de diseño)
-type TxStageView = "front" | "back" | "folded";
-const TX_STAGE_VIEWS: { id: TxStageView; src: string; label: string }[] = [
-  { id: "front", src: txPhotoFront.url, label: "Frente" },
-  { id: "back", src: txPhotoBack.url, label: "Espalda" },
-  { id: "folded", src: txPhotoFolded.url, label: "Detalle" },
-];
-
 const TX_GALLERY: { src: string; label: string }[] = [
   { src: txPhotoFront.url, label: "Frente" },
   { src: txPhotoBack.url, label: "Espalda" },
@@ -5951,17 +5942,12 @@ function TextilesDesignStep({
 }) {
   const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
-  const [view, setView] = useState<TxStageView>("front");
   const [backMode, setBackMode] = useState<"blank" | "design">("blank");
-  const [layer, setLayer] = useState<StageLayer>({ x: 22, y: 20, w: 56, h: 42 });
   const [sizeQty, setSizeQty] = useState<Record<TxSize, number>>(
     () => Object.fromEntries(TX_SIZES.map((s) => [s, 0])) as Record<TxSize, number>,
   );
 
   const totalQty = TX_SIZES.reduce((a, s) => a + (sizeQty[s] || 0), 0);
-  const zoneView: ViewId = view === "back" ? "back" : "front";
-  const stagePhoto = TX_STAGE_VIEWS.find((v) => v.id === view) ?? TX_STAGE_VIEWS[0];
-  const showDesignOnStage = view === "front" || (view === "back" && backMode === "design");
 
   // Mantiene el estado del padre en sync con la tabla de tallas.
   useEffect(() => {
@@ -5975,18 +5961,8 @@ function TextilesDesignStep({
   useEffect(() => {
     if (!uploaded) { setDims(null); return; }
     const img = new Image();
-    img.onload = () => {
-      setDims({ w: img.naturalWidth, h: img.naturalHeight });
-      // Ajusta la capa inicial al aspecto real de la imagen, dentro de la zona.
-      const zone = ZONE_CM[zoneView];
-      const ar = img.naturalWidth / img.naturalHeight;
-      const zoneAr = zone.w / zone.h;
-      let w = 60, h = 60;
-      if (ar > zoneAr) { w = 60; h = (60 * zoneAr) / ar; } else { h = 60; w = (60 * ar) / zoneAr; }
-      setLayer({ x: (100 - w) / 2, y: (100 - h) / 2, w, h });
-    };
+    img.onload = () => setDims({ w: img.naturalWidth, h: img.naturalHeight });
     img.src = uploaded;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploaded]);
 
   const setQtyFor = (s: TxSize, n: number) =>
@@ -6008,7 +5984,6 @@ function TextilesDesignStep({
       `- Parte trasera: ${backMode === "blank" ? "En blanco" : "Con diseño"}`,
       sizeBreakdown ? `- Tallas: ${sizeBreakdown}` : (size ? `- Talla: ${size}` : ""),
       `- Cantidad total: ${totalQty || qty}`,
-      uploaded ? `- Tamaño del diseño (frente): ≈ ${measureLabel(zoneView, layer.w, layer.h)}` : "",
       notes ? `- Notas: ${notes}` : "",
       "",
       mode === "propio"
@@ -6024,65 +5999,7 @@ function TextilesDesignStep({
     <div className="animate-step-in space-y-6">
       <SectionTitle icon={<PencilRuler className="h-5 w-5" />} title="Armá tu prenda y cotizá" />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-        {/* ============ IZQUIERDA: mockup + miniaturas ============ */}
-        <div className="rounded-3xl border border-border bg-card p-4 shadow-elegant sm:p-5">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div>
-              <Label className="text-sm font-semibold">Vista previa de la prenda</Label>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Fotos reales del taller · área imprimible en talla M
-              </p>
-            </div>
-            <span className="hidden rounded-full bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground sm:inline">
-              {fabricData?.name} · {sleeve === "corta" ? "Manga corta" : "Manga larga"}
-            </span>
-          </div>
-
-          <TextilesMockupStage
-            photoSrc={stagePhoto.src}
-            photoAlt={`Prenda personalizada Idealo — ${stagePhoto.label}`}
-            view={zoneView}
-            design={showDesignOnStage ? uploaded : null}
-            layer={layer}
-            onLayerChange={setLayer}
-          />
-
-          {/* Miniaturas */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {TX_STAGE_VIEWS.map((v) => (
-              <button
-                key={v.id}
-                onClick={() => setView(v.id)}
-                className={cn(
-                  "overflow-hidden rounded-xl border-2 bg-neutral-50 text-left transition",
-                  view === v.id ? "border-[color:var(--brand-magenta)]" : "border-border hover:border-foreground/20",
-                )}
-              >
-                <div className="relative aspect-[4/5] w-full">
-                  <SmartImage src={v.src} alt={`Vista ${v.label}`} fit="cover" loading="lazy" />
-                </div>
-                <span className="block px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  {v.label}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Leyenda */}
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--brand-cyan)" }} />
-              Área segura — todo lo importante va aquí
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-              Sangrado — puede recortarse en producción
-            </span>
-          </div>
-        </div>
-
-        {/* ============ DERECHA: panel de opciones ============ */}
+      <div className="mx-auto max-w-xl">
         <div className="space-y-4">
           {/* 1. Color */}
           <div className="rounded-2xl border border-border bg-background p-4">
@@ -6147,7 +6064,7 @@ function TextilesDesignStep({
               ] as const).map((o) => (
                 <button
                   key={o.id}
-                  onClick={() => { setBackMode(o.id); if (o.id === "design") setView("back"); }}
+                  onClick={() => setBackMode(o.id)}
                   className={cn(
                     "rounded-xl border-2 px-3 py-3 text-left transition",
                     backMode === o.id ? "rainbow-border-active" : "border-border hover:border-foreground/20",
@@ -6245,7 +6162,7 @@ function TextilesDesignStep({
               <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
                 <img src={uploaded} alt="Diseño subido" className="h-14 w-14 rounded-xl object-contain" />
                 <div className="min-w-0 flex-1 text-xs text-muted-foreground">
-                  Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""} · ≈ {measureLabel(zoneView, layer.w, layer.h)}
+                  Diseño cargado{dims ? ` · ${dims.w}×${dims.h}px` : ""}
                 </div>
                 <button
                   onClick={() => onUpload(null)}
@@ -6254,18 +6171,6 @@ function TextilesDesignStep({
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
-              </div>
-            )}
-
-            {uploaded && dims && (
-              <div className="mt-3">
-                <ResolutionWarning
-                  naturalW={dims.w}
-                  naturalH={dims.h}
-                  width={roundHalf((layer.w / 100) * ZONE_CM[zoneView].w)}
-                  height={roundHalf((layer.h / 100) * ZONE_CM[zoneView].h)}
-                  unit="cm"
-                />
               </div>
             )}
 
