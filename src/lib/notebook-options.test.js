@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { notebookQuoteMessage, notebookQuoteSizes, notebookPaperTypes } from "./notebook-options";
+import { notebookQuoteMessage, notebookQuoteSizes, notebookPaperTypes } from "./notebook-options.ts";
 
 describe("Notebook quote rules", () => {
   test("offers only the requested five sizes in inches", () => {
