@@ -149,7 +149,8 @@ type TxShirtType = "redondo" | "polo" | "columbia";
 type TxFabric = "algodon" | "kiana" | "durazno" | "drifit" | "columbia";
 type TxSleeve = "corta" | "larga";
 type TxTechnique = "sublimacion" | "dtf";
-type TxSize = "S" | "M" | "L" | "XL" | "XXL";
+type TxSize = "XS" | "S" | "M" | "L" | "XL" | "XXL";
+type TxCut = "hombre" | "mujer" | "unisex";
 
 // Fabric metadata (name / description / available printing techniques)
 const TX_FABRICS_META: Record<TxFabric, { name: string; desc: string; techniques: TxTechnique[] }> = {
@@ -236,6 +237,13 @@ const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
 ];
 
 const TX_SIZES: TxSize[] = ["S", "M", "L", "XL", "XXL"];
+// Tallas según corte: Columbia viene en Hombre y Mujer; Redondo y Dri Fit son Unisex.
+const TX_CUT_SIZES: Record<TxCut, TxSize[]> = {
+  hombre: ["S", "M", "L", "XL", "XXL"],
+  mujer: ["XS", "S", "M", "L", "XL"],
+  unisex: ["S", "M", "L", "XL", "XXL"],
+};
+const TX_CUT_LABELS: Record<TxCut, string> = { hombre: "Hombre", mujer: "Mujer", unisex: "Unisex" };
 const TX_MIN_QTY = 1;
 const TX_QTY_PRESETS = [1, 5, 10, 50];
 type NotebookStyle = "cover-only" | "cover-pages";
