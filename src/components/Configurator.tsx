@@ -135,7 +135,7 @@ function SmartImage({
 
 type Category = "stickers" | "iron-ons" | "libretas" | "laser" | "imprenta";
 type ImprentaProductId = "tarjetas" | "menus" | "carpetas" | "brochures";
-type ImprentaStyleId = "plantilla" | "personalizado" | "propio";
+type ImprentaStyleId = "personalizado" | "propio";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
   | "llavero-madera" | "vaso" | "coco" | "cadena";
@@ -710,7 +710,6 @@ const imprentaProducts: ImprentaProduct[] = [
 ];
 
 const imprentaStyles: { id: ImprentaStyleId; name: string; desc: string; icon: React.ReactNode; accent: string }[] = [
-  { id: "plantilla", name: "Diseño desde plantilla", desc: "Elegimos una plantilla profesional y la adaptamos con tus datos. Rápido y económico.", icon: <Layers className="h-7 w-7" />, accent: "var(--brand-blue)" },
   { id: "personalizado", name: "Diseño 100% personalizado", desc: "Nuestro equipo crea el arte desde cero para tu marca. Ideal si querés algo único.", icon: <Palette className="h-7 w-7" />, accent: "var(--brand-violet)" },
   { id: "propio", name: "Ya tengo mi diseño listo", desc: "Subís tu archivo (PDF, AI, PSD o imagen alta resolución) y lo imprimimos.", icon: <PencilRuler className="h-7 w-7" />, accent: "var(--brand-orange)" },
 ];
@@ -1594,7 +1593,7 @@ export function Configurator() {
           {step === 3 && isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Palette className="h-5 w-5" />} title="¿Cómo querés el diseño?" />
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2">
                 {imprentaStyles.map((s) => (
                   <button
                     key={s.id}
@@ -1619,9 +1618,6 @@ export function Configurator() {
 
 
 
-              <p className="mt-4 text-center text-xs text-muted-foreground">
-                Recomendado: si es tu primera impresión con nosotros, elegí "Diseño desde plantilla" — es más rápido y económico.
-              </p>
               <NavRow onBack={() => goTo(2)} onNext={imprentaStyle ? () => goTo(4) : undefined} />
             </div>
           )}
@@ -3010,249 +3006,6 @@ function CategoryCard({
   );
 }
 
-const imprentaTemplateTags: Record<ImprentaProductId, { tag: string; label: string }> = {
-  tarjetas: { tag: "business,card", label: "Tarjetas de presentación" },
-  menus: { tag: "restaurant,menu", label: "Menús de restaurante" },
-  carpetas: { tag: "corporate,folder", label: "Carpetas corporativas" },
-  brochures: { tag: "brochure,flyer", label: "Brochures y volantes" },
-};
-
-type TplTextBlock = {
-  id: string;
-  text: string;
-  x: number; // 0..100 %
-  y: number;
-  size: number; // px at 480 base
-  color: string;
-  weight: "normal" | "bold";
-};
-
-function ImprentaTemplateEditor({
-  product,
-  onExport,
-}: {
-  product: ImprentaProduct;
-  onExport?: (summary: string) => void;
-}) {
-  const info = imprentaTemplateTags[product.id];
-  const seeds = [11, 22, 33, 44, 55, 66, 77, 88];
-  const templates = seeds.map((s) => ({
-    id: `t${s}`,
-    url: `https://loremflickr.com/640/480/${info.tag}?lock=${s}`,
-  }));
-
-  const [tplId, setTplId] = useState<string | null>(null);
-  const [blocks, setBlocks] = useState<TplTextBlock[]>([
-    { id: "b1", text: "Tu marca aquí", x: 50, y: 42, size: 32, color: "#ffffff", weight: "bold" },
-    { id: "b2", text: "Subtítulo o slogan", x: 50, y: 58, size: 14, color: "#ffffff", weight: "normal" },
-  ]);
-  const [selected, setSelected] = useState<string | null>("b1");
-  const stageRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ id: string; startX: number; startY: number; origX: number; origY: number } | null>(null);
-  const tpl = templates.find((t) => t.id === tplId);
-
-  const update = (id: string, patch: Partial<TplTextBlock>) =>
-    setBlocks((prev) => prev.map((b) => (b.id === id ? { ...b, ...patch } : b)));
-
-  const remove = (id: string) => {
-    setBlocks((prev) => prev.filter((b) => b.id !== id));
-    if (selected === id) setSelected(null);
-  };
-
-  const add = () => {
-    const id = `b${Date.now()}`;
-    setBlocks((prev) => [
-      ...prev,
-      { id, text: "Nuevo texto", x: 50, y: 50, size: 20, color: "#ffffff", weight: "normal" },
-    ]);
-    setSelected(id);
-  };
-
-  const duplicate = (id: string) => {
-    const b = blocks.find((x) => x.id === id);
-    if (!b) return;
-    const nid = `b${Date.now()}`;
-    setBlocks((prev) => [...prev, { ...b, id: nid, x: Math.min(b.x + 4, 96), y: Math.min(b.y + 4, 96) }]);
-    setSelected(nid);
-  };
-
-  const onPointerDown = (e: React.PointerEvent, b: TplTextBlock) => {
-    e.stopPropagation();
-    setSelected(b.id);
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    dragRef.current = { id: b.id, startX: e.clientX, startY: e.clientY, origX: b.x, origY: b.y };
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    const d = dragRef.current;
-    const stage = stageRef.current;
-    if (!d || !stage) return;
-    const rect = stage.getBoundingClientRect();
-    const dx = ((e.clientX - d.startX) / rect.width) * 100;
-    const dy = ((e.clientY - d.startY) / rect.height) * 100;
-    update(d.id, {
-      x: Math.max(2, Math.min(98, d.origX + dx)),
-      y: Math.max(2, Math.min(98, d.origY + dy)),
-    });
-  };
-  const onPointerUp = () => { dragRef.current = null; };
-
-  useEffect(() => {
-    if (!onExport) return;
-    if (!tpl) return onExport("");
-    const summary = [
-      `Plantilla base: ${info.label} (${tpl.id})`,
-      ...blocks.map((b, i) => `Texto ${i + 1}: "${b.text}" (${b.weight}, ${b.size}px, ${b.color})`),
-    ].join("\n");
-    onExport(summary);
-  }, [tpl, blocks, info.label, onExport]);
-
-  const sel = blocks.find((b) => b.id === selected) || null;
-
-  return (
-    <div className="rounded-2xl border border-border bg-gradient-soft p-4 sm:p-5">
-      <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-        <Sparkles className="h-3 w-3" style={{ color: "var(--brand-pink)" }} />
-        Editor de plantilla · experimental
-      </div>
-
-      {!tpl && (
-        <>
-          <h5 className="mb-1 text-base font-bold">Elegí una plantilla base</h5>
-          <p className="mb-3 text-xs text-muted-foreground">
-            Referencias de la web para {info.label.toLowerCase()}. Al seleccionar, podés editar los textos encima.
-          </p>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-            {templates.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTplId(t.id)}
-                className="group relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-border bg-muted transition hover:-translate-y-0.5 hover:border-foreground/40"
-              >
-                <SmartImage src={t.url} className="transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-x-2 bottom-2 rounded-full bg-black/60 py-1 text-center text-[10px] font-semibold text-white opacity-0 transition group-hover:opacity-100">
-                  Usar esta
-                </div>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-
-      {tpl && (
-        <>
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <h5 className="text-base font-bold">Editá tu diseño</h5>
-            <button
-              onClick={() => setTplId(null)}
-              className="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-semibold hover:border-foreground/40"
-            >
-              Cambiar plantilla
-            </button>
-          </div>
-
-          <div
-            ref={stageRef}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerLeave={onPointerUp}
-            onClick={() => setSelected(null)}
-            className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-xl border-2 border-border bg-muted"
-            style={{ touchAction: "none" }}
-          >
-            <img src={tpl.url} alt="" className="absolute inset-0 h-full w-full object-cover" draggable={false} />
-            <div className="absolute inset-0 bg-black/20" />
-            {blocks.map((b) => (
-              <div
-                key={b.id}
-                onPointerDown={(e) => onPointerDown(e, b)}
-                className={cn(
-                  "absolute -translate-x-1/2 -translate-y-1/2 cursor-move whitespace-nowrap rounded px-1 leading-tight",
-                  selected === b.id ? "outline outline-2 outline-white/90" : "hover:outline hover:outline-1 hover:outline-white/60",
-                )}
-                style={{
-                  left: `${b.x}%`,
-                  top: `${b.y}%`,
-                  fontSize: `${b.size}px`,
-                  color: b.color,
-                  fontWeight: b.weight === "bold" ? 700 : 400,
-                  textShadow: "0 2px 8px rgba(0,0,0,0.4)",
-                }}
-              >
-                {b.text || "\u00a0"}
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <button
-              onClick={add}
-              className="rounded-full border-2 border-foreground bg-foreground px-3 py-1.5 text-xs font-semibold text-background"
-            >
-              + Agregar texto
-            </button>
-            {sel && (
-              <>
-                <button
-                  onClick={() => duplicate(sel.id)}
-                  className="rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:border-foreground/40"
-                >
-                  Duplicar
-                </button>
-                <button
-                  onClick={() => remove(sel.id)}
-                  className="rounded-full border border-destructive/40 bg-background px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                >
-                  Eliminar
-                </button>
-              </>
-            )}
-            <span className="text-[10px] text-muted-foreground">Arrastrá los textos sobre la imagen</span>
-          </div>
-
-          {sel && (
-            <div className="mt-3 grid gap-3 rounded-xl border border-border bg-background p-3 sm:grid-cols-[1fr_auto_auto_auto]">
-              <Input
-                value={sel.text}
-                onChange={(e) => update(sel.id, { text: e.target.value })}
-                placeholder="Texto…"
-                className="h-9 rounded-lg"
-              />
-              <input
-                type="range"
-                min={10}
-                max={80}
-                value={sel.size}
-                onChange={(e) => update(sel.id, { size: parseInt(e.target.value, 10) })}
-                className="w-28"
-                title="Tamaño"
-              />
-              <input
-                type="color"
-                value={sel.color}
-                onChange={(e) => update(sel.id, { color: e.target.value })}
-                className="h-9 w-10 cursor-pointer rounded border border-border bg-background"
-                title="Color"
-              />
-              <button
-                onClick={() => update(sel.id, { weight: sel.weight === "bold" ? "normal" : "bold" })}
-                className={cn(
-                  "h-9 rounded-lg border-2 px-3 text-xs font-bold",
-                  sel.weight === "bold" ? "border-foreground bg-foreground text-background" : "border-border bg-background",
-                )}
-                title="Negrita"
-              >
-                B
-              </button>
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-
-
 
 function SelectCard({
   title, desc, active, onClick, accent, swatch, sampleImage,
@@ -4578,16 +4331,13 @@ function ImprentaFinal({
   onBack: () => void;
 }) {
   const needsUpload = style.id === "propio";
-  const isTemplate = style.id === "plantilla";
   const allSpecsChosen = product.fields.every((f) => specs[f.key]);
-  const [tplSummary, setTplSummary] = useState("");
 
   const summary = [
     `Producto: ${product.name}`,
     `Estilo de diseño: ${style.name}`,
     `Cantidad: ${qty}`,
     ...product.fields.map((f) => `${f.label}: ${specs[f.key] || "-"}`),
-    isTemplate && tplSummary ? `\n--- Plantilla editada ---\n${tplSummary}` : "",
     notes ? `Notas: ${notes}` : "",
     file ? "Diseño: adjunto (se envía por WhatsApp)" : needsUpload ? "Diseño: pendiente de enviar" : "Diseño: a cargo de Idealo",
   ].filter(Boolean).join("\n");
@@ -4603,9 +4353,6 @@ function ImprentaFinal({
     <div className="animate-step-in grid gap-8 lg:grid-cols-[1.1fr_1fr]">
       {/* LEFT: specs */}
       <div className="space-y-6">
-        {isTemplate && (
-          <ImprentaTemplateEditor product={product} onExport={setTplSummary} />
-        )}
         <SectionTitle icon={<FileCheck2 className="h-5 w-5" />} title="Especificaciones del producto" />
 
         {product.fields.map((f) => (
