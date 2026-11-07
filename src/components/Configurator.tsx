@@ -5102,12 +5102,13 @@ type TxCanvasBg = "checker" | "white" | "gray";
 
 
 function TextilesDesignStep({
-  fabricData, sleeve, technique, onTechniqueChange, colorLock,
+  fabricData, shirtType, sleeve, technique, onTechniqueChange, colorLock,
   color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
+  shirtType: TxShirtType | null;
   sleeve: TxSleeve;
   technique: TxTechnique;
   onTechniqueChange: (t: TxTechnique) => void;
@@ -5125,17 +5126,20 @@ function TextilesDesignStep({
   const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
   const [backMode, setBackMode] = useState<"blank" | "design">("blank");
+  const hasCuts = shirtType === "columbia";
+  const [cut, setCut] = useState<TxCut>(hasCuts ? "hombre" : "unisex");
+  const activeSizes = hasCuts ? TX_CUT_SIZES[cut] : TX_CUT_SIZES.unisex;
   const [sizeQty, setSizeQty] = useState<Record<TxSize, number>>(
     () => Object.fromEntries(TX_SIZES.map((s) => [s, 0])) as Record<TxSize, number>,
   );
 
-  const totalQty = TX_SIZES.reduce((a, s) => a + (sizeQty[s] || 0), 0);
+  const totalQty = activeSizes.reduce((a, s) => a + (sizeQty[s] || 0), 0);
 
   // Mantiene el estado del padre en sync con la tabla de tallas.
   useEffect(() => {
     if (totalQty <= 0) return;
     onQtyChange(totalQty);
-    const first = TX_SIZES.find((s) => (sizeQty[s] || 0) > 0);
+    const first = activeSizes.find((s) => (sizeQty[s] || 0) > 0);
     if (first && first !== size) onSizeChange(first);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalQty, sizeQty]);
