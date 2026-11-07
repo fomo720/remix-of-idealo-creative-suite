@@ -135,7 +135,7 @@ function SmartImage({
 
 type Category = "stickers" | "iron-ons" | "libretas" | "laser" | "imprenta";
 type ImprentaProductId = "tarjetas" | "menus" | "carpetas" | "brochures";
-type ImprentaStyleId = "plantilla" | "personalizado" | "propio";
+type ImprentaStyleId = "personalizado" | "propio";
 type LaserProductId =
   | "tabla" | "botella" | "cartera" | "llavero-cuero"
   | "llavero-madera" | "vaso" | "coco" | "cadena";
@@ -710,7 +710,6 @@ const imprentaProducts: ImprentaProduct[] = [
 ];
 
 const imprentaStyles: { id: ImprentaStyleId; name: string; desc: string; icon: React.ReactNode; accent: string }[] = [
-  { id: "plantilla", name: "Diseño desde plantilla", desc: "Elegimos una plantilla profesional y la adaptamos con tus datos. Rápido y económico.", icon: <Layers className="h-7 w-7" />, accent: "var(--brand-blue)" },
   { id: "personalizado", name: "Diseño 100% personalizado", desc: "Nuestro equipo crea el arte desde cero para tu marca. Ideal si querés algo único.", icon: <Palette className="h-7 w-7" />, accent: "var(--brand-violet)" },
   { id: "propio", name: "Ya tengo mi diseño listo", desc: "Subís tu archivo (PDF, AI, PSD o imagen alta resolución) y lo imprimimos.", icon: <PencilRuler className="h-7 w-7" />, accent: "var(--brand-orange)" },
 ];
@@ -1594,7 +1593,7 @@ export function Configurator() {
           {step === 3 && isImprenta && (
             <div className="animate-step-in">
               <SectionTitle icon={<Palette className="h-5 w-5" />} title="¿Cómo querés el diseño?" />
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2">
                 {imprentaStyles.map((s) => (
                   <button
                     key={s.id}
@@ -1619,9 +1618,6 @@ export function Configurator() {
 
 
 
-              <p className="mt-4 text-center text-xs text-muted-foreground">
-                Recomendado: si es tu primera impresión con nosotros, elegí "Diseño desde plantilla" — es más rápido y económico.
-              </p>
               <NavRow onBack={() => goTo(2)} onNext={imprentaStyle ? () => goTo(4) : undefined} />
             </div>
           )}
