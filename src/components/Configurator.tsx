@@ -3010,13 +3010,6 @@ function CategoryCard({
   );
 }
 
-const imprentaTemplateTags: Record<ImprentaProductId, { tag: string; label: string }> = {
-  tarjetas: { tag: "business,card", label: "Tarjetas de presentación" },
-  menus: { tag: "restaurant,menu", label: "Menús de restaurante" },
-  carpetas: { tag: "corporate,folder", label: "Carpetas corporativas" },
-  brochures: { tag: "brochure,flyer", label: "Brochures y volantes" },
-};
-
 
 function SelectCard({
   title, desc, active, onClick, accent, swatch, sampleImage,
