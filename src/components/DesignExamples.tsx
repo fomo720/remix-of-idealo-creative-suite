@@ -15,7 +15,6 @@ const TYPE_LABELS: Record<ProjectType, string> = {
   Rotulación: "rotulación",
   Regalos: "regalos personalizados",
   Servicios: "servicios",
-  Menús: "menús de restaurante",
 };
 
 export function DesignExamples({ type }: { type: ProjectType }) {

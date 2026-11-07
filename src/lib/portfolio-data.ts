@@ -121,11 +121,6 @@ import tazasHonduras from "@/assets/portfolio-tazas-honduras.jpg.asset.json";
 import calendariosCorporativosPared from "@/assets/portfolio-calendarios-corporativos-pared.jpg.asset.json";
 import tazasSublimadasPartenon from "@/assets/portfolio-tazas-sublimadas-partenon.jpg.asset.json";
 import calendariosCorporativos2026 from "@/assets/portfolio-calendarios-corporativos-2026.jpg.asset.json";
-import menuTogo from "@/assets/menu-togo.jpg.asset.json";
-import menuParrilleros from "@/assets/menu-parrilleros.jpg.asset.json";
-import menuLaCasaParrilladas from "@/assets/menu-la-casa-parrilladas.jpg.asset.json";
-import menuPalmasBar from "@/assets/menu-palmas-bar.jpg.asset.json";
-import menuManantial from "@/assets/menu-manantial.jpg.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -136,8 +131,7 @@ export type ProjectType =
   | "Libretas"
   | "Rotulación"
   | "Regalos"
-  | "Servicios"
-  | "Menús";
+  | "Servicios";
 
 export type Project = {
   slug: string;
@@ -290,13 +284,6 @@ const raw: Omit<Project, "slug">[] = [
   { title: "Calendarios Corporativos de Pared", tag: "Corporativo & Papelería", type: "Impresos", subtitle: "Calendarios personalizados con tu logo · de pared y escritorio", image: calendariosCorporativosPared.url, bg: "#f3f4f6", fit: "contain", description: "Calendarios corporativos personalizados con tu logo, colores y branding. Disponibles en formato de pared y escritorio. Regalo corporativo ideal para clientes, empleados y proveedores.", highlights: ["Formato de pared y escritorio", "Personalizado con tu logo", "Impresión full color HD", "Espiral metálica premium"] },
   { title: "Tazas Sublimadas · Hotel Partenon", tag: "Corporativo & Souvenirs", type: "Regalos", subtitle: "Tazas sublimadas full color con tu logo, foto o diseño personalizado", image: tazasSublimadasPartenon.url, bg: "#dbeafe", fit: "contain", description: "Tazas cerámicas sublimadas full color con tu logo, foto o diseño personalizado. Perfectas como regalo corporativo, souvenir de hotel o detalle único. Puedes personalizarla con logo, nombre o foto.", highlights: ["Sublimación full color 360°", "Personalizable con logo, nombre o foto", "Cerámica premium 11oz", "Ideal para hoteles y corporativo"] },
   { title: "Calendarios Corporativos 2026", tag: "Corporativo & Papelería", type: "Impresos", subtitle: "Calendarios 2026 personalizados con tu logo, nombre y/o foto · pared y escritorio", image: calendariosCorporativos2026.url, bg: "#eff6ff", fit: "contain", description: "Calendarios corporativos 2026 personalizables con tu logo, nombre y/o foto. Disponibles en formato de pared y escritorio. Regalo corporativo perfecto para fin de año.", highlights: ["Diseños 2026 personalizados", "Formato de pared y escritorio", "Personalizable con logo, nombre o foto", "Impresión full color HD"] },
-
-  /* ---------- Menús de restaurante ---------- */
-  { title: "Menú Togo – Cartoncillo con ojillos", tag: "Menús de restaurante", type: "Menús", subtitle: "Menú en cartoncillo grueso con ojillos metálicos · varias hojas argolladas", image: menuTogo.url, bg: "#1a1a1a", fit: "cover", description: "Menú para café Togo en cartoncillo grueso con ojillos metálicos para argollar varias hojas: café, té naturales, smoothies, postres, desayunos y platos fuertes. Impresión full color con acabado elegante en negro.", highlights: ["Cartoncillo grueso resistente", "Ojillos metálicos para argollar", "Varias hojas por sección", "Impresión full color"] },
-  { title: "Menú Parrilleros – PVC 12x18", tag: "Menús de restaurante", type: "Menús", subtitle: "Menú rígido en PVC 12×18 pulgadas · resistente al agua y a la limpieza diaria", image: menuParrilleros.url, bg: "#3b1a08", fit: "cover", description: "Menú rígido en PVC de 12×18 pulgadas para Parrilleros. Resistente al agua, grasa y limpieza diaria. Diseño full color con fotos de platos y precios destacados.", highlights: ["PVC rígido 12×18 in", "Resistente al agua y grasa", "Se limpia a diario sin dañarse", "Diseño full color con fotos"] },
-  { title: "Menú La Casa de las Parrilladas – Resorte y portada gruesa", tag: "Menús de restaurante", type: "Menús", subtitle: "Menú con resorte espiral y portada en cartón de agenda con sticker", image: menuLaCasaParrilladas.url, bg: "#0f2b4a", fit: "cover", description: "Menú tipo libro con resorte espiral metálico y portada gruesa en cartón de agenda con sticker impreso. Varias hojas interiores para organizar entradas, platos fuertes y bebidas.", highlights: ["Resorte espiral metálico", "Portada gruesa con sticker", "Varias hojas interiores", "Impresión full color HD"] },
-  { title: "Menú Palma's Bar – PVC con corte especial", tag: "Menús de restaurante", type: "Menús", subtitle: "Menú en PVC con esquinas redondeadas de corte especial · diseño tropical", image: menuPalmasBar.url, bg: "#2b1a4a", fit: "cover", description: "Menú en PVC rígido con corte especial de esquinas redondeadas para Palma's Bar. Diseño tropical full color con secciones de entradas, parrilladas, mariscos, tacos y salsas de la casa.", highlights: ["PVC rígido resistente", "Corte especial de esquinas", "Diseño 100% personalizado", "Fácil de limpiar"] },
-  { title: "Menú Manantial – Laminado tamaño carta", tag: "Menús de restaurante", type: "Menús", subtitle: "Menú laminado tamaño carta · desayunos, almuerzos, cenas y pizzas", image: menuManantial.url, bg: "#2f1a0e", fit: "cover", description: "Menú laminado tamaño carta para Manantial con secciones de desayunos, almuerzos, cenas, especiales de fin de semana y pizzas. Laminado protector para uso diario en mesa.", highlights: ["Tamaño carta laminado", "Protección contra derrames", "Diseño con fotos de platos", "Impresión full color"] },
 ];
 
 export const projects: Project[] = raw.map((p) => ({ ...p, slug: slugify(p.title) }));
