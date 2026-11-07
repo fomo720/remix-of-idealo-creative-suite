@@ -29,6 +29,8 @@ import { cn } from "@/lib/utils";
 import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
 import { NotebookQuoteForm } from "@/components/NotebookQuoteForm";
+import { MenuQuoteWizard } from "@/components/MenuQuoteWizard";
+import menuLaCasaCard from "@/assets/menu-la-casa-parrilladas.jpg.asset.json";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Link } from "@tanstack/react-router";
 import { Mascot } from "@/components/Mascot";
@@ -650,6 +652,7 @@ type ImprentaProduct = {
   desc: string;
   icon: React.ReactNode;
   accent: string;
+  image?: string;
   qtyOptions: number[];
   fields: { key: string; label: string; options: string[] }[];
 };
@@ -674,6 +677,7 @@ const imprentaProducts: ImprentaProduct[] = [
     desc: "Impresión doble lado, espiral metal, laminado impermeable.",
     icon: <FileText className="h-8 w-8" />,
     accent: "var(--brand-orange)",
+    image: menuLaCasaCard.url,
     qtyOptions: [10, 25, 50, 100],
     fields: [
       { key: "formato", label: "Formato", options: ["A4", "Tabloide", "Custom"] },
@@ -1569,10 +1573,17 @@ export function Configurator() {
                       goTo(3);
                     }}
                     className={cn(
-                      "group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all rainbow-splash",
+                      "group relative overflow-hidden rounded-2xl border-2 text-left transition-all rainbow-splash",
                       imprentaProduct === p.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
+                      p.image ? "p-0" : "p-6",
                     )}
                   >
+                    {p.image && (
+                      <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
+                        <img src={p.image} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                      </div>
+                    )}
+                    <div className={p.image ? "p-6" : undefined}>
                     <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: p.accent }}>
                       {p.icon}
                     </div>
