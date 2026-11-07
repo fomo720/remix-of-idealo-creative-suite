@@ -3,6 +3,7 @@ import nbPhoto1 from "@/assets/1-portada.png.asset.json";
 import nbPhoto2 from "@/assets/2-interior-portada.png.asset.json";
 import nbPhoto3 from "@/assets/3-interior-contraportada.png.asset.json";
 import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
+import nbPortadaGruesaImg from "@/assets/notebook-portada-gruesa.jpg";
 
 // NOTE: el editor 2D y el visor 3D (TextilesEditor2D / TextilesShirt3D) siguen en el
 // repositorio pero están desconectados del flujo del cliente (fase futura).
@@ -1295,7 +1296,7 @@ export function Configurator() {
           {step === 2 && isNotebook && (
             <div className="animate-step-in mx-auto max-w-md text-center">
               <Button variant="outline" className="h-auto w-full flex-col gap-3 overflow-hidden rounded-lg border-2 border-border bg-background p-0 pb-5" onClick={() => { setNotebookStyle("cover-only"); setNotebookMaterial("cover-carton"); setGateMsg(null); setStep(4); }}>
-                <img src={nbPhoto1.url} alt="Libreta de portada gruesa" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                <img src={nbPortadaGruesaImg} alt="Libreta de portada gruesa personalizada" className="aspect-[4/3] w-full object-cover" loading="lazy" width={1024} height={768} />
                 <span className="text-xl font-bold">Portada gruesa</span>
                 <span className="px-4 text-xs font-normal text-muted-foreground">Cartoncillo grueso con espiral metálico</span>
               </Button>
