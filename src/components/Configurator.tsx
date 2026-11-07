@@ -5267,8 +5267,26 @@ function TextilesDesignStep({
           {/* 3. Tallas y cantidad */}
           <div className="rounded-2xl border border-border bg-background p-4">
             <Label className="mb-2 block text-sm font-semibold">3. Tallas y cantidad</Label>
+            {hasCuts ? (
+              <div className="mb-3 grid grid-cols-2 gap-2">
+                {(["hombre", "mujer"] as const).map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setCut(c)}
+                    className={cn(
+                      "rounded-xl border-2 px-3 py-2.5 text-sm font-bold transition",
+                      cut === c ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                    )}
+                  >
+                    {TX_CUT_LABELS[c]}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tallas unisex</p>
+            )}
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
-              {TX_SIZES.map((s) => (
+              {activeSizes.map((s) => (
                 <div key={s} className="flex items-center justify-between gap-3 bg-card px-3 py-2">
                   <span className="text-sm font-bold">{s}</span>
                   <div className="flex items-center gap-1.5">
