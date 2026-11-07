@@ -18,6 +18,7 @@ const FILTERS: Filter[] = [
   "Rotulación",
   "Regalos",
   "Servicios",
+  "Menús",
 ];
 
 function matchFilter(raw: string | undefined | null): Filter {
@@ -63,6 +64,7 @@ export function Portfolio() {
       Rotulación: 0,
       Regalos: 0,
       Servicios: 0,
+      Menús: 0,
     };
     projects.forEach((p) => {
       c[p.type]++;

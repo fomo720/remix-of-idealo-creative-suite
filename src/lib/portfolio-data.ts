@@ -121,6 +121,11 @@ import tazasHonduras from "@/assets/portfolio-tazas-honduras.jpg.asset.json";
 import calendariosCorporativosPared from "@/assets/portfolio-calendarios-corporativos-pared.jpg.asset.json";
 import tazasSublimadasPartenon from "@/assets/portfolio-tazas-sublimadas-partenon.jpg.asset.json";
 import calendariosCorporativos2026 from "@/assets/portfolio-calendarios-corporativos-2026.jpg.asset.json";
+import menuTogo from "@/assets/menu-togo.jpg.asset.json";
+import menuParrilleros from "@/assets/menu-parrilleros.jpg.asset.json";
+import menuLaCasaParrilladas from "@/assets/menu-la-casa-parrilladas.jpg.asset.json";
+import menuPalmasBar from "@/assets/menu-palmas-bar.jpg.asset.json";
+import menuManantial from "@/assets/menu-manantial.jpg.asset.json";
 
 export type ProjectType =
   | "Stickers"
@@ -131,7 +136,8 @@ export type ProjectType =
   | "Libretas"
   | "Rotulación"
   | "Regalos"
-  | "Servicios";
+  | "Servicios"
+  | "Menús";
 
 export type Project = {
   slug: string;
