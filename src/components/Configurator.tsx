@@ -5154,7 +5154,7 @@ function TextilesDesignStep({
   const setQtyFor = (s: TxSize, n: number) =>
     setSizeQty((prev) => ({ ...prev, [s]: Math.max(0, Math.min(9999, n || 0)) }));
 
-  const sizeBreakdown = TX_SIZES.filter((s) => (sizeQty[s] || 0) > 0)
+  const sizeBreakdown = activeSizes.filter((s) => (sizeQty[s] || 0) > 0)
     .map((s) => `${s} x${sizeQty[s]}`)
     .join(", ");
 
@@ -5168,6 +5168,7 @@ function TextilesDesignStep({
       `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
       `- Color: ${color}`,
       `- Parte trasera: ${backMode === "blank" ? "En blanco" : "Con diseño"}`,
+      `- Corte: ${hasCuts ? TX_CUT_LABELS[cut] : "Unisex"}`,
       sizeBreakdown ? `- Tallas: ${sizeBreakdown}` : (size ? `- Talla: ${size}` : ""),
       `- Cantidad total: ${totalQty || qty}`,
       notes ? `- Notas: ${notes}` : "",
