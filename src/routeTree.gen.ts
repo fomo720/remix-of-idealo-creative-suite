@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AsistenteRouteImport } from './routes/asistente'
 import { Route as ClientesRouteImport } from './routes/clientes'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CotizarRouteImport } from './routes/cotizar'
@@ -28,11 +27,6 @@ import { Route as EventosCategoriaProductoRouteImport } from './routes/eventos.$
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AsistenteRoute = AsistenteRouteImport.update({
-  id: '/asistente',
-  path: '/asistente',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientesRoute = ClientesRouteImport.update({
@@ -104,7 +98,6 @@ const EventosCategoriaProductoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/asistente': typeof AsistenteRoute
   '/clientes': typeof ClientesRoute
   '/contacto': typeof ContactoRoute
   '/cotizar': typeof CotizarRoute
@@ -121,7 +114,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/asistente': typeof AsistenteRoute
   '/clientes': typeof ClientesRoute
   '/contacto': typeof ContactoRoute
   '/cotizar': typeof CotizarRoute
@@ -136,7 +128,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/asistente': typeof AsistenteRoute
   '/clientes': typeof ClientesRoute
   '/contacto': typeof ContactoRoute
   '/cotizar': typeof CotizarRoute
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/asistente'
     | '/clientes'
     | '/contacto'
     | '/cotizar'
@@ -172,7 +162,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/asistente'
     | '/clientes'
     | '/contacto'
     | '/cotizar'
@@ -186,7 +175,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/asistente'
     | '/clientes'
     | '/contacto'
     | '/cotizar'
@@ -204,7 +192,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AsistenteRoute: typeof AsistenteRoute
   ClientesRoute: typeof ClientesRoute
   ContactoRoute: typeof ContactoRoute
   CotizarRoute: typeof CotizarRoute
@@ -221,13 +208,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/asistente': {
-      id: '/asistente'
-      path: '/asistente'
-      fullPath: '/asistente'
-      preLoaderRoute: typeof AsistenteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clientes': {
@@ -366,7 +346,6 @@ const EventosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AsistenteRoute: AsistenteRoute,
   ClientesRoute: ClientesRoute,
   ContactoRoute: ContactoRoute,
   CotizarRoute: CotizarRoute,
