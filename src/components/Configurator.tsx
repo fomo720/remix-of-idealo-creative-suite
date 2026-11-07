@@ -1594,6 +1594,7 @@ export function Configurator() {
                         <Check className="h-3.5 w-3.5" />
                       </span>
                     )}
+                    </div>
                   </button>
                 ))}
               </div>
@@ -1601,7 +1602,11 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 3 && isImprenta && (
+          {step >= 3 && isImprenta && imprentaProduct === "menus" && (
+            <MenuQuoteWizard onBack={() => goTo(2)} />
+          )}
+
+          {step === 3 && isImprenta && imprentaProduct !== "menus" && (
             <div className="animate-step-in">
               <SectionTitle icon={<Palette className="h-5 w-5" />} title="¿Cómo querés el diseño?" />
               <div className="grid gap-4 sm:grid-cols-2">
@@ -1633,7 +1638,7 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 4 && isImprenta && imprentaProductData && (
+          {step === 4 && isImprenta && imprentaProduct !== "menus" && imprentaProductData && (
             <ImprentaFinal
               product={imprentaProductData}
               style={imprentaStyles.find((s) => s.id === imprentaStyle)!}
