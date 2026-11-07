@@ -3,6 +3,7 @@ import nbPhoto1 from "@/assets/1-portada.png.asset.json";
 import nbPhoto2 from "@/assets/2-interior-portada.png.asset.json";
 import nbPhoto3 from "@/assets/3-interior-contraportada.png.asset.json";
 import nbPhoto4 from "@/assets/4-contraportada.png.asset.json";
+import nbPortadaGruesaImg from "@/assets/notebook-portada-gruesa.jpg";
 
 // NOTE: el editor 2D y el visor 3D (TextilesEditor2D / TextilesShirt3D) siguen en el
 // repositorio pero están desconectados del flujo del cliente (fase futura).
@@ -149,7 +150,8 @@ type TxShirtType = "redondo" | "polo" | "columbia";
 type TxFabric = "algodon" | "kiana" | "durazno" | "drifit" | "columbia";
 type TxSleeve = "corta" | "larga";
 type TxTechnique = "sublimacion" | "dtf";
-type TxSize = "S" | "M" | "L" | "XL" | "XXL";
+type TxSize = "XS" | "S" | "M" | "L" | "XL" | "XXL";
+type TxCut = "hombre" | "mujer" | "unisex";
 
 // Fabric metadata (name / description / available printing techniques)
 const TX_FABRICS_META: Record<TxFabric, { name: string; desc: string; techniques: TxTechnique[] }> = {
@@ -236,6 +238,13 @@ const TX_COLORS: { name: string; hex: string; border?: boolean }[] = [
 ];
 
 const TX_SIZES: TxSize[] = ["S", "M", "L", "XL", "XXL"];
+// Tallas según corte: Columbia viene en Hombre y Mujer; Redondo y Dri Fit son Unisex.
+const TX_CUT_SIZES: Record<TxCut, TxSize[]> = {
+  hombre: ["S", "M", "L", "XL", "XXL"],
+  mujer: ["XS", "S", "M", "L", "XL"],
+  unisex: ["S", "M", "L", "XL", "XXL"],
+};
+const TX_CUT_LABELS: Record<TxCut, string> = { hombre: "Hombre", mujer: "Mujer", unisex: "Unisex" };
 const TX_MIN_QTY = 1;
 const TX_QTY_PRESETS = [1, 5, 10, 50];
 type NotebookStyle = "cover-only" | "cover-pages";
@@ -1234,6 +1243,7 @@ export function Configurator() {
           {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
+              shirtType={txShirtType}
               sleeve={txSleeve!}
               technique={txTechnique ?? "sublimacion"}
               onTechniqueChange={setTxTechnique}
@@ -1285,9 +1295,10 @@ export function Configurator() {
 
           {step === 2 && isNotebook && (
             <div className="animate-step-in mx-auto max-w-md text-center">
-              <Button variant="outline" className="h-auto min-h-32 w-full flex-col gap-3 rounded-lg border-2 border-border bg-background py-6" onClick={() => { setNotebookStyle("cover-only"); setNotebookMaterial("cover-carton"); setGateMsg(null); setStep(4); }}>
-                <BookOpen className="h-8 w-8 text-primary" />
+              <Button variant="outline" className="h-auto w-full flex-col gap-3 overflow-hidden rounded-lg border-2 border-border bg-background p-0 pb-5" onClick={() => { setNotebookStyle("cover-only"); setNotebookMaterial("cover-carton"); setGateMsg(null); setStep(4); }}>
+                <img src={nbPortadaGruesaImg} alt="Libreta de portada gruesa personalizada" className="aspect-[4/3] w-full object-cover" loading="lazy" width={1024} height={768} />
                 <span className="text-xl font-bold">Portada gruesa</span>
+                <span className="px-4 text-xs font-normal text-muted-foreground">Cartoncillo grueso con espiral metálico</span>
               </Button>
               <NavRow onBack={() => goTo(1)} />
             </div>
@@ -5094,12 +5105,13 @@ type TxCanvasBg = "checker" | "white" | "gray";
 
 
 function TextilesDesignStep({
-  fabricData, sleeve, technique, onTechniqueChange, colorLock,
+  fabricData, shirtType, sleeve, technique, onTechniqueChange, colorLock,
   color, onColorChange, size, onSizeChange, qty, onQtyChange,
   uploaded, onUpload, fileRef,
   notes, setNotes, onBack, onSubmitted,
 }: {
   fabricData: (typeof TX_FABRICS)[number] | null;
+  shirtType: TxShirtType | null;
   sleeve: TxSleeve;
   technique: TxTechnique;
   onTechniqueChange: (t: TxTechnique) => void;
@@ -5117,17 +5129,20 @@ function TextilesDesignStep({
   const availableTechniques = fabricData?.techniques ?? ["sublimacion"];
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
   const [backMode, setBackMode] = useState<"blank" | "design">("blank");
+  const hasCuts = shirtType === "columbia";
+  const [cut, setCut] = useState<TxCut>(hasCuts ? "hombre" : "unisex");
+  const activeSizes = hasCuts ? TX_CUT_SIZES[cut] : TX_CUT_SIZES.unisex;
   const [sizeQty, setSizeQty] = useState<Record<TxSize, number>>(
     () => Object.fromEntries(TX_SIZES.map((s) => [s, 0])) as Record<TxSize, number>,
   );
 
-  const totalQty = TX_SIZES.reduce((a, s) => a + (sizeQty[s] || 0), 0);
+  const totalQty = activeSizes.reduce((a, s) => a + (sizeQty[s] || 0), 0);
 
   // Mantiene el estado del padre en sync con la tabla de tallas.
   useEffect(() => {
     if (totalQty <= 0) return;
     onQtyChange(totalQty);
-    const first = TX_SIZES.find((s) => (sizeQty[s] || 0) > 0);
+    const first = activeSizes.find((s) => (sizeQty[s] || 0) > 0);
     if (first && first !== size) onSizeChange(first);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalQty, sizeQty]);
@@ -5142,7 +5157,7 @@ function TextilesDesignStep({
   const setQtyFor = (s: TxSize, n: number) =>
     setSizeQty((prev) => ({ ...prev, [s]: Math.max(0, Math.min(9999, n || 0)) }));
 
-  const sizeBreakdown = TX_SIZES.filter((s) => (sizeQty[s] || 0) > 0)
+  const sizeBreakdown = activeSizes.filter((s) => (sizeQty[s] || 0) > 0)
     .map((s) => `${s} x${sizeQty[s]}`)
     .join(", ");
 
@@ -5156,6 +5171,7 @@ function TextilesDesignStep({
       `- Técnica: ${technique === "sublimacion" ? "Sublimación (solo blanco)" : "Estampado DTF (cualquier color)"}`,
       `- Color: ${color}`,
       `- Parte trasera: ${backMode === "blank" ? "En blanco" : "Con diseño"}`,
+      `- Corte: ${hasCuts ? TX_CUT_LABELS[cut] : "Unisex"}`,
       sizeBreakdown ? `- Tallas: ${sizeBreakdown}` : (size ? `- Talla: ${size}` : ""),
       `- Cantidad total: ${totalQty || qty}`,
       notes ? `- Notas: ${notes}` : "",
@@ -5254,8 +5270,26 @@ function TextilesDesignStep({
           {/* 3. Tallas y cantidad */}
           <div className="rounded-2xl border border-border bg-background p-4">
             <Label className="mb-2 block text-sm font-semibold">3. Tallas y cantidad</Label>
+            {hasCuts ? (
+              <div className="mb-3 grid grid-cols-2 gap-2">
+                {(["hombre", "mujer"] as const).map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setCut(c)}
+                    className={cn(
+                      "rounded-xl border-2 px-3 py-2.5 text-sm font-bold transition",
+                      cut === c ? "rainbow-border-active" : "border-border hover:border-foreground/20",
+                    )}
+                  >
+                    {TX_CUT_LABELS[c]}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tallas unisex</p>
+            )}
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
-              {TX_SIZES.map((s) => (
+              {activeSizes.map((s) => (
                 <div key={s} className="flex items-center justify-between gap-3 bg-card px-3 py-2">
                   <span className="text-sm font-bold">{s}</span>
                   <div className="flex items-center gap-1.5">
