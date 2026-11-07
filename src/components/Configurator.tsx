@@ -1242,6 +1242,7 @@ export function Configurator() {
           {isTextiles && step === 5 && (
             <TextilesDesignStep
               fabricData={txFabricData}
+              shirtType={txShirtType}
               sleeve={txSleeve!}
               technique={txTechnique ?? "sublimacion"}
               onTechniqueChange={setTxTechnique}
@@ -1293,9 +1294,10 @@ export function Configurator() {
 
           {step === 2 && isNotebook && (
             <div className="animate-step-in mx-auto max-w-md text-center">
-              <Button variant="outline" className="h-auto min-h-32 w-full flex-col gap-3 rounded-lg border-2 border-border bg-background py-6" onClick={() => { setNotebookStyle("cover-only"); setNotebookMaterial("cover-carton"); setGateMsg(null); setStep(4); }}>
-                <BookOpen className="h-8 w-8 text-primary" />
+              <Button variant="outline" className="h-auto w-full flex-col gap-3 overflow-hidden rounded-lg border-2 border-border bg-background p-0 pb-5" onClick={() => { setNotebookStyle("cover-only"); setNotebookMaterial("cover-carton"); setGateMsg(null); setStep(4); }}>
+                <img src={nbPhoto1.url} alt="Libreta de portada gruesa" className="aspect-[4/3] w-full object-cover" loading="lazy" />
                 <span className="text-xl font-bold">Portada gruesa</span>
+                <span className="px-4 text-xs font-normal text-muted-foreground">Cartoncillo grueso con espiral metálico</span>
               </Button>
               <NavRow onBack={() => goTo(1)} />
             </div>
