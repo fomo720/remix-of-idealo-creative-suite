@@ -29,6 +29,8 @@ import { cn } from "@/lib/utils";
 import { toPng, toBlob } from "html-to-image";
 import { DesignExamples } from "@/components/DesignExamples";
 import { NotebookQuoteForm } from "@/components/NotebookQuoteForm";
+import { MenuQuoteForm } from "@/components/MenuQuoteForm";
+import menuThumbnail from "@/assets/menu-encuadernado-parrilladas.jpeg.asset.json";
 import { ResolutionWarning } from "@/components/ResolutionWarning";
 import { Link } from "@tanstack/react-router";
 import { Mascot } from "@/components/Mascot";
@@ -651,6 +653,7 @@ type ImprentaProduct = {
   icon: React.ReactNode;
   accent: string;
   qtyOptions: number[];
+  image?: string;
   fields: { key: string; label: string; options: string[] }[];
 };
 
@@ -671,10 +674,11 @@ const imprentaProducts: ImprentaProduct[] = [
   {
     id: "menus",
     name: "Menús para Restaurantes",
-    desc: "Impresión doble lado, espiral metal, laminado impermeable.",
+    desc: "Menús laminados, en cartoncillo o PVC, con corte y encuadernación a elección.",
+    image: menuThumbnail.url,
     icon: <FileText className="h-8 w-8" />,
     accent: "var(--brand-orange)",
-    qtyOptions: [10, 25, 50, 100],
+    qtyOptions: [1, 2, 3, 4, 5],
     fields: [
       { key: "formato", label: "Formato", options: ["A4", "Tabloide", "Custom"] },
       { key: "acabado", label: "Acabado", options: ["Laminado mate", "Laminado brillante", "Sin laminar"] },
@@ -1573,9 +1577,9 @@ export function Configurator() {
                       imprentaProduct === p.id ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
                     )}
                   >
-                    <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: p.accent }}>
+                    {p.image ? <img src={p.image} alt="Menú de cartoncillo encuadernado de La Casa de las Parrilladas" className="mb-4 aspect-[4/3] w-full rounded-lg object-cover" /> : <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: p.accent }}>
                       {p.icon}
-                    </div>
+                    </div>}
                     <h4 className="text-lg font-bold">{p.name}</h4>
                     <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
                     {imprentaProduct === p.id && (
@@ -1622,10 +1626,18 @@ export function Configurator() {
             </div>
           )}
 
-          {step === 4 && isImprenta && imprentaProductData && (
+          {step === 4 && isImprenta && imprentaProductData && imprentaStyle && (
+            imprentaProductData.id === "menus" ? <MenuQuoteForm
+              ownDesign={imprentaStyle === "propio"}
+              specs={imprentaSpecs} setSpecs={setImprentaSpecs}
+              quantity={imprentaQty} setQuantity={setImprentaQty}
+              file={imprentaFile} setFile={setImprentaFile}
+              notes={imprentaNotes} setNotes={setImprentaNotes}
+              onBack={() => goTo(3)}
+            /> :
             <ImprentaFinal
               product={imprentaProductData}
-              style={imprentaStyles.find((s) => s.id === imprentaStyle)!}
+              style={imprentaStyles.find((s) => s.id === imprentaStyle) ?? imprentaStyles[0]}
               specs={imprentaSpecs}
               setSpecs={setImprentaSpecs}
               qty={imprentaQty}

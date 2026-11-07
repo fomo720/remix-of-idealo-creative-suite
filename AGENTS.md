@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
  
 - Keep the simplified notebook quote form separate from legacy preview editors and centralize its selectable options and WhatsApp message in a browser-safe module so all selections are tested together.
+- Keep restaurant menu specifications in a dedicated quote form with browser-safe option and message rules, so other print products retain their existing flow.

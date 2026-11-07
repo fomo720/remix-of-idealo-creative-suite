@@ -29,7 +29,7 @@ export const Route = createFileRoute("/portafolio/$slug")({
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
     ];
-    if (project.image) {
+    if (project.image?.startsWith("https://")) {
       meta.push({ property: "og:image", content: project.image });
       meta.push({ name: "twitter:image", content: project.image });
     }

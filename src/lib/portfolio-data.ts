@@ -1,4 +1,8 @@
 import menus from "@/assets/portfolio-menus.jpg.asset.json";
+import menuParrilleros from "@/assets/menu-pvc-parrilleros.jpeg.asset.json";
+import menuParrilladas from "@/assets/menu-encuadernado-parrilladas.jpeg.asset.json";
+import menuPalmas from "@/assets/menu-pvc-palmas.jpeg.asset.json";
+import menuManantial from "@/assets/menu-laminado-manantial.jpeg.asset.json";
 import stickersMarca from "@/assets/portfolio-stickers-marca.jpg.asset.json";
 import carpetas from "@/assets/portfolio-carpetas.jpg.asset.json";
 import troquelados from "@/assets/portfolio-troquelados.jpg.asset.json";
@@ -164,6 +168,10 @@ export const slugify = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 const raw: Omit<Project, "slug">[] = [
+  { title: "Menú PVC — Parrilleros", tag: "Restaurantes · PVC", type: "PVC", subtitle: "Menú rectangular en PVC rígido", image: menuParrilleros.url, description: "Menú en PVC rígido producido para Parrilleros, con presentación rectangular y diseño personalizado para el restaurante.", highlights: ["PVC rígido", "Corte rectangular", "Diseño personalizado"] },
+  { title: "Menú de cartoncillo encuadernado — La Casa de las Parrilladas", tag: "Restaurantes · Encuadernado", type: "Impresos", subtitle: "Menú de cartoncillo encuadernado con resorte", image: menuParrilladas.url, description: "Menú de cartoncillo encuadernado con resorte para La Casa de las Parrilladas. Un ejemplo de portada gruesa con diseño personalizado.", highlights: ["Cartoncillo encuadernado", "Encuadernación con resorte", "Portada personalizada"] },
+  { title: "Menú PVC con corte especial — Palma’s Bar", tag: "Restaurantes · PVC", type: "PVC", subtitle: "Menú rígido con forma personalizada", image: menuPalmas.url, description: "Menú de PVC rígido para Palma’s Bar, con corte especial curvo y diseño personalizado.", highlights: ["PVC rígido", "Corte especial", "Forma personalizada"] },
+  { title: "Menú laminado — Manantial", tag: "Restaurantes · Laminado", type: "Impresos", subtitle: "Menú impreso laminado de formato rectangular", image: menuManantial.url, description: "Menú impreso laminado para Manantial, con presentación rectangular y diseño personalizado de su oferta gastronómica.", highlights: ["Menú laminado", "Formato rectangular", "Diseño personalizado"] },
   { title: "Termo Térmico Skinny para Mamá", tag: "Regalos & Mamá", type: "Regalos", subtitle: "Termo skinny sublimado full color · diseño 'Mereces lo que Sueñas' y frases para Mamá", image: termoMamaMariposas.url, bg: "#fce7f3", fit: "contain", description: "Termo térmico skinny sublimado full color con diseño 100% personalizado. Ideal para Día de la Madre, cumpleaños y regalos únicos. Diseños disponibles: 'Mereces lo que Sueñas' con mariposas y 'Mamá Eres' con frases motivacionales. Cualquier diseño, foto o frase que desees.", highlights: ["Sublimación full color 360°", "Diseño 100% personalizado", "Ideal para Día de la Madre", "Cualquier foto, nombre o frase"] },
   { title: "Fotos tipo cristal", tag: "Regalos & Recuerdos", type: "Regalos", subtitle: "Fotos impresas tipo cristal con el diseño y tamaño que prefieras · ideal para aniversarios y bodas", image: fotosCristal.url, bg: "#e8ede8", fit: "contain", description: "Fotos impresas tipo cristal, acabado premium tipo periódico o collage personalizado. Diseño 100% a la medida con las fotos, textos y tamaño que prefieras. Perfectas para aniversarios, bodas, cumpleaños y regalos únicos.", highlights: ["Acabado tipo cristal premium", "El diseño y tamaño que prefieras", "Ideal para aniversarios y bodas", "Regalo único y personalizado"] },
   
