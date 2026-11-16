@@ -946,6 +946,19 @@ export function Configurator() {
     setStep(s);
   };
 
+  // Always bring the guided configurator header back into view when the step changes,
+  // so new visitors never land on content below (portfolio, featured products).
+  const stepMounted = useRef(false);
+  useEffect(() => {
+    if (!stepMounted.current) { stepMounted.current = true; return; }
+    const el = document.getElementById("personalizar");
+    if (!el) return;
+    requestAnimationFrame(() => {
+      const top = el.getBoundingClientRect().top + window.scrollY - 70;
+      window.scrollTo({ top, behavior: "smooth" });
+    });
+  }, [step]);
+
   useEffect(() => {
     const handler = (e: Event) => {
       const detail = (e as CustomEvent<{ category?: Category; cut?: CutShape; step?: number }>).detail || {};

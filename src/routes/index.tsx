@@ -5,7 +5,6 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Configurator } from "@/components/Configurator";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
 import { MissionVision } from "@/components/MissionVision";
-import { Testimonials } from "@/components/Testimonials";
 
 import { Footer } from "@/components/Footer";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -31,7 +30,6 @@ function Index() {
         <HowItWorks />
         <Configurator />
         <FeaturedProducts />
-        <Testimonials />
 
         <MissionVision />
       </main>
