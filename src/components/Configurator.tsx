@@ -823,7 +823,7 @@ export function Configurator() {
   const laserHasVariants = !!laserProductData?.variants?.length;
   const laserVariantData = laserProductData?.variants?.find((v) => v.id === laserVariantId);
   const laserColor = laserVariantData?.colors[Math.min(laserColorIdx, laserVariantData.colors.length - 1)];
-  const laserDesignStep = laserHasVariants ? 4 : 3;
+  const laserDesignStep = 3;
   // textiles state
   const [txShirtType, setTxShirtType] = useState<TxShirtType | null>(null);
   const [txFabric, setTxFabric] = useState<TxFabric | null>(null);
@@ -1125,9 +1125,7 @@ export function Configurator() {
           onGo={(s) => goTo(isNotebook && s === 3 ? 4 : s)}
           labels={
             isLaser
-              ? laserHasVariants
-                ? ["Categoría", "Producto", laserProductData?.variantLabel ?? "Modelo", "Diseño"]
-                : ["Categoría", "Producto", "Diseño"]
+              ? ["Categoría", "Producto", "Diseño"]
               : isNotebook
               ? ["Categoría", "Portada gruesa", "Diseño"]
               : isImprenta
@@ -1312,9 +1310,6 @@ export function Configurator() {
               <SectionTitle icon={<Flame className="h-5 w-5" />} title="¿Qué producto vamos a grabar?" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {laserProducts.map((p) => {
-                  // Special logic for "coco": it should skip to WhatsApp if possible,
-                  // or at least handle the auto-advance logic if it has no variants.
-                  const isCoco = p.id === "coco";
                   return (
                     <LaserProductCard
                       key={p.id}
@@ -1322,25 +1317,10 @@ export function Configurator() {
                       active={laserProduct === p.id}
                       onClick={() => {
                         setLaserProduct(p.id);
-                        if (isCoco) {
-                          // Cocoa has no Step 3 variants, so direct to WA from Step 2
-                          const summary = [
-                            "Hola Idealo, estoy interesado en grabado láser:",
-                            "- Producto: Coco Grabado",
-                            "- Me gustaría personalizarlo con mi logo/diseño.",
-                            "",
-                            "Solicito una cotización, gracias 🙌",
-                          ].join("\n");
-                          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(summary)}`;
-                          window.open(waHref, "_blank", "noreferrer");
-                        } else {
-                          // Other laser products go to Step 3
-                          const first = p.variants?.[0]?.id ?? null;
-                          setLaserVariantId(first);
-                          setLaserColorIdx(0);
-                          setLaserByob(false);
-                          goTo(3);
-                        }
+                        setLaserVariantId(null);
+                        setLaserColorIdx(0);
+                        setLaserByob(false);
+                        goTo(3);
                       }}
                     />
                   );
@@ -1352,158 +1332,6 @@ export function Configurator() {
                 Grabado permanente sin tinta · el arte se convierte automáticamente en trazo apto para láser.
               </p>
               <NavRow onBack={() => goTo(1)} onNext={laserProduct ? () => goTo(3) : undefined} />
-            </div>
-          )}
-
-          {/* Laser step 3: variant / color picker (only when the product has variants) */}
-          {step === 3 && isLaser && laserHasVariants && laserProductData && (
-            <div className="animate-step-in">
-              <SectionTitle
-                icon={<Package className="h-5 w-5" />}
-                title={`${laserProductData.variantLabel ?? "Modelo"} para ${laserProductData.name}`}
-              />
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {laserProductData.variants!.map((v) => {
-                  const active = laserVariantId === v.id;
-                  const thumb = active && laserColor?.image ? laserColor.image : v.image;
-                  return (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => {
-                        const y = window.scrollY;
-                        setLaserVariantId(v.id);
-                        setLaserColorIdx(0);
-                        requestAnimationFrame(() => window.scrollTo({ top: y }));
-
-                        if (laserProduct === "cadena") {
-                          // Quick-quote logic for "cadenas" to WhatsApp (Step 4 equivalent)
-                          const summary = [
-                            "Hola Idealo, estoy interesado en grabado láser:",
-                            "- Producto: Cadenas & Dijes",
-                            `- Tipo de dije: ${v.name}`,
-                            "- Grabado fotográfico: Sí",
-                            "- Me gustaría comenzar a platicar con ustedes sobre mi diseño.",
-                            "",
-                            "Solicito una cotización, gracias 🙌",
-                          ].join("\n");
-                          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(summary)}`;
-                          window.open(waHref, "_blank", "noreferrer");
-                        } else {
-                          goTo(4);
-                        }
-                      }}
-                      className={cn(
-                        "group relative flex flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-all",
-                        active ? "rainbow-border-active" : "border-border hover:-translate-y-0.5 hover:shadow-card-soft",
-                      )}
-                    >
-                      {thumb && (
-                        <div className="relative mb-1 h-64 w-full overflow-hidden rounded-xl bg-gradient-to-br from-muted/60 to-background sm:h-72">
-                          <img
-                            key={thumb}
-                            src={thumb}
-                            alt={v.name}
-                            className="absolute inset-0 h-full w-full object-contain p-2 transition-opacity duration-300"
-                          />
-                        </div>
-                      )}
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <h4 className="text-sm font-bold leading-tight">{v.name}</h4>
-                          <p className="mt-0.5 text-xs text-muted-foreground">{v.desc}</p>
-                        </div>
-                        {active && (
-                          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-white" style={{ background: "var(--brand-orange)" }}>
-                            <Check className="h-3.5 w-3.5" />
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                        {v.colors.map((c, ci) => {
-                          const highlighted = active && laserColorIdx === ci;
-                          return (
-                            <span
-                              key={c.name}
-                              title={c.name}
-                              role="button"
-                              tabIndex={0}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                const y = window.scrollY;
-                                setLaserVariantId(v.id);
-                                setLaserColorIdx(ci);
-                                requestAnimationFrame(() => window.scrollTo({ top: y }));
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setLaserVariantId(v.id);
-                                  setLaserColorIdx(ci);
-                                }
-                              }}
-                              className={cn(
-                                "h-5 w-5 cursor-pointer rounded-full border shadow-sm transition hover:scale-110",
-                                highlighted ? "ring-2 ring-offset-1 ring-offset-background scale-110" : "border-border",
-                              )}
-                              style={{ background: c.hex, ...(highlighted ? { boxShadow: `0 0 0 2px var(--brand-orange)` } : {}) }}
-                            />
-                          );
-                        })}
-                        <span className="ml-1 text-[10px] text-muted-foreground">{v.colors.length} color{v.colors.length === 1 ? "" : "es"}</span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Bring-your-own-product option (added to Step 3 for everything except coco) */}
-              {laserProductData && laserProduct !== "coco" && (
-                <button
-                  type="button"
-                  onClick={() => setLaserByob((b) => !b)}
-                  className={cn(
-                    "mt-6 flex w-full items-start gap-3 rounded-2xl border-2 p-4 text-left text-sm transition",
-                    laserByob
-                      ? "border-foreground bg-background shadow-card-soft"
-                      : "border-dashed border-border bg-background/60 hover:border-foreground/40",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2",
-                      laserByob ? "border-transparent text-white" : "border-border",
-                    )}
-                    style={laserByob ? { background: "var(--brand-orange)" } : {}}
-                  >
-                    {laserByob && <Check className="h-4 w-4" />}
-                  </span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-foreground">
-                      Yo llevo mi propio {laserProductData.name.toLowerCase()}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-muted-foreground">
-                      Si traes tu propio producto nosotros lo grabamos. ¡Cotiza ya!
-                    </span>
-                  </span>
-                </button>
-              )}
-
-
-              <NavRow 
-                onBack={() => goTo(2)} 
-                onNext={
-                  laserByob 
-                    ? () => {
-                        const productType = laserProductData?.name ?? "producto";
-                        const msg = encodeURIComponent(`Hola! Traigo mi propio ${productType} y me gustaría que ustedes lo graben. ¿Me podrían dar más información sobre el proceso y costos?`);
-                        window.open(`https://wa.me/50433635666?text=${msg}`, "_blank");
-                      }
-                    : (laserVariantId ? () => goTo(4) : undefined)
-                } 
-              />
-
             </div>
           )}
 
@@ -3966,278 +3794,72 @@ function LaserDesigner({
   duplicated: boolean; setDuplicated: (b: boolean | ((d: boolean) => boolean)) => void;
   onBack: () => void;
 }) {
-  const engraveUrl = useEngraveBitmap(uploaded, product.engrave, engraveIntensity);
-  const hasArt = !!(uploaded || preset);
-  const showOutline = engraveMode === "outline" && !!engraveUrl;
-
-  const centerArt = () => { setOffsetX(0); setOffsetY(0); };
-
   return (
-    <div className="animate-step-in grid gap-8 lg:grid-cols-2">
-      {/* LEFT: Controls */}
-      <div className="space-y-6">
-        {/* Product info */}
-        <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-soft p-5">
-          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl opacity-30" style={{ background: "var(--brand-orange)" }} />
-          <div className="relative flex items-start gap-3">
-            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-white" style={{ background: "var(--brand-orange)" }}>
-              <Flame className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Producto seleccionado</div>
-              <div className="font-bold leading-tight">{product.name}</div>
-              {variant && (
-                <div className="mt-1 text-xs">
-                  <span className="font-semibold text-foreground">{variant.name}</span>
-                  {color && (
-                    <span className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] text-muted-foreground">
-                      <span className="h-3 w-3 rounded-full border border-black/10" style={{ background: color.hex }} />
-                      {color.name}
-                    </span>
-                  )}
-                </div>
-              )}
-              <p className="mt-1 text-xs text-muted-foreground">{variant?.desc ?? product.desc}</p>
-              {byob && (
-                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-foreground/20 bg-background px-2 py-0.5 text-[10px] font-semibold text-foreground">
-                  <Check className="h-3 w-3" style={{ color: "var(--brand-orange)" }} />
-                  Cliente trae su propio {product.name.toLowerCase()} · solo servicio de grabado
-                </div>
-              )}
-            </div>
-          </div>
+    <div className="animate-step-in mx-auto max-w-xl space-y-6">
+      <div className="flex items-center gap-3 rounded-2xl border border-border bg-gradient-soft p-5">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-white" style={{ background: "var(--brand-orange)" }}>
+          <Flame className="h-6 w-6" />
         </div>
-
-        {/* Upload */}
         <div>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => onFile(e.target.files?.[0] ?? null)}
-          />
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Producto seleccionado</div>
+          <div className="font-bold leading-tight">{product.name}</div>
+        </div>
+      </div>
+
+      <div>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
+        {uploaded ? (
+          <div className="flex items-center gap-3 rounded-2xl border border-border bg-background p-3">
+            <img src={uploaded} alt="Arte subido" className="h-16 w-16 rounded-lg object-contain bg-muted" />
+            <div className="flex-1 text-sm font-medium">Arte de ejemplo cargado</div>
+            <button onClick={() => fileRef.current?.click()} className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium">Cambiar</button>
+            <button onClick={onClear} aria-label="Eliminar arte" className="rounded-lg border border-border p-1.5 text-destructive"><Trash2 className="h-4 w-4" /></button>
+          </div>
+        ) : (
           <button
             onClick={() => fileRef.current?.click()}
-            className="group flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:border-transparent hover:shadow-elegant"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-background px-4 py-6 text-sm font-medium transition hover:shadow-elegant"
           >
             <Upload className="h-5 w-5" style={{ color: "var(--brand-orange)" }} />
-            {uploaded ? "Cambiar arte / logo" : "Subir mi Arte / Logo"}
+            Subir mi arte / logo de ejemplo
           </button>
-          <p className="mt-2 text-[11px] text-muted-foreground">
-            Convertimos automáticamente tu imagen a trazo apto para láser (eliminamos el fondo y dejamos el contorno). Si no se ve bien, usa <strong>Revertir</strong>.
-          </p>
-        </div>
-
-
-        {/* Engrave toolbox */}
-        {hasArt && (
-          <div className="rounded-2xl border border-border bg-background p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <Label className="text-sm font-semibold">Ajustes de grabado</Label>
-              <div className="flex gap-1 rounded-md border border-border p-0.5 text-[10px] font-medium">
-                <button
-                  onClick={() => setEngraveMode("outline")}
-                  className={cn("rounded px-2 py-0.5 transition", engraveMode === "outline" ? "bg-foreground text-background" : "text-muted-foreground")}
-                >
-                  Grabado
-                </button>
-                <button
-                  onClick={() => setEngraveMode("original")}
-                  className={cn("rounded px-2 py-0.5 transition inline-flex items-center gap-1", engraveMode === "original" ? "bg-foreground text-background" : "text-muted-foreground")}
-                >
-                  <RotateCcw className="h-3 w-3" /> Revertir
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <ToolSlider
-                icon={<Flame className="h-3.5 w-3.5" />}
-                label="Intensidad de grabado"
-                value={engraveIntensity} min={15} max={95} step={1}
-                onChange={setEngraveIntensity} suffix="%"
-              />
-              <ToolSlider
-                icon={<ZoomIn className="h-3.5 w-3.5" />}
-                label="Escala"
-                value={scale} min={30} max={200} step={1}
-                onChange={setScale} suffix="%"
-              />
-            </div>
-
-            {/* Quick actions */}
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <button
-                onClick={centerArt}
-                className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 py-2 text-[11px] font-medium transition hover:border-foreground/30 hover:shadow-sm"
-              >
-                <Move className="h-3.5 w-3.5" /> Centrar
-              </button>
-              <button
-                onClick={() => setDuplicated((d) => !d)}
-                className={cn(
-                  "flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-[11px] font-medium transition",
-                  duplicated ? "border-transparent bg-foreground text-background" : "border-border hover:border-foreground/30",
-                )}
-              >
-                <Copy className="h-3.5 w-3.5" /> {duplicated ? "Duplicado" : "Duplicar"}
-              </button>
-              <button
-                onClick={onClear}
-                className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 py-2 text-[11px] font-medium text-destructive transition hover:border-destructive hover:shadow-sm"
-              >
-                <Trash2 className="h-3.5 w-3.5" /> Eliminar
-              </button>
-            </div>
-          </div>
         )}
+        <p className="mt-2 text-[11px] text-muted-foreground">Opcional. Los modelos y colores disponibles te los confirmamos por WhatsApp.</p>
+      </div>
 
-        {/* Quantity */}
-        <div>
-          <Label htmlFor="lqty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
-          <Input id="lqty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
-          <div className="mt-2 grid grid-cols-4 gap-2">
-            {[10, 25, 50, 100].map((n) => (
-              <button
-                key={n}
-                onClick={() => setQty(n)}
-                className={cn(
-                  "rounded-xl border-2 py-2 text-sm font-bold transition",
-                  qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20",
-                )}
-              >
-                {n}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="lnotes" className="mb-2 block text-sm font-semibold">Instrucciones especiales</Label>
-          <Textarea
-            id="lnotes"
-            rows={3}
-            placeholder="Ubicación del grabado, profundidad, tamaño exacto, empaque, entrega, etc."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
+      <div>
+        <Label htmlFor="lqty" className="mb-2 block text-sm font-semibold">Cantidad</Label>
+        <Input id="lqty" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, +e.target.value || 1))} />
+        <div className="mt-2 grid grid-cols-4 gap-2">
+          {[10, 25, 50, 100].map((n) => (
+            <button key={n} onClick={() => setQty(n)} className={cn("rounded-xl border-2 py-2 text-sm font-bold transition", qty === n ? "rainbow-border-active" : "border-border hover:border-foreground/20")}>{n}</button>
+          ))}
         </div>
       </div>
 
-      {/* RIGHT: Preview */}
-      <div className="lg:sticky lg:top-6 lg:self-start">
-        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-soft p-6">
-          <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
-            <span>Vista previa del grabado</span>
-            <span className="rounded-full bg-background px-2 py-0.5">{product.name}</span>
-          </div>
-
-          <div className="relative mx-auto aspect-square max-w-md">
-            <ProductMockup product={product}>
-              <div className="relative h-full w-full">
-                {hasArt && (
-                  <div
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{
-                      transform: `translate(${offsetX}%, ${offsetY}%) scale(${scale / 100})`,
-                      transformOrigin: "center",
-                    }}
-                  >
-                    {uploaded ? (
-                      showOutline && engraveUrl ? (
-                        <img src={engraveUrl} alt="" className="max-h-[75%] max-w-[75%] object-contain" style={{ filter: "drop-shadow(0 0 0.5px rgba(0,0,0,0.4))" }} />
-                      ) : (
-                        <img src={uploaded} alt="" className="max-h-[75%] max-w-[75%] object-contain opacity-90" />
-                      )
-                    ) : (
-                      <div
-                        className="text-[80px] leading-none"
-                        style={{ color: product.engrave, textShadow: "0 0 1px rgba(0,0,0,0.35)" }}
-                      >
-                        {preset}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {duplicated && hasArt && (
-                  <div
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{
-                      transform: `translate(${offsetX + 25}%, ${offsetY + 15}%) scale(${(scale / 100) * 0.6})`,
-                      transformOrigin: "center",
-                      opacity: 0.85,
-                    }}
-                  >
-                    {uploaded ? (
-                      showOutline && engraveUrl ? (
-                        <img src={engraveUrl} alt="" className="max-h-[75%] max-w-[75%] object-contain" />
-                      ) : (
-                        <img src={uploaded} alt="" className="max-h-[75%] max-w-[75%] object-contain opacity-90" />
-                      )
-                    ) : (
-                      <div className="text-[60px] leading-none" style={{ color: product.engrave }}>{preset}</div>
-                    )}
-                  </div>
-                )}
-                {!hasArt && (
-                  <div className="grid h-full w-full place-items-center">
-                    <div className="rounded-lg border border-white/30 bg-black/30 px-3 py-2 text-center text-[11px] font-medium text-white/80 backdrop-blur">
-                      Sube tu arte para ver el grabado
-                    </div>
-                  </div>
-                )}
-              </div>
-            </ProductMockup>
-          </div>
-
-          <div className="mt-6 grid grid-cols-2 gap-3 rounded-2xl bg-background/70 p-4 text-center backdrop-blur">
-            <Stat label="Producto" value={product.name.split(" ")[0]} />
-            <Stat label="Cantidad" value={`${qty}`} />
-          </div>
-
-          <p className="mt-3 text-center text-[11px] text-muted-foreground">
-            {hasArt
-              ? "Ajusta intensidad, escala, centra o duplica. Si el trazo no convence, usa Revertir para ver el original."
-              : "El grabado es permanente. Cotización final tras revisar el arte."}
-          </p>
-        </div>
-
-        {(() => {
-          const summary = [
-            `Producto: ${product.name} (Grabado Láser)`,
-            variant ? `Modelo: ${variant.name}` : "",
-            color ? `Color: ${color.name}` : "",
-            byob ? "Cliente aporta el producto (solo servicio de grabado)" : "",
-            `Modo de grabado: ${engraveMode === "outline" ? "Trazo / outline" : "Original"}`,
-            `Intensidad del grabado: ${engraveIntensity}%`,
-            `Escala del arte: ${scale}%`,
-            duplicated ? "Arte duplicado: sí" : "",
-            `Cantidad: ${qty}`,
-            notes ? `Notas: ${notes}` : "",
-            uploaded ? "Diseño: adjunto (envío la imagen por WhatsApp) 📎" : preset ? `Diseño: preset "${preset}"` : "Diseño: pendiente de enviar",
-            "",
-            "Solicito una cotización, gracias 🙌",
-          ].filter(Boolean).join("\n");
-          const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar grabado láser:\n\n${summary}`)}`;
-          return (
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]"
-            >
-              <MessageCircle className="h-5 w-5" /> Solicitar Cotización por WhatsApp
-            </a>
-          );
-        })()}
-        {uploaded && (
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            📎 No olvides adjuntar tu diseño en la conversación de WhatsApp.
-          </p>
-        )}
-        <NavRow onBack={onBack} />
+      <div>
+        <Label htmlFor="lnotes" className="mb-2 block text-sm font-semibold">Instrucciones especiales</Label>
+        <Textarea id="lnotes" rows={3} placeholder="Ubicación del grabado, profundidad, tamaño exacto, empaque, entrega, etc." value={notes} onChange={(e) => setNotes(e.target.value)} />
       </div>
+
+      {(() => {
+        const summary = [
+          `Producto: ${product.name} (Grabado Láser)`,
+          `Cantidad: ${qty}`,
+          notes ? `Notas: ${notes}` : "",
+          uploaded ? "Arte: adjunto (envío la imagen por WhatsApp) 📎" : "",
+          "",
+          "¿Qué modelos tienen disponibles? Solicito una cotización, gracias 🙌",
+        ].filter(Boolean).join("\n");
+        const waHref = `https://wa.me/50433635666?text=${encodeURIComponent(`Hola Idealo, quiero cotizar grabado láser:\n\n${summary}`)}`;
+        return (
+          <a href={waHref} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-cta animate-rainbow-shimmer px-6 py-4 text-base font-semibold text-white shadow-elegant transition hover:scale-[1.01]">
+            <MessageCircle className="h-5 w-5" /> Solicitar cotización por WhatsApp
+          </a>
+        );
+      })()}
+      {uploaded && <p className="text-center text-[11px] text-muted-foreground">📎 No olvides adjuntar tu arte en la conversación de WhatsApp.</p>}
+      <NavRow onBack={onBack} />
     </div>
   );
 }
