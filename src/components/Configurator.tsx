@@ -1310,9 +1310,6 @@ export function Configurator() {
               <SectionTitle icon={<Flame className="h-5 w-5" />} title="¿Qué producto vamos a grabar?" />
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {laserProducts.map((p) => {
-                  // Special logic for "coco": it should skip to WhatsApp if possible,
-                  // or at least handle the auto-advance logic if it has no variants.
-                  const isCoco = p.id === "coco";
                   return (
                     <LaserProductCard
                       key={p.id}
